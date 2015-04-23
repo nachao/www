@@ -1,0 +1,27 @@
+activate	激活码列表 + 激活码生成页	无需登录可查看
+
+activate_verify	注册时ajax验证使用页面
+
+add		发布页
+
+conn		链接数据库
+
+digg		排行榜
+
+effigy		修改头像页
+
+exchange	兑换页（提现）
+
+head		头部页面
+
+list		内容页
+
+login		登陆页面
+	
+plus		ajax 点赞页面
+
+register	注册页面
+
+user		用户页面
+
+exclusive	专属页面
