@@ -5,17 +5,13 @@
 	
 	//设置选择菜单
 	Global $ect;
-	$ect="welfare";
-	
+	$ect="user";
 
 	//引用样式头部
 	include("./comm/head.php");
 ?>
 
 	<div class="container pagecon">
-	
-		<?php
-		// include("./comm/pageHead.php");	//导入内页头部及导航 	?>
 
 		<!-- 主体 -->
 		<div class="main">

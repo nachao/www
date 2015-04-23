@@ -11,6 +11,7 @@
 		<meta http-equiv="pragma"content="no-cache">
 		<meta http-equiv="Cache-Control"content="no-cache, must-revalidate">
 		<meta http-equiv="expires"content="Wed, 26 Feb 1997 08:21:57 GMT">
+		<link rel="stylesheet" type="text/css" href="./css/common.css" />
 		<link rel="stylesheet" type="text/css" href="./css/ffangle.css" />
         <link rel="icon" href="./myicon-ico.png" type="image/gif" >
 		<script type="text/javascript" src="./js/jquery-1.11.0.min.js" ></script>

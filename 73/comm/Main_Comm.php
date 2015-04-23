@@ -72,6 +72,7 @@ class Tool
 	public function Ccode($str=''){
 		$str = str_replace("&lt;", "<", $str);
 		$str = str_replace("&27", "'", $str);
+		$str = str_replace("<br />", "\n", $str);
 		return $str;
 	}
 

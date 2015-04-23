@@ -5,7 +5,7 @@
 
 	//设置选择菜单
 	Global $ect;
-	$ect="chang";	
+	$ect="user";	
 
 	//引用样式头部
 	include("./comm/head.php");		

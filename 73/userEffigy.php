@@ -5,13 +5,11 @@
 
 	//设置选择菜单
 	Global $ect;
-	$ect="effigy";
+	$ect="user";
 
 	//引用样式头部
 	include("./comm/head.php");
 ?>
-
-	<!-- <link rel="stylesheet" type="text/css" href="./css/comm.css" /> -->
 
 	<?php if($u -> Gid()){ ?>
 		<!-- 用户信息 -->
@@ -22,8 +20,6 @@
 
 
 	<div class="container pagecon">
-		<?php
-		// include("./comm/pageHead.php");	//导入内页头部及导航 	?>
 
 		<!-- 主体 -->
 		<div class="main">

@@ -494,10 +494,12 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* 内页 操作栏 */
 .actionbar{ height: 90px;width: 100%; }
-.actionbar .option{ display: inline-block;line-height: 33px;background: white url(../imgs/page_bottomBg.gif) repeat-x bottom;border: 1px solid #d9dbdd;border-bottom: 0px;padding: 0 30px 2px;box-shadow: 0px 0px 10px #eee;color: #afb4bb;border-radius: 3px;margin-top: 27px;float: left;margin-right: 15px; }
+.actionbar .option{ display: inline-block;line-height: 33px;background: white url(../imgs/page_bottomBg.gif) repeat-x bottom;border: 1px solid #d9dbdd;border-bottom: 0px;padding: 0 30px 2px;color: #afb4bb;border-radius: 3px;margin-top: 27px;float: left;margin-right: 15px; }
 .actionbar .option:hover{ color: #333; }
-.actionbar .optionAct,.actionbar .optionAct:hover{ background: #e74c3c;color: white; }
+.actionbar .optionAct,.actionbar .optionAct:hover{ background: #e74c3c;color: white;border-color: #ca3627; }
 .actionbar .user-icon{ background-image: url(../imgs/iconfont-fanhui.png);background-repeat: no-repeat;background-position: 10px 8px;padding-left: 30px; }
+
+.actionbar-sign{ display: inline-block;width: 100%;height: 1px;margin-top: 60px;overflow: hidden; }
 
 /* 标题描述 */
 .describe{ padding: 20px 0 50px; }
@@ -607,10 +609,14 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /* 个人中心 - 图片阴影 */
 .contentList .col-user .cont .gui_1 .sawtooth i{ display: inline-block;width: 100%;height: 30px; }
 
+/* 个人中心 - 描点间隙 */
+.user-cols-sign{ display: inline-block;width: 100%;height: 30px;cursor: default; }
+
 /* 个人中心 - 内容列表 */
 .userpage .contentList{ width: 800px; }
 .userpage .contentList .col{ width: 100%;display: inline-block;margin: 0 0 30px 0;float: none; }
-.userpage .contentList .col-user{ width: 420px; }
+.userpage .contentList .col-user{ width: 420px;margin: 0px; }
+
 .userpage .contentList .col .cont .gui_2{ height: 470px;max-height: none; }
 .userpage .page{ margin-top: 30px; }
 .userpage .page .btn{ height: 33px;line-height: 30px;background: white url(../imgs/page_bottomBg.gif) repeat-x bottom;border: 1px solid #d9dbdd;border-bottom: 0px;box-shadow: 0px 0px 10px #eee;display: inline-block;border-radius: 2px;color: #2f3c4e; }
@@ -692,68 +698,6 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .col-user-mbtn:hover i{ top: -80px; }
 
 
-
-
-/* 详细页 - 无内容 */ 
-.msgwu{ height: 600px;background: url(../imgs/msgwu.png) no-repeat center; } /* 列表页 - 无内容 */ .noContent{ height: 360px;background: url(../imgs/msgwu2.png) no-repeat center;margin-top: 90px;position: relative; } .noContent .are{ position: absolute;top: 220px;text-align: center;left: 50%;margin-left: -35px; } .noContent .tip{ position: absolute;top:100px;left: 600px;font-size: 30px;color: #ccc; }
-.noContent a{ display: inline-block;line-height: 35px;padding: 0 15px;border-radius: 2px;margin: 0 0 0 10px; }
-.noContent .publish,.noContent .confirm{ background: #e74c3c;color: white;padding: 0 15px; }
-.noContent .publish{ background: #e74c3c url(../imgs/tagPublish_white.png) no-repeat 10px center;padding: 0 15px 0 30px; }
-.noContent .publish:hover,.noContent .confirm:hover{ background-color: #ca3627; }
-.noContent .stroll{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;padding: 0 15px; }
-.noContent .stroll:hover{ border-color: #bbb;color: #333; }
-
-/* 无内容提示 - 简洁版 */
-.Ncon{ background: no-repeat 100px center;margin-top: 0px;height: 335px;background-size: 100px;height: auto;padding: 150px 0 150px 300px; }
-.Ncon h1{ font-weight: normal;font-size: 18px;color: #2f3c4e;margin: 0px; }
-.Ncon .cue{ color: #737a83;margin-top: 15px;line-height: 24px; }
-.Ncon .cue p{ color: #737a83; }
-.Ncon .btn{ margin-top: 20px; }
-.Ncon .btn a{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;display: inline-block;line-height: 35px;padding: 0 15px;margin-right: 10px; }
-.Ncon .btn a:hover{ border-color: #bbb;color: #333; }
-.Ncon .btn a.red{ background: #e74c3c;color: white;padding: 0 15px; }
-.Ncon .btn a.red:hover{ background-color: #ca3627; }
-
-/* 用户中心 - 无内容 */
-.userNot{ background: url(../imgs/msgwu3.png) no-repeat center; }
-
-/* 用户中心 - 访问用户 - 无内容 */
-.visitNot{ background: url(../imgs/msgwu4.png) no-repeat center; }
-
-/* 申请标题 - 提交提示信息 */
-.applyMsg{ background: url(../imgs/msgwu5.png) no-repeat center; }
-
-/* 我的标题 - 暂无属于自己的标题 */
-.titleNot{ background-image: url(../imgs/iconfont-message.png); }
-
-/* 我的标题 - 暂无属于自己的标题 */
-.followNot{ background-image: url(../imgs/iconfont-wodedingyue.png); }
-
-/* 徽章福利 - 没有徽章提示 */
-.badgeNot{ background: url(../imgs/msgwu7.png) no-repeat center;margin-top: 0px; }
-
-/* 发布成功 */
-.addContentMsg{ background: url(../imgs/msgwu8.png) no-repeat center;margin-top: 0px; }
-
-/* 留言提示 */
-.notMessage{ background: url(../imgs/msgwu9.png) no-repeat center;margin-top: 0px;height: 335px; }
-
-/* 留言提示 */
-.notAd{ background: url(../imgs/msgwu10.png) no-repeat center;margin-top: 0px;height: 335px; }
-
-/* 无标题提示 */
-.notTit{ background: url(../imgs/iconfont-no.png) no-repeat 100px center;margin-top: 0px;height: 335px;background-size: 100px;height: auto;padding: 150px 0 150px 300px; } 
-.notTit h1{ font-weight: normal;font-size: 18px;color: #999;margin: 0px; }
-.notTit p{ color: #aaa;margin-top: 10px; }
-
-/* 没有关注的用户 */
-.followUserNot{ background-image: url(../imgs/iconfont-guanzhu-black.png); }
-
-/* 没有留言 */
-.messageNot{ background-image: url(../imgs/iconfont-geiwoliuyan-black.png); }
-
-/* 没有相关内容 */
-.listNot{ background-image: url(../imgs/iconfont-xiangxineirong.png); }
 
 
 /* 标题页 - 列表 */
@@ -1054,7 +998,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* 图片 */
 .publish .picture .uploadPhoto{ border: 1px dashed #ddd;border-radius: 3px;padding: 20px;text-align: center;color: #ccc;margin-bottom: 30px;cursor: pointer; }
-.publish .picture .con{ border: 1px solid #ddd;border-bottom: 0px;border-radius: 3px 3px 0 0; }
+.publish .picture .con{ border: 1px solid #ddd;border-radius: 3px; }
 .publish .picture .con #divPreview{ overflow: hidden;position: relative; }
 .publish .picture .con #divPreview .upfile{ position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0;filter: alpha(opacity:0);z-index: 2; }
 .publish .picture .con img{ border: 0px;float: left;max-width: 100%; }
@@ -1064,7 +1008,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /* 视频 */
 .publish .video .con{ position: relative; }
 .publish .video .tit{ display: inline-block;position: absolute;bottom: 0px;left: 33px;line-height: 35px;color: #999;cursor: default; }
-.publish .video .txt{  height: 33px;background: url(../imgs/tagtag.png) no-repeat 10px center;width: 618px;padding: 0 10px 0 78px;border: 1px solid #e4e6e8;border-radius: 3px 3px 0 0;color: #444;font-size: 13px; }
+.publish .video .txt{  height: 33px;background: url(../imgs/tagtag.png) no-repeat 10px center;width: 663px;padding: 0 10px 0 33px;border: 1px solid #e4e6e8;border-radius: 3px;color: #444;font-size: 13px; }
 .publish .video .txt:focus{ border-color: #ddd;box-shadow: 0 0 10px #ddd; }
 .publish .video .hint{ height: 67px;text-align: right; }
 .publish .video .hint p{ font-size: 12px;color: gray;line-height: 24px; }
@@ -1163,6 +1107,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .floatside .s3:hover{ background-position: -89px 0px; }
 .floatside .s3{position: relative; right: -50px; opacity: 0; -webkit-transition: 0.5s; transition: 0.5s; -webkit-transform:rotate(90deg); transform:rotate(90deg); filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1); } 
 .floatside .rotate{right:0px; opacity: 1; -webkit-transform:rotate(0deg); transform:rotate(0deg); filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=0); }
+.floatside .s3{ background-position: 0 0px; }
 
 
 

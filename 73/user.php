@@ -27,10 +27,11 @@
 						
 					<?php $Ulist = $c -> GUlist(0, 99, 0, 0, $u -> Ik() ? $u -> Gcid() : 0);					
 					if(count($Ulist) > 0){ 	//如果有内容 ?>
-						<div class="contentList" style="margin:0px;width: 100%;">
+						<div class="contentList" style="margin:0px;width: 100%;position: relative;top: -30px;">
 							
 							<?php foreach($Ulist as $k => $v) {	//输出内容，或者指定标题的内容 		?>
 								<div class="f col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; ?> col-user" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+									<a href="javascript:;" name="<?php echo $v['cid']; ?>" class="user-cols-sign" ></a>
 
 									<!-- 标示 -->
 									<?php if($v['effects'] == 1){	//如果是顶 ?>
@@ -61,7 +62,6 @@
 										</div>
 										<div class="txt txt-big">
 											<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-											<?php echo $v['content']; ?>
 											<div class="are"><?php echo $v['content']; ?></div>
 											<?php }else{ ?>
 											<div class="are-not">———— 没有描述 ————</div>
@@ -82,7 +82,7 @@
 												<a class="skip look" href="javascript:;" >展开</a>
 												<?php } ?>
 												<?php if($u -> Guid() && !$u -> IVuser()){	//登录情况下，访问个人中心可以删除 ?>
-												<a class="skip" href="./userAdd-Edit.php?cid=<?php echo $v['cid']; ?>" >编辑内容</a>
+												<a class="skip" href="./userAdd-Edit.php?cid=<?php echo $v['cid']; ?>&#revise" >编辑内容</a>
 												<a class="skip delete" href="javascript:;" >删除</a>
 												<div class="affirm">
 													<a class="buy ackDelete" href="javascript:;" >确定</a>

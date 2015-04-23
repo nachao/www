@@ -5,7 +5,7 @@
 	
 	//设置选择菜单
 	Global $ect;
-	$ect="fabu";	
+	$ect="user";	
 
 	//引用样式头部
 	include("./comm/head.php");
@@ -53,11 +53,14 @@
 				<div class="leftarea f">
 
 					<?php if($addOk){ //判断是否发布成功	?> 
-						<div class="noContent addContentMsg">
+						<div class="Ncon hint-success" id="success">
 							<div class="are">
-								<a class="confirm" href="./detail.php?cid=<?php echo $addOk; ?>" title="">确认，前往详细页</a>
-								<a class="stroll" href="./userAdd.php" >继续发布</a>
-								<a class="stroll" href="./user.php" title="">个人中心</a>
+								<h1>发布成功！</h1>
+								<div class="cue">每天分享一两篇优质的内容，坐等收账！</div>
+								<div class="btn">
+									<a class="red" href="./detail.php?cid=<?php echo $addOk; ?>" title="">确认，前往详细页</a>
+									<a href="./user.php#<?php echo $addOk; ?>" title="">个人中心</a>
+								</div>
 							</div>
 						</div>
 					<?php }else{ ?>
@@ -104,7 +107,7 @@
 										<!-- 文字 -->
 										<div class="col extent writing">
 											<div class="tip">请填写内容<i></i></div>
-											<textarea id="txtApply" class="cue txt conts" name="depict" placeholder="请输入内容" ></textarea>
+											<textarea id="textDepict" class="cue txt conts" name="depict" placeholder="请输入内容" ></textarea>
 											<div class="c"></div>
 										</div>
 										<!-- 文字 -->
@@ -121,7 +124,6 @@
 											</div>
 											<div class="c"></div>
 											<div class="are"><textarea id="imgDepict" class="cue" name="imgDepict" placeholder="描述（可以不写）" ></textarea></div>
-
 											<input class="conts" type="hidden" value="" name="beforeimg" id="beforeimg" />
 										</div>
 										<!-- 图片 end -->
@@ -138,7 +140,6 @@
 													</p>
 													<p>怎么找视频地址？不知道话，请点 <a class='co' href="#" title="" >这里</a>。</p>
 												</div>
-												<span class="tit">Http://</span>
 												<input class="txt conts" id="j-vidsrc" type="text"  name="video"  value="" placeholder="请输入视频地址，例如：www.ffangle.com/xxx.swf" />
 												<div class="c"></div>
 											</div>
@@ -146,8 +147,7 @@
 												<embed id="vidembed" src="" type="application/x-shockwave-flash" width="100%" height="350" allowfullscreen="true" allownetworking="all" allowscriptaccess="always">
 												<div class="c"></div>
 											</div>
-											<textarea class="no j-text" name="videoDepict"></textarea>
-											<div class="cue j-describe" id="j-cue-video" contentEditable="true" placeholder="描述（可以不写）" title="描述（可以不写）" ></div>
+											<div class="are"><textarea id="videoDepict" class="cue" name="videoDepict" placeholder="描述（可以不写）" ></textarea></div>
 										</div>
 										<!-- 视频 -->
 
@@ -159,15 +159,14 @@
 													<p>当前只支持 <a href="http://www.xiami.com" title="访问此网站" target="_blank" >虾米网</a> 的音乐</p>
 													<p>不知道怎么添加音乐，请点 <a class='co' href="#" title="" >这里</a>。</p>
 												</div>
-												<span class="tit">Http://</span>
-												<input class="txt conts" id="mussrc" name="music" type="text"  value="" placeholder="请输入音乐地址，例如：www.ffangle.com/xxx.swf" />
+												<input class="txt conts" id="j-mussrc" name="music" type="text"  value="" placeholder="请输入音乐地址，例如：www.ffangle.com/xxx.swf" />
 												<div class="c"></div>
 											</div>
 											<div class="result">
 												<embed id="musembed" src="" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent">
 												<div class="c"></div>
 											</div>
-											<div class="are"><textarea id="txtApply" class="cue" name="musicDepict" placeholder="描述（可以不写）" ></textarea></div>
+											<div class="are"><textarea id="musicDepict" class="cue" name="musicDepict" placeholder="描述（可以不写）" ></textarea></div>
 										</div>
 
 										<!-- 提交  -->
@@ -223,32 +222,16 @@
 	<script type="text/javascript" src="./js/comm.js" ></script>
 	<script type="text/javascript" src="./js/xiuxiu.js"></script>
 	<script type="text/javascript">
-     
 
-		//类型选择
-		function selectType(i){
-			$('#classType').val(i);
-			$('.main .col').hide().eq(i).show();
-			$('#conTypes').val(i);
-			$('.nav a').eq(i).addClass('act').siblings().removeClass('act');
-		}
-		$('.nav a').click(function(){ selectType($(this).index()); });
-		selectType($('#conTypes').val());	//初始化选择
-     	
-     	
-
-		//清空描述样式
-		$('.video .cue').blur(function(){
-			$(this).find('*').removeAttr('style');
-		});
+		//==========================
+		//缓存命名
+		var cookieName = "F_"+ $('#userIs').val() +"_";
 
 
-		//关闭和显示上传图片插件
-		$('#uploadPhoto').click(function(){
-			$('#uploadPlugIn').toggle();
-		});
 
-		
+		//==========================
+		//初始化事件
+
 		//添加视频
 		$('#j-vidsrc').blur(function(){
 			var input = $(this);
@@ -261,40 +244,96 @@
 				embed.removeAttr('src').parent().hide();
 				input.addClass('textyes');
 			}
+
+			//保存视频地址
+			setCookie( cookieName + "videoSrc" , $(this).val(), 1 );
 		});
 
 		//添加音乐
-		(function(){
-			var src = $('#mussrc'),
-				done = $('#musembed'),
-				url = $('#musrefer');
-			src.blur(function(){
-				var v = $(this).val(),
-					a = v.indexOf('http:'),
-					b = v.indexOf('.swf');
-				v = v.substr(a+7,b-a+4);
-				$(this).val(v);
-				if( v != '' ){
-					if( v.indexOf('xiami.com') >= 0 && v.indexOf('.swf') >= 0 ){
-						// done.attr('src', v).parent().show();
-						// url.val(v);
+		$('#j-mussrc').blur(function(){
+			var input = $(this);
+				value = $(0).isMusicAddress(input),
+				embed = $('#musembed');
+			if(value){
+				embed.attr('src', value).parent().show();
+				input.removeClass('textyes');
+			}else{
+				embed.removeAttr('src').parent().hide();
+				input.addClass('textyes');
+			}
 
-						var temp = done.clone();
-							temp.attr('src', 'http://'+v).parent().show();
-						$('.music .result').show().empty().append(temp);
-						src.val('http://'+v);
+			//保存视频地址
+			setCookie( cookieName + "musicSrc" , $(this).val(), 1 );
+		});
 
-						//提示
-						// $('.music .hint p:first').html('可是发布。').css({ color:'green' });
-					}else{
-						src.val('抱歉暂时还不支持此网站的 音乐！');
-						url.val('');
-					}
-				}else{
-					url.val('');
-				}
-			}).blur();
-		})();
+
+     
+
+		//======================
+		//判断是否有图片
+		var F_addImg = checkCookie(cookieName + 'addImg');
+		if( F_addImg ){
+			$('#imgHeadPhoto').attr('src',F_addImg ).show();
+			$('#beforeimg').val( F_addImg );
+		}
+
+		//判断是否有图片描述
+		var F_imgDepict = checkCookie(cookieName + 'imgDepict');
+		if( F_imgDepict ){
+			$('#imgDepict').val( F_imgDepict );
+		}
+
+		//判断是否有文本
+		var F_textDepict = checkCookie(cookieName + 'textDepict');
+		if( F_textDepict ){
+			$('#textDepict').val( F_textDepict );
+		}
+
+		//判断是否有音乐描述
+		var F_musicDepict = checkCookie(cookieName + 'musicDepict');
+		if( F_musicDepict ){
+			$('#musicDepict').val( F_musicDepict ).blur();
+		}
+
+		//判断是否有音乐地址
+		var F_musicDepict = checkCookie(cookieName + 'musicSrc');
+		if( F_musicDepict ){
+			$('#j-mussrc').val( F_musicDepict ).blur();
+		}
+
+		//判断是否有视频描述
+		var F_videoDepict = checkCookie(cookieName + 'videoDepict');
+		if( F_videoDepict ){
+			$('#videoDepict').val( F_videoDepict );
+		}
+
+		//判断是否有视频地址
+		var F_addVideoSrc = checkCookie(cookieName + 'videoSrc');
+		if( F_addVideoSrc ){
+			$('#j-vidsrc').val(F_addVideoSrc).blur();
+		}
+
+		//判断是否有记录选择类型
+		var F_selectType = checkCookie(cookieName + 'selectType');
+
+
+
+		//类型选择
+		function selectType(i){
+			$('#classType').val(i);
+			$('.main .col').hide().eq(i).show();
+			$('#conTypes').val(i);
+			$('.nav a').eq(i).addClass('act').siblings().removeClass('act');
+
+			//类型存入缓存
+			setCookie( cookieName + "selectType" , i, 1 );
+		}
+		$('.nav a').click(function(){ selectType($(this).index()); });
+		var defType = $('#conTypes').val();
+		if( F_selectType ){
+			defType = F_selectType;
+		}
+		selectType(defType);	//初始化选择
 
 		//打开和关闭标题列表
 		$('#orTitle').click(function(){
@@ -309,7 +348,6 @@
 
 			//刷新按钮显示
 			$('#delTitle').removeClass('no');
-
 
 			//获取金额参数
 			var sharegold = parseInt($(this).attr('share')),
@@ -360,8 +398,6 @@
 			$('#titleList .tits[tid='+ dat +']').click();
 		}
 
-		
-
 		//表单检测
 		function check( obj ){
 
@@ -374,9 +410,6 @@
 				con = col.find('.conts');
 
 			var loop;
-
-			//将编辑DIV里的描述转移至文本域中
-			$('.j-text').val($('.j-describe').val());
 
 			//遍历所有必要内容
 			if( con.val() == '' ){
@@ -393,10 +426,6 @@
 			}
 
 		}
-
-		//==========================
-		//缓存命名
-		var cookieName = "F_"+ $('#userIs').val() +"_";
 		
 
 		//加载图片上传控件 
@@ -411,10 +440,6 @@
 			xiuxiu.setUploadDataFieldName("upload_file");
 			xiuxiu.onUploadResponse = function (data){
 				data = eval('('+ data +')');
-
-				// console.log( data.original_pic );  可以开启调试
-				// xiuxiu.loadPhoto( data.original_pic );
-				// console.log( $('#imgHeadPhoto').length );
 
 				//给表单赋值
 				$('#imgHeadPhoto').attr('src',data.original_pic ).show();
@@ -434,51 +459,41 @@
 
 		//============================
 		//提交数据后删除所有缓存
-		if( $('.addContentMsg').length > 0 ){
+		if( $('#success').length > 0 ){
 			delCookie(cookieName + 'addImg');
-			delCookie(cookieName + 'addImgDepict');
+			delCookie(cookieName + 'imgDepict');
+			delCookie(cookieName + 'textDepict');
+			delCookie(cookieName + 'musicDepict');
+			delCookie(cookieName + 'videoDepict');
+			delCookie(cookieName + 'selectType');
+			delCookie(cookieName + 'musicSrc');
+			delCookie(cookieName + 'videoSrc');
 		}
 
 
 
 		//======================
+		//保存音乐描述缓存
+		$('#musicDepict').blur(function(){
+			setCookie(cookieName + "musicDepict" , $(this).val(), 1);
+		});
+
 		//保存视频描述缓存
-		$('#j-cue-video').blur(function(){
-			setCookie(cookieName + "addVideoDepict" , $(this).html(), 1);
+		$('#videoDepict').blur(function(){
+			setCookie(cookieName + "videoDepict" , $(this).val(), 1);
 		});
 
 		//保存图片描述缓存
 		$('#imgDepict').blur(function(){
-			setCookie( cookieName + "addImgDepict" , $(this).val(), 1 );
+			setCookie( cookieName + "imgDepict" , $(this).val(), 1 );
+		});
+
+		//保存文本
+		$('#textDepict').blur(function(){
+			setCookie( cookieName + "textDepict" , $(this).val(), 1 );
 		});
 
 
-
-		//======================
-		//判断是否有图片
-		var F_addImg = checkCookie(cookieName + 'addImg');
-		if( F_addImg ){
-			$('#imgHeadPhoto').attr('src',F_addImg ).show();
-			$('#beforeimg').val( F_addImg );
-		}
-
-		//判断是否有图片描述
-		var F_addImgDepict = checkCookie(cookieName + 'addImgDepict');
-		if( F_addImgDepict ){
-			$('#imgDepict').val( F_addImgDepict );
-		}
-
-		//判断是否有视频地址
-		var F_addVideoSrc = checkCookie(cookieName + 'addVideoSrc');
-		if( F_addVideoSrc ){
-			$('#j-vidsrc').val(F_addVideoSrc).blur();
-		}
-
-		//判断是否有视频描述
-		var F_addVideoDepict = checkCookie(cookieName + 'addVideoDepict');
-		if( F_addVideoDepict ){
-			$('#j-cue-video').html(F_addVideoDepict);
-		}
 
 
 	</script>

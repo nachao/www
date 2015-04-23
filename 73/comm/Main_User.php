@@ -880,7 +880,7 @@ class Users extends Event_user
 	
 	//判断指定 用户UID（选填）是否存在
 	public function Ibe($uid=0){
-		return count(parent::event_get($uid));
+		return parent::event_getInfo($uid);
 	}
 	
 	//判断指定 用户(UID)（选填）是不是会员

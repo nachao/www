@@ -1,11 +1,11 @@
 <?php
-	
-	//设置选择菜单
-	Global $ect;
-	$ect="userTitle";
 
 	//引用公共文件
 	include("./comm/base.php");		
+	
+	//设置选择菜单
+	Global $ect;
+	$ect="user";
 
 	//引用样式头部
 	include("./comm/head.php");	
@@ -26,9 +26,6 @@
 ?>
 
 	<div class="container pagecon">
-		<?php
-
-			// include("./comm/pageHead.php");	//导入内页头部及导航 	?>
 
 		<!-- 主体 -->
 		<div class="main">
@@ -36,10 +33,11 @@
 			
 				<!-- 操作栏 -->
 				<div class="actionbar">
-					<?php if($seeUid){	//访问时可见 ?>
-					<a class="cupid-red user-icon r" href="./list.php?uid=<?php echo $uid; ?>" style="margin: 27px 0 0 20px;line-height: 34px;" title=""><?php echo $u -> Gname($uid); ?></a>
+					<?php echo $u -> Ibe($uid); ?>
+					<?php if($seeUid && $u -> Ibe($uid)){	//访问，且访问的用户存在时可见 ?>
+						<a class="cupid-red user-icon f" href="./list.php?uid=<?php echo $uid; ?>" style="margin: 28px 30px 0 0;line-height: 33px;" title=""><?php echo $u -> Gname($uid); ?></a>
 					<?php } ?>
-					<?php if($u -> Guid()){ //登录后可见 ?>
+					<?php if($u -> Guid() && $uid == $u -> Guid()){ //登录后可见 ?>
 					<a class="cupid-green apply r" href="./userTitle-Apply.php" title="">申请 & 标题</a>
 					<?php } ?>
 					<a class="option <?php if(!isset($_GET['Ta'])){ echo "optionAct"; } ?>" href="?Me<?php echo $seeUid; ?>" >创建的</a>
@@ -164,7 +162,7 @@
 												<?php } ?>
 
 											<?php }else{ //如果不是创建者，则可以关注此标题	?>
-												<?php if($u -> Guid()){ ?>
+												<?php if(!$uid && isset($_GET['Ta'])){ ?>
 												<a class="buy sh follow buy_follow r" href="javascript:;" >取消关注</a>
 												<?php } ?>
 											<?php } ?>

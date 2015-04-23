@@ -720,25 +720,53 @@ jQuery.fn.extend({
 	},
 
 	//检查视频地址是否有效且做相应的地址处理，返回结果 *******************************************************
-	isVideoAddress: function(input, embed, funs){
+	isVideoAddress: function(input, funs){
 		var value = input.val(),
 			reply = false;
 		if(value.replace(/\s+/g,"") != ""){
 			if(value.indexOf('http://') >= 0){
 				value = value.replace(/http:\/\//g, '');
-				input.val(value);
 			}
 
 			//是否为播放文件
 			if(value.indexOf('.swf') >= 0){
 				value = 'http://'+ value;
+				input.val(value);
 				var v = value;
 
 				//只支持指定网站的视频
 				if((( v.indexOf('56.com') >= 0 || v.indexOf('youku.com') >= 0 ) || v.indexOf('tudou.com') >= 0 ) || v.indexOf('yinyuetai.com') >= 0 ){
 					reply = value;
 				}
-				setCookie(cookieName + "addVideoSrc" , value, 1);	//保存视频地址至缓存
+
+				funs ? funs() : null;
+			}
+		}
+		return reply;
+	},
+
+	//检查音乐地址是否有效且做相应的地址处理，返回结果 *******************************************************
+	isMusicAddress: function(input, funs){
+		var value = input.val(),
+			reply = false;
+		if(value.replace(/\s+/g,"") != ""){
+			if(value.indexOf('http://') >= 0){
+				value = value.replace(/http:\/\//g, '');
+			}
+
+			//是否为播放文件
+			if(value.indexOf('.swf') >= 0){
+				value = 'http://'+ value;
+				input.val(value);
+				console.log(input.val());
+				var v = value;
+
+				//只支持指定网站的视频
+				if( v.indexOf('xiami.com') >= 0 ){
+					reply = value;
+				}
+
+				funs ? funs() : null;
 			}
 		}
 		return reply;

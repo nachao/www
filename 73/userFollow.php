@@ -1,11 +1,11 @@
 <?php
-
-	//设置选择菜单
-	Global $ect;
-	$ect="userFollow";	
 	
 	//引用公共文件
 	include("./comm/base.php");	
+
+	//设置选择菜单
+	Global $ect;
+	$ect="user";	
 
 	//引用样式头部
 	include("./comm/head.php");	
