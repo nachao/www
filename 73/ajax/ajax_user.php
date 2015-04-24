@@ -241,7 +241,10 @@
 	}
 
 
-
+	//提交反馈信息
+	if(isset($_POST['feedback'])){
+		echo $u -> Afeedback($_POST['feedback']);
+	}
 
 
 ?>

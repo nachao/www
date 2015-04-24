@@ -61,6 +61,12 @@ class Data_user extends Config
 		return mysql_query($sql);
 	}
 
+	//反馈 --添加反馈信息
+	protected function data_addFeedback($uid=0, $txt=''){
+		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."feedback` (`id`, `uid`, `time`, `content`) VALUES (NULL, '".$uid."', '".time()."', '".$txt."');";
+		return mysql_query($sql);
+	}
+
 
 
 	/********************************************
@@ -544,6 +550,13 @@ class Event_user extends Data_user
 	//激活码 --添加 激活码CDK 
 	protected function event_addCdk($cdk){
 		return parent::data_addCdk($cdk);
+	}
+
+	//反馈 --添加 反馈 
+	protected function event_addFeedback($uid=0, $txt=''){
+		if($txt){
+			return parent::data_addFeedback($uid, $txt);
+		}
 	}
 
 
@@ -1124,6 +1137,15 @@ class Users extends Event_user
 		}
 	}
 
+	//提交反馈信息
+	public function Afeedback($txt=''){
+		$u = new Users();
+		$value = 0;
+		if($u -> Guid()){
+			$value = parent::event_addFeedback($u -> Guid(), $txt); 
+		}
+		return $value;
+	}
 
 
 	/********************************************

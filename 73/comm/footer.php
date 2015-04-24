@@ -1,8 +1,50 @@
 		<div class="floatside">
-			<!-- <a class="s2" id="feedback" href="javascript:;" title="">反馈</a> -->
-			<a class="s3 rotate" id="topBtn" href="javascript:;" title=""></a>
+			<?php if($u -> Guid()){	//登陆用户可反馈 ?>
+			<a class="s2" id="feedback" href="javascript:;" title="反馈" pop="pop-1"></a>
+			<?php } ?>
+			<a class="s3" id="topBtn" href="javascript:;" title="" pop="pop-2"></a>
 		</div>
+
+		<?php if($u -> Guid()){	//登陆用户可反馈 ?>
+		<div class="pop" id="pop-1" >
+			<div class="pop-bg"></div>
+			<div class="pop-main">
+				<h1 class="pop-title">反馈信息</h1>
+				<div class="pop-form">
+					<div class="pop-form-col">
+						<textarea class="pop-form-textarea" placeholder="请填写反馈信息，如果你的建议被采纳，我们将会给予奖励。" ></textarea>
+					</div>
+					<div class="pop-form-col">
+						<input type="button" value="提交" class="pop-form-submit" />
+						<a href="javascript:;" class="pop-form-close" >关闭窗口</a>
+					</div>
+				</div>
+				<div class="pop-colse"></div>
+			</div>
+		</div>
+		<?php } ?>
+
 		<script type="text/javascript">
+
+			//弹出框初始化
+			ncs.pop.init({
+				funs: {
+					'pop-1': function(pop){
+						var txt = pop.find('.pop-form-textarea').val();
+						if(txt.replace(/\s*/g, '') != ''){
+							pop.hide();		//关闭弹出框
+							ncs.ajax.set("feedback="+ txt);	//提交反馈信息后提交数据
+						}
+					},
+					'pop-2': function(){
+						ncs.ajax.set("feedback="+ $('.j-fankui').val());	//提交后执行
+					}
+				}
+			});
+
+
+
+
 		
 			//置顶
 			(function(){

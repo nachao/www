@@ -986,3 +986,119 @@ function pagess(v, defact){
 		}
 	});
 }
+
+
+
+
+
+
+
+//功能化
+var ncs = new Object();
+
+
+/*
+* name: 弹出框
+* anthor: nachao
+* function: 初始化
+* paramter: -
+*/
+ncs.ajax = {
+	url: "./ajax/ajax_user.php",
+
+	//初始化
+	init: function(file){
+		if(file){
+			this.url = "./ajax/"+ file;	//重置数据文件
+		}
+	},
+
+	//输出地址
+	log: function(){
+		return this.url;
+	},
+
+	//提交数据
+	set: function(val, funs){
+		$.ajax({
+			type: "POST",
+			url: this.url,
+			data: val,
+			success: function(msg){
+				funs? funs(msg): null;
+			}
+		});
+	},
+
+	//获取数据
+	get: function(val, funs){
+		$.ajax({
+			type: "POST",
+			url: this.url,
+			data: val,
+			success: function(msg){
+				funs? funs(msg): null;
+			}
+		});
+	}
+}
+
+
+/*
+* name: 弹出框
+* anthor: nachao
+* function: 初始化
+* paramter: -
+*/
+ncs.pop = {
+	// obj: [{
+	// 	pop: null,	//弹出框
+	// 	open: null,	//打开弹出框按钮
+	// 	close: null	//关闭弹出框按钮
+	// }],
+	obj :[],
+	funs: [],	//提交弹出框表单后执行的方法
+
+	//初始化
+	init: function(val){
+		if(val.funs){
+			this.funs = val.funs;
+		}
+		this.gets();
+		this.event();
+	},
+
+	//获取全部元素
+	gets: function(){
+		var obj = this.obj,
+			funs = this.funs;
+		$('*[pop]').each(function(){	//遍历所有弹出框按钮
+			var arr = {};
+			arr.open = $(this);
+			arr.pop = $('#'+ $(this).attr('pop'));
+			arr.close = arr.pop.find('.pop-colse,.pop-bg,.pop-form-close');
+			arr.submit = arr.pop.find('.pop-form-submit');
+			arr.textarea = arr.pop.find('.pop-form-textarea');
+			arr.funs = funs['pop-1'];
+			if(arr.pop.length){		//如果有对应的弹出框的话则存入数据
+				obj.push(arr);
+			}
+		});
+	},
+
+	//挂接事件
+	event: function() {
+		var obj = this.obj;
+		$(obj).each(function(i, val){	//遍历绑定所有有效的弹出框事件
+			val.open.click(function(){ val.pop.show(); }); 	//打开弹出框
+			val.close.click(function(){ val.pop.hide(); });	//关闭弹出框
+			val.submit.click(function(){	//提交表单后执行，反馈对应的弹出框元素
+				val.funs(val.pop); 	
+				val.textarea.val('');
+			});
+		});
+	}
+
+	//获取表单数据
+
+}
