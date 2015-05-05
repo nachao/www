@@ -26,6 +26,9 @@
 		$info = $c -> Ginfo($cid);
 		$depict = $info['content'];
 
+		if($type == 0){
+			$depict = $_POST['depict'];		//文本类型，修改文本
+		}
 		if($type == 1){
 			$depict = $_POST['imgDepict'];
 			if($_POST['beforeimg'] != $info['image']){
