@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : ux73
-Source Server Version : 50169
-Source Host           : ux73.gotoftp2.com:3306
+Source Server         : localhost
+Source Server Version : 50611
+Source Host           : localhost:3306
 Source Database       : ux73
 
 Target Server Type    : MYSQL
-Target Server Version : 50169
+Target Server Version : 50611
 File Encoding         : 65001
 
-Date: 2015-05-05 12:58:44
+Date: 2015-05-05 22:39:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -67,8 +67,8 @@ CREATE TABLE `ux73_banner` (
 -- Records of ux73_banner
 -- ----------------------------
 INSERT INTO `ux73_banner` VALUES ('1', '731429112068', null, '1429112068', '1', './images/1.jpg', '321427775977', '0', '3', '广告公司');
-INSERT INTO `ux73_banner` VALUES ('2', '1429112338', null, '1429112265', '1', './images/004.jpg', '0', '291429156432', '2', '游记专题');
-INSERT INTO `ux73_banner` VALUES ('3', '1429112516', null, '1429112443', '1', './images/005.jpg', '0', '271430234778', '1', '第一期活动');
+INSERT INTO `ux73_banner` VALUES ('2', '1429112338', null, '1429112265', '1', '/images/004.jpg', '0', '291429156432', '2', '游记专题');
+INSERT INTO `ux73_banner` VALUES ('3', '1429112516', null, '1429112443', '1', '/images/005.jpg', '0', '271430234778', '1', '第一期活动');
 
 -- ----------------------------
 -- Table structure for `ux73_cdk`
@@ -276,6 +276,29 @@ INSERT INTO `ux73_exchange` VALUES ('2', '6', '123123-123123', '3000', '0', '201
 INSERT INTO `ux73_exchange` VALUES ('3', '131427770385', '123-12313', '200', '0', '1427778635');
 INSERT INTO `ux73_exchange` VALUES ('4', '131427770385', '1231-1423', '200', '0', '1427778685');
 INSERT INTO `ux73_exchange` VALUES ('5', '101427698727', '123-123', '3000', '0', '1429590845');
+
+-- ----------------------------
+-- Table structure for `ux73_feedback`
+-- ----------------------------
+DROP TABLE IF EXISTS `ux73_feedback`;
+CREATE TABLE `ux73_feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) DEFAULT NULL COMMENT '用户uid',
+  `time` int(11) DEFAULT NULL COMMENT '提交时间',
+  `content` text COMMENT '反馈内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ux73_feedback
+-- ----------------------------
+INSERT INTO `ux73_feedback` VALUES ('1', '123', '123', '阿萨达速度');
+INSERT INTO `ux73_feedback` VALUES ('2', '101427698727', '1429895521', 'asd');
+INSERT INTO `ux73_feedback` VALUES ('3', '101427698727', '1429895589', 'asd');
+INSERT INTO `ux73_feedback` VALUES ('4', '101427698727', '1429895613', 'asd');
+INSERT INTO `ux73_feedback` VALUES ('5', '101427698727', '1429895687', '阿斯达');
+INSERT INTO `ux73_feedback` VALUES ('6', '101427698727', '1429895693', '阿萨达速度');
+INSERT INTO `ux73_feedback` VALUES ('7', '101427698727', '1429896086', '阿斯达');
 
 -- ----------------------------
 -- Table structure for `ux73_logs_followtitle`
@@ -615,6 +638,25 @@ INSERT INTO `ux73_message` VALUES ('20', '爱上大声大声道', '1427879361', 
 INSERT INTO `ux73_message` VALUES ('21', '29', '1427880792', '0', '1', '0');
 
 -- ----------------------------
+-- Table structure for `ux73_notice`
+-- ----------------------------
+DROP TABLE IF EXISTS `ux73_notice`;
+CREATE TABLE `ux73_notice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `text` varchar(500) DEFAULT NULL COMMENT '描述',
+  `status` int(1) DEFAULT '0' COMMENT '状态 1=开启，0=关闭',
+  `time` int(11) DEFAULT '0' COMMENT '发布日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ux73_notice
+-- ----------------------------
+INSERT INTO `ux73_notice` VALUES ('2', '七十三号展馆内测正常开始，每天会放出少量的邀请码。', '1', '1430834444');
+INSERT INTO `ux73_notice` VALUES ('3', '测试期间收入为正常的&275&27倍，此收入仅限作者，标题不变。', '1', '1430836348');
+INSERT INTO `ux73_notice` VALUES ('5', '新加入了 《标题金池共享》 功能，每个用户都可以成为标题的赞助者，和题主一起大赚特赚。', '1', '1430836482');
+
+-- ----------------------------
 -- Table structure for `ux73_special`
 -- ----------------------------
 DROP TABLE IF EXISTS `ux73_special`;
@@ -674,7 +716,7 @@ CREATE TABLE `ux73_user` (
 -- ----------------------------
 -- Records of ux73_user
 -- ----------------------------
-INSERT INTO `ux73_user` VALUES ('29', '101427698727', '0', '站长', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/30/551909ca17728.jpg', '1430752897', '1430235260', '157', '70', '0', '1427880792', null, null, null, '127.0.0.1', '1427698727', '1428389373', null, '0');
+INSERT INTO `ux73_user` VALUES ('29', '101427698727', '0', '站长', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/30/551909ca17728.jpg', '1430752657', '1430235260', '157', '70', '0', '1427880792', null, null, null, '127.0.0.1', '1427698727', '1428389373', null, '0');
 INSERT INTO `ux73_user` VALUES ('39', '121427795139', '0', '九月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6cbc9709f.jpg', '1427795139', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795139', null, null, '0');
 INSERT INTO `ux73_user` VALUES ('38', '111427795114', '0', '南台月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6ca051411.jpg', '1427795114', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795114', null, null, '0');
 INSERT INTO `ux73_user` VALUES ('37', '101427795057', '0', '大姐大', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6c66eb3a2.jpg', '1427795058', '0', '10', '0', '0', '0', null, null, null, '127.0.0.1', '1427795057', null, null, '0');

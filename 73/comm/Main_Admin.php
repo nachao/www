@@ -32,6 +32,13 @@ class Data_admin extends Config
 		return mysql_query($sql);
 	}
 
+	//公告 - 添加指定描述的系统公告
+	protected function data_addNotice($txt=''){
+		$sql = "insert INTO  `".parent::Mn()."`.`".parent::Fn()."notice` (`id` , `text` , `status` , `time` ) VALUES (NULL ,  '".$txt."',  '1',  '".time()."');";
+		echo $sql;
+		return mysql_query($sql);
+	}
+
 
 	/********************************************
 	* 删除
@@ -63,6 +70,12 @@ class Data_admin extends Config
 	//获取指定 状态VAL 的全部焦点图列表
 	protected function data_selectStatus($val=0){
 		$sql = "select * FROM  `".parent::Fn()."banner` WHERE  `status` =".$val." ORDER BY  `order` ASC;";
+		return mysql_query($sql);
+	}
+
+	//公告 - 获取全部公告信息
+	protected function data_selectNoticeAll($num=7){
+		$sql = "select * FROM  `".parent::Fn()."notice` LIMIT 0 , ".$num;
 		return mysql_query($sql);
 	}
 
@@ -138,6 +151,20 @@ class Event_admin extends Data_admin
 		return $array;
 	}
 
+	//公告 - 获取全部公告信息
+	protected function event_getNoticeAll($num=7){
+		$o = new Tool();
+		$array = array();
+		$query = parent::data_selectNoticeAll($num);
+		if( !!$query && mysql_num_rows($query) > 0 ){	//遍历数据
+			while( $row = mysql_fetch_array($query)){	//获取单个内容数
+				$row['text'] = $o -> Ccode($row['text']);
+				array_push($array, $row);
+			}
+		}
+		return $array;
+	}
+
 
 
 	/********************************************
@@ -171,6 +198,13 @@ class Event_admin extends Data_admin
 		$bid = '73'+time();
 		parent::data_addBanner($bid, $src, $cid, $tid);
 		return $bid;
+	}
+
+	//添加指定描述的系统公告
+	protected function event_addNotice($txt=''){
+		if($txt){
+			return parent::data_addNotice($txt);
+		}
 	}
 
 
@@ -223,6 +257,11 @@ class Admin extends Event_admin
 		return parent::event_getList();
 	}
 
+	//公告 - 获取全部公告信息
+	public function Gnotice($num=7){
+		return parent::event_getNoticeAll($num);
+	}
+
 
 	/********************************************
 	* 判断 is
@@ -262,6 +301,13 @@ class Admin extends Event_admin
 		return parent::event_addBanner($src, $cid, $tid);
 	}
 
+	//公告 - 添加指定描述的系统公告
+	public function Anotice($txt=''){
+		$o = new Tool();
+		return parent::event_addNotice($o -> Chtml($txt));
+	}
+
+
 
 	/********************************************
 	* 删除 delete
@@ -288,6 +334,7 @@ class Admin extends Event_admin
 
 //赋值数据
 $admin = new Admin();
+$an = new Admin();
 
 
 

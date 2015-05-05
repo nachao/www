@@ -47,6 +47,9 @@
 	$admin -> UBact('731429112068');
 
 
+	// $an -> Anotice("优化内容：现在首页会有18条推荐的免费内容可欣赏，此体验在未登录用户下可看。");
+
+
 ?>
 
 	<div class="container pagecon">
@@ -59,11 +62,14 @@
 				<div class="notice">
 					<div class="tit">系统公告</div>
 					<div class="con">
-						<!-- <div class="cue f">用户“方方方”在2014年12月23日以[2,940,202]的个人金币数量，成功打破“misa”之前保持的[2,632,220]分，刷新了《方方乐》最高记录。并获得首富称号。</div> -->
-						<div class="cue f">七十三号展馆内测进行中，测试地址：www.ux73.com。测试期间收入为正常的"5"倍。</div>
+						<div class="cue f" id="notice-cue">
+							<?php foreach ($an -> Gnotice() as $key => $val) { ?>
+							<p><?php echo $val['text'].' - '.$o -> Cdate($val['time']); ?></p>
+							<?php } ?>
+						</div>
 						<div class="btn r">
-							<a class="not" href="javascript:;" >&lt;</a>
-							<a class="not" href="javascript:;" >&gt;</a>
+							<a id="notice-btn-left" href="javascript:;" >&lt;</a>
+							<a id="notice-btn-right" href="javascript:;" >&gt;</a>
 						</div>
 					</div>
 				</div>
@@ -237,6 +243,49 @@
 
 		//挂接关注和取消关注
 		$('.describe').attention();
+
+		//公告切换，此效果因为只在此页面使用，所有放在此处
+		(function(){
+			var cue = $('#notice-cue'),
+				col = cue.find('p'),
+				len = col.length;
+			var current = 0;
+
+			//主要的部分
+			function go(){
+				if(current >= len){
+					current = 0;
+				}
+				if(current < 0){
+					current = len-1;
+				};
+				cue.stop().animate({ top: -col.height() * current });
+			}
+
+			//自动执行
+			var loop,
+				time = 5000;
+			function auto(){
+				stop();
+				loop = setTimeout(function(){
+					auto();
+					current++;
+					go();
+				}, time);
+			}
+			function stop() {
+				clearTimeout(loop);
+			}
+
+			//挂接事件
+			$('#notice-btn-left').click(function(){ current--; go(); });
+			$('#notice-btn-right').click(function(){ current++; go(); });
+			$('.notice').hover(function(){
+				stop();
+			},function(){
+				auto();
+			}).mouseleave();
+		})();
 
 		//焦点图
 		(function(){
