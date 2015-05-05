@@ -179,7 +179,7 @@ jQuery.fn.extend({
 					//提交数据
 					$.ajax({ type: "POST", url: "./ajax/ajax_user.php", data: "praise=" + cid, success: 
 						function(msg){
-							// console.log(msg);
+							console.log(msg);
 
 							//修改显示数量
 							col.find('.golds').attr('n', now+ parseInt(msg)).golds();

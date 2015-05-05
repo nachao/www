@@ -414,7 +414,7 @@ class Event_title extends Data_title
 				$o = new Tool();
 				$con = $o -> Chtml($con);	//编译
 				$tid = $u -> Gid().time();	//标题自定义 ID(*重要参数)
-				// $this -> event_addUserFollowTit($tid);		//关注用户自己创建的标题
+				$this -> event_addUserFollowTit($tid);		//关注用户自己创建的标题
 				parent::data_createNew($u -> Guid(), $tid, $tit, $con, $price, $duration, $reward, $type );	//提交数据
 				return $tid;
 			}

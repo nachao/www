@@ -26,20 +26,23 @@
 
 		<script type="text/javascript">
 
-			//弹出框初始化
-			ncs.pop.init({
-				funs: {
-					'pop-1': function(pop){
-						var txt = pop.find('.pop-form-textarea').val();
-						if(txt.replace(/\s*/g, '') != ''){
-							pop.hide();		//关闭弹出框
-							ncs.ajax.set("feedback="+ txt);	//提交反馈信息后提交数据
+			$(document).ready(function(){
+
+				//弹出框初始化
+				ncs.pop.init({
+					funs: {
+						'pop-1': function(pop){
+							var txt = pop.find('.pop-form-textarea').val();
+							if(txt.replace(/\s*/g, '') != ''){
+								pop.hide();		//关闭弹出框
+								ncs.ajax.set("feedback="+ txt);	//提交反馈信息后提交数据
+							}
+						},
+						'pop-2': function(){
+							ncs.ajax.set("feedback="+ $('.j-fankui').val());	//提交后执行
 						}
-					},
-					'pop-2': function(){
-						ncs.ajax.set("feedback="+ $('.j-fankui').val());	//提交后执行
 					}
-				}
+				});
 			});
 
 
