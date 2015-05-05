@@ -8,7 +8,7 @@
 
 /* 详细页 - 无内容 */ 
 .msgwu{ height: 600px;background: url(../imgs/msgwu.png) no-repeat center; } /* 列表页 - 无内容 */ .noContent{ height: 360px;background: url(../imgs/msgwu2.png) no-repeat center;margin-top: 90px;position: relative; } .noContent .are{ position: absolute;top: 220px;text-align: center;left: 50%;margin-left: -35px; } .noContent .tip{ position: absolute;top:100px;left: 600px;font-size: 30px;color: #ccc; }
-.noContent a{ display: inline-block;line-height: 35px;padding: 0 15px;border-radius: 2px;margin: 0 0 0 10px; }
+.noContent a{ display: inline-block;line-height: 35px;padding: 0 15px;border-radius: 2px;margin: 0 10 0 10px; }
 .noContent .publish,.noContent .confirm{ background: #e74c3c;color: white;padding: 0 15px; }
 .noContent .publish{ background: #e74c3c url(../imgs/tagPublish_white.png) no-repeat 10px center;padding: 0 15px 0 30px; }
 .noContent .publish:hover,.noContent .confirm:hover{ background-color: #ca3627; }
@@ -21,7 +21,7 @@
 .Ncon .cue{ color: #737a83;margin-top: 10px;line-height: 24px; }
 .Ncon .cue p{ color: #737a83; }
 .Ncon .btn{ margin-top: 20px; }
-.Ncon .btn a{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;display: inline-block;line-height: 35px;padding: 0 15px;margin-right: 10px; }
+.Ncon .btn a{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;display: inline-block;line-height: 35px;padding: 0 15px;margin-right: 10px;width: auto; }
 .Ncon .btn a:hover{ border-color: #bbb;color: #333; }
 .Ncon .btn a.red{ background: #e74c3c;color: white;padding: 0 15px;border-color: #ca3627; }
 .Ncon .btn a.red:hover{ background-color: #ca3627; }

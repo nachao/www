@@ -33,7 +33,6 @@
 			
 				<!-- 操作栏 -->
 				<div class="actionbar">
-					<?php echo $u -> Ibe($uid); ?>
 					<?php if($seeUid && $u -> Ibe($uid)){	//访问，且访问的用户存在时可见 ?>
 						<a class="cupid-red user-icon f" href="./list.php?uid=<?php echo $uid; ?>" style="margin: 28px 30px 0 0;line-height: 33px;" title=""><?php echo $u -> Gname($uid); ?></a>
 					<?php } ?>

@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
 	    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" /> -->
-		<title>首页</title>
+		<title>七十三号馆</title>
         <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
 		<META HTTP-EQUIV="expires" CONTENT="0">
@@ -42,7 +42,7 @@
 					<div class="row">
 
 						<!-- LOGO -->
-						<div class="logo f"><a href="./" ><em>方方乐</em><i>ffangle.com & 知识交易所</i></a></div>
+						<div class="logo f"><a href="./" ><em>七十三号馆</em><i>ux73.com & 不一样的交易所</i></a></div>
 
 						<!-- 广告 -->
 						<div class="advert r">

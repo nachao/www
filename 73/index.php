@@ -1,5 +1,5 @@
 <?php
-	
+
 	//引用公共文件
 	include("./comm/base.php");		
 

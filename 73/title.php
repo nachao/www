@@ -24,13 +24,13 @@ include("./comm/head.php");
 
 				<?php if(!$t -> Iuse()){ ?>
 					<!-- 没有标题时的提示 -->
-					<div class="noContent notTit">
+					<div class="Ncon notTit">
 						<h1>抱歉没有找到相关内容！</h1>
 						<p>你可以去申请属于自己专属的 “个人专题”；也可以申请让大家参与进来的 “活动标题”。</p>
 						
 						<?php if($u -> Guid()){ ?>
-						<div class="noc-btn">
-							<a href="./userTitle-Apply.php" class="cupid-orange" >去申请创建新标题</a>
+						<div class="btn">
+							<a href="./userTitle-Apply.php" class="red" >去申请创建新标题</a>
 						</div>
 						<?php } ?>
 					</div>
@@ -130,7 +130,9 @@ include("./comm/head.php");
 										</div>
 
 										<?php if($c -> Itxt($Cv['cid'])){	//如果有文本则显示展开按钮 ?>
-											<div class="txt"><div class="are"><?php echo $o -> Ccode($Cv['content']); ?></div></div>
+										<div class="txt">
+											<div class="are"><?php echo $Cv['content']; ?></div>
+										</div>
 										<?php } ?>
 
 										<div class="use">
@@ -150,7 +152,7 @@ include("./comm/head.php");
 											<?php }else{  //需要购买 ?>
 												<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
 												<a class="skip look r" href="./detail.php?cid=<?php echo $Cv['cid']; ?>" >评论</a>
-											<?php } ?>
+											<?php } ?>	
 
 										</div>
 									</div>

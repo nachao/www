@@ -88,7 +88,7 @@
 				<span><?php echo $u -> Gname($suid); ?></span>
 			</div>
 
-			<div class="price f"><em id="userInfoGold" class="golds"><?php echo $u -> Gplus($suid); ?></em><i>元</i></div>
+			<div class="price f"><em id="userInfoGold" class="golds" n="<?php echo $u -> Gplus($suid); ?>"></em><i>元</i></div>
 			<div class="c"></div>
 			<div class="depict"><?php echo $u -> Gdepict($suid); ?></div>
 
