@@ -11,7 +11,7 @@
 	include("./comm/head.php");	
 
 	//内容参数
-	$page = 9;		//每页显示的数量
+	$page = 18;		//每页显示的数量
 	$norm = 1;		//内容显示最低标准（金额：0.01元为单位）
 
 	//获取标题
@@ -123,7 +123,8 @@
 				<div class="contentList" tote="<?php echo $total; ?>" style="overflow: inherit;margin: 0 -15px;" >
 					<div class="row"></div>
 					<?php foreach ($list as $k => $v) {	//输出内容，或者指定标题的内容 		?>
-						<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+						<?php $is_look = !$u -> Guid()?' col_possess':'';	//如果没有登录默认内容可以查看 ?>
+						<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
 
 							<!-- 标示 -->
 							<?php if($v['effects'] == 1){	//如果是顶 ?>
@@ -183,8 +184,12 @@
 											<a class="skip look r" href="javascript:;" >展开</a>
 										<?php } ?>
 									<?php }else{  //需要购买 ?>
+										<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
 										<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
 										<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
+										<?php }else{ ?>
+										<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
+										<?php } ?>
 									<?php } ?>
 
 								</div>
