@@ -36,7 +36,7 @@
 					<?php if($seeUid && $u -> Ibe($uid)){	//访问，且访问的用户存在时可见 ?>
 						<a class="cupid-red user-icon f" href="./list.php?uid=<?php echo $uid; ?>" style="margin: 28px 30px 0 0;line-height: 33px;" title=""><?php echo $u -> Gname($uid); ?></a>
 					<?php } ?>
-					<?php if($u -> Guid() && $uid == $u -> Guid()){ //登录后可见 ?>
+					<?php if($u -> Guid() && (($uid && $uid == $u -> Guid()) || !$uid)){ //登录后，访问别人或访问自己可见；或登录且非访问他人情况下可见 ?>
 					<a class="cupid-green apply r" href="./userTitle-Apply.php" title="">申请 & 标题</a>
 					<?php } ?>
 					<a class="option <?php if(!isset($_GET['Ta'])){ echo "optionAct"; } ?>" href="?Me<?php echo $seeUid; ?>" >创建的</a>
