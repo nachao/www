@@ -1033,10 +1033,14 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 */
 /* 确定 */
 .publish .prompt{ display: inline-block;width: 100%;position: relative; }
-.publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px;color: white;cursor: pointer; }
+.publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px 0 0 3px;color: white;cursor: pointer; }
+.publish .prompt .sub:hover{ background: #ca2d1d; }
 .publish .prompt .cancel{ color: #2f3c4e;float: left;margin: 10px 0 0 30px;font-size: 13px; }
 .publish .prompt .cancel:hover{ text-decoration: underline; }
-.publish .prompt .sub:hover{ background: #ca2d1d; }
+.publish .prompt .recommend{ display: inline-block;width: auto;line-height: 33px;border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 0 3px 3px 0;padding: 0 15px;margin-left: 10px;-webkit-transition: 0.3s; transition: 0.3s; }
+.publish .prompt .recommend:hover{ border-color: #bbb;color: #333; }
+.publish .prompt .recommend-act{ margin-left: 2px;background: #e74c3c;border-color: #e74c3c;color: white; }
+.publish .prompt .recommend-act:hover{ color: white;background-color: #ca2d1d;border-color: #ca2d1d; }
 .publish .prompt .tag{ line-height: 35px; }
 .publish .prompt .tag input{ color: #e74c3c;font-size: 30px;font-family: Arial;width: 120px;display: inline-block; }
 .publish .prompt .tag em{ display: none; }

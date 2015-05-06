@@ -33,8 +33,8 @@
 	//是否有指定的标题
 	if(isset($_GET['tid'])){
 		$Itid = $_GET['tid'];
-		$Dinfo = $t -> Ginfo($Itid);
-		$Dtype = $Dinfo['recommend'];
+		// $Dinfo = $t -> Ginfo($Itid);
+		// $Dtype = $Dinfo['recommend'];
 	}else{
 		$Itid = 0;
 	}
@@ -172,7 +172,9 @@
 										<!-- 提交  -->
 										<div class="prompt" style="margin-top: 50px;">
 											<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-											<input id="submitApply" class="sub f" type="submit" name="submit" value="发布" />				
+											<input id="submitApply" class="sub f" type="submit" name="submit" value="发布" />
+											<a href="javascript:;" class="recommend" id="btn-recommend">推送</a>
+											<input type="hidden" value="0" name="recommend" id="is-recommend" />
 											<?php 
 												$number = $u -> GTPnum()+1;			//本日发布次数
 												$basic = $u -> Ivip() ? 3 : 7;		//基础值
@@ -200,7 +202,10 @@
 											<!-- 只用于前端 显示计算 -->
 											<input type="hidden" id="number" value="<?php echo $number; ?>" />	
 											<input type="hidden" id="standard" value="7" />			
+											<input type="hidden" id="special" value="3" />			
+											<input type="hidden" id="value-recommend" value="100" />
 											<input type="hidden" id="basic" value="<?php echo $basic; ?>" />		
+											<input type="hidden" id="isvip" value="<?php echo $u -> Ivip(); ?>" />
 										</div>
 									</div>
 									<div class="c"></div>
@@ -227,6 +232,67 @@
 		//缓存命名
 		var cookieName = "F_"+ $('#userIs').val() +"_";
 
+		//计算和刷新应支付金额
+		function payable(){
+
+			//获取相关参数
+			var isTit = $('#conTitleId').val(),			//是有选择标题
+				isVip = $('#isvip').val(),				//是否为VIP
+				isRecommend = $('#is-recommend').val(),	//是否推送
+
+				PFAnother = parseInt($('#titleList a[tid="'+ isTit +'"]').attr('share')),		//标题代付金额
+				standard = parseInt($('#standard').val()),			//标准基础支付金额
+				special	= parseInt($('#special').val()),			//会员基础支付金额
+				number = parseInt($('#number').val()),				//今日发布的次数
+				recommend = parseInt($('#value-recommend').val()),	//推送应支付的金额
+				initial = 0;	//计算后的基础金额
+
+			//根据当前条件返回公式基础金
+			//判断是否有标题
+			if(isTit){
+				base = "（标准基础金："+ standard +"分 - 分享金："+ PFAnother +"分）";
+				initial = standard - PFAnother;
+			}else{
+
+				//判断是否为会员
+				if(isVip){
+					base = "会员基础金："+ special +"分";
+					initial = special;
+				}else{
+					base = "标准基础金："+ standard +"分";
+					initial = standard;
+				}
+			}
+			
+			//判断是否推送内容
+			if(isRecommend){
+				initial += recommend;
+			}
+			console.log(isRecommend);
+
+			//计算公式提示
+			$('#basic-cue').show().html("计算公式："+ base +" * 本日次数："+ number +"次");
+			$('#basic-tit-cue').hide();
+
+			//刷新应付金额
+			var show = $('#totalTote');
+				show.attr('n', initial * number);
+				show.val(show.golds().num);
+		}
+
+
+		//=======================
+		//推送
+		$('#btn-recommend').click(function(){
+			if($(this).hasClass('recommend-act')){
+				$(this).removeClass('recommend-act');
+				$('#is-recommend').val(0);
+			}else{
+				$(this).addClass('recommend-act');
+				$('#is-recommend').val(1);
+			}
+			payable();
+		});
 
 
 		//==========================
@@ -372,6 +438,7 @@
 		$('#delTitle').click(function(){
 			$('#conTitleShow').val('').hide();
 			$('#conTitleVal').val('');
+			$('#conTitleId').val('');
 
 			//刷新按钮显示
 			$('#delTitle').addClass('no');
