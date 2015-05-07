@@ -17,7 +17,7 @@
 
 	//是否提交表单
 	if(isset($_POST['submit'])){
-		$c -> Acon( $_POST['types'], $_POST['titleid'], $_POST['depict'], $_POST['beforeimg'], $_POST['imgDepict'], $_POST['music'], $_POST['musicDepict'], $_POST['video'], $_POST['videoDepict'] );
+		$c -> Acon( $_POST['types'], $_POST['titleid'], $_POST['depict'], $_POST['beforeimg'], $_POST['imgDepict'], $_POST['music'], $_POST['musicDepict'], $_POST['video'], $_POST['videoDepict'], $_POST['recommend-sum'] );
 	}
 
 	$addOk = 0;
@@ -38,6 +38,9 @@
 	}else{
 		$Itid = 0;
 	}
+
+	// $arr = range(1,10); 
+	// print_r(rand(70,120)); 
 
 ?>
 
@@ -173,8 +176,8 @@
 										<div class="prompt" style="margin-top: 50px;">
 											<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
 											<input id="submitApply" class="sub f" type="submit" name="submit" value="发布" />
-											<a href="javascript:;" class="recommend" id="btn-recommend">推送</a>
-											<input type="hidden" value="0" name="recommend" id="is-recommend" />
+											<a href="javascript:;" class="recommend" id="btn-recommend">推送【1折】</a>
+											<input type="hidden" value="0" name="recommend-sum" id="is-recommend" />
 											<?php 
 												$number = $u -> GTPnum()+1;			//本日发布次数
 												$basic = $u -> Ivip() ? 3 : 7;		//基础值
@@ -203,7 +206,7 @@
 											<input type="hidden" id="number" value="<?php echo $number; ?>" />	
 											<input type="hidden" id="standard" value="7" />			
 											<input type="hidden" id="special" value="3" />			
-											<input type="hidden" id="value-recommend" value="100" />
+											<input type="hidden" id="value-recommend" value="10" />
 											<input type="hidden" id="basic" value="<?php echo $basic; ?>" />		
 											<input type="hidden" id="isvip" value="<?php echo $u -> Ivip(); ?>" />
 										</div>
@@ -264,11 +267,13 @@
 				}
 			}
 			
+			//计算默认应付金额
+			initial = initial * number;
+
 			//判断是否推送内容
-			if(isRecommend){
-				initial += recommend;
+			if(!!parseInt(isRecommend)){
+				initial = initial + recommend;
 			}
-			console.log(isRecommend);
 
 			//计算公式提示
 			$('#basic-cue').show().html("计算公式："+ base +" * 本日次数："+ number +"次");
@@ -276,7 +281,7 @@
 
 			//刷新应付金额
 			var show = $('#totalTote');
-				show.attr('n', initial * number);
+				show.attr('n', initial);
 				show.val(show.golds().num);
 		}
 
