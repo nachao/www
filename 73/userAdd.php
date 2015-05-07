@@ -63,6 +63,7 @@
 								<div class="btn">
 									<a class="red" href="./detail.php?cid=<?php echo $addOk; ?>" title="">确认，前往详细页</a>
 									<a href="./user.php#<?php echo $addOk; ?>" title="">个人中心</a>
+									<a href="./userAdd.php" >继续发布</a>
 								</div>
 							</div>
 						</div>
