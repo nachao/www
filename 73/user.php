@@ -35,7 +35,7 @@
 
 									<!-- 标示 -->
 									<?php if($v['effects'] == 1){	//如果是顶 ?>
-										<div class="effects effects-very" alt="作者顶贴" ></div>
+										<div class="effects effects-very" alt="作者顶贴" style="top: 33px;" ></div>
 									<?php } ?>
 
 									<?php if($v['effects'] == 2){	//如果是推荐 ?>
