@@ -42,7 +42,7 @@
 					<div class="row">
 
 						<!-- LOGO -->
-						<div class="logo f"><a href="./" ><em>七十三号馆</em><i>ux73.com & 不一样的交易所</i></a></div>
+						<div class="logo f"><a href="./" ><em>七十三号馆</em><i>不做交易的轻微博不是好社交网站</i></a></div>
 
 						<!-- 广告 -->
 						<div class="advert r">
