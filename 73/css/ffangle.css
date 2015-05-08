@@ -247,7 +247,8 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .notice .tit{ height: 32px;line-height: 32px;width: 105px;text-indent: 30px;color: #f2a9a4;background: #e74c3c url(../imgs/notice_ico.gif) no-repeat 9px center;border-radius: 2px 0 0 2px;position: absolute;top: 0px;left: 0px; }
 .notice .con{ margin-left: 108px;height: 32px;background: #3a4553;border-radius: 0 2px 2px 0;overflow: hidden; }
 .notice .con .cue{ color: #a3a7ac;line-height: 32px;text-indent: 12px;position: relative; }
-.notice .con .cue p{ color: #a3a7ac; }
+.notice .con .cue p a{ color: #a3a7ac; }
+.notice .con .cue p a:hover{ text-decoration: underline; }
 .notice .con .btn a{ display: inline-block;width: 20px;height: 20px;text-align: center;line-height: 20px;background: white;color: #2f3c4e;font-family: 宋体;border-radius: 2px;margin-top: 5.5px;float: left;margin-right: 5.5px;cursor: pointer;opacity: 0.8; }
 .notice .con .btn a:hover{ opacity: 1; }
 .notice .con .btn a.not{ color: #b5bac0; }

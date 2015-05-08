@@ -120,10 +120,12 @@
 										</div>
 										<?php } ?>
 
+
+										<?php echo $o -> Ccode($Rinfo['content'], 1); ?>
 										<!-- 文字 -->
 										<div class="col extent writing">
 											<div class="tip">请填写内容<i></i></div>
-											<textarea id="txtApply" class="cue txt conts" name="depict" placeholder="请输入内容" ><?php echo $o -> Ccode($Rinfo['content']); ?></textarea>
+											<textarea id="txtApply" class="cue txt conts" name="depict" placeholder="请输入内容" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea>
 											<div class="c"></div>
 										</div>
 										<!-- 文字 -->
@@ -138,7 +140,7 @@
 												<div class="c"></div>
 											</div>
 											<div class="c"></div>
-											<div class="are"><textarea id="imgDepict" class="cue" name="imgDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content']); ?></textarea></div>
+											<div class="are"><textarea id="imgDepict" class="cue" name="imgDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>
 											<input class="conts" type="hidden" value="<?php echo $Rinfo['image']; ?>" name="beforeimg" id="beforeimg" />
 										</div>
 										<!-- 图片 end -->
@@ -162,7 +164,7 @@
 												<embed id="vidembed" src="<?php echo $Rinfo['video']; ?>" type="application/x-shockwave-flash" width="100%" height="350" allowfullscreen="true" allownetworking="all" allowscriptaccess="always">
 												<div class="c"></div>
 											</div>
-											<div class="are"><textarea id="imgDepict" class="cue" name="videoDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content']); ?></textarea></div>
+											<div class="are"><textarea id="imgDepict" class="cue" name="videoDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>
 										</div>
 										<!-- 视频 -->
 
@@ -181,7 +183,7 @@
 												<embed id="musembed" src="<?php echo $Rinfo['music']; ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent">
 												<div class="c"></div>
 											</div>
-											<div class="are"><textarea id="imgDepict" class="cue" name="musicDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content']); ?></textarea></div>
+											<div class="are"><textarea id="imgDepict" class="cue" name="musicDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>
 										</div>
 
 										<!-- 提交  -->
