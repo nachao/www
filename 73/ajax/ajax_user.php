@@ -168,7 +168,7 @@
 
 	//管理标题
 	if( isset($_POST['titleAdmin']) ){
-		echo $t -> Utit( $_POST['titleAdmin'], $_POST['shareglod'], $_POST['cue'], $_POST['modified'], $_POST['withholding'] );
+		echo $t -> Utit( $_POST['titleAdmin'], $_POST['shareglod'], $_POST['cue'], $_POST['modified'], $_POST['withholding'], $_POST['scale'] );
 	}
 
 	//关闭标题
@@ -240,6 +240,12 @@
 		echo $c -> UErecommend($_POST['recommendSet']);
 	}
 
+
+
+	//投资管理
+	if(isset($_POST['shareManage'])){
+		echo $t -> Uinvest($_POST['shareManage'], $_POST['number']);
+	}
 
 
 

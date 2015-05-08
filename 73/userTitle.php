@@ -22,7 +22,6 @@
 	}
 
 
-
 ?>
 
 	<div class="container pagecon">
@@ -108,22 +107,29 @@
 
 										<span class="gold">池：
 											<?php $price = $t -> Gprice($Tv['tid']) ? $t -> Gprice($Tv['tid']) : 0; ?>
-											<em class="golds" n="<?php echo $price; ?>" ><?php echo $price; ?></em> <i></i>
+											<em class="golds title-sum" n="<?php echo $price; ?>" ><?php echo $price; ?></em> <i></i>
 
 											<?php if($t -> Iact($Tv['tid'])){ 	//如果是活动类则显示此参数（单次分享金） ?>
-												<b>(<?php echo $Tv['shareglod']/100; ?>)</b>
+												(<b class="j-title-shareglod"><?php echo $Tv['shareglod']/100; ?></b>)
 											<?php } ?>
 
 										</span>
 										<span class="fabu"><em><?php echo $Tv['number']; ?></em> 条内容</span>
 
 										<?php if($t -> Iact($Tv['tid'])){ 	//活动类显示参数 ?>
-											<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
+											<span class="time">剩余时间：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
 											<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i></i></span>
+
 											<?php if($t -> Gfirst($Tv['tid'])){ 	//如果有第一名则显示
 												$t -> Ufirst($Tv['tid'], $t -> Gfirst($Tv['tid']));		//并刷新标记 ?>
 												<span class="first">获胜者：<a href="./list.php?uid=<?php echo $t -> Gfirst($Tv['tid']); ?>"><?php echo $u -> Gname($t -> Gfirst($Tv['tid'])); ?></a></span>
 											<?php  } ?>
+
+											<?php if($Tv['invest']){		//如果标题开启了金池共享，则显示 ?>
+											<span class="fenxiang">金池分享：<i class="title-share-scale"><?php echo $Tv['invest']; ?></i>% （<em class="golds title-share-sum" n="<?php echo intval($price*$Tv['invest']/100); ?>"></em> <i></i>）</span>
+											<?php } ?>
+											<input type="hidden" class="title-invest-sum" value="<?php echo $t -> GTIsum($Tv['tid']); ?>" />
+
 										<?php }else{ 	//专题显示参数 ?>									
 											<span class="goumai"><em><?php echo $Tv['click']; ?></em> 人买</span>
 										<?php } ?>
@@ -167,46 +173,115 @@
 											<?php } ?>
 
 											<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
+											
+											<?php if(isset($_GET['Ta']) && 1){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
+												<!-- 投资金额 -->
+												<div class="r" style="margin-right:15px;">
+												<?php if($t -> IUinvest($Tv['tid'])){	//如果用户有投资则显示数据 ?>
+													<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
+													<div class="use-invest">
+														<span title="投入的越多占的比例越大">拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
+													</div>
+													<a class="use-invest-btn" id="btn-share-manage" href="javascript:;" >管理</a>
+												<?php }else{ ?>
+													<div class="use-invest">
+														<span>尚未参与</span>
+													</div>
+													<a class="use-invest-btn" id="btn-share-manage" href="javascript:;" >参与金池共享</a>
+												<?php } ?>
+												</div>
+											<?php } ?>
 										</div>
 									<?php } ?>
 									<div class="c"></div>
 								</div>
-								<div class="depict" style="display: none;">
-									<div class="txt">
-										<textarea class="cue"><?php echo $Tv['content']; ?></textarea>
 
-										<?php if($t -> Iact($Tv['tid'])){	//如果是活动，则可以操作 ?>
-										<div class="radio" selection="<?php echo $Tv['shareglod']; ?>" >
-											<span class="names s1">单次分享金</span>
-											<label><input type="radio" name="days" value="1" /><em>0.01</em>元</label>
-											<label><input type="radio" name="days" value="2" /><em>0.02</em>元</label>
-											<label><input type="radio" name="days" value="3" /><em>0.03</em>元</label>
-											<label><input type="radio" name="days" value="4" /><em>0.04</em>元</label>
-											<label><input type="radio" name="days" value="5" /><em>0.05</em>元</label>
-											<label><input type="radio" name="days" value="6" /><em>0.06</em>元</label>
-											<input type="hidden" name="money" value="<?php echo $Tv['shareglod']; ?>" />		
-										</div>
-										<?php } ?>
-										<div class="radio" style="overflow: inherit;">
-											<span class="names s1" style="width: 190px;">金池注入（单位：0.01 元）</span>
-											<div class="modified" max="<?php echo  $u -> Gplus(); ?>">
-												<input type="button" value="-" class="btn prev">
-												<input type="text" value="0" class="txt">
-												<input type="button" value="+" class="btn next">
+								<?php if($Tv['userid'] == $u -> Guid() && $t -> GCtime($Tv['tid'])){ //如果当前访问者是题主且标题状态正常，则可以管理	?>
+									<div class="depict" style="display: none;">
+										<div class="txt">
+											<textarea class="cue"><?php echo $Tv['content']; ?></textarea>
+
+											<?php if($t -> Iact($Tv['tid'])){	//如果是活动，则可以调整代付金额 ?>
+												<div class="radio" selection="<?php echo $Tv['shareglod']; ?>" >
+													<span class="names s1">单次代付金</span>
+													<label><input type="radio" name="days" value="1" /><em>0.01</em>元</label>
+													<label><input type="radio" name="days" value="2" /><em>0.02</em>元</label>
+													<label><input type="radio" name="days" value="3" /><em>0.03</em>元</label>
+													<label><input type="radio" name="days" value="4" /><em>0.04</em>元</label>
+													<label><input type="radio" name="days" value="5" /><em>0.05</em>元</label>
+													<label><input type="radio" name="days" value="6" /><em>0.06</em>元</label>
+													<input type="hidden" name="money" value="<?php echo $Tv['shareglod']; ?>" />		
+												</div>
+											<?php } ?>
+
+											<div class="radio" style="overflow: inherit;">
+												<span class="names s1" style="width: 190px;">金池注入（单位：0.01 元）</span>
+												<div class="modified" max="<?php echo  $u -> Gplus(); ?>">
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
 											</div>
-											<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+											<div class="radio" selection="<?php echo $Tv['withholding']; ?>" >
+												<span class="names s1" style="width:120px;">余额代扣开启</span>
+												<label><input type="radio" name="days" value="1" />否</label>
+												<label><input type="radio" name="days" value="2" />是</label>
+												<input type="hidden" name="withholding" value="<?php echo $Tv['withholding']; ?>" />		
+											</div>
+
+											<?php if($Tv['invest']){		//如果开启了金池共享 ?>
+												<div class="radio" style="overflow: inherit;">
+													<span class="names s1" style="width: 155px;">增加金池共享百分比</span>
+													<div class="modified" max="80" min="<?php echo $Tv['invest']; ?>" >
+														<input type="button" value="-" class="btn prev">
+														<input type="text" value="<?php echo $Tv['invest']; ?>" class="txt j-manage-invest-scale" style="width: 50px;" readonly="readonly">
+														<input type="button" value="+" class="btn next">
+													</div>
+													<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+												</div>
+											<?php } ?>
+
+											<div class="radio" style="overflow: inherit;">
+												<span class="names s1" style="width: 100px;">增加奖金</span>
+												<div class="modified" max="<?php echo $price; ?>" min="0" >
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt j-manage-moneyAward" readonly="readonly">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+											</div>
+
+											<input class="confirm amend r" id="title-manage-affirm" type="button" value="确认修改" />
+											<div class="prompt"><div>修改成功</div></div>
+											<div class="c"></div>
 										</div>
-										<div class="radio" selection="<?php echo $Tv['withholding']; ?>" >
-											<span class="names s1" style="width:120px;">余额代扣开启</span>
-											<label><input type="radio" name="days" value="1" />否</label>
-											<label><input type="radio" name="days" value="2" />是</label>
-											<input type="hidden" name="withholding" value="<?php echo $Tv['withholding']; ?>" />		
-										</div>
-										<input class="confirm amend r" type="button" value="确认修改" />
-										<div class="prompt"><div>修改成功</div></div>
-										<div class="c"></div>
 									</div>
-								</div>
+								<?php } ?>
+								
+								<?php if(isset($_GET['Ta']) && 1){	//如果当前访问者是关注者且标题开启了共享功能，则可以管理。 ?>
+									<div class="depict" id="share-manage" style="display: none;">
+										<div class="txt">
+											<div class="radio radio-data" style="margin-top: 0px;" >
+												<p class="input">已投入金额：<em n="<?php echo $investInfo['sum']; ?>" class="golds possess-invest-input"></em> <i>元</i></p>
+												<p class="income">预计回报：<em class="golds possess-invest-sum" n="<?php echo intval($price *$Tv['invest'] /100 *($investInfo['sum'] /$t -> GTIsum($Tv['tid']))); ?>"></em> <i>元</i></p>
+											</div>
+											<div class="radio" style="overflow: inherit;">
+												<span class="names s1" style="width: 215px;">投资金额注入（单位：0.01 元）</span>
+												<div class="modified" max="<?php echo  $u -> Gplus(); ?>">
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+											</div>
+											<input class="confirm amend r" id="share-manage-affirm" type="button" value="确认" />
+											<div class="prompt"><div>操作成功</div></div>
+											<div class="c"></div>
+										</div>
+									</div>
+								<?php } ?>
+
 							</div>
 						<?php } //输出内容结束 -------------------------------- ?>
 						<div class="c"></div>
@@ -220,6 +295,11 @@
 	</div>
 	<script type="text/javascript">
 
+		//操作共享界面
+		$('#btn-share-manage').click(function(){
+			$('#share-manage').toggle();
+		});
+
 		//挂接关注和取消关注
 		$('.titleCol').attention();
 		
@@ -230,7 +310,7 @@
 
 			var obj = col;
 
-			var min = 0,
+			var min = obj.attr('min') ? obj.attr('min') : 0,
 				max = obj.attr('max');
 
 			var go;
@@ -248,6 +328,7 @@
 			//刷新最大值
 			function m(obj){
 				max = parseInt(obj.parents('.modified').attr('max'));
+				min = obj.parents('.modified').attr('min') ? parseInt(obj.parents('.modified').attr('min')) : 0;
 			}
 
 
@@ -279,9 +360,8 @@
 
 		//设置数量
 		$('.modified').each(function(){
-			scale( $(this) ); 
+			scale($(this)); 
 			$(this).find('.txt').blur(function(){
-				console.log( $(this).val() );
 				$(this).val(parseInt($(this).val()));
 			});
 		});
@@ -307,14 +387,15 @@
 		});
 
 		//修改标题
-		$('.amend').click(function(){
+		$('#title-manage-affirm').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid'),
 				cue = col.find('.cue').val(),
 				num = col.find('input[name="money"]').val(),
 				wit = col.find('input[name="withholding"]').val(),
 				add = parseInt(col.find('.modified .txt').val()),
-				gold = col.find('.gold b');
+				scale = parseInt(col.find('.j-manage-invest-scale').val()),
+				gold = col.find('.j-title-shareglod');
 
 			//判断金币注入是否正确
 			if(add && add > $('#userGold').val() ){
@@ -324,18 +405,38 @@
 			}
 			tip = col.find('.prompt');
 			tip.slideDown();
-			console.log( "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit );
+			// console.log( "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit +"&scale="+ scale );
 			$.ajax({
 				type: "POST",
 				url: "./ajax/ajax_user.php",
-				data: "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit,
+				data: "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit +"&scale="+ scale,
 				success: function(msg){ 
 
+					//提示操作成功
 					tip.find('div').show();
-					gold.html('('+ parseInt(num)/100 +')');
 					setTimeout(function(){
 						tip.slideUp();
 					}, 1000);
+
+					//修改页面标题的数据
+					//如果修改了代付金
+					if(parseInt(gold.html()) != parseInt(num)){
+						gold.html(parseInt(num)/100);
+					}
+
+					//如果修改金池
+					var TSum = col.find('.title-sum'),
+						TSums = parseInt(TSum.attr('n'));
+
+					//如果修改了共享比例
+					var SScale = col.find('.title-share-scale'),
+						SScales = parseInt(SScale.html());
+					if(scale != SScales){
+						SScales = scale;
+						SScale.html(SScales);
+						col.find('.title-share-sum').attr('n', parseInt(TSums*(SScales/100))).golds();
+						$('.j-manage-invest-scale').parent().attr('min', SScales);
+					}
 
 					//如果有注入金，则修改页面数量
 					if( add > 0 ){
@@ -347,13 +448,9 @@
 
 						var titPrice = col.find('.head .gold em'),
 							newPrice = parseInt(titPrice.attr('n')) + add;
-						// console.log( Number() +','+ add );
-						// console.log( Number(col.find('.head .gold em').html()) +','+ add );
 						titPrice.attr('n', newPrice);
 						titPrice.html(newPrice);
 						goldShow(titPrice);
-
-						// col.find('.head .gold em').html( ((Number(col.find('.head .gold em').html())*100 + add)/100).toFixed(2) );
 					}
 				}
 			});
@@ -376,6 +473,91 @@
 					col.slideUp(function(){
 						$(this).remove();
 					});
+				}
+			});
+		});
+
+		//投资操作
+		$('#share-manage-affirm').click(function(){
+			var col = $(this).parents('.col'),
+				tid = col.attr('tid'),
+				num = parseInt(col.find('.modified .txt').val()),
+				gold = col.find('.gold b');
+
+			//判断金币注入是否正确
+			if(num && num > $('#userGold').val() ){		//如果金额不足则提示
+				col.find('.modifiedTip').fadeIn();
+				setTimeout(function(){ col.find('.modifiedTip').hide(); }, 3000);
+				return false;
+			}
+
+			//显示数据交互中提示
+			tip = col.find('.prompt');
+			tip.slideDown();
+
+			//提交后台数据
+			// console.log("shareManage="+ tid +"&number="+ num);
+			$.ajax({
+				type: "POST",
+				url: "./ajax/ajax_user.php",
+				data: "shareManage="+ tid +"&number="+ num,
+				success: function(msg){ 
+					// console.log(msg);
+					if(parseInt(msg) == 1){
+
+						//提示操作成功
+						tip.find('div').show();
+						setTimeout(function(){
+							tip.slideUp();
+						}, 1000);
+
+						//修改页面标题的数据
+						//获取元素
+						var sum 	= col.find('.title-sum'),					//当前标题的金池
+							share 	= col.find('.title-share-scale'),			//标题共享比例
+							total 	= col.find('.title-share-sum'),				//标题共享总金额
+							invest 	= col.find('.title-invest-sum'),			//标题投资总金额
+							input 	= col.find('.possess-invest-input'),		//当前投入总金额
+							income 	= col.find('.possess-invest-sum'),			//预计收入金额
+							scale 	= col.find('.possess-invest-scale');		//当前拥有分享金比例
+						
+
+						//获取参数
+						var titSum	= parseInt(sum.attr('n')) +num,
+							titScale = parseInt(share.html()) /100,
+
+							investSum = parseInt(invest.val()) +num,	//所有用户投资总金额
+							mySum = parseInt(input.attr('n')) +num,		//我的投资总金额
+
+							incomeScale	= 0,				//我的收入比例，用户计算预计收入
+							shareScale = mySum/investSum;	//我的投资占总投资金额的百分比，用户显示我的份额
+
+
+						//输出在页面指定位置
+						invest.val(investSum);									//刷新标题的投资总金额
+						sum.attr('n', titSum).golds();							//刷新标题的金池
+						total.attr('n', parseInt(titScale *titSum)).golds();	//刷新标题的共享总金额
+
+						input.attr('n', mySum).golds();										//刷新我的投资总金额
+						scale.html((shareScale*100).toFixed(2));							//刷新我的份额百分比
+						income.attr('n', parseInt(shareScale *titScale *titSum)).golds();	//刷新我的预计收入
+
+
+						//如果有注入金，则修改页面数量
+						// if( add > 0 ){
+						// 	var ug = parseInt($('#userGold').val());
+						// 		ug = ug - add;
+						// 	$('#userGold').val(ug);
+						// 	$('#userInfoGold').html( ug/100 );
+						// 	col.find('.modified').attr('max', ug);	//刷新最大值
+
+						// 	var titPrice = col.find('.head .gold em'),
+						// 		newPrice = parseInt(titPrice.attr('n')) + add;
+						// 	titPrice.attr('n', newPrice);
+						// 	titPrice.html(newPrice);
+						// 	goldShow(titPrice);
+						// }
+					}
 				}
 			});
 		});
