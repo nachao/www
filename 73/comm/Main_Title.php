@@ -47,6 +47,12 @@ class Data_title extends Config
 		return mysql_query($sql);
 	}
 
+	//添加指定 用户UID 投资指定 标题ID 的金额NUM
+	protected function data_addUserInvestTit( $uid=0, $tid=0, $num=0 ){
+		$sql = "insert INTO  `".parent::Mn()."`.`".parent::Fn()."titleshare` (`id` , `tid` , `uid` , `sum` ) VALUES (NULL,  '".$tid."',  '".$uid."',  '".$num."');";
+		return mysql_query($sql);
+	}
+
 
 
 	/********************************************
@@ -131,6 +137,20 @@ class Data_title extends Config
 		}
 	}
 
+	//获取指定 用户UID 投资指定 标题ID 的信息
+	protected function data_selectUserInvest( $uid=0, $tid=0){
+		$sql = "select * FROM  `".parent::Fn()."titleshare` WHERE  `tid` =".$tid." AND  `uid` =".$uid." LIMIT 0 , 30";
+		return parent::Ais($sql);
+	}
+
+	//获取指定 标题ID 的总投资金额
+	protected function data_selectTitleInvestSum($tid=0){
+		// $sql = "select * FROM  `".parent::Fn()."titleshare` WHERE  `tid` =".$tid." LIMIT 0 , 30";
+		$sql = "select SUM(`sum`) FROM  `".parent::Fn()."titleshare` WHERE  `tid` =271430890209 LIMIT 0 , 30";
+		$row = parent::Ais($sql);
+		return $row[0];
+	}
+
 
 
 	/********************************************
@@ -140,6 +160,12 @@ class Data_title extends Config
 	//刷新指定 标题ID 的参数(val)
 	protected function data_update( $tid=0, $val='', $num=0 ){
 		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."classify` SET  `".$val."` =  '".$num."' WHERE  `".parent::Fn()."classify`.`tid` =".$tid." LIMIT 1 ;";
+		return mysql_query($sql);
+	}
+
+	//刷新指定 用户UID 投资指定 标题ID 的信息
+	protected function data_updateInvest( $tid=0, $uid=0, $num=0 ){
+		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."titleShare` SET  `sum` =  '".$num."' WHERE `tid` =".$tid." AND `uid` =".$uid." LIMIT 1 ;";
 		return mysql_query($sql);
 	}
 
@@ -375,6 +401,13 @@ class Event_title extends Data_title
 		}
 	}
 
+	//获取指定 标题TID 的全部信息
+	protected function event_getInfo($tid=0){
+		if($tid){
+			return parent::data_selectById($tid);
+		}
+	}
+
 	//获取指定 用户UID（选填） 关注指定 标题TID 的时间
 	protected function event_getUserFollowerTime($tid=0, $uid=0){
 		$uid = $uid ? $uid : parent::Eid();
@@ -387,6 +420,20 @@ class Event_title extends Data_title
 	//获取指定 标题TID 的关注人数
 	protected function event_getFollowTotal($tid=0){
 		return parent::data_selectFollowTotal($tid);
+	}
+
+	//获取指定 用户UID 投资指定 标题ID 的信息
+	protected function event_getUserInvest($uid=0, $tid=0){
+		if($tid && $uid){
+			return parent::data_selectUserInvest($uid, $tid);
+		}
+	}
+
+	//获取指定 标题ID 的总投资金额
+	protected function event_getTitleInvestSum($tid=0){
+		if($tid){
+			return parent::data_selectTitleInvestSum($tid);
+		}
 	}
 
 
@@ -425,7 +472,15 @@ class Event_title extends Data_title
 	protected function event_addUserFollowTit( $tid=0, $uid=0 ){
 		if($tid){
 			$uid = $uid ? $uid : parent::Eid();
-			parent::data_addUserFollowTit( $uid, $tid );
+			return parent::data_addUserFollowTit( $uid, $tid );
+		}
+	}
+
+
+	//添加指定 用户UID 投资指定 标题ID 的金额NUM
+	protected function event_addUserInvestTit( $tid=0, $uid=0, $num=0 ){
+		if($tid && $num){
+			return parent::data_addUserInvestTit( $uid, $tid, $num );
 		}
 	}
 
@@ -439,7 +494,7 @@ class Event_title extends Data_title
 	//删除指定 用户UID 指定的 标题ID
 	protected function event_deleteFollowTit( $uid=0, $tid=0 ){
 		if($uid && $tid){
-			parent::data_deleteFollowTit($uid, $tid);
+			return parent::data_deleteFollowTit($uid, $tid);
 		}
 	}
 
@@ -463,20 +518,21 @@ class Event_title extends Data_title
 	}
 
 	//更新参数 管理标题
-	protected function event_titleAdmin( $tid=0, $shareglod=0 ,$depict='' ,$append=0, $withholding=0 ){
+	protected function event_titleAdmin( $tid=0, $shareglod=0 ,$depict='' ,$append=0, $withholding=0, $scale=0 ){
 
 		//修改管理员
 		// if( isset($_POST['adminId']) ){
 		// 	return data_titleSetAdmin( $tid, $_POST['adminId'] );
 		// }
+		$info = $this -> event_getInfo($tid);
 
-		if($shareglod) {
+		if($shareglod && $shareglod != $info['shareglod']) {
 			parent::data_update( $tid, 'shareglod',$shareglod );	//修改 分享金
 		}
 		if($depict) {
 			$this -> event_updateContent( $tid, $depict );			//修改 描述
 		}
-		if($withholding){
+		if($withholding && withholding != $info['withholding']){
 			$this -> event_updateWithholding($tid, $withholding);	//修改代扣
 		}
 		$u = new Users();
@@ -484,7 +540,10 @@ class Event_title extends Data_title
 			$glod = $this -> event_getPrice($tid);	//获取标题当前的金池数量
 			parent::data_update( $tid, 'price', $glod +$append );		//注入金币池
 			$u -> USplus($append);		//扣除用户的余额		
-		}	
+		}
+		if($scale && $scale != $info['invest']){
+			parent::data_update( $tid, 'invest', $scale );	//修改 金池共享比例
+		}
 	}
 
 	//更新指定 标题ID 的金币池
@@ -551,6 +610,13 @@ class Event_title extends Data_title
 	protected function event_updateWithholding($tid=0, $val=0){
 		if($tid){
 			return parent::data_update($tid, 'withholding', $val);
+		}
+	}
+
+	//更新指定 用户UID 投资的指定 标题TID 的金额NUM
+	protected function event_updateUserInvest($tid=0, $uid=0, $num=0){
+		if($tid && $num){
+			return parent::data_updateInvest($tid, $uid, $num);
 		}
 	}
 
@@ -751,6 +817,16 @@ class Title extends Event_title
 		return parent::event_getFollowTotal($tid);
 	}
 
+	//获取指定 用户UID 投资指定 标题ID 的信息
+	public function GUinvest($tid=0, $uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		return parent::event_getUserInvest($uid, $tid);
+	}
+
+	//获取指定 标题ID 的总投资金额
+	public function GTIsum($tid=0){
+		return parent::event_getTitleInvestSum($tid);
+	}
 
 
 
@@ -924,6 +1000,17 @@ class Title extends Event_title
 		return $value;
 	}
 
+	//判断指定 标题TID 的创建者是否能支付代付
+	public function IUinvest($tid=0, $uid=0){
+		$value = 0;
+		$uid = $uid ? $uid : parent::Eid();
+		if($tid){
+			$value = parent::event_getUserInvest($uid, $tid);
+		}
+		return $value;
+	}
+	
+
 
 
 	/********************************************
@@ -970,9 +1057,9 @@ class Title extends Event_title
 	*/
 
 	//更新指定 标题 参数
-	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0 ){
+	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0, $scale=0 ){
 		if($tid){
-			return parent::event_titleAdmin( $tid, $shareglod, $depict, $append, $withholding );
+			return parent::event_titleAdmin( $tid, $shareglod, $depict, $append, $withholding, $scale );
 		}
 	}
 
@@ -1068,6 +1155,20 @@ class Title extends Event_title
 	public function Uclose($tid=0){
 		return parent::event_EndTit($tid);
 	}
+
+	//更新指定 用户UID 投资的指定 标题TID 的金额NUM
+	public function Uinvest($tid=0 ,$num=0, $uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		if($tid && $num){
+			if(!!parent::event_getUserInvest($uid, $tid)){
+				$info = parent::event_getUserInvest($uid, $tid);
+				$this -> UAda($tid, $num);		//刷新标题金池
+				return parent::event_updateUserInvest($tid, $uid, $num + $info['sum']);	//如果用户已经投资则修改金额
+			}else{
+				return parent::event_addUserInvestTit($tid, $uid, $num);	//如果用户没有投资过则创建新数据
+			}
+		}
+	} 
 
 	
 	

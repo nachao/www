@@ -721,6 +721,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 	.apply{ padding: 0 33px;background: #7fbf4d;border: 1px solid #63a62f;margin-top: 27px;border-radius: 3px;color: white;font-size: 16px;text-align: center;font-family: 微软雅黑;font-weight: 500;width: auto;height: 34px;line-height: 34px; }
 .apply:hover{ background: #63a62f; }
 
+
 /* 详细页 - 作者 */
 .detailAuthor{ margin-top: 70px; }
 .detailAuthor .head .tit em{ background: url(../imgs/sideFondertit_headIcon.gif) no-repeat 0 center;padding-left: 38px; }
@@ -796,7 +797,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /* 我的标题 */
 .titleManage{ margin: 0px;width: auto; }
 .titleManage .col{ width: auto;margin: 0 0 30px;float: none; }
-.titleManage .col .use{ width: 100%; border-top: 1px solid #eee; padding: 20px 0 0; margin: 20px 0 0;height: auto; }
+.titleManage .col .use{ width: 100%; border-top: 1px solid #eee; padding: 20px 0 0; margin: 30px 0 0;height: auto; }
 .titleManage .col .depict{ margin-top: 10px;border: 1px solid #d9dbdd;background: white url(../imgs/area_bottomBg.gif) repeat-x bottom;box-shadow: 0px 0px 10px #eee;border-radius: 3px;overflow: hidden;padding: 20px 20px 25px; }
 .titleManage .col .depict{ max-height: none;position: relative;border-radius: 0px; }
 .titleManage .depict .radio{ display: inline-block;border-radius: 3px;padding-left: 1px;float: left;margin-top: 20px;width: 100%;overflow: hidden;position: relative; }
@@ -813,6 +814,15 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .depict .radio .modifiedTip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #e74c3c;padding: 2px 5px;position: absolute;top: 50px;left: 230px;display: none;cursor: default; }
 .titleManage .depict .radio .modifiedTip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;top: -4px;left: 43px;-webkit-transform:rotate(-135deg);transform:rotate(-135deg);border: 4px solid #e74c3c; border-top-color: transparent; border-left-color: transparent;  }
 
+.titleManage .depict .radio-data{ float: left; }
+.titleManage .depict .radio-data p{ float: left;line-height: 50px;padding: 0 30px 0 50px;font-size: 15px;color: #666;margin-right: 30px;background: #f6f6f6  no-repeat 10px center;border: 1px solid #ddd;border-radius: 2px; }
+.titleManage .depict .radio-data .input{ background-image: url(../imgs/iconfont-shouru.png); } 
+.titleManage .depict .radio-data .income{ background-image: url(../imgs/iconfont-gupiao.png); } 
+.titleManage .depict .radio-data .gap{ border-right: 1px dashed #ddd; }
+.titleManage .depict .radio-data em,.titleManage .depict .radio-data i{ font-size: 15px; }
+.titleManage .depict .radio-data em{ color: #e74c3c;padding: 0 5px; }
+.titleManage .depict .radio-data i{ color: #666; }
+
 .titleManage .depict .cue{ background: #f6f6f6;border: 1px solid #ddd;width: 100%;height: 120px;padding: 24px 20px;color: #444;font-size: 13px;line-height: 24px;margin: 0 -20px;resize: none;position: relative;left: -1px; }
 .titleManage .depict .confirm{ height: 35px;border: 1px solid #16273e;margin-left: -1px;float: left;background: #2f3c4e;cursor: pointer;color: white;text-align: center;margin-top: 20px;border-radius: 3px;padding: 0 30px; }
 .titleManage .depict .confirm:hover{ background: #16273e; }
@@ -821,9 +831,21 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .depict .prompt div{ display: inline-block;width: 100%;height: 100%;line-height: 300px;text-align: center;background: white;display: none; }
 
 /* 我的标题 - 参数样式重置 */
-/*.titleManage .col .head .tag{ margin-top: 20px; border: 1px solid #e4e6e8; border-right: 0px; position: relative; border-radius: 2px; }
-.titleManage .col .head .tag span{ border: 0px;border-right: 1px solid #e4e6e8;border-radius: 0px;margin: 0px;float: left; }
-*/
+.titleManage .col .head{ position: relative;padding-top: 80px; }
+.titleManage .col .head .tit{ height: 80px;line-height: 80px;position: absolute;top: 0px;left: 0px;width: 100%;background: #f6f6f6;border-bottom: 1px solid #eee; }
+.titleManage .col .head .tit a{ font-size: 17px;margin-left: 30px; }
+.titleManage .col .head .tag{ padding-top: 15px; }
+.titleManage .col .head .tag span{ margin: 15px 15px 0 0; }
+
+/* 我的标题 - 投资 */
+.use-invest{ display: inline-block;line-height: 35px;padding:0 0 0 35px;background-color: #f6f6f6;background-repeat: no-repeat;background-position: 12px center;border: 1px solid #ccc;border-radius: 3px 0 0 3px;color: #9ba1a8;float: left;background-image: url(../imgs/tagTouzi.png);border-right: 0px; }
+.use-invest span{ float: left;padding-right: 15px; }
+.use-invest span i{ color: #9ba1a8; }
+.use-invest span b{ font-weight: normal; }
+.use-invest span a,.use-invest em{ color: #e74c3c; }
+.use-invest span a:hover{ text-decoration: underline; }
+.use-invest-btn{ display: inline-block;line-height: 35px;color: #666;padding: 0 15px;border: 1px solid #ccc;border-left: 1px solid #ddd;float: left;background: #f6f6f6;border-radius: 0 3px 3px 0; } 
+.use-invest-btn:hover{ background: #e74c3c;border-color: #e74c3c;color: white; }
 
 /* 加减一 */
 .modified{ float: left;width: auto;height: 33px;position: relative;background: red;border: 1px solid #ddd;background: #f6f6f6;border-left: 0px; }
@@ -1427,6 +1449,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .param-tag .gold{ background-image: url(../imgs/tagPrice.png); }
 .param-tag .creator{ background-image: url(../imgs/tagQunzhu.png); }
 .param-tag .guanliyuan{ background-image: url(../imgs/tagGuanliyuan.png); }
+.param-tag .fenxiang{ background-image: url(../imgs/tagTouzi.png); }
 .param-tag .iOs{ position: absolute;width: 100%;height: 100%;top: 0px;left: 0px;background: white url(../imgs/iOs.jpg) no-repeat center; }
 .param-tag .notPass{  position: absolute;width: 100%;height: 100%;top: 0px;left: 0px;background: white; }
 .param-tag .notPass .ico{ display: inline-block;float: left;margin-top: 10px;hieght: 90px;line-height: 90px;font-size: 80px;text-align: center;width: 200px;color: #e74c3c;font-weight: bold;font-family: Arial; }
