@@ -1064,7 +1064,7 @@ class Title extends Event_title
 	*/
 
 	//更新指定 标题 参数
-	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0, $scale=0, $reward=0 ){
+	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0, $scale=0, $reward=0, $withdraw=0 ){
 		$u = new Users();
 		if($tid){
 			parent::event_titleAdmin( $tid, $shareglod, $depict, $append, $withholding, $scale );
@@ -1083,6 +1083,12 @@ class Title extends Event_title
 				$this -> USda($tid, $reward);
 				$reward = $reward + $info['reward'];
 				parent::event_updateReward($tid, $reward);
+			}
+
+			//金池提现
+			if($withdraw && $withdraw <= $this -> Gprice($tid)){	//判断是否有修改的数值 且 提现金额小于金池金额
+				$this -> USda($tid, $withdraw);
+				$u -> UAplus($withdraw);
 			}
 		}
 	}
