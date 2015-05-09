@@ -97,7 +97,16 @@
 
 							<div class="col titleCol col_follow j_title_message sh" tid="<?php echo $Tv['tid']; ?>" >
 								<div class="head">
-									<div class="tit">
+
+									<?php 
+									$titStyleClass = '';
+									if($t -> Itype($Tv['tid'] ,1)){	//如果是活动
+										$titStyleClass = 'tit-activity';
+									}
+									if($t -> Itype($Tv['tid'] ,2)){	//如果是专题
+										$titStyleClass = 'tit-special';
+									} ?>
+									<div class="tit <?php echo $titStyleClass; ?>" >
 										<a href="./list.php?tid=<?php echo $Tv['tid']; ?>"><?php echo $title -> ITval($Tv['type'])."#". $Tv['title']; ?></a>
 									</div>
 
@@ -198,10 +207,10 @@
 									<!-- 题主管理界面 -->
 									<div class="depict j-title-manage" style="display: none;">
 										<div class="txt">
-											<textarea class="cue"><?php echo $Tv['content']; ?></textarea>
+											<textarea class="cue j-manage-depict" def="<?php echo $o -> Ccode($Tv['content']); ?>"><?php echo $o -> Ccode($Tv['content'], 1); ?></textarea>
 
 											<?php if($t -> Iact($Tv['tid'])){	//如果是活动，则可以调整代付金额 ?>
-												<div class="radio" selection="<?php echo $Tv['shareglod']; ?>" >
+												<div class="radio j-manage-assist-def" selection="<?php echo $Tv['shareglod']; ?>" >
 													<span class="names s1">单次代付金</span>
 													<label><input type="radio" name="days" value="1" /><em>0.01</em>元</label>
 													<label><input type="radio" name="days" value="2" /><em>0.02</em>元</label>
@@ -209,7 +218,7 @@
 													<label><input type="radio" name="days" value="4" /><em>0.04</em>元</label>
 													<label><input type="radio" name="days" value="5" /><em>0.05</em>元</label>
 													<label><input type="radio" name="days" value="6" /><em>0.06</em>元</label>
-													<input type="hidden" name="money" value="<?php echo $Tv['shareglod']; ?>" />		
+													<input type="hidden" name="money" class="j-manage-assist" value="<?php echo $Tv['shareglod']; ?>" />		
 												</div>
 											<?php } ?>
 
@@ -224,6 +233,20 @@
 												<span class="radio-hint">从账户余额转入。</span>
 											</div>
 
+											<?php if($t -> Itype($Tv['tid'], 2)){	//专题标题可以将金池的金额提现至余额里 ?>
+											<div class="radio">
+												<span class="names s1" style="width: 190px;">金池提现（单位：0.01 元）</span>
+												<div class="modified" max="<?php echo $price; ?>">
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt j-manage-withdraw">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip j-tip-withdraw r" href="javascript:;" title="">超出了金池里的金额！<i></i></a>
+												<span class="radio-hint">将金池内的金额转至用户余额中。</span>
+											</div>
+											<?php } ?>
+											
+											<?php if($t -> Iact($Tv['tid'])){	//活动标题才可以添加奖金 ?>
 											<div class="radio" style="overflow: inherit;">
 												<span class="names s1" style="width: 190px;">增加奖金（单位：0.01 元）</span>
 												<div class="modified" max="<?php echo $price; ?>" min="0" >
@@ -234,6 +257,7 @@
 												<a class="modifiedTip j-tip-reward r" href="javascript:;" title="">金池金额不足！<i></i></a>
 												<span class="radio-hint">从金池中转入。</span>
 											</div>
+											<?php } ?>
 											
 											<!-- 由于余额代扣逻辑比较复杂，暂时关闭
 											<div class="radio" selection="<?php echo $Tv['withholding']; ?>" >
@@ -244,25 +268,27 @@
 											</div>
 											-->
 
-											<?php if($Tv['invest']){		//如果开启了金池共享 ?>
-												<div class="radio" style="overflow: inherit;">
-													<span class="names s1" style="width: 155px;">增加金池共享百分比</span>
-													<div class="modified" max="80" min="<?php echo $Tv['invest']; ?>" >
-														<input type="button" value="-" class="btn prev">
-														<input type="text" value="<?php echo $Tv['invest']; ?>" class="txt j-manage-invest-scale" style="width: 50px;" readonly="readonly">
-														<input type="button" value="+" class="btn next">
+											<?php if($t -> Iact($Tv['tid'])){	//活动标题才可以开启此功能 ?>
+												<?php if($Tv['invest']){		//如果开启了金池共享 ?>
+													<div class="radio" style="overflow: inherit;">
+														<span class="names s1" style="width: 155px;">增加金池共享百分比</span>
+														<div class="modified" max="80" min="<?php echo $Tv['invest']; ?>" >
+															<input type="button" value="-" class="btn prev">
+															<input type="text" value="<?php echo $Tv['invest']; ?>" class="txt j-manage-invest-scale" style="width: 50px;" readonly="readonly">
+															<input type="button" value="+" class="btn next">
+														</div>
+														<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>	
+														<span class="radio-hint">比例只能添加无法减少。</span>
 													</div>
-													<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>	
-													<span class="radio-hint">比例只能添加无法减少。</span>
-												</div>
-											<?php }else{ ?>
-												<div class="radio" selection="1" >
-													<span class="names s1" style="width:120px;">金池共享开启</span>
-													<label><input type="radio" name="days" value="0" />关闭</label>
-													<label><input type="radio" name="days" value="1" />开启</label>
-													<input type="hidden" class="j-manage-invest" value="0" />		
-													<span class="radio-hint">提示：开启后无法关闭</span>
-												</div>
+												<?php }else{ ?>
+													<div class="radio" selection="1" >
+														<span class="names s1" style="width:120px;">金池共享开启</span>
+														<label><input type="radio" name="days" value="0" />关闭</label>
+														<label><input type="radio" name="days" value="1" />开启</label>
+														<input type="hidden" class="j-manage-invest" value="0" />		
+														<span class="radio-hint">提示：开启后无法关闭</span>
+													</div>
+												<?php } ?>
 											<?php } ?>
 
 											<input class="confirm amend r j-title-manage-affirm" type="button" value="确认修改" />
@@ -421,19 +447,24 @@
 		$('.j-title-manage-affirm').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid'),
-				cue = col.find('.cue').val(),
+
+				//获取管理界面的 标题描述
+				MDepict = col.find('.j-manage-depict'),
+				MDepictVal = MDepict.val(),
 
 				//获取管理界面的修改 单次代付金
-				MAssistNum = parseInt(col.find('input[name="money"]').val()),
+				MAssistNum = parseInt(col.find('.j-manage-assist').val()),
 
 				//获取管理界面的是否开启 余额代付 ----此功能暂时关闭
-				MwitNum = col.find('input[name="withholding"]').val(),
+				MwitNum = parseInt(col.find('input[name="withholding"]').val()),
+				MwitNum = MwitNum ? MwitNum : 0;
 				
 				//获取管理界面的 金池比例 元素及数值
 				MScaleInput = col.find('.j-manage-invest-scale'),
 				MScaleNum = parseInt(MScaleInput.val()),
 
-				invest = col.find('.j-manage-invest').val(),
+				//获取管理界面的 是否开启金池共享功能
+				MInvest = col.find('.j-manage-invest').val(),
 
 				//获取管理界面的 添加金池元素及金额
 				MSumInput = col.find('.j-manage-sum'),
@@ -442,6 +473,10 @@
 				//获取管理界面的 添加奖金元素及金额
 				MRewardInput = col.find('.j-manage-reward'),
 				MRewardNum = parseInt(MRewardInput.val()),
+
+				//获取管理界面的 金池提现元素及金额
+				MWithdrawInput = col.find('.j-manage-withdraw'),
+				MWithdrawNum = parseInt(MWithdrawInput.val()),
 
 				//获取用户余额
 				userSum = $(1).ABalance();
@@ -482,11 +517,44 @@
 				return false;
 			}
 
-			//判断是否开启金池共享
-			if(invest){
+			//判断是否有进行过操作
+			var MOperate = 0;
+
+			//判断是否修改过描述
+			if(MDepictVal != MDepict.attr('def')){
+				MOperate = 1;
+			}
+
+			//判断是否修改过单次代付金
+			if(MAssistNum && MAssistNum != col.find('.j-manage-assist-def').attr('selection')){
+				MOperate = 1;
+			}
+
+			//判断是否修增加了金池
+			if(!!MSum){
+				MOperate = 1;
+			}
+
+			//判断是否修增加了奖金
+			if(!!MRewardNum){
+				MOperate = 1;
+			}
+
+			//判断是否修金池提现
+			if(!!MWithdrawNum){
+				MOperate = 1;
+			}
+
+			//判断是开启了金池共享功能
+			if(MInvest == 1){
+				MOperate = 1;
 				MScaleNum = 20;
 			}
 
+			//如果没有操作者终止提交
+			if(MOperate == 0){
+				return;
+			}
 
 			//以上判断都通过的话，切换成等待动画
 			tip = col.find('.prompt');
@@ -499,8 +567,9 @@
 			$.ajax({
 				type: "POST",
 				url: "./ajax/ajax_user.php",
-				data: "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ MSum +"&shareglod="+ MAssistNum +"&withholding="+ MwitNum +"&scale="+ MScaleNum +"&reward="+ MRewardNum,
+				data: "titleAdmin="+ tid +"&cue="+ MDepictVal +"&modified="+ MSum +"&shareglod="+ MAssistNum +"&withholding="+ MwitNum +"&scale="+ MScaleNum +"&reward="+ MRewardNum +"&withdraw="+ MWithdrawNum,
 				success: function(msg){ 
+					// console.log(msg);
 
 					//提示操作成功
 					tip.find('div').show();
@@ -509,7 +578,7 @@
 					}, 1000);
 
 					//如果开启了金池共享则刷新页面
-					if(invest){
+					if(MInvest == 1){
 						history.go(0);
 					}
 
@@ -527,7 +596,7 @@
 						TSum.attr('n', TSums).golds();								//刷新标题金池显示金额
 						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题金池共享金额
 
-						MSumInput.parent('.modified').attr('max', userSum);		//刷新注入金额的上限
+						MSumInput.parent('.modified').attr('max', userSum);			//刷新注入金额的上限
 					}
 
 					//如果操作了 添加奖金
@@ -548,6 +617,14 @@
 						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题 金池共享 显示金额
 
 						MScaleInput.parent('.modified').attr('min', MScaleNum);		//刷新修改 金池共享比例 的下限
+					}
+
+					//如果操作了 金池提现
+					if(MWithdrawNum){
+						userSum = $().ABalance(+MWithdrawNum);	//刷新用户金额
+						TSums -= MWithdrawNum;
+						TSum.attr('n', TSums).golds();								//刷新标题金池显示金额
+						MWithdrawInput.parent('.modified').attr('max', TSums);		//刷新注入金额的上限
 					}
 				}
 			});
