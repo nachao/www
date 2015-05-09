@@ -84,6 +84,10 @@
 							<?php echo $t -> ISnormal($Tv['tid']); ?>
 							<span class="gold">金池：<em class="golds"><?php echo $Tv['price']; ?></em> <i>元</i> (<b><?php echo $Tv['shareglod']/100;?></b>) </span>
 						
+							<?php if($Tv['invest']){		//如果标题开启了金池共享，则显示 ?>
+							<span class="fenxiang">金池分享：<i class="title-share-scale"><?php echo $Tv['invest']; ?></i>% </span>
+							<?php } ?>
+
 							<?php if($t -> Gfirst($Tv['tid'])){		//如果有第一名则显示
 								$fcid = $t -> GFcid($Tv['tid']);	//获取第一名的内容CID  ?>
 								<span class="first">获胜者：

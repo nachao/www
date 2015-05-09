@@ -69,10 +69,15 @@ class Tool
 	}
 
 	//编码 转换成也页面文本
-	public function Ccode($str=''){
+	public function Ccode($str='', $type=0){
 		$str = str_replace("&lt;", "<", $str);
 		$str = str_replace("&27", "'", $str);
-		$str = str_replace("<br />", "\n", $str);
+		if($type == 1){
+			$str = str_replace("<br />", "", $str);
+		}
+		if($type == 2){
+			$str = str_replace("<br />", "\n", $str);
+		}
 		return $str;
 	}
 

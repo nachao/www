@@ -168,7 +168,7 @@
 
 	//管理标题
 	if( isset($_POST['titleAdmin']) ){
-		echo $t -> Utit( $_POST['titleAdmin'], $_POST['shareglod'], $_POST['cue'], $_POST['modified'], $_POST['withholding'], $_POST['scale'] );
+		echo $t -> Utit( $_POST['titleAdmin'], $_POST['shareglod'], $_POST['cue'], $_POST['modified'], $_POST['withholding'], $_POST['scale'], $_POST['reward'] );
 	}
 
 	//关闭标题

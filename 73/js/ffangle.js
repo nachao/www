@@ -770,6 +770,26 @@ jQuery.fn.extend({
 			}
 		}
 		return reply;
+	},
+
+	//获取用户的缓存账号余额（单位：分）
+	// operate = 对当前金额进行加或者减。
+	// accountBalance = ABalance
+	ABalance: function(operate){
+		var obj = $('#userGold'),
+			sideObj = $('#userInfoGold'),
+			headObj = $('#headGold'),
+			sum = parseInt(obj.val());
+
+		//判断是否有加减操作
+		if(operate && operate != 0){
+			sum += operate;
+			obj.val(sum);
+			
+			sideObj.attr('n', sum).golds();
+			headObj.attr('n', sum).golds();
+		}
+		return sum;
 	}
 
 });

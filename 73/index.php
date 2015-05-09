@@ -64,7 +64,8 @@
 					<div class="con">
 						<div class="cue f" id="notice-cue">
 							<?php foreach ($an -> Gnotice() as $key => $val) { ?>
-							<p><?php echo $val['text'].' - '.$o -> Cdate($val['time']); ?></p>
+							
+							<p><a href="<?php  echo !!$val['address'] ? './detail.php?cid='.$val['address'] : 'javascript:;'; ?>" ><?php echo $val['text'].' - '.$o -> Cdate($val['time']); ?></a></p>
 							<?php } ?>
 						</div>
 						<div class="btn r">

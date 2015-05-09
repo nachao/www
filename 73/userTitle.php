@@ -118,7 +118,7 @@
 
 										<?php if($t -> Iact($Tv['tid'])){ 	//活动类显示参数 ?>
 											<span class="time">剩余时间：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
-											<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i></i></span>
+											<span class="jine">奖金：<em class="golds j-title-reward" n="<?php echo $Tv['reward']; ?>"></em> <i></i></span>
 
 											<?php if($t -> Gfirst($Tv['tid'])){ 	//如果有第一名则显示
 												$t -> Ufirst($Tv['tid'], $t -> Gfirst($Tv['tid']));		//并刷新标记 ?>
@@ -163,7 +163,7 @@
 												<?php } ?>
 
 												<?php if($t -> GCtime($Tv['tid'])){  //正常状态下 ?>
-													<a class="buy manage r" href="javascript:;" >管理</a>
+													<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
 												<?php } ?>
 
 											<?php }else{ //如果不是创建者，则可以关注此标题	?>
@@ -174,22 +174,20 @@
 
 											<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
 											
-											<?php if(isset($_GET['Ta']) && 1){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
-												<!-- 投资金额 -->
-												<div class="r" style="margin-right:15px;">
-												<?php if($t -> IUinvest($Tv['tid'])){	//如果用户有投资则显示数据 ?>
-													<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
-													<div class="use-invest">
-														<span title="投入的越多占的比例越大">拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
-													</div>
-													<a class="use-invest-btn" id="btn-share-manage" href="javascript:;" >管理</a>
-												<?php }else{ ?>
-													<div class="use-invest">
-														<span>尚未参与</span>
-													</div>
-													<a class="use-invest-btn" id="btn-share-manage" href="javascript:;" >参与金池共享</a>
-												<?php } ?>
+											<?php if(isset($_GET['Ta']) && $Tv['invest']){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
+											<div class="r" style="margin-right:15px;">
+												<div class="use-invest" >
+
+													<?php if($t -> IUinvest($Tv['tid'])){	//判断是否有投资过 ?>
+														<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
+														<span>拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
+													<?php }else{ ?>
+														<span class="j-possess-invest-info">还未参加</span>
+													<?php } ?>
+
 												</div>
+												<a class="use-invest-btn j-btn-share-manage" href="javascript:;" >共享管理</a>
+											</div>
 											<?php } ?>
 										</div>
 									<?php } ?>
@@ -197,7 +195,8 @@
 								</div>
 
 								<?php if($Tv['userid'] == $u -> Guid() && $t -> GCtime($Tv['tid'])){ //如果当前访问者是题主且标题状态正常，则可以管理	?>
-									<div class="depict" style="display: none;">
+									<!-- 题主管理界面 -->
+									<div class="depict j-title-manage" style="display: none;">
 										<div class="txt">
 											<textarea class="cue"><?php echo $Tv['content']; ?></textarea>
 
@@ -218,17 +217,32 @@
 												<span class="names s1" style="width: 190px;">金池注入（单位：0.01 元）</span>
 												<div class="modified" max="<?php echo  $u -> Gplus(); ?>">
 													<input type="button" value="-" class="btn prev">
-													<input type="text" value="0" class="txt">
+													<input type="text" value="0" class="txt j-manage-sum">
 													<input type="button" value="+" class="btn next">
 												</div>
-												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+												<a class="modifiedTip j-tip-sum r" href="javascript:;" title="">您的金额不足！<i></i></a>
+												<span class="radio-hint">从账户余额转入。</span>
 											</div>
+
+											<div class="radio" style="overflow: inherit;">
+												<span class="names s1" style="width: 190px;">增加奖金（单位：0.01 元）</span>
+												<div class="modified" max="<?php echo $price; ?>" min="0" >
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt j-manage-reward">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip j-tip-reward r" href="javascript:;" title="">金池金额不足！<i></i></a>
+												<span class="radio-hint">从金池中转入。</span>
+											</div>
+											
+											<!-- 由于余额代扣逻辑比较复杂，暂时关闭
 											<div class="radio" selection="<?php echo $Tv['withholding']; ?>" >
 												<span class="names s1" style="width:120px;">余额代扣开启</span>
-												<label><input type="radio" name="days" value="1" />否</label>
-												<label><input type="radio" name="days" value="2" />是</label>
+												<label><input type="radio" name="days" value="1" />关闭</label>
+												<label><input type="radio" name="days" value="2" />开启</label>
 												<input type="hidden" name="withholding" value="<?php echo $Tv['withholding']; ?>" />		
 											</div>
+											-->
 
 											<?php if($Tv['invest']){		//如果开启了金池共享 ?>
 												<div class="radio" style="overflow: inherit;">
@@ -238,21 +252,21 @@
 														<input type="text" value="<?php echo $Tv['invest']; ?>" class="txt j-manage-invest-scale" style="width: 50px;" readonly="readonly">
 														<input type="button" value="+" class="btn next">
 													</div>
-													<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+													<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>	
+													<span class="radio-hint">比例只能添加无法减少。</span>
+												</div>
+											<?php }else{ ?>
+												<div class="radio" selection="1" >
+													<span class="names s1" style="width:120px;">金池共享开启</span>
+													<label><input type="radio" name="days" value="0" />关闭</label>
+													<label><input type="radio" name="days" value="1" />开启</label>
+													<input type="hidden" class="j-manage-invest" value="0" />		
+													<span class="radio-hint">提示：开启后无法关闭</span>
 												</div>
 											<?php } ?>
 
-											<div class="radio" style="overflow: inherit;">
-												<span class="names s1" style="width: 100px;">增加奖金</span>
-												<div class="modified" max="<?php echo $price; ?>" min="0" >
-													<input type="button" value="-" class="btn prev">
-													<input type="text" value="0" class="txt j-manage-moneyAward" readonly="readonly">
-													<input type="button" value="+" class="btn next">
-												</div>
-												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-											</div>
-
-											<input class="confirm amend r" id="title-manage-affirm" type="button" value="确认修改" />
+											<input class="confirm amend r j-title-manage-affirm" type="button" value="确认修改" />
+											<a href="javascript:;" class="depict-link j-title-manage-close" >关闭</a>
 											<div class="prompt"><div>修改成功</div></div>
 											<div class="c"></div>
 										</div>
@@ -260,22 +274,35 @@
 								<?php } ?>
 								
 								<?php if(isset($_GET['Ta']) && 1){	//如果当前访问者是关注者且标题开启了共享功能，则可以管理。 ?>
-									<div class="depict" id="share-manage" style="display: none;">
+									<!-- 资助管理界面 -->
+									<div class="depict j-share-manage" style="display: none;">
 										<div class="txt">
 											<div class="radio radio-data" style="margin-top: 0px;" >
-												<p class="input">已投入金额：<em n="<?php echo $investInfo['sum']; ?>" class="golds possess-invest-input"></em> <i>元</i></p>
-												<p class="income">预计回报：<em class="golds possess-invest-sum" n="<?php echo intval($price *$Tv['invest'] /100 *($investInfo['sum'] /$t -> GTIsum($Tv['tid']))); ?>"></em> <i>元</i></p>
+
+												<?php //判断是否有投资过
+												if($t -> IUinvest($Tv['tid'])){
+													$investInfo = $t -> GUinvest($Tv['tid']);
+													$investInput = $investInfo['sum'];
+													$investIncome = intval($price *$Tv['invest'] /100 *($investInfo['sum'] /$t -> GTIsum($Tv['tid'])));
+												}else{ 
+													$investInput = 0;
+													$investIncome = 0;
+												} ?>
+											
+												<p class="input">已投入金额：<em n="<?php echo $investInput; ?>" class="golds possess-invest-input"></em> <i>元</i></p>
+												<p class="income">预计回报：<em class="golds possess-invest-sum" n="<?php echo $investIncome; ?>"></em> <i>元</i></p>
 											</div>
 											<div class="radio" style="overflow: inherit;">
 												<span class="names s1" style="width: 215px;">投资金额注入（单位：0.01 元）</span>
 												<div class="modified" max="<?php echo  $u -> Gplus(); ?>">
 													<input type="button" value="-" class="btn prev">
-													<input type="text" value="0" class="txt">
+													<input type="text" value="0" class="txt j-possess-invest-add">
 													<input type="button" value="+" class="btn next">
 												</div>
-												<a class="modifiedTip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+												<a class="modifiedTip r j-tip-invest" href="javascript:;" >您的金额不足！<i></i></a>
 											</div>
-											<input class="confirm amend r" id="share-manage-affirm" type="button" value="确认" />
+											<input class="confirm amend r j-share-manage-affirm" type="button" value="确认" />
+											<a href="javascript:;" class="depict-link j-share-manage-close" >关闭</a>
 											<div class="prompt"><div>操作成功</div></div>
 											<div class="c"></div>
 										</div>
@@ -296,8 +323,23 @@
 	<script type="text/javascript">
 
 		//操作共享界面
-		$('#btn-share-manage').click(function(){
-			$('#share-manage').toggle();
+		$('.j-btn-share-manage').click(function(){
+			$(this).parents('.col').find('.j-share-manage').stop().slideToggle();
+		});
+
+		//关闭投资界面
+		$('.j-share-manage-close').click(function(){
+			$(this).parents('.col').find('.j-share-manage').slideUp();
+		});
+
+		//标题管理界面
+		$('.j-btn-title-manage').click(function(){
+			$(this).parents('.col').find('.j-title-manage').stop().slideToggle();
+		});
+
+		//关闭标题管理界面
+		$('.j-title-manage-close').click(function(){
+			$(this).parents('.col').find('.j-title-manage').slideUp();
 		});
 
 		//挂接关注和取消关注
@@ -366,17 +408,6 @@
 			});
 		});
 
-		//显示管理
-		$('.manage').click(function(){
-			var col = $(this).parents('.col'),
-				con = col.find('.depict');
-			if( con.css('display') == "none" ){
-				con.show();
-			}else{
-				con.hide();
-			}
-		});
-
 		//修改记录
 		$('.col').each(function(){
 			var day = $(this).find('input[name="days"]'),
@@ -387,29 +418,88 @@
 		});
 
 		//修改标题
-		$('#title-manage-affirm').click(function(){
+		$('.j-title-manage-affirm').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid'),
 				cue = col.find('.cue').val(),
-				num = col.find('input[name="money"]').val(),
-				wit = col.find('input[name="withholding"]').val(),
-				add = parseInt(col.find('.modified .txt').val()),
-				scale = parseInt(col.find('.j-manage-invest-scale').val()),
-				gold = col.find('.j-title-shareglod');
 
-			//判断金币注入是否正确
-			if(add && add > $('#userGold').val() ){
-				col.find('.modifiedTip').fadeIn();
-				setTimeout(function(){ col.find('.modifiedTip').hide(); }, 3000);
+				//获取管理界面的修改 单次代付金
+				MAssistNum = parseInt(col.find('input[name="money"]').val()),
+
+				//获取管理界面的是否开启 余额代付 ----此功能暂时关闭
+				MwitNum = col.find('input[name="withholding"]').val(),
+				
+				//获取管理界面的 金池比例 元素及数值
+				MScaleInput = col.find('.j-manage-invest-scale'),
+				MScaleNum = parseInt(MScaleInput.val()),
+
+				invest = col.find('.j-manage-invest').val(),
+
+				//获取管理界面的 添加金池元素及金额
+				MSumInput = col.find('.j-manage-sum'),
+				MSum = parseInt(MSumInput.val()),
+
+				//获取管理界面的 添加奖金元素及金额
+				MRewardInput = col.find('.j-manage-reward'),
+				MRewardNum = parseInt(MRewardInput.val()),
+
+				//获取用户余额
+				userSum = $(1).ABalance();
+
+
+			//获取标题金池元素及金额
+			var TSum = col.find('.title-sum'),
+				TSums = parseInt(TSum.attr('n'));
+
+			//获取标题 金池代付金 元素及金额
+			var TAssistObj = col.find('.j-title-shareglod'),
+				TAssistNum = parseInt(TAssistObj.html());
+
+			//获取标题奖金元素及金额
+			var TReward = col.find('.j-title-reward'),
+				TRewards = parseInt(TReward.attr('n'));
+
+			//获取标题金池共享比例元素及数值
+			var TScaleObj = col.find('.title-share-scale'),
+				TScaleNum = parseInt(TScaleObj.html())/100;
+
+			//获取标题金池共享金额元素及金额
+			var TSharingObj = col.find('.title-share-sum'),
+				TSharingNum = parseInt(TScaleNum*TSums);		//此数据如果修改后无法使用，但需要此公式
+
+
+			//判断增加金池的金额是否大于账户余额
+			if(MSum && MSum > $(1).ABalance()){
+				var tip = col.find('.j-tip-sum').fadeIn();
+				setTimeout(function(){ tip.hide(); }, 3000);
 				return false;
 			}
+
+			//判断增加奖金的金额是否大于金池余额
+			if(MRewardNum && MRewardNum > TSums){
+				var tip = col.find('.j-tip-reward').fadeIn();
+				setTimeout(function(){ tip.hide(); }, 3000);
+				return false;
+			}
+
+			//判断是否开启金池共享
+			if(invest){
+				MScaleNum = 20;
+			}
+
+
+			//以上判断都通过的话，切换成等待动画
 			tip = col.find('.prompt');
 			tip.slideDown();
-			// console.log( "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit +"&scale="+ scale );
+			col.find('.modifiedTip').hide();	//隐藏所有提示框
+
+			// console.log( "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ addSum +"&shareglod="+ num +"&withholding="+ wit +"&scale="+ scale +"&reward="+ reward );
+			
+			//提交数据
 			$.ajax({
 				type: "POST",
 				url: "./ajax/ajax_user.php",
-				data: "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ add +"&shareglod="+ num +"&withholding="+ wit +"&scale="+ scale,
+				data: "titleAdmin="+ tid +"&cue="+ cue +"&modified="+ MSum +"&shareglod="+ MAssistNum +"&withholding="+ MwitNum +"&scale="+ MScaleNum +"&reward="+ MRewardNum,
 				success: function(msg){ 
 
 					//提示操作成功
@@ -418,39 +508,46 @@
 						tip.slideUp();
 					}, 1000);
 
-					//修改页面标题的数据
-					//如果修改了代付金
-					if(parseInt(gold.html()) != parseInt(num)){
-						gold.html(parseInt(num)/100);
+					//如果开启了金池共享则刷新页面
+					if(invest){
+						history.go(0);
 					}
 
-					//如果修改金池
-					var TSum = col.find('.title-sum'),
-						TSums = parseInt(TSum.attr('n'));
+					//修改页面标题的数据	----------------------------------
 
-					//如果修改了共享比例
-					var SScale = col.find('.title-share-scale'),
-						SScales = parseInt(SScale.html());
-					if(scale != SScales){
-						SScales = scale;
-						SScale.html(SScales);
-						col.find('.title-share-sum').attr('n', parseInt(TSums*(SScales/100))).golds();
-						$('.j-manage-invest-scale').parent().attr('min', SScales);
+					//如果操作了 修改单次代付金
+					if(TAssistNum != MAssistNum){
+						TAssistObj.html(MAssistNum/100);
 					}
 
-					//如果有注入金，则修改页面数量
-					if( add > 0 ){
-						var ug = parseInt($('#userGold').val());
-							ug = ug - add;
-						$('#userGold').val(ug);
-						$('#userInfoGold').html( ug/100 );
-						col.find('.modified').attr('max', ug);	//刷新最大值
+					//如果操作了 金池注入
+					if(MSum){
+						userSum = $().ABalance(-MSum);	//刷新用户金额
+						TSums += MSum;
+						TSum.attr('n', TSums).golds();								//刷新标题金池显示金额
+						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题金池共享金额
 
-						var titPrice = col.find('.head .gold em'),
-							newPrice = parseInt(titPrice.attr('n')) + add;
-						titPrice.attr('n', newPrice);
-						titPrice.html(newPrice);
-						goldShow(titPrice);
+						MSumInput.parent('.modified').attr('max', userSum);		//刷新注入金额的上限
+					}
+
+					//如果操作了 添加奖金
+					if(MRewardNum){
+						TSums -= MRewardNum;
+						TRewards += MRewardNum;
+						TReward.attr('n', TRewards).golds();						//刷新标题 奖金 显示金额
+						TSum.attr('n', TSums).golds();								//刷新标题 金池 显示金额
+						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题 金池共享 显示金额
+
+						MRewardInput.parent('.modified').attr('max', TSums);		//刷新 添加奖金 的上限
+					}
+
+					//如果修改了 共享比例
+					if(MScaleNum != TScaleNum*100){
+						TScaleObj.html(MScaleNum);	
+						TScaleNum = MScaleNum/100;									//刷新标题 金池共享比例
+						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题 金池共享 显示金额
+
+						MScaleInput.parent('.modified').attr('min', MScaleNum);		//刷新修改 金池共享比例 的下限
 					}
 				}
 			});
@@ -478,90 +575,124 @@
 		});
 
 		//投资操作
-		$('#share-manage-affirm').click(function(){
+		$('.j-share-manage-affirm').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid'),
-				num = parseInt(col.find('.modified .txt').val()),
-				gold = col.find('.gold b');
+				gold = col.find('.gold b'),
 
-			//判断金币注入是否正确
-			if(num && num > $('#userGold').val() ){		//如果金额不足则提示
-				col.find('.modifiedTip').fadeIn();
-				setTimeout(function(){ col.find('.modifiedTip').hide(); }, 3000);
+				//获取管理界面的 当前总投入 的元素和金额
+				MInputObj = col.find('.possess-invest-input'),
+				MInputNum = parseInt(MInputObj.attr('n')),
+
+				//获取管理界面 预计收入金额 的元素和金额
+				MIncomeObj = col.find('.possess-invest-sum'),
+				MIncomeNum = parseInt(MIncomeObj.attr('n')),
+
+				//获取管理界面的 投资金额注入 数值
+				MinvestObj = col.find('.j-possess-invest-add'),
+				MinvestNum = parseInt(MinvestObj.val());
+
+
+			//获取用户余额
+			var userSum = $(1).ABalance();
+
+			//获取标题金池元素及金额
+			var TSum = col.find('.title-sum'),
+				TSums = parseInt(TSum.attr('n'));
+
+			//获取标题金池共享比例元素及数值
+			var TScaleObj = col.find('.title-share-scale'),
+				TScaleNum = parseInt(TScaleObj.html())/100;
+
+			//获取标题金池共享金额元素及金额
+			var TSharingObj = col.find('.title-share-sum'),
+				TSharingNum = parseInt(TScaleNum*TSums);		//此数据如果修改后无法使用，但需要此公式
+
+			//获取标题的全部收到的投资
+			var	TinvestObj = col.find('.title-invest-sum'),			//标题投资总金额
+				TinvestNum = parseInt(TinvestObj.val()); 
+
+
+			//判断注入投资的金额是否大于用户余额
+			if(MinvestNum && MinvestNum > userSum){
+				var tip = col.find('.j-tip-invest').fadeIn();
+				setTimeout(function(){ tip.hide(); }, 3000);
 				return false;
 			}
 
-			//显示数据交互中提示
+			//判断是否有进行过操作
+			if(MinvestNum <= 0){
+				return false;
+			}
+
+
+			//以上判断都通过的话，切换成等待动画
 			tip = col.find('.prompt');
 			tip.slideDown();
+			col.find('.modifiedTip').hide();	//隐藏所有提示框
+
+			// console.log("shareManage="+ tid +"&number="+ MinvestNum);
 
 			//提交后台数据
-			// console.log("shareManage="+ tid +"&number="+ num);
 			$.ajax({
 				type: "POST",
 				url: "./ajax/ajax_user.php",
-				data: "shareManage="+ tid +"&number="+ num,
+				data: "shareManage="+ tid +"&number="+ MinvestNum,
 				success: function(msg){ 
 					// console.log(msg);
-					if(parseInt(msg) == 1){
 
-						//提示操作成功
-						tip.find('div').show();
-						setTimeout(function(){
-							tip.slideUp();
-						}, 1000);
+					//提示操作成功
+					tip.find('div').show();
+					setTimeout(function(){
+						tip.slideUp();
+					}, 1000);
 
-						//修改页面标题的数据
-						//获取元素
-						var sum 	= col.find('.title-sum'),					//当前标题的金池
-							share 	= col.find('.title-share-scale'),			//标题共享比例
-							total 	= col.find('.title-share-sum'),				//标题共享总金额
-							invest 	= col.find('.title-invest-sum'),			//标题投资总金额
-							input 	= col.find('.possess-invest-input'),		//当前投入总金额
-							income 	= col.find('.possess-invest-sum'),			//预计收入金额
-							scale 	= col.find('.possess-invest-scale');		//当前拥有分享金比例
-						
+					//判断是否首次投资
+					if(!MInputNum){
 
-						//获取参数
-						var titSum	= parseInt(sum.attr('n')) +num,
-							titScale = parseInt(share.html()) /100,
-
-							investSum = parseInt(invest.val()) +num,	//所有用户投资总金额
-							mySum = parseInt(input.attr('n')) +num,		//我的投资总金额
-
-							incomeScale	= 0,				//我的收入比例，用户计算预计收入
-							shareScale = mySum/investSum;	//我的投资占总投资金额的百分比，用户显示我的份额
-
-
-						//输出在页面指定位置
-						invest.val(investSum);									//刷新标题的投资总金额
-						sum.attr('n', titSum).golds();							//刷新标题的金池
-						total.attr('n', parseInt(titScale *titSum)).golds();	//刷新标题的共享总金额
-
-						input.attr('n', mySum).golds();										//刷新我的投资总金额
-						scale.html((shareScale*100).toFixed(2));							//刷新我的份额百分比
-						income.attr('n', parseInt(shareScale *titScale *titSum)).golds();	//刷新我的预计收入
-
-
-						//如果有注入金，则修改页面数量
-						// if( add > 0 ){
-						// 	var ug = parseInt($('#userGold').val());
-						// 		ug = ug - add;
-						// 	$('#userGold').val(ug);
-						// 	$('#userInfoGold').html( ug/100 );
-						// 	col.find('.modified').attr('max', ug);	//刷新最大值
-
-						// 	var titPrice = col.find('.head .gold em'),
-						// 		newPrice = parseInt(titPrice.attr('n')) + add;
-						// 	titPrice.attr('n', newPrice);
-						// 	titPrice.html(newPrice);
-						// 	goldShow(titPrice);
-						// }
+						//添加显示比例元素
+						col.find('.j-possess-invest-info').html("拥有分享金：<i class='possess-invest-scale'>0</i>%");
 					}
+
+					//获取管理按钮的 拥有金池共享百分比 的元素及数值
+					var MscaleObj = col.find('.possess-invest-scale'),
+						MscaleNum = parseInt(MscaleObj.html());
+
+					
+					//修改页面标题的数据 ---------------------------
+
+					//刷新金池
+					TSums += MinvestNum;
+					TSum.attr('n', TSums).golds();
+
+					//刷新共享总金额
+					TSharingNum = parseInt(TScaleNum*TSums);
+					TSharingObj.attr('n', TSharingNum).golds();
+
+					console.log(MInputNum);
+
+					//刷新我的已投入总金额
+					MInputNum += MinvestNum;
+					MInputObj.attr('n', MInputNum).golds();
+
+					//刷新总投资金额
+					TinvestNum += MinvestNum;
+					TinvestObj.val(TinvestNum);
+
+					//刷新拥有分享金比例
+					MscaleNum = (MInputNum/TinvestNum*100).toFixed(2);
+					MscaleObj.html(MscaleNum);
+
+					//刷新预计收入金额
+					MIncomeNum = parseInt(TSharingNum*MscaleNum/100);
+					MIncomeObj.attr('n', MIncomeNum).golds();
+					
+					//刷新可注入的最大金额	
+					userSum = $().ABalance(-MinvestNum);
+					MinvestObj.parent('.modified').attr('max', userSum);
 				}
 			});
 		});
-
 
 
 
