@@ -111,7 +111,7 @@
 									</div>
 
 									<!-- 我的标题列表	#参数们 -->
-									<div class="param-tag tag f">
+									<div class="param-tag tag f j-title-param">
 										<span class="creator">创建者：<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $users -> Gname($Tv['userid']); ?></a></span>
 
 										<span class="gold">池：
@@ -157,49 +157,53 @@
 
 									</div>
 
-									<?php
-									 if(!$t -> Ipass($Tv['tid'])){		//如果还是处于待审核状态，则不能操作标题 ?>
-										<div class="use r">
+									<?php if(!$t -> Ipass($Tv['tid'])){		//如果还是处于待审核状态，则不能操作标题 ?>
+									<div class="use r  j-title-use">
 
-											<?php if($Tv['userid'] == $u -> Guid()){ //如果查看用户为创建者，则可以管理	?>
+										<?php if($Tv['userid'] == $u -> Guid()){ //如果查看用户为创建者，则可以管理	?>
 
-												<?php if($t -> Ifail($Tv['tid'])){ 		//如果未通过审核 ?>
-													<a class="buy r" href="./titleApply.php?id=<?php echo $Tv['tid']; ?>" >修改</a>
-												<?php } ?>
-												
-												<?php if($t -> IOact($Tv['tid']) || ($t -> Itype($Tv['tid'], 2) && !$t -> IWpay($Tv['tid']))){ 	//活动标题已结束 或者 专题如果不能交纳维护费 ?>
-													<a class="buy closeTitle r" href="javascript:;" >关闭 (<?php echo $o -> Ctime($t -> GCtime($Tv['tid'])); ?>后自动关闭)</a>
-												<?php } ?>
-
-												<?php if($t -> GCtime($Tv['tid'])){  //正常状态下 ?>
-													<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
-												<?php } ?>
-
-											<?php }else{ //如果不是创建者，则可以关注此标题	?>
-												<?php if(!$uid && isset($_GET['Ta'])){ ?>
-												<a class="buy sh follow buy_follow r" href="javascript:;" >取消关注</a>
-												<?php } ?>
+											<?php if($t -> Ifail($Tv['tid'])){ 		//如果未通过审核 ?>
+												<a class="buy r" href="./titleApply.php?id=<?php echo $Tv['tid']; ?>" >修改</a>
 											<?php } ?>
-
-											<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
+											<?php echo time(); ?>
+											<?php if($t -> IOact($Tv['tid'])){ 	//活动标题已结束 ?>
+												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认结束活动</a>
+											<?php } ?>
 											
-											<?php if(isset($_GET['Ta']) && $Tv['invest']){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
-											<div class="r" style="margin-right:15px;">
-												<div class="use-invest" >
-
-													<?php if($t -> IUinvest($Tv['tid'])){	//判断是否有投资过 ?>
-														<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
-														<span>拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
-													<?php }else{ ?>
-														<span class="j-possess-invest-info">还未参加</span>
-													<?php } ?>
-
-												</div>
-												<a class="use-invest-btn j-btn-share-manage" href="javascript:;" >共享管理</a>
-											</div>
+											<?php if($t -> Itype($Tv['tid'], 2) && !$t -> IWpay($Tv['tid'])){ 	//专题如果不能交纳维护费 ?>
+												<a class="buy closeTitle r" href="javascript:;" >确认关闭专题</a>
 											<?php } ?>
+
+											<?php if($t -> GCtime($Tv['tid']) && !$t -> IOact($Tv['tid'])){  //正常状态下 ?>
+												<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
+											<?php } ?>
+
+										<?php }else{ //如果不是创建者，则可以关注此标题	?>
+											<?php if(!$uid && isset($_GET['Ta'])){ ?>
+											<a class="buy sh follow buy_follow r" href="javascript:;" >取消关注</a>
+											<?php } ?>
+										<?php } ?>
+
+										<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
+										
+										<?php if(isset($_GET['Ta']) && $Tv['invest']){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
+										<div class="r" style="margin-right:15px;">
+											<div class="use-invest" >
+
+												<?php if($t -> IUinvest($Tv['tid'])){	//判断是否有投资过 ?>
+													<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
+													<span>拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
+												<?php }else{ ?>
+													<span class="j-possess-invest-info">还未参加</span>
+												<?php } ?>
+
+											</div>
+											<a class="use-invest-btn j-btn-share-manage" href="javascript:;" >共享管理</a>
 										</div>
+										<?php } ?>
+									</div>
 									<?php } ?>
+
 									<div class="c"></div>
 								</div>
 
@@ -631,24 +635,34 @@
 		});
 
 		//关闭标题
-		$('.closeTitle').click(function(){
+		$('.j-btn-title-close').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid');
-			$.ajax({
-				type: "POST",
-				url: "./ajax/ajax_user.php",
-				data: "titleClose="+ tid,
-				success: function(msg){ 
-					var num = parseInt($('#userGold').val()),
-						add = parseInt(msg);
-					$('#userGold').val(num+add);
-					$('#userInfoGold').html(num+add).golds();
-					$('#headGold').html(num+add).golds();
-					col.slideUp(function(){
-						$(this).remove();
-					});
-				}
+
+			//显示关闭加载动画
+
+			//去掉元素
+			// col.css({ overflow: 'hidden' }).animate({ height: 100 });
+			col.find('.head').animate({ height: 100 },function(){
+				col.find('.j-title-use').hide();
+				col.find('.j-title-param').hide();
 			});
+
+			// $.ajax({
+			// 	type: "POST",
+			// 	url: "./ajax/ajax_user.php",
+			// 	data: "titleClose="+ tid,
+			// 	success: function(msg){ 
+			// 		// var num = parseInt($('#userGold').val()),
+			// 		// 	add = parseInt(msg);
+			// 		// $('#userGold').val(num+add);
+			// 		// $('#userInfoGold').html(num+add).golds();
+			// 		// $('#headGold').html(num+add).golds();
+			// 		col.slideUp(function(){
+			// 			$(this).remove();
+			// 		});
+			// 	}
+			// });
 		});
 
 		//投资操作

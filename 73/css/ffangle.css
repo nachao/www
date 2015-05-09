@@ -799,6 +799,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage{ margin: 0px;width: auto; }
 .titleManage .col{ width: auto;margin: 0 0 30px;float: none; }
 .titleManage .col .use{ width: 100%; border-top: 1px solid #eee; padding: 20px 0 0; margin: 30px 0 0;height: auto; }
+.titleManage .col .use-btn-end{ background: #e74c3c; }
 .titleManage .col .depict{ margin-top: 10px;border: 1px solid #d9dbdd;background: white url(../imgs/area_bottomBg.gif) repeat-x bottom;box-shadow: 0px 0px 10px #eee;border-radius: 3px;overflow: hidden;padding: 20px 20px 25px; }
 .titleManage .col .depict{ max-height: none;position: relative;border-radius: 0px; }
 .titleManage .depict .radio{ display: inline-block;border-radius: 3px;padding-left: 1px;float: left;margin-top: 20px;width: 100%;overflow: hidden;position: relative; }
