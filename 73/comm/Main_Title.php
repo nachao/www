@@ -145,8 +145,7 @@ class Data_title extends Config
 
 	//获取指定 标题ID 的总投资金额
 	protected function data_selectTitleInvestSum($tid=0){
-		// $sql = "select * FROM  `".parent::Fn()."titleshare` WHERE  `tid` =".$tid." LIMIT 0 , 30";
-		$sql = "select SUM(`sum`) FROM  `".parent::Fn()."titleshare` WHERE  `tid` =271430890209 LIMIT 0 , 30";
+		$sql = "select SUM(`sum`) FROM  `".parent::Fn()."titleshare` WHERE  `tid` =".$tid." LIMIT 0 , 30";
 		$row = parent::Ais($sql);
 		return $row[0];
 	}
@@ -535,14 +534,10 @@ class Event_title extends Data_title
 		if($withholding && withholding != $info['withholding']){
 			$this -> event_updateWithholding($tid, $withholding);	//修改代扣
 		}
-		$u = new Users();
-		if($append && $u -> Gplus() >= $append ){	//个人余额是否充足	
-			$glod = $this -> event_getPrice($tid);	//获取标题当前的金池数量
-			parent::data_update( $tid, 'price', $glod +$append );		//注入金币池
-			$u -> USplus($append);		//扣除用户的余额		
-		}
+
+		//修改 金池共享比例
 		if($scale && $scale != $info['invest']){
-			parent::data_update( $tid, 'invest', $scale );	//修改 金池共享比例
+			parent::data_update( $tid, 'invest', $scale );
 		}
 	}
 
@@ -610,6 +605,13 @@ class Event_title extends Data_title
 	protected function event_updateWithholding($tid=0, $val=0){
 		if($tid){
 			return parent::data_update($tid, 'withholding', $val);
+		}
+	}
+
+	//更新指定 标题TID 的奖金
+	protected function event_updateReward($tid=0, $val=0){
+		if($tid){
+			return parent::data_update($tid, 'reward', $val);
 		}
 	}
 
@@ -825,7 +827,12 @@ class Title extends Event_title
 
 	//获取指定 标题ID 的总投资金额
 	public function GTIsum($tid=0){
-		return parent::event_getTitleInvestSum($tid);
+		$value = 0;
+		$number = parent::event_getTitleInvestSum($tid);
+		if($number){
+			$value = $number;
+		}
+		return $value;
 	}
 
 
@@ -1000,7 +1007,7 @@ class Title extends Event_title
 		return $value;
 	}
 
-	//判断指定 标题TID 的创建者是否能支付代付
+	//判断指定 用户UID 是否有投资过指定的 标题TID 
 	public function IUinvest($tid=0, $uid=0){
 		$value = 0;
 		$uid = $uid ? $uid : parent::Eid();
@@ -1057,9 +1064,26 @@ class Title extends Event_title
 	*/
 
 	//更新指定 标题 参数
-	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0, $scale=0 ){
+	public function Utit( $tid=0, $shareglod=0, $depict='', $append=0, $withholding=0, $scale=0, $reward=0 ){
+		$u = new Users();
 		if($tid){
-			return parent::event_titleAdmin( $tid, $shareglod, $depict, $append, $withholding, $scale );
+			parent::event_titleAdmin( $tid, $shareglod, $depict, $append, $withholding, $scale );
+			
+			//添加金池金额
+			if($append && $u -> Gplus() >= $append ){	//个人余额是否充足	
+				$u -> USplus($append);					//扣除用户的余额
+				parent::event_updatePrice($tid, $this -> Gprice($tid) +$append);		//注入金币池	
+			}
+
+			//获取此标题的所有信息
+			$info = parent::event_getInfo($tid);
+
+			//修改奖金
+			if($reward && $reward <= $this -> Gprice($tid)){	//判断是否有修改的数值 且 增加金额小于金池金额
+				$this -> USda($tid, $reward);
+				$reward = $reward + $info['reward'];
+				parent::event_updateReward($tid, $reward);
+			}
 		}
 	}
 
@@ -1158,11 +1182,13 @@ class Title extends Event_title
 
 	//更新指定 用户UID 投资的指定 标题TID 的金额NUM
 	public function Uinvest($tid=0 ,$num=0, $uid=0){
+		$u = new Users();
 		$uid = $uid ? $uid : parent::Eid();
 		if($tid && $num){
 			if(!!parent::event_getUserInvest($uid, $tid)){
 				$info = parent::event_getUserInvest($uid, $tid);
 				$this -> UAda($tid, $num);		//刷新标题金池
+				$u -> USplus($num);				//扣除用户的余额
 				return parent::event_updateUserInvest($tid, $uid, $num + $info['sum']);	//如果用户已经投资则修改金额
 			}else{
 				return parent::event_addUserInvestTit($tid, $uid, $num);	//如果用户没有投资过则创建新数据

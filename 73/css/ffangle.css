@@ -811,8 +811,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .depict .radio .act{ background: #e74c3c;border-color: #e74c3c;color: #eee;box-shadow: 0 0 5px rgba(0,0,0,.2) inset; }
 .titleManage .depict .radio .act em{ color: white; }
 .titleManage .depict .radio .act:hover{ border-color: #e74c3c;color: white; }
+.titleManage .depict .radio .radio-hint{ color: #999;line-height: 35px;margin-left: 20px;display: inline-block;float: left; }
 
-.titleManage .depict .radio .modifiedTip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #e74c3c;padding: 2px 5px;position: absolute;top: 50px;left: 230px;display: none;cursor: default; }
+.titleManage .depict .radio .modifiedTip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #e74c3c;padding: 2px 5px;position: absolute;top: 50px;left: 230px;display: none;cursor: default;z-index: 3; }
 .titleManage .depict .radio .modifiedTip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;top: -4px;left: 43px;-webkit-transform:rotate(-135deg);transform:rotate(-135deg);border: 4px solid #e74c3c; border-top-color: transparent; border-left-color: transparent;  }
 
 .titleManage .depict .radio-data{ float: left; }
@@ -827,6 +828,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .depict .cue{ background: #f6f6f6;border: 1px solid #ddd;width: 100%;height: 120px;padding: 24px 20px;color: #444;font-size: 13px;line-height: 24px;margin: 0 -20px;resize: none;position: relative;left: -1px; }
 .titleManage .depict .confirm{ height: 35px;border: 1px solid #16273e;margin-left: -1px;float: left;background: #2f3c4e;cursor: pointer;color: white;text-align: center;margin-top: 20px;border-radius: 3px;padding: 0 30px; }
 .titleManage .depict .confirm:hover{ background: #16273e; }
+.titleManage .depict .depict-link{ float: right;margin-top: 20px;line-height: 35px;margin-right: 20px; }
 
 .titleManage .depict .prompt{ position: absolute;top: 0px;left: 0px;background: white url(../imgs/loading.gif) no-repeat center;width: 100%;height: 100%;display: none; }
 .titleManage .depict .prompt div{ display: inline-block;width: 100%;height: 100%;line-height: 300px;text-align: center;background: white;display: none; }
