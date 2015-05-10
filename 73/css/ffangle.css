@@ -171,7 +171,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .header .pagelogo a{  height: 100%;line-height: 90px;font-size: 24px;color: #e74c3c;font-weight: bold;float: left;display: inline-block;width: 100%; }
 
 /* 头部 - 广告 */
-.header .advert{ width: 720px;height: 90px;overflow: hidden;margin-top: 30px; }
+.header .advert{ width: 720px;height: 90px;margin-top: 30px; }
+.header .advert a{ display: inline-block;border: 1px solid #e4e6e8;border-radius: 3px;background: #f6f6f6; }
+.header .advert a:hover{ border-color: #d0d2d5; }
 
 /* 头部 - 菜单 */
 .header .menu{ height: 80px; }
@@ -1091,7 +1093,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .publish #halfamoment{ width: 100%;height: 50px;float: left;text-align: center;line-height: 50px;color: #ccc;font-size: 18px;display: none; }
 */
 /* 确定 */
-.publish .prompt{ display: inline-block;width: 100%;position: relative; }
+.publish .prompt{ display: inline-block;width: 100%;position: relative;height: 60px; }
 .publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px 0 0 3px;color: white;cursor: pointer; }
 .publish .prompt .sub:hover{ background: #ca2d1d; }
 .publish .prompt .cancel{ color: #2f3c4e;float: left;margin: 10px 0 0 30px;font-size: 13px; }
@@ -1108,6 +1110,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 .publish .prompt .formula{ width: 100%; }
 .publish .prompt .formula-txt{ margin: 0 0 0 20px;color:#aaa;display: none; }
+
+/* 提交后加载动画 */
+.j-prompt-submit-ajax{ background: url(../imgs/concept-f.gif) no-repeat center; }
 
 /* 提示 */
 .publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }

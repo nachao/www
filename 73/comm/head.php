@@ -21,9 +21,8 @@
 		
 <?php 
 	
-
 	//判断是否更换广告
-	if($a -> ICad()){ 
+	if($a -> Grange()){ 
 		$a -> UCad(); 	
 	}
 	
@@ -46,9 +45,13 @@
 
 						<!-- 广告 -->
 						<div class="advert r">
+							<?php if($ad['link']){	//如果有广告 ?>
 							<a href="<?php echo $ad['link'] ? $ad['link'] : 'javascript:;'; ?>" title="《<?php echo $ad['cue']; ?>》独家赞助" >
 								<img src="<?php echo $ad['longimgs']; ?>" />
 							</a>
+							<?php }else{ ?>
+							<a href="javascript:;" title="暂无赞助" ><img src="./imgs/not-ad.png" /></a>
+							<?php } ?>
 						</div>
 
 						<div class="c"></div>

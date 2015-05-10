@@ -174,7 +174,7 @@
 										</div>
 
 										<!-- 提交  -->
-										<div class="prompt" style="margin-top: 50px;">
+										<div class="prompt j-add-prompt" style="margin-top: 50px;">
 											<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
 											<input id="submitApply" class="sub f" type="submit" name="submit" value="发布" />
 											<a href="javascript:;" class="recommend" id="btn-recommend">推送【1折】</a>
@@ -473,6 +473,9 @@
 
 		//表单检测
 		function check( obj ){
+
+			//显示提交动画
+			$('.j-add-prompt').addClass('j-prompt-submit-ajax').find('*').hide();
 
 			//获取参数
 			var type = $("input[name='types']").val();
