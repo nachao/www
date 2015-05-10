@@ -1105,9 +1105,9 @@ class Users extends Event_user
 		$uid = parent::event_getUserTotal().time();
 
 		//当前用户的默认头像
-		$icon = md5($uid).".jpg";
-		$effigy = "./effigy/".$icon;
-		copy( "../img/default.gif", ".".$effigy);
+		// $icon = md5($uid).".jpg";
+		$effigy = "./imgs/default.gif";
+		// copy( "../img/default.gif", ".".$effigy);
 
 		//如果有邀请码则刷新邀请码
 		if($cdk){
