@@ -247,6 +247,10 @@
 		echo $t -> Uinvest($_POST['shareManage'], $_POST['number']);
 	}
 
+	//获取指定标题的投资用户列表
+	if(isset($_POST['investList'])){
+		print_r(json_encode($t -> Ginvest($_POST['investList'])));
+	}
 
 
 

@@ -150,6 +150,12 @@ class Data_title extends Config
 		return $row[0];
 	}
 
+	//获取指定 标题ID 的投资所有用户列表，按占百分比显示
+	protected function data_selectTitleInvestList($tid=0){
+		$sql = "select * FROM  `".parent::Fn()."titleshare` WHERE  `tid` =".$tid." ORDER BY  `sum` DESC LIMIT 0 , 100";
+		return mysql_query($sql);
+	}
+
 
 
 	/********************************************
@@ -435,7 +441,21 @@ class Event_title extends Data_title
 		}
 	}
 
-
+	//获取指定 标题ID 的投资所有用户列表
+	protected function event_getTitleInvestList($tid=0){
+		$u = new Users();
+		if($tid){
+			$query = parent::data_selectTitleInvestList($tid);
+			$array = array();
+			if( !!$query && mysql_num_rows($query) > 0 ){	//判断是否有内容
+				while( $row = mysql_fetch_array($query)){	//遍历数据
+					$row['name'] = $u -> Gname($row['uid']);
+					array_push($array, $row);
+				}
+			}
+			return $array;
+		}
+	}
 
 
 	/********************************************
@@ -509,11 +529,6 @@ class Event_title extends Data_title
 
 	//更新参数 结束标题，返回金池数量
 	protected function event_EndTit($tid=0){
-		$this -> event_updateStatus($tid, 3);	//修改标题状态为 已经结束：3
-		$u = new Users();
-		$u -> UAplus($this -> event_getReward($tid), $this -> event_getFirst($tid));		//给获胜者奖金
-		$u -> UAplus($this -> event_getPrice($tid));		//将金池全部返还给创建者
-		return $this -> event_getPrice($tid);
 	}
 
 	//更新参数 管理标题
@@ -796,7 +811,7 @@ class Title extends Event_title
 		return $value;
 	}
 
-	//获取指定 专题标题TID 应该扣的维护费
+	//获取指定 专题标题TID 应该扣的维护费的天数
 	public function Gcost($tid=0){
 		$val = 0;
 		if($tid){
@@ -833,6 +848,16 @@ class Title extends Event_title
 			$value = $number;
 		}
 		return $value;
+	}
+
+	//获取指定 标题ID 的总人数
+	public function GTItotal($tid=0){
+		return count(parent::event_getTitleInvestList($tid));
+	}
+
+	//获取指定 标题ID 的投资所有用户列表
+	public function Ginvest($tid=0){
+		return parent::event_getTitleInvestList($tid);
 	}
 
 
@@ -1183,7 +1208,35 @@ class Title extends Event_title
 
 	//更新指定 标题TID 为关闭
 	public function Uclose($tid=0){
-		return parent::event_EndTit($tid);
+		$u = new Users();
+		$c = new Content();
+		$info = $this -> Ginfo($tid);
+		$sum = $this -> Gprice($tid);
+
+		//判断是否开启共享
+		if($info['invest']){
+			$sharing = $sum*($info['invest']/100);	//共享金额
+			$sum = $sum - $sharing;					//刷新金池金额
+			$invest = $this -> GTIsum($tid);		//获取总投资金额
+			foreach ($this -> Ginvest($tid) as $key => $value) {
+				$u -> UAplus($value['sum']/$invest*$sharing, $value['uid']);	//返回相应的共享金给投资者
+			}
+		}
+
+		//判断是否有第一名
+		$reward = $this -> Greward($tid);
+		$first = $c -> Gauthor($this -> GFcid($tid));
+		if($first){
+			$u -> UAplus($reward, $first);			//给获胜者奖金
+		}else{
+			$sum = $sum + $reward;	//将奖金返还给创建者
+		}
+
+		//创建者返金
+		$u -> UAplus($sum);							//将金池全部返还给创建者
+
+		parent::event_updateStatus($tid, 3);		//修改标题状态为 已经结束：3
+		return $sum;
 	}
 
 	//更新指定 用户UID 投资的指定 标题TID 的金额NUM
@@ -1193,12 +1246,13 @@ class Title extends Event_title
 		if($tid && $num){
 			if(!!parent::event_getUserInvest($uid, $tid)){
 				$info = parent::event_getUserInvest($uid, $tid);
-				$this -> UAda($tid, $num);		//刷新标题金池
-				$u -> USplus($num);				//扣除用户的余额
-				return parent::event_updateUserInvest($tid, $uid, $num + $info['sum']);	//如果用户已经投资则修改金额
+				parent::event_updateUserInvest($tid, $uid, $num + $info['sum']);	//如果用户已经投资则修改金额
 			}else{
-				return parent::event_addUserInvestTit($tid, $uid, $num);	//如果用户没有投资过则创建新数据
+				parent::event_addUserInvestTit($tid, $uid, $num);	//如果用户没有投资过则创建新数据
 			}
+			$this -> UAda($tid, $num);		//刷新标题金池
+			$u -> USplus($num);				//扣除用户的余额
+			return $num;
 		}
 	} 
 

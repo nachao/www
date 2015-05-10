@@ -111,7 +111,7 @@
 									</div>
 
 									<!-- 我的标题列表	#参数们 -->
-									<div class="param-tag tag f">
+									<div class="param-tag tag f j-title-param">
 										<span class="creator">创建者：<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $users -> Gname($Tv['userid']); ?></a></span>
 
 										<span class="gold">池：
@@ -137,10 +137,13 @@
 											<?php if($Tv['invest']){		//如果标题开启了金池共享，则显示 ?>
 											<span class="fenxiang">金池分享：<i class="title-share-scale"><?php echo $Tv['invest']; ?></i>% （<em class="golds title-share-sum" n="<?php echo intval($price*$Tv['invest']/100); ?>"></em> <i></i>）</span>
 											<?php } ?>
-											<input type="hidden" class="title-invest-sum" value="<?php echo $t -> GTIsum($Tv['tid']); ?>" />
 
 										<?php }else{ 	//专题显示参数 ?>									
 											<span class="goumai"><em><?php echo $Tv['click']; ?></em> 人买</span>
+										<?php } ?>
+										
+										<?php if($t -> Itype($Tv['tid'], 2)){	//专题参数 ?>
+										<span class="goumai">到期时间：2015-05-10 0:00</span>
 										<?php } ?>
 
 										<?php if($t -> Ipass($Tv['tid'])){	//判断是否通过审核 ?>
@@ -157,49 +160,67 @@
 
 									</div>
 
-									<?php
-									 if(!$t -> Ipass($Tv['tid'])){		//如果还是处于待审核状态，则不能操作标题 ?>
-										<div class="use r">
+									<?php if(!$t -> Ipass($Tv['tid'])){		//如果还是处于待审核状态，则不能操作标题 ?>
+									<div class="use r  j-title-use">
 
-											<?php if($Tv['userid'] == $u -> Guid()){ //如果查看用户为创建者，则可以管理	?>
+										<?php if($Tv['userid'] == $u -> Guid()){ //如果查看用户为创建者，则可以管理	?>
 
-												<?php if($t -> Ifail($Tv['tid'])){ 		//如果未通过审核 ?>
-													<a class="buy r" href="./titleApply.php?id=<?php echo $Tv['tid']; ?>" >修改</a>
-												<?php } ?>
+											<?php if($t -> Ifail($Tv['tid'])){ 		//如果未通过审核 ?>
+												<a class="buy r" href="./titleApply.php?id=<?php echo $Tv['tid']; ?>" >修改</a>
+											<?php } ?>
+
+											<?php if($t -> IOact($Tv['tid'])){ 	//活动标题已结束 ?>
+												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认结束活动</a>
+											<?php } ?>
+											<?php echo $t -> Gcost($Tv['tid']); ?>
+											<?php if($t -> Itype($Tv['tid'], 2) && !$t -> IWpay($Tv['tid'])){ 	//专题如果不能交纳维护费 ?>
+												<a class="buy closeTitle r" href="javascript:;" >确认关闭专题</a>
+											<?php } ?>
+
+											<?php if($t -> GCtime($Tv['tid']) && !$t -> IOact($Tv['tid'])){  //正常状态下 ?>
+												<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
+											<?php } ?>
+
+										<?php }else{ //如果不是创建者，则可以关注此标题	?>
+											<?php if(!$uid && isset($_GET['Ta'])){ ?>
+											<a class="buy sh follow buy_follow r" href="javascript:;" >取消关注</a>
+											<?php } ?>
+										<?php } ?>
+
+										<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
+										
+										<?php if( $Tv['invest']){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
+										<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
+										<div class="r" style="margin-right:15px;">
+											<div class="use-invest" >
 												
-												<?php if($t -> IOact($Tv['tid']) || ($t -> Itype($Tv['tid'], 2) && !$t -> IWpay($Tv['tid']))){ 	//活动标题已结束 或者 专题如果不能交纳维护费 ?>
-													<a class="buy closeTitle r" href="javascript:;" >关闭 (<?php echo $o -> Ctime($t -> GCtime($Tv['tid'])); ?>后自动关闭)</a>
-												<?php } ?>
-
-												<?php if($t -> GCtime($Tv['tid'])){  //正常状态下 ?>
-													<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
-												<?php } ?>
-
-											<?php }else{ //如果不是创建者，则可以关注此标题	?>
-												<?php if(!$uid && isset($_GET['Ta'])){ ?>
-												<a class="buy sh follow buy_follow r" href="javascript:;" >取消关注</a>
-												<?php } ?>
-											<?php } ?>
-
-											<a class="skip sh r" href="./list.php?tid=<?php echo $Tv['tid']; ?>" >查看内容</a>
-											
-											<?php if(isset($_GET['Ta']) && $Tv['invest']){	//如果标题开启的金池共享，关注着则可以管理标题 ?>
-											<div class="r" style="margin-right:15px;">
-												<div class="use-invest" >
-
+												<?php if(isset($_GET['Ta'])){ 				//判断是否为关注者 ?>
 													<?php if($t -> IUinvest($Tv['tid'])){	//判断是否有投资过 ?>
-														<?php $investInfo = $t -> GUinvest($Tv['tid']); ?>
-														<span>拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
+														<span class="use-invest-hint j-btn-invest-list">拥有分享金：<i class="possess-invest-scale"><?php echo sprintf("%.2f", $investInfo['sum']/$t -> GTIsum($Tv['tid'])*100); ?></i>%</span>
 													<?php }else{ ?>
-														<span class="j-possess-invest-info">还未参加</span>
+														<span class="use-invest-hint j-possess-invest-info j-btn-invest-list">还未参加</span>
 													<?php } ?>
+													<a class="use-invest-btn j-btn-share-manage" href="javascript:;" >共享管理</a>
+												<?php }else{	//如果是题主的话 ?>
+													<span class="use-invest-hint use-invest-list-hint  j-btn-invest-list">投资排行榜</span>
+												<?php } ?>
 
-												</div>
-												<a class="use-invest-btn j-btn-share-manage" href="javascript:;" >共享管理</a>
+												<ul class="use-invest-list">
+													<ol class="invest-list-tip"></ol>
+													<ol class="invest-list-info">共<?php echo $t -> GTItotal($Tv['tid']); ?>人，资助总额：<em class="golds j-title-invest-sum" n="<?php echo $t -> GTIsum($Tv['tid']); ?>"></em> <i></i></ol>
+													<ol class="invest-list-col">
+														<li class="tags tags-order">0</li>
+														<li class="tags tags-name">xxx</li>
+														<li class="tags tags-percent">0%</li>
+													</ol>
+												</ul>
 											</div>
-											<?php } ?>
 										</div>
+										<?php } ?>
+									</div>
 									<?php } ?>
+
+									<div class="col-close-load"><img src="../imgs/loading3.gif" />正在处理金池...</div>
 									<div class="c"></div>
 								</div>
 
@@ -367,6 +388,39 @@
 		$('.j-title-manage-close').click(function(){
 			$(this).parents('.col').find('.j-title-manage').slideUp();
 		});
+
+		//显示投资列表
+		$('.j-btn-invest-list').hover(function(){
+			var list = $(this).siblings('.use-invest-list').toggle(),
+				col = $(this).parents('.col'),
+				tid = col.attr('tid'),
+				row = col.find('.invest-list-col:eq(0)').removeClass('invest-list-col-act'),
+				total = parseInt(col.find('.j-title-invest-sum').attr('n'));
+
+			if(list.css('display') != 'none'){
+				list.find('.invest-list-col').remove();
+				$.ajax({
+					type: "POST",
+					url: "./ajax/ajax_user.php",
+					data: "investList="+ tid,
+					success: function(msg){ 
+						var arr = eval(msg),
+							obj = null;
+						for(var i=0;i<arr.length;i++){
+							obj = row.clone();
+							//如果是自己则标记上
+							if(arr[i].uid == $('#userIs').val()){
+								obj.addClass('invest-list-col-act');
+							}
+							obj.find('.tags-order').addClass('tags-order-'+(i+1)).html(i+1);
+							obj.find('.tags-name').html(arr[i].name);
+							obj.find('.tags-percent').html((arr[i].sum/total*100).toFixed(2) +'%');
+							list.append(obj);
+						}
+					}
+				});
+			}
+		})
 
 		//挂接关注和取消关注
 		$('.titleCol').attention();
@@ -551,6 +605,11 @@
 				MScaleNum = 20;
 			}
 
+			//调整共享金额比例
+			if(!!MScaleNum){
+				MOperate = 1;
+			}
+
 			//如果没有操作者终止提交
 			if(MOperate == 0){
 				return;
@@ -631,22 +690,31 @@
 		});
 
 		//关闭标题
-		$('.closeTitle').click(function(){
+		$('.j-btn-title-close').click(function(){
 			var col = $(this).parents('.col'),
 				tid = col.attr('tid');
+
+			//显示关闭加载动画
+
+			//去掉元素
+			col.find('.head').height(col.find('.head').height());
+			col.find('.j-title-use').remove();
+			col.find('.j-title-param').remove();
+			col.find('.head').animate({ height: 100 },function(){
+				col.find('.col-close-load').show();
+			});
+
 			$.ajax({
 				type: "POST",
 				url: "./ajax/ajax_user.php",
 				data: "titleClose="+ tid,
 				success: function(msg){ 
-					var num = parseInt($('#userGold').val()),
-						add = parseInt(msg);
-					$('#userGold').val(num+add);
-					$('#userInfoGold').html(num+add).golds();
-					$('#headGold').html(num+add).golds();
-					col.slideUp(function(){
-						$(this).remove();
-					});
+					setTimeout(function(){
+						$().ABalance(parseInt(msg));	//刷新用户金额
+						col.slideUp(function(){
+							$(this).remove();
+						});
+					}, 1000)
 				}
 			});
 		});
@@ -686,8 +754,8 @@
 				TSharingNum = parseInt(TScaleNum*TSums);		//此数据如果修改后无法使用，但需要此公式
 
 			//获取标题的全部收到的投资
-			var	TinvestObj = col.find('.title-invest-sum'),			//标题投资总金额
-				TinvestNum = parseInt(TinvestObj.val()); 
+			var	TinvestObj = col.find('.j-title-invest-sum'),			//标题投资总金额
+				TinvestNum = parseInt(TinvestObj.attr('n')); 
 
 
 			//判断注入投资的金额是否大于用户余额
@@ -746,15 +814,13 @@
 					TSharingNum = parseInt(TScaleNum*TSums);
 					TSharingObj.attr('n', TSharingNum).golds();
 
-					console.log(MInputNum);
-
 					//刷新我的已投入总金额
 					MInputNum += MinvestNum;
 					MInputObj.attr('n', MInputNum).golds();
 
 					//刷新总投资金额
 					TinvestNum += MinvestNum;
-					TinvestObj.val(TinvestNum);
+					TinvestObj.attr('n', TinvestNum).golds();
 
 					//刷新拥有分享金比例
 					MscaleNum = (MInputNum/TinvestNum*100).toFixed(2);

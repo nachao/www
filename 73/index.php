@@ -191,12 +191,15 @@
 											<a class="skip look r" href="javascript:;" >展开</a>
 										<?php } ?>
 									<?php }else{  //需要购买 ?>
+
 										<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
-										<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-										<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
+											<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
+											<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
 										<?php }else{ ?>
-										<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
+											<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
+											<a class="skip look r" href="javascript:;" >展开</a>
 										<?php } ?>
+										
 									<?php } ?>
 
 								</div>

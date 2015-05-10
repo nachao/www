@@ -69,6 +69,7 @@ class Data_advert extends Config
 	//获取竞价第一名资料
 	protected function data_selectFirst($time=0){
 		$sql = "select * FROM  `".parent::Fn()."ad` WHERE `id` != 1 AND `lastdate` > ".$time." ORDER BY  `num` DESC LIMIT 0 , 1";
+		echo $sql;
 		return parent::Ais($sql);
 	}
 
@@ -235,7 +236,7 @@ class Event_advert extends Data_advert
 
 	//刷新站广告
 	protected function event_updateRenewalAd(){
-		$info = $this -> event_getFirst($this -> Gbegin());
+		$info = $this -> event_getFirst(time());
 		if($info){
 			parent::data_update(1, 'cue', $info['cue']);
 			parent::data_update(1, 'num', $info['num']);
@@ -243,11 +244,11 @@ class Event_advert extends Data_advert
 			parent::data_update(1, 'describe', $info['describe']);
 			parent::data_update(1, 'imgs', $info['imgs']);
 			parent::data_update(1, 'longimgs', $info['longimgs']);
-			parent::data_update(1, 'lastdate', time());
 			parent::data_update(1, 'subsidize', $info['subsidize']);
 		}else{
 			parent::data_update(1, 'longimgs', './imgs/not-ad.png');
 		}
+		parent::data_update(1, 'lastdate', time());
 		return 	time();	
 	}
 
@@ -356,12 +357,26 @@ class Advert extends Event_advert
 	}
 
 	//获取今天距离下周一的时间戳
+	// public function Grange(){
+	// 	date_default_timezone_set('PRC');		//时间标准	
+	// 	$week = date("N",time());				//今天的星期 
+	// 	$aday = strtotime('+1day') - time();	//一天的时间戳
+	// 	$now  = strtotime(date('Y-m-d'));		//当前时间
+	// 	return $now +((8 -$week) *$aday) -time();
+	// 	// return (parent::event_getLastTime() + 7 * (strtotime('+1day') - time())) -time();
+	// 	// return date('Y-m-d H:m:s', $now +((8 -$week) *$aday));
+	// }
+
+	//获取广告是否超过有效期(一个星期)
 	public function Grange(){
 		date_default_timezone_set('PRC');		//时间标准	
 		$week = date("N",time());				//今天的星期 
 		$aday = strtotime('+1day') - time();	//一天的时间戳
 		$now  = strtotime(date('Y-m-d'));		//当前时间
-		return $now +((8 -$week) *$aday) -time();
+		// return $now +((8 -$week) *$aday) -time();
+		// return ((8 -$week) *$aday);
+
+		return time() -parent::event_getLastTime() -((8 -$week) *$aday) > 0;
 		// return (parent::event_getLastTime() + 7 * (strtotime('+1day') - time())) -time();
 		// return date('Y-m-d H:m:s', $now +((8 -$week) *$aday));
 	}
@@ -404,10 +419,10 @@ class Advert extends Event_advert
 	}
 
 	//判断是否达到更换广告标准
-	public function ICad(){
-		return time() > time() +$this -> Grange();
-		// return time() > parent::event_getLastTime() + 7 * (strtotime('+1day') - time());
-	}
+	// public function ICad(){
+	// 	return time() > time() +$this -> Grange();
+	// 	// return time() > parent::event_getLastTime() + 7 * (strtotime('+1day') - time());
+	// }
 
 
 

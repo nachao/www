@@ -171,7 +171,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .header .pagelogo a{  height: 100%;line-height: 90px;font-size: 24px;color: #e74c3c;font-weight: bold;float: left;display: inline-block;width: 100%; }
 
 /* 头部 - 广告 */
-.header .advert{ width: 720px;height: 90px;overflow: hidden;margin-top: 30px; }
+.header .advert{ width: 720px;height: 90px;margin-top: 30px; }
+.header .advert a{ display: inline-block;border: 1px solid #e4e6e8;border-radius: 3px;background: #f6f6f6; }
+.header .advert a:hover{ border-color: #d0d2d5; }
 
 /* 头部 - 菜单 */
 .header .menu{ height: 80px; }
@@ -511,7 +513,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .describe h1{ font-weight: normal;font-size: 18px;color: #2f3c4e; }
 
 /* 内页 内容列表 */
-.contentList{ overflow: hidden; }
+/*.contentList{ overflow: hidden; }*/
 .contentList .conarea{ width: 120%; }
 .contentList .row{ width: 370px;float: left;margin: 0 15px; }
 .contentList .col{ width: 100%;margin-right: 0px;margin-bottom: 50px;float: left;display: none;position: relative; }
@@ -799,6 +801,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage{ margin: 0px;width: auto; }
 .titleManage .col{ width: auto;margin: 0 0 30px;float: none; }
 .titleManage .col .use{ width: 100%; border-top: 1px solid #eee; padding: 20px 0 0; margin: 30px 0 0;height: auto; }
+.titleManage .col .use-btn-end{ background: #e74c3c; }
 .titleManage .col .depict{ margin-top: 10px;border: 1px solid #d9dbdd;background: white url(../imgs/area_bottomBg.gif) repeat-x bottom;box-shadow: 0px 0px 10px #eee;border-radius: 3px;overflow: hidden;padding: 20px 20px 25px; }
 .titleManage .col .depict{ max-height: none;position: relative;border-radius: 0px; }
 .titleManage .depict .radio{ display: inline-block;border-radius: 3px;padding-left: 1px;float: left;margin-top: 20px;width: 100%;overflow: hidden;position: relative; }
@@ -845,8 +848,12 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .col .head .tag{ padding-top: 15px; }
 .titleManage .col .head .tag span{ margin: 15px 15px 0 0; }
 
+/* 我的标题 - 关闭标题的加载效果 */
+.titleManage .col .col-close-load{ line-height: 100px;width: 100%;text-align: center;color: #ccc;font-size: 16px;margin-top: 12px;display: inline-block;display: none; }
+.titleManage .col .col-close-load img{ position: relative;top: 2px;left: -10px; }
+
 /* 我的标题 - 投资 */
-.use-invest{ display: inline-block;line-height: 35px;padding:0 0 0 35px;background-color: #f6f6f6;background-repeat: no-repeat;background-position: 12px center;border: 1px solid #ccc;border-radius: 3px 0 0 3px;color: #9ba1a8;float: left;background-image: url(../imgs/tagTouzi.png);border-right: 0px; }
+.use-invest{ display: inline-block;line-height: 35px;color: #9ba1a8;float: left;position: relative; }
 .use-invest span{ float: left;padding-right: 15px; }
 .use-invest span i{ color: #9ba1a8; }
 .use-invest span b{ font-weight: normal; }
@@ -854,6 +861,30 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .use-invest span a:hover{ text-decoration: underline; }
 .use-invest-btn{ display: inline-block;line-height: 35px;color: #666;padding: 0 15px;border: 1px solid #ccc;border-left: 1px solid #ddd;float: left;background: #f6f6f6;border-radius: 0 3px 3px 0; } 
 .use-invest-btn:hover{ background: #e74c3c;border-color: #e74c3c;color: white; }
+.use-invest-hint{ background: #f6f6f6  url(../imgs/tagTouzi.png) no-repeat 12px center;padding:0 0 0 35px;border: 1px solid #ccc;border-radius: 3px 0 0 3px;border-right: 0px;cursor: default; }
+.use-invest-list-hint{ border-right: 1px solid #ccc; }
+
+/* 我的标题 - 投资者列表 */
+.use-invest-list{ position: absolute; top: 0px; left: -200px; width: 200px; background: #f6f6f6; border-right: 2px solid #d82425; display: none; z-index: 3; border-top: 1px solid #ccc;border-left: 1px solid #ccc; border-bottom: 1px solid #ccc; padding-bottom: 1px;border-radius: 3px 0 0 3px; }
+.invest-list-col{ width: 100%;height: 35px;line-height: 35px;float: left;margin-top: 1px; }
+.invest-list-col .tags{ float: left;display: inline-block; }
+.invest-list-col .tags-order{ width: 15%;margin-right: 5%;background: #ccc;color: white;text-align: center;position: relative;left: -1px; }
+.invest-list-col .tags-order-1{ background: #d82425; }
+.invest-list-col .tags-order-2{ background: #E03C3D; }
+.invest-list-col .tags-order-3{ background: #E24A4B; }
+.invest-list-col .tags-order-4{ background: #E25A5B; }
+.invest-list-col .tags-order-5{ background: #E97A7B; }
+.invest-list-col .tags-order-6{ background: #F08989; }
+.invest-list-col .tags-order-7{ background: #F39B9B; }
+.invest-list-col .tags-order-8{ background: #F3ACAC; }
+.invest-list-col .tags-order-9{ background: #F7BEBE; }
+.invest-list-col .tags-name{ width: 50%; }
+.invest-list-col .tags-percent{ width: 30%; }
+.invest-list-col-act{ background-color: #eee;background-image: -webkit-linear-gradient(top right,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent);background-size: 30px 30px; }
+.invest-list-col-act .tags-name{ color: #d82425;font-weight: bold; }
+.invest-list-col-act .tags-percent{ color: #d82425;font-weight: bold; }
+.invest-list-tip{ display: inline-block;border: 4px #d82425 solid;border-left-color: white; border-bottom-color: white;-webkit-transform:rotate(45deg);transform:rotate(45deg);position: absolute;top: 14px;right: -4px; }
+.invest-list-info{ line-height: 35px;text-align: right;padding-right: 20px;border-bottom: 1px dashed #ccc; }
 
 /* 加减一 */
 .modified{ float: left;width: auto;height: 33px;position: relative;background: red;border: 1px solid #ddd;background: #f6f6f6;border-left: 0px; }
@@ -1062,7 +1093,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .publish #halfamoment{ width: 100%;height: 50px;float: left;text-align: center;line-height: 50px;color: #ccc;font-size: 18px;display: none; }
 */
 /* 确定 */
-.publish .prompt{ display: inline-block;width: 100%;position: relative; }
+.publish .prompt{ display: inline-block;width: 100%;position: relative;height: 60px; }
 .publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px 0 0 3px;color: white;cursor: pointer; }
 .publish .prompt .sub:hover{ background: #ca2d1d; }
 .publish .prompt .cancel{ color: #2f3c4e;float: left;margin: 10px 0 0 30px;font-size: 13px; }
@@ -1079,6 +1110,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 .publish .prompt .formula{ width: 100%; }
 .publish .prompt .formula-txt{ margin: 0 0 0 20px;color:#aaa;display: none; }
+
+/* 提交后加载动画 */
+.j-prompt-submit-ajax{ background: url(../imgs/concept-f.gif) no-repeat center; }
 
 /* 提示 */
 .publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
