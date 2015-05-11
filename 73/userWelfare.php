@@ -86,7 +86,7 @@
 									<div class="right">
 										<div class="price"><span><?php echo $BLgain['str']; ?></span></div>
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-										<div class="btn"><a class="<?php echo $ub -> IBFcn($v['gain']); ?>" href="javascript:;" gain="<?php echo $BLgain['num']; ?>" ><?php echo $v['gain']; ?></a></div>
+										<div class="btn"><a class="<?php echo $ub -> IBFcn($v['gain']); ?>" href="javascript:;" gain="<?php echo $BLgain['num']; ?>" ><?php echo $ub -> IBfree($v['gain']); ?></a></div>
 									</div>
 								</div>
 						<?php }
@@ -102,63 +102,9 @@
 	<script type="text/javascript">
 
 		//可领取的徽章 前置
-		$('.receiveBadge').each(function(){
-			$(this).parents('.col').prependTo( $(this).parents('.badgeList') );
-		});
-
-		//点击领取
-		$('.receiveBadge').click(function(){
-
-			//获取元素
-			var btn = $(this),
-				col = $(this).parents('.col'),
-				tip = col.find('.tip');
-
-			var glory = $('.glory');
-
-			//获取参数
-			var icon = col.find('.icon i').attr('class'),
-				name = col.find('.name').html();
-
-			//如果是购买的话，则扣除 样式余额
-			if( $(this).html() == "购买" ){
-
-				//获取参数元素
-				var userGold = $('#userGold'),
-					userSide = $('#userInfoGold');
-
-				//获取卖价
-				var sellingPrice = parseInt($(this).attr('gain'));
-
-				var number = parseInt(userGold.val());
-					number = number - parseInt($(this).attr('gain'));
-
-				if( number >= 0 ){
-
-					userSide.attr('n', number);
-					userSide.golds();
-					userGold.val(number);
-
-					// $('#userGold').val(gold);
-					// $('#userInfoGold').html(gold/100);
-
-					getBadge(col);
-				}else{
-					$(this).parent().prev().show();
-				}
-			}
-
-			//如果是免费领取的
-			if( $(this).html() == "领取" ){
-				getBadge(col);
-			}
-
-			//隐藏结果
-			// setTimeout(function(){
-			// 	tip.slideUp();
-			// }, 5000);
-
-		});
+		// $('.receiveBadge').each(function(){
+		// 	$(this).parents('.col').prependTo( $(this).parents('.badgeList') );
+		// });
 
 		//获得徽章 事件及动画
 		function getBadge( col ){
@@ -168,6 +114,8 @@
 				tip = col.find('.tip');
 
 			var glory = $('.glory');
+
+			console.log("specialProvide="+ col.attr('bid'));
 
 			//交互数据
 			$.ajax({
@@ -222,6 +170,60 @@
 				}
 			});
 		}
+
+		//点击领取
+		$('.receiveBadge').click(function(){
+
+			//获取元素
+			var btn = $(this),
+				col = $(this).parents('.col'),
+				tip = col.find('.tip');
+
+			var glory = $('.glory');
+
+			//获取参数
+			var icon = col.find('.icon i').attr('class'),
+				name = col.find('.name').html();
+
+			//如果是购买的话，则扣除 样式余额
+			if( $(this).html() == "购买" ){
+
+				//获取参数元素
+				var userGold = $('#userGold'),
+					userSide = $('#userInfoGold');
+
+				//获取卖价
+				var sellingPrice = parseInt($(this).attr('gain'));
+
+				var number = parseInt(userGold.val());
+					number = number - parseInt($(this).attr('gain'));
+
+				if( number >= 0 ){
+
+					userSide.attr('n', number);
+					userSide.golds();
+					userGold.val(number);
+
+					// $('#userGold').val(gold);
+					// $('#userInfoGold').html(gold/100);
+
+					getBadge(col);
+				}else{
+					$(this).parent().prev().show();
+				}
+			}
+
+			//如果是免费领取的
+			if( $(this).html() == "领取" ){
+				getBadge(col);
+			}
+
+			//隐藏结果
+			// setTimeout(function(){
+			// 	tip.slideUp();
+			// }, 5000);
+
+		});
 
 
 		//领取福利

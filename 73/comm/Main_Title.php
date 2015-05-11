@@ -731,6 +731,13 @@ class Title extends Event_title
 	public function GUtime($tid=0){
 		return parent::event_getUseTime($tid);
 	}
+
+	//获取指定 活动标题ID 的时间戳
+	public function GTstamp($tid=0){
+		if($tid){
+			return parent::event_getDuration($tid);
+		}
+	}
 	
 	//获取指定 活动标题ID 的剩余日期
 	public function Gsurplus($tid=0){
@@ -755,7 +762,7 @@ class Title extends Event_title
 		}
 	}
 
-	//获取指定 标题ID 剩余自动关闭时间戳
+	//获取指定 标题ID 剩余自动关闭时间戳，此功能取消，不会自动关闭
 	public function GCtime($tid=0){
 		date_default_timezone_set('PRC');
 		$end = parent::event_getDuration($tid);
@@ -832,6 +839,33 @@ class Title extends Event_title
 	//获取指定 标题TID 的关注人数
 	public function GFtotal($tid=0){
 		return parent::event_getFollowTotal($tid);
+	}
+
+	//获取指定 专题标题TID 的到期时间戳，此方法只推荐适用于页面显示
+	public function Gfinish($tid=0){
+		if($tid){
+			//是否为专题
+			if($this -> Itype($tid, 2)){
+				$time = parent::event_getDuration($tid);	//获取上次维护时间
+				$sum = $this -> Gprice($tid);				//获取金池金额
+
+				$last = strtotime(date('Y', $time).'-'.date('m', $time).'-'.date('d', $time));
+				$aday = 60*60*24;
+				$num = intval($sum/100)+1;	//总金额/每天的维护费=平均可维护天数
+
+				//显示结束时间的话
+				// if($num==0){
+				// 	$num = 1;
+				// }
+
+				//到期时间戳
+				$finish = $last+$num*$aday;
+
+				return date('Y-m-d H:i:s', $finish);
+				// return $finish;
+				// return intval((strtotime(date('Y-m-d')) -$last)/60/60/24) *100 < $this -> Gprice($tid);
+			}
+		}
 	}
 
 	//获取指定 用户UID 投资指定 标题ID 的信息
@@ -962,13 +996,11 @@ class Title extends Event_title
 		}
 	}
 
-	//判断指定 活动标题ID 是否为有效时间内
+	//判断指定 标题ID 是否为有效时间内
 	public function INact($tid=0){
 		$val = 0;
 		if($tid){
-			if($this -> Itype($tid)){	//是否为活动
-				$val = parent::event_getDuration($tid) > time();
-			}
+			$val = time() < parent::event_getDuration($tid);
 		}
 		return $val;
 	}
@@ -995,7 +1027,7 @@ class Title extends Event_title
 						$val = 1;
 					}
 				}else{							//如果没有开启
-					if($this -> Gcost($tid) <= $this -> Gprice($tid)){
+					if(time() > $this -> Gfinish($tid)){
 						$val = 1;
 					}
 				}
@@ -1171,6 +1203,7 @@ class Title extends Event_title
 	public function UMtime($tid=0, $time=0){
 		$val = 0;
 		if($tid && $this -> Itype($tid, 2)){
+			$time = strtotime(date('Y-m-d')) + 24*60*60 -1;
 			$val = parent::event_updateDurationTime($tid, $time);
 		}
 		return $val;

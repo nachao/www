@@ -65,7 +65,7 @@ class Data_user_badge extends Config
 
 	//获取全部 徽章
 	protected function data_selectSpecial(){
-		$sql = "select * FROM  `".parent::Fn()."special` ORDER BY  `sid` DESC LIMIT 0 , 100";
+		$sql = "select * FROM  `".parent::Fn()."special` ORDER BY  `sid` ASC LIMIT 0 , 100";
 		return mysql_query($sql);
 	}
 
