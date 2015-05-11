@@ -8,6 +8,16 @@
 
 /********************************************************************************************
 * 公共操作
+
+徽章序列号说明：
+	
+	901 ~ 999 = 稀有特殊徽章：官方授予
+	801 ~ 899 = 系统徽章：满足条件后自动发放
+	701 ~ 799 = 功能徽章：购买
+	101 ~ 199 = 娱乐徽章：免费领取
+
+输出的时候顺序输出。
+
 */
 // class Comm_user_badge extends Config
 // {	
@@ -47,11 +57,6 @@ class Data_user_badge extends Config
 		return mysql_query($sql);
 	}
 
-	//删除指定 徽章SID 的领取记录
-	protected function data_deleteSpecialUseBySid($sid=0){
-		$sql = "delete FROM `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` WHERE `".parent::Fn()."logs_specialuse`.`sid` = ".$sid." ;";
-	}
-
 
 
 	/********************************************
@@ -60,32 +65,32 @@ class Data_user_badge extends Config
 
 	//获取全部 徽章
 	protected function data_selectSpecial(){
-		$sql = "select * FROM  `".parent::Fn()."special` LIMIT 0 , 30";
+		$sql = "select * FROM  `".parent::Fn()."special` ORDER BY  `sid` DESC LIMIT 0 , 100";
 		return mysql_query($sql);
 	}
 
 	//获取指定 徽章BID 的信息
 	protected function data_selectSpecialGetInfo($bid=0){
-		$sql = "select * FROM  `".parent::Fn()."special` WHERE  `id` =".$bid;
+		$sql = "select * FROM  `".parent::Fn()."special` WHERE  `sid` =".$bid;
 		return parent::Ais($sql);
 	}
 
 	//获取指定 用户UID 的全部徽章信息
 	protected function data_selectUserBadge($uid=0){
-		$sql = "select  `s`. * FROM  `".parent::Fn()."special` AS  `s` ,  `".parent::Fn()."logs_specialuse` AS  `u` WHERE  `u`.`sid` =  `s`.`id` AND `u`.`uid` = ".$uid." ORDER BY  `u`.`time` ASC ;";
+		$sql = "select  `s`. * FROM  `".parent::Fn()."special` AS  `s` ,  `".parent::Fn()."logs_specialuse` AS  `u` WHERE  `u`.`sid` =  `s`.`sid` AND `u`.`uid` = ".$uid." AND  `u`.`status` =1 ORDER BY  `u`.`time` ASC ;";
 		return mysql_query($sql);
 	}
 
 	//获取指定 用户UID 的指定 徽章SID 的信息
 	protected function data_selectBadgeInfo($uid=0, $sid=0){
-		$sql = "select * FROM  `".parent::Fn()."logs_specialuse` WHERE  `sid` =".$sid." AND `uid` =".$uid." ;";
+		$sql = "select * FROM  `".parent::Fn()."logs_specialuse` WHERE  `sid` =".$sid." AND `uid` =".$uid." AND  `status` =1 ;";
 		return parent::Ais($sql);
 	}
 
 
-	//获取指定 徽章SID 的领取信息
+	//获取指定 徽章SID 的领取信息的最新的一条
 	protected function data_selectBadgeUse($sid=0){
-		$sql = "select * FROM  `".parent::Fn()."logs_specialuse` WHERE  `sid` =".$sid.";";
+		$sql = "select * FROM  `".parent::Fn()."logs_specialuse` WHERE  `sid` =".$sid." ORDER BY  `time` DESC  LIMIT 0, 1;";
 		return parent::Ais($sql);
 	}
 
@@ -98,13 +103,19 @@ class Data_user_badge extends Config
 
 	//刷新指定 用户UID 领取指定 徽章SID 的领取时间
 	protected function data_updateReceive($uid=0, $sid=0){
-		$sql = "update `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` SET  `receive` =  '".time()."' WHERE  `".parent::Fn()."logs_specialuse`.`sid` =".$sid." AND `uid` =".$uid." ;";
+		$sql = "update `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` SET  `receive` =  '".time()."' WHERE  `".parent::Fn()."logs_specialuse`.`sid` =".$sid." AND `uid` =".$uid." AND `status` =1 ;";
 		return mysql_query($sql);
 	}
 
 	//刷新指定 徽章SID 的指定 字段STR 的指定 参数VAL
 	protected function data_update($sid=0, $str='', $val=0){
-		$sql = "update `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` SET  `".$str."` =  '".$val."' WHERE  `".parent::Fn()."logs_specialuse`.`sid` =".$sid." AND `uid` =".$uid." ;";
+		$sql = "update `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` SET  `".$str."` =  '".$val."' WHERE  `".parent::Fn()."logs_specialuse`.`sid` =".$sid." AND `uid` =".$uid." AND `status` =1 ;";
+		return mysql_query($sql);
+	}
+
+	//刷新指定 徽章SID 的领取记录为无效
+	protected function data_updateInvalid($sid=0){
+		$sql = "update `".parent::Mn()."`.`".parent::Fn()."logs_specialuse` SET `status` = '".time()."' WHERE `".parent::Fn()."logs_specialuse`.`sid` = ".$sid." AND `status` =1;";
 		return mysql_query($sql);
 	}
 
@@ -172,7 +183,7 @@ class Event_user_badge extends Data_user_badge
 
 	//获取指定 徽章SID 的领取信息
 	protected function event_selectBadgeUse($sid=0){
-		parent::data_selectBadgeUse($sid);
+		return parent::data_selectBadgeUse($sid);
 	}
 
 
@@ -195,6 +206,13 @@ class Event_user_badge extends Data_user_badge
 	protected function event_updateOwner($uid=0, $sid=0){
 		if($sid && $uid){
 			return parent::data_update($sid, 'uid', $uid);
+		}
+	}
+
+	//刷新指定 徽章SID 的领取记录为无效
+	protected function event_updateInvalid($sid=0){
+		if($sid){
+			return parent::data_updateInvalid($sid);
 		}
 	}
 
@@ -223,13 +241,6 @@ class Event_user_badge extends Data_user_badge
 	protected function event_deleteSpecialUse($uid=0, $sid=0){
 		if($sid && $uid){
 			return parent::data_deleteSpecialUse($uid, $sid);
-		}
-	}
-
-	//删除指定 徽章SID 的领取记录
-	protected function event_deleteSpecialUseBySid($sid=0){
-		if($sid){
-			return parent::data_deleteSpecialUseBySid($sid);
 		}
 	}
 
@@ -338,6 +349,9 @@ class Users_badge extends Event_user_badge
 		if( $str == '自动发放' ){
 			return "no";
 		}
+		if( $str == '官方授予' ){
+			return "no";
+		}
 
 		if( $str == '免费' ) {
 			return "cupid-green receiveBadge";
@@ -346,30 +360,12 @@ class Users_badge extends Event_user_badge
 		}
 	}
 
-	//判断是否可以发放 第一名徽章
-	public function IPone(){
-		$info = parent::event_selectBadgeUse(4);
-		return strtotime(date('Y-m-d')) > $info['time'];
-	}
-
-	//判断是否可以发放 第二名徽章
-	public function IPtwo(){
-		$info = parent::event_selectBadgeUse(7);
-		return strtotime(date('Y-m-d')) > $info['time'];
-	}
-
-	//判断是否可以发放 第三名徽章
-	public function IPthree(){
-		$info = parent::event_selectBadgeUse(9);
-		return strtotime(date('Y-m-d')) > $info['time'];
-	}
-
 	//判断指定 用户UID 是否可以发放 人际圈牛人徽章
 	public function IPniu($uid=0){
 		$uid = $uid ? $uid : parent::Eid();
 		$u = new Users();
 		$num = $u -> GInum($uid);
-		return $num >= 3;
+		return $num >= 3;			//邀请人数达到 3 人
 	}
 
 
@@ -397,35 +393,74 @@ class Users_badge extends Event_user_badge
 
 	//更新第一名
 	public function Uone(){
-		$sid = 4;
 		$u = new Users();
-		$info = $u -> Gdigg(0, 1);
-		if($info){
-			$this -> DBuse($sid);
-			$this -> Aspecial($sid, $info[0]['uid']);
+		$sid = 801;
+		$time = 0;
+		$badge = parent::event_selectBadgeUse($sid);
+		$value = 0;
+
+		//判断是否已经被领取过
+		if($badge){
+			$time = $badge['time'];
 		}
+
+		//判断是否满足自动发放条件
+		if(strtotime(date('Y-m-d')) > $time){
+			$info = $u -> Gdigg(0, 1);
+			if($info){
+				$this -> DBuse($sid);
+				$value = $this -> Aspecial($sid, $info[0]['uid']);
+			}
+		}
+		return $value;
 	}
 
 	//更新第二名
 	public function Utwo(){
-		$sid = 7;
 		$u = new Users();
-		$info = $u -> Gdigg(1, 1);
-		if($info){
-			$this -> DBuse($sid);
-			$this -> Aspecial($sid, $info[0]['uid']);
+		$sid = 802;
+		$time = 0;
+		$badge = parent::event_selectBadgeUse($sid);
+		$value = 0;
+
+		//判断是否已经被领取过
+		if($badge){
+			$time = $badge['time'];
 		}
+
+		//判断是否满足自动发放条件
+		if(strtotime(date('Y-m-d')) > $time){
+			$info = $u -> Gdigg(1, 1);	//获取财富第二名用户信息
+			if($info){
+				$this -> DBuse($sid);
+				$value = $this -> Aspecial($sid, $info[0]['uid']);
+			}
+		}
+		return $value;
 	}
 
 	//更新第三名
 	public function Uthree(){
-		$sid = 9;
 		$u = new Users();
-		$info = $u -> Gdigg(2, 1);
-		if($info){
-			$this -> DBuse($sid);
-			$this -> Aspecial($sid, $info[0]['uid']);
+		$sid = 803;
+		$time = 0;
+		$badge = parent::event_selectBadgeUse($sid);
+		$value = 0;
+
+		//判断是否已经被领取过
+		if($badge){
+			$time = $badge['time'];
 		}
+
+		//判断是否满足自动发放条件
+		if(strtotime(date('Y-m-d')) > $time){
+			$info = $u -> Gdigg(2, 1);
+			if($info){
+				$this -> DBuse($sid);
+				$value = $this -> Aspecial($sid, $info[0]['uid']);
+			}
+		}
+		return $value;
 	}
 
 
@@ -437,23 +472,22 @@ class Users_badge extends Event_user_badge
 
 	//添加指定 用户UID 发布指定 徽章BID
 	public function Aspecial($sid=0, $uid=0){
+		$u = new Users();	
 		$uid = $uid ? $uid : parent::Eid();
 		$value = 0;
-		$u = new Users();	
+
+		//如果当前用户尚未拥有此徽章
 		if($this -> IBbe($sid, $uid) == 0){
 			$info = parent::event_getSpecialInfo($sid);
-			$u -> USplus(intval($info['purchase'], 10));	//扣除指定的费用
-			if( $info['icon'] == "vip" ){		//如果是购买会员
+			//$u -> USplus(intval($info['purchase'], 10));	//扣除指定的费用
+
+			//如果是购买会员
+			if( $info['icon'] == "vip" ){		
 				$u -> Uvip(strtotime('+7day'));	//则开通会员
 			}
 			$value = parent::event_addBadge($sid, $uid);
 		}
 		return $value;
-	}
-
-	//给指定 用户UID 发放 圈子牛人 徽章
-	public function ASniu($uid=0){
-		$this -> Aspecial(5, $uid);
 	}
 
 
@@ -474,7 +508,7 @@ class Users_badge extends Event_user_badge
 
 	//删除指定 徽章SID 领取记录
 	public function DBuse($sid=0){
-		return parent::event_deleteSpecialUseBySid($sid);
+		return parent::event_updateInvalid($sid);
 	}
 
 

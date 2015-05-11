@@ -327,7 +327,7 @@ class Event_user extends Data_user
 
 	//获取用户的金额排行列表
 	protected function event_getPlusDigg($begin=0 ,$page=0){
-		$query = parent::data_selectDigg($begin ,$page=30);
+		$query = parent::data_selectDigg($begin ,$page);
 		$array = array();
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据

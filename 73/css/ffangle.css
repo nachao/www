@@ -1000,7 +1000,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeList .col .right{ position: absolute;right: 45px;top: 20px;text-align: center;}
 .badgeList .col .price{ width: 100%;height: 100px; }
 .badgeList .col .price span{ font-size: 28px;color: #d82425;opacity: 0.8;position: relative;top: 18px;font-family: Arial, 微软雅黑; }
-.badgeList .col .price span em{ font-size: 36px;color: #d82425;margin-right: 10px;position: relative;top: 3px; }
+.badgeList .col .price span em{ font-size: 36px;color: #d82425;position: relative;top: 3px; }
 .badgeList .col .btn a{ width: auto;padding-right:30px;padding-left: 30px;font-weight: normal;line-height: 33px;font-family: 微软雅黑; }
 .badgeList .col .received{ position: absolute;width: 200px;height: 100%;z-index: 2;right: 0px;top: 0px;background: url(../imgs/badgeList_msg.png) no-repeat 95px 50px;opacity: 0.9; }
 

@@ -5,26 +5,6 @@
 		$u -> Uout();
 	}
 
-	//发放第一名徽章
-	if($ub -> IPone()){
-		$ub -> Uone();
-	}
-
-	//发放第二名徽章
-	if($ub -> IPtwo()){
-		$ub -> Utwo();
-	}
-
-	//发放第三名徽章
-	if($ub -> IPthree()){
-		$ub -> Uthree();
-	}
-
-	//判断登录用户是否可以发放 圈子牛人
-	if($ub -> IPniu()){
-		$ub -> Aspecial(5);
-	}
-
 
 ?>
 

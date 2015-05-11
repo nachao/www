@@ -35,7 +35,6 @@ class Data_admin extends Config
 	//公告 - 添加指定描述的系统公告
 	protected function data_addNotice($txt=''){
 		$sql = "insert INTO  `".parent::Mn()."`.`".parent::Fn()."notice` (`id` , `text` , `status` , `time` ) VALUES (NULL ,  '".$txt."',  '1',  '".time()."');";
-		echo $sql;
 		return mysql_query($sql);
 	}
 
