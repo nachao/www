@@ -37,33 +37,22 @@
 					<?php if(count($ub -> Gbadge())){ ?>
 						<!-- 输出全部 我拥有的徽章 -->
 						<div class="badgeList ">
-							<?php //输出内容开始 --------------------------------
-							//命名说明
-							//CN = class name;
-							//BL = badge list;
-							// $BLcon = UR_userGetAllBadge();
-							foreach($ub -> Gbadge() as $BLk => $BLv ){
-								$BLid 		= $BLv['id'];
-								$BLicon 	= $BLv['icon'];
-								$BLname 	= $BLv['name']; 
-								$BLdepict	= $BLv['depict']; 
-								$BLwelfare	= $BLv['welfare'];
-								$CNreceived	= $ub -> Ireceive($BLv['id']);	//判断是否可以领取 	?>
-								<div class="col" bid="<?php echo $BLid; ?>" >
+							<?php foreach($ub -> Gbadge() as $BLk => $BLv ){ //输出内容开始 --------------------------------  ?>
+								<div class="col" bid="<?php echo $BLv['sid']; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $BLicon; ?>"></i></div>
-										<div class="name"><?php echo $BLname; ?></div>
+										<div class="icon"><i class="<?php echo $BLv['icon']; ?>"></i></div>
+										<div class="name"><?php echo $BLv['name']; ?></div>
 									</div>
-									<div class="text"><?php echo $BLdepict; ?></div>
+									<div class="text"><?php echo $BLv['depict']; ?></div>
 									<div class="right">
-										<div class="price"><span><em><?php echo sprintf("%.2f", $BLwelfare/100); ?></em> 元</span></div>
-										<?php if( $BLicon != "new" ){ //如果是新手福利则进行判断，用户条件是否足够 ?>
+										<div class="price"><span><em><?php echo sprintf("%.2f", $BLv['welfare']/100); ?></em> 元</span></div>
+										<?php if($BLv['icon'] != "new" ){ //如果是新手福利则进行判断，用户条件是否足够 ?>
 										<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" title="">领取</a></div>
 										<?php }else if($u -> Gplus() < 10){ ?>
 										<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" title="">领取</a></div>
 										<?php } ?>
 									</div>
-									<div class="received <?php echo !$CNreceived ? 'no' :''; ?>" ></div>
+									<div class="received <?php echo !$ub -> Ireceive($BLv['sid']) ? 'no' :'';	//判断是否可以领取 ?>" ></div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
 						</div>
@@ -85,27 +74,19 @@
 
 					<!-- 输出全部徽章 -->
 					<div class="badgeList">
-						<?php //输出内容开始 --------------------------------
-						foreach ($ub -> Gspecial() as $k => $v) {
-							if(!$ub -> IBbe($v['id'])){
-								$BLid 		= $v['id'];
-								$BLicon 	= $v['icon'];
-								$BLname 	= $v['name']; 
-								$BLdepict	= $v['depict'];		
-								$BLwelfare	= $v['welfare'];
-								$BLgain		= $ub -> IBPbuy($v['id']);	//判断是的需要购买 
-								$BLbtn 		= $ub -> IBfree($v['gain']);
-								$CNbtn 		= $ub -> IBFcn($v['gain']);	//判断是否可以领取 	?>
-								<div class="col" bid="<?php echo $BLid; ?>" >
+						<?php foreach ($ub -> Gspecial() as $k => $v) { //输出内容开始 --------------------------------
+							if(!$ub -> IBbe($v['sid'])){	
+								$BLgain		= $ub -> IBPbuy($v['sid']);	//判断是的需要购买 ?>
+								<div class="col" bid="<?php echo $v['sid']; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $BLicon; ?>"></i></div>
-										<div class="name"><?php echo $BLname; ?></div>
+										<div class="icon"><i class="<?php echo $v['icon']; ?>"></i></div>
+										<div class="name"><?php echo $v['name']; ?></div>
 									</div>
-									<div class="text"><?php echo $BLdepict; ?><div class="tip"><div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div></div></div>
+									<div class="text"><?php echo $v['depict']; ?><div class="tip"><div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div></div></div>
 									<div class="right">
 										<div class="price"><span><?php echo $BLgain['str']; ?></span></div>
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-										<div class="btn"><a class="<?php echo $CNbtn; ?>" href="javascript:;" gain="<?php echo $BLgain['num']; ?>" ><?php echo $BLbtn; ?></a></div>
+										<div class="btn"><a class="<?php echo $ub -> IBFcn($v['gain']); ?>" href="javascript:;" gain="<?php echo $BLgain['num']; ?>" ><?php echo $v['gain']; ?></a></div>
 									</div>
 								</div>
 						<?php }
@@ -260,7 +241,7 @@
 				url: "./ajax/ajax_user.php",
 				data: "UserReceiveLog="+ col.attr('bid'),
 				success: function(msg){
-					console.log( msg );
+					// console.log( msg );
 
 					var num = parseInt(msg);
 
