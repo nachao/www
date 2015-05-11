@@ -7,6 +7,16 @@
 	Global $ect;
 	$ect="digg";	
 
+	$ub -> Uone();		//发放第一名徽章
+	$ub -> Utwo();		//发放第二名徽章
+	$ub -> Uthree();	//发放第三名徽章
+
+	// //判断登录用户是否可以发放 圈子牛人
+	if($ub -> IPniu()){
+		$ub -> Aspecial(804);
+	}
+
+
 	//引用样式头部
 	include("./comm/head.php");		
 ?>
