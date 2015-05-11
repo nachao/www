@@ -69,7 +69,6 @@ class Data_advert extends Config
 	//获取竞价第一名资料
 	protected function data_selectFirst($time=0){
 		$sql = "select * FROM  `".parent::Fn()."ad` WHERE `id` != 1 AND `lastdate` > ".$time." ORDER BY  `num` DESC LIMIT 0 , 1";
-		echo $sql;
 		return parent::Ais($sql);
 	}
 
