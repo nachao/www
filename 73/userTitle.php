@@ -85,16 +85,7 @@
 							$list = $t -> GUlist($uid);			//获取用户创建的 全部标题
 						} ?>
 						<?php foreach ($list as $key => $Tv) { 	//输出 全部标题 	?>
-
-							<?php if($t -> Gcost($Tv['tid']) > 0){  	//判断是否需要维护
-									if(!$t -> USMcharges($Tv['tid'])){	//如果没有维护成功
-										if($t -> Gcost($Tv['tid']) > 300){	//如果连续超过3天无法维护
-											$t -> Uclose($Tv['tid']);		//则系统关闭专题
-											continue;
-										}
-									}
-							} ?>
-
+							<?php $t -> USMcharges($Tv['tid']); //维护专题标题 ?>
 							<div class="col titleCol col_follow j_title_message sh" tid="<?php echo $Tv['tid']; ?>" >
 								<div class="head">
 
@@ -137,13 +128,11 @@
 											<?php if($Tv['invest']){		//如果标题开启了金池共享，则显示 ?>
 											<span class="fenxiang">金池分享：<i class="title-share-scale"><?php echo $Tv['invest']; ?></i>% （<em class="golds title-share-sum" n="<?php echo intval($price*$Tv['invest']/100); ?>"></em> <i></i>）</span>
 											<?php } ?>
-
-										<?php }else{ 	//专题显示参数 ?>									
-											<span class="goumai"><em><?php echo $Tv['click']; ?></em> 人买</span>
 										<?php } ?>
 										
 										<?php if($t -> Itype($Tv['tid'], 2)){	//专题参数 ?>
-										<span class="goumai">到期时间：2015-05-10 0:00</span>
+											<!-- <span class="goumai"><em><?php echo $Tv['click']; ?></em> 人买</span> -->
+											<span class="goumai">到期时间：<i class="j-title-finish" n="<?php echo $Tv['duration']; ?>"><?php echo $t -> Gfinish($Tv['tid']); ?></i>（每日维护费：<em>1.00</em> <i>元</i>）</span>
 										<?php } ?>
 
 										<?php if($t -> Ipass($Tv['tid'])){	//判断是否通过审核 ?>
@@ -172,12 +161,16 @@
 											<?php if($t -> IOact($Tv['tid'])){ 	//活动标题已结束 ?>
 												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认结束活动</a>
 											<?php } ?>
-											<?php echo $t -> Gcost($Tv['tid']); ?>
-											<?php if($t -> Itype($Tv['tid'], 2) && !$t -> IWpay($Tv['tid'])){ 	//专题如果不能交纳维护费 ?>
-												<a class="buy closeTitle r" href="javascript:;" >确认关闭专题</a>
+											
+
+											<?php 
+											//} ?>
+											<?php //$t -> IWpay($Tv['tid']);		//如果专题金池足够则扣除费用，否则关闭 ?>
+											<?php if($t -> Itype($Tv['tid'], 2) && $t -> Gcost($Tv['tid'])){ 	//专题如果不能交纳维护费 ?>
+												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认关闭专题</a>
 											<?php } ?>
 
-											<?php if($t -> GCtime($Tv['tid']) && !$t -> IOact($Tv['tid'])){  //正常状态下 ?>
+											<?php if($t -> INact($Tv['tid'])){  //正常状态下 ?>
 												<a class="buy manage r j-btn-title-manage" href="javascript:;" >管理</a>
 											<?php } ?>
 
@@ -497,6 +490,12 @@
 			});
 		});
 
+		//根据时间戳返回日期
+		function toDate(time){
+			var n = new Date(time+1000);
+			return n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate()+' '+(n.getHours()<=9?'0'+n.getHours():n.getHours())+':'+(n.getMinutes()<=9?'0'+n.getMinutes():n.getMinutes());
+		}
+
 		//修改标题
 		$('.j-title-manage-affirm').click(function(){
 			var col = $(this).parents('.col'),
@@ -556,6 +555,10 @@
 			var TSharingObj = col.find('.title-share-sum'),
 				TSharingNum = parseInt(TScaleNum*TSums);		//此数据如果修改后无法使用，但需要此公式
 
+			//获取专题标题上次维护时间
+			var TFinishObj = col.find('.j-title-finish'),		
+				TFinishTime = parseInt(TFinishObj.attr('n'));
+
 
 			//判断增加金池的金额是否大于账户余额
 			if(MSum && MSum > $(1).ABalance()){
@@ -567,6 +570,13 @@
 			//判断增加奖金的金额是否大于金池余额
 			if(MRewardNum && MRewardNum > TSums){
 				var tip = col.find('.j-tip-reward').fadeIn();
+				setTimeout(function(){ tip.hide(); }, 3000);
+				return false;
+			}
+
+			//判断提现的金额是否大于金池余额
+			if(MWithdrawNum && MWithdrawNum > TSums){
+				var tip = col.find('.j-tip-withdraw').fadeIn();
 				setTimeout(function(){ tip.hide(); }, 3000);
 				return false;
 			}
@@ -656,6 +666,10 @@
 						TSharingObj.attr('n', parseInt(TSums*TScaleNum)).golds();	//刷新标题金池共享金额
 
 						MSumInput.parent('.modified').attr('max', userSum);			//刷新注入金额的上限
+
+						//专题的话，刷新到期日期
+						var timeStamp = parseInt(TFinishTime + parseInt(TSums/100)*(24*60*60)) * 1000;
+						TFinishObj.html(toDate(timeStamp));
 					}
 
 					//如果操作了 添加奖金
@@ -684,6 +698,10 @@
 						TSums -= MWithdrawNum;
 						TSum.attr('n', TSums).golds();								//刷新标题金池显示金额
 						MWithdrawInput.parent('.modified').attr('max', TSums);		//刷新注入金额的上限
+
+						//专题的话，刷新到期日期
+						var timeStamp = parseInt(TFinishTime + parseInt(TSums/100)*(24*60*60)) * 1000;
+						TFinishObj.html(toDate(timeStamp));
 					}
 				}
 			});
