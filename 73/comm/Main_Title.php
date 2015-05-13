@@ -473,7 +473,7 @@ class Event_title extends Data_title
 				if( $type == 2 ){				//如果是专题类型，则刷新参数
 					$price 	= 100;
 					$reward = 0;
-					$duration = time();
+					$duration = strtotime(date('Y-m-d')) + 24*60*60 -1;
 				}else{
 					$duration = strtotime("+".$days." day");		//到期的时间戳
 				}

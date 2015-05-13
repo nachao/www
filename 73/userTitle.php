@@ -162,10 +162,6 @@
 												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认结束活动</a>
 											<?php } ?>
 											
-
-											<?php 
-											//} ?>
-											<?php //$t -> IWpay($Tv['tid']);		//如果专题金池足够则扣除费用，否则关闭 ?>
 											<?php if($t -> Itype($Tv['tid'], 2) && $t -> Gcost($Tv['tid'])){ 	//专题如果不能交纳维护费 ?>
 												<a class="buy closeTitle r use-btn-end j-btn-title-close" href="javascript:;" >确认关闭专题</a>
 											<?php } ?>
@@ -257,6 +253,48 @@
 												</div>
 												<a class="modifiedTip j-tip-withdraw r" href="javascript:;" title="">超出了金池里的金额！<i></i></a>
 												<span class="radio-hint">将金池内的金额转至用户余额中。</span>
+											</div>
+											<?php } ?>
+
+											<?php if($t -> Itype($Tv['tid'], 2)){	//专题标题可以设置标签 ?>
+											<div class="radio">
+												<span class="names s1" style="width: 190px;">设置标签（上限7个）</span>
+												<div class="cue-label">
+													<div class="cue-label-col no j-label-templet" lid="" > 
+														<div class="label-rename">
+															<input class="label-rename-input" type="text" value="" />
+															<div class="cue-label-btn label-rename-yes">确认修改</div>
+															<div class="cue-label-btn label-rename-no">取消修改</div>
+														</div>
+														<div class="label-normal">
+															<div class="cue-label-name"></div>
+															<div class="cue-label-btn cue-label-rename"></div>
+															<div class="cue-label-btn cue-label-close"></div>
+														</div>
+													</div>
+													
+													<?php foreach ($tl -> Glabel($Tv['tid']) as $key => $value) {	//输出全部标签 ?>
+													<div class="cue-label-col" lid="<?php echo $value['lid']; ?>" > 
+														<div class="label-rename">
+															<input class="label-rename-input" type="text" value="<?php echo $value['name']; ?>" />
+															<div class="cue-label-btn label-rename-yes">确认修改</div>
+															<div class="cue-label-btn label-rename-no">取消修改</div>
+														</div>
+														<div class="label-normal">
+															<div class="cue-label-name"><?php echo $value['name']; ?></div>
+															<div class="cue-label-btn cue-label-rename"></div>
+															<div class="cue-label-btn cue-label-close"></div>
+														</div>
+													</div>
+													<?php } ?>
+
+													<div class="cue-label-add">
+														<input class="label-add-input" type="text" style="display: none;" />
+														<a class="label-add-btn label-add-yes j-manage-add-label" href="javascript:;" >添加</a>
+														<a class="label-add-btn label-add-no j-manage-add-label-cancel" href="javascript:;" style="display: none;" >取消</a> 
+													</div>
+													<div class="c"></div>
+												</div>
 											</div>
 											<?php } ?>
 											
@@ -855,6 +893,144 @@
 			});
 		});
 
+
+		//标签管理 *********************************************
+
+		//展开添加标签面板
+		$('.j-manage-add-label').click(function(){
+			var label = $(this).parent(),
+				input = label.find('.label-add-input');
+
+			var col = label.parents('.col'),
+				cue = label.parents('.cue-label');
+
+			//判断添加数量是否上限
+			if(cue.find('.cue-label-col').length-1 >= 7){
+				alert('此标题的标签达到上限（7个）。');
+				return;
+			}
+
+			//判断是否展开
+			if(label.hasClass('j-add-label')){
+				var name = input.val();
+
+				//判断命名是否规范
+				if(name.replace(/\s/g, '').length <= 0){
+					return;
+				}
+				console.log(name.replace(/\s/g, '').length);
+
+				//添加数据
+				addLabelData(name, col.attr('tid'), function(msg){
+					//重置添加面板
+					input.val('');
+
+					//添加页面元素
+					var fresh = cue.find('.j-label-templet').clone(true);
+						fresh.removeClass('no j-label-templet');
+					fresh.find('.cue-label-name').html(name);
+					fresh.find('.label-rename-input').val(name);
+					fresh.attr('tid', msg);
+					manageLabel(fresh);
+					cue.find('.cue-label-add').before(fresh);
+				});
+			}else{
+				label.addClass('j-add-label');
+				label.find('.label-add-no').show();
+				label.find('.label-add-yes').css({ borderRadius: 0 });
+				input.width(0).show().stop().animate({ width: 120, paddingLeft: 12, paddingRight: 12 },function(){
+					$(this).attr('placeholder', '标签名');
+				});
+			}
+		});
+
+		//创建标签
+		function addLabelData(name, tid, funs){
+			$.ajax({
+				type: "POST",
+				url: "./ajax/ajax_user.php",
+				data: "addLabel=1&name="+ name +"&tid="+ tid,
+				success: function(msg){ 
+					console.log(msg);
+					funs(msg);
+				}
+			});
+		}
+
+		//取消添加
+		$('.j-manage-add-label-cancel').click(function(){
+			var label = $(this).parent();
+				label.removeClass('j-add-label');
+				label.find('.label-add-yes').animate({ borderRadius: 3 });
+				label.find('.label-add-input').removeAttr('placeholder').stop().animate({ width: 0, padding: 0 });
+				label.find('.label-add-no').hide();
+		});
+
+		//标签修改名称
+		function renameLabel(col){
+			var label = col.parent();
+				label.find('.label-normal').show();
+				label.find('.label-rename').hide();
+			col.find('.label-normal').hide();
+			col.find('.label-rename').show();
+		}
+
+		//标签确认重命名
+		function renameLabelYes(col){
+			col.find('.label-normal').hide();
+			col.find('.label-rename').show();
+
+			var name = col.find('.label-rename-input').val();
+
+			//判断命名是否规范
+			if(name.replace(/[]/g, '').length <= 0 && name == col.find('.cue-label-name').html()){
+				return;
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "./ajax/ajax_user.php",
+				data: "renameLabel=1&name="+ name +"&lid="+ col.attr('lid'),	//提交数据
+				success: function(msg){ 
+					// console.log(msg);
+					col.find('.label-normal').show();
+					col.find('.label-rename').hide();
+				}
+			});
+			col.find('.cue-label-name').html(col.find('.label-rename-input').val());	//修改页面参数
+		}
+
+		//标签取消重命名
+		function renameLabelNo(col){
+			col.find('.label-normal').show();
+			col.find('.label-rename').hide();
+		}
+
+		//标签删除
+		function closeLabel(col){
+			$.ajax({
+				type: "POST",
+				url: "./ajax/ajax_user.php",
+				data: "closeLabel=1&lid="+ col.attr('lid'),
+				success: function(msg){ 
+					console.log(msg);
+					col.hide(500, function(){
+						col.remove();
+					});
+				}
+			});
+		}
+
+		//挂接每个标签管理的事件
+		function manageLabel(col){
+			col.find('.cue-label-rename').click(function(){	renameLabel(col); });		//修改标签名称		
+			col.find('.label-rename-yes').click(function(){ renameLabelYes(col); });	//确认重命名
+			col.find('.label-rename-no').click(function(){ renameLabelNo(col); });	//取消重命名
+			col.find('.cue-label-close').click(function(){ closeLabel(col); });	//删除标签
+		}
+		$('.cue-label-col').each(function(){
+			manageLabel($(this));
+		});
 
 
 	</script>

@@ -24,8 +24,13 @@
 
 	if($ist){
 		$tid = $_GET['tid'];
+		$label = 0;
 
-		$list = $c -> Glist(0, $page, $tid);			//获取内容列表，指定标题内容时没有显示标准
+		if(isset($_GET['label'])){
+			$label = $_GET['label'];
+		}
+
+		$list = $c -> Glist(0, $page, $tid, 0, $label);	//获取内容列表，指定标题内容时没有显示标准
 		$total = $c -> Gtotel(0, 0, $tid);				//获取此标题的内容总数
 
 	}elseif($isu){
@@ -62,7 +67,7 @@
 				<?php if($ist){ $Tv = $t -> Ginfo($tid);	//如果有指定的标题 ?>
 				<!-- 标题描述 -->
 				<div class="describe <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" >
-					<h1 class="f"><?php echo $t -> Gtype($tid).'#'.$t -> Gtitle($tid); ?></h1>
+					<a href="?tid=<?php echo $tid; ?>"><h1 class="f"><?php echo $t -> Gtype($tid).'#'.$t -> Gtitle($tid); ?></h1></a>
 					<?php if($Tv['tid'] == '291429156432'){		//指定内容播放音乐 ?>
 						<object data="./swf/dewplayer.swf" width="200" height="20" name="dewplayer" id="dewplayer" type="application/x-shockwave-flash" style="float: right;margin-top: 15px;" >
 							<param name="movie" value="./mp3/dewplayer.swf" />
@@ -72,6 +77,15 @@
 					<?php } ?>
 					<div class="c"></div>
 					<p><?php echo $t -> Gcontent($tid); ?></p>
+					<p>
+						<!-- <em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">最后的香格里拉（下）</em>
+						<em style="background-color: #f0ad4e;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">最后的香格里拉（上）</em>
+						<em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">转山转水只为你</em>
+ -->
+						<?php foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签 ?>
+						<a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "background-color: #f0ad4e;"; } ?>"><?php echo $value['name']; ?></em></a>
+						<?php } ?>
+					</p>
 					<!-- 标题列表 - 参数 -->
 					<div class="param-tag f">
 						<span class="creator">创建者：

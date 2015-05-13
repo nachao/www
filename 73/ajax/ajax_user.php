@@ -253,5 +253,25 @@
 	}
 
 
+	//获取标签
+	if (isset($_POST['getLabel'])) {
+		echo json_encode($tl -> Glabel($_POST['tid']));
+	}
+
+	//添加标签
+	if (isset($_POST['addLabel'])) {
+		echo $tl -> Alabel($_POST['name'], $_POST['tid']);
+	}
+
+	//重命名标签
+	if (isset($_POST['renameLabel'])) {
+		echo $tl -> Uname($_POST['lid'], $_POST['name']);
+	}
+
+	//关闭标签
+	if (isset($_POST['closeLabel'])) {
+		echo $tl -> Uclose($_POST['lid']);
+	}
+
 
 ?>

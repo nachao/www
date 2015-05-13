@@ -64,9 +64,14 @@ class Data_content extends Comm_content
 	//获取全部通过的内容，按 id 倒序排序
 	// 参数说明
 	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$tid= 显示指定标题的内容（选填，默认全部显示）； $grade = 得分标准（选，默认没有标准）
-	protected function data_selectContent( $begin=0, $pages=9, $tid=0, $grade = 0, $uid=0 ){
+	protected function data_selectContent( $begin=0, $pages=9, $tid=0, $grade = 0, $uid=0, $label=0 ){
 		if($tid){
-			$sql = "select * from `".parent::Fn()."content` WHERE `titleid` = '".$tid."' AND (`verify` = 0 AND `plus` >= ".$grade.") order by `id` desc LIMIT ".$begin." , ".$pages;
+			if($label){
+				$labelSql = "AND `label`=".$label;
+			}else{
+				$labelSql = "";
+			}
+			$sql = "select * from `".parent::Fn()."content` WHERE `titleid` = '".$tid."' AND (`verify` = 0 AND `plus` >= ".$grade.") ".$labelSql." order by `id` desc LIMIT ".$begin." , ".$pages;
 		}else{
 			$sql = "select * from `".parent::Fn()."content` WHERE `verify` = 0 AND `plus` >= ".$grade." order by `id` desc LIMIT ".$begin." , ".$pages;
 		}
@@ -152,8 +157,8 @@ class Event_content extends Data_content
 	}
 
 	//获取的内容列表，可以指定 标准得分NORM
-	protected function event_getList($tid=0, $begin=0, $page=15, $norm=0 , $uid=0 ){
-		$query = parent::data_selectContent( $begin, $page, $tid, $norm, $uid);
+	protected function event_getList($tid=0, $begin=0, $page=15, $norm=0 , $uid=0, $label=0 ){
+		$query = parent::data_selectContent( $begin, $page, $tid, $norm, $uid, $label);
 		$array = array();
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据
@@ -466,9 +471,9 @@ class Content extends Event_content
 	}
 
 	//获取指定 数量的 的内容列表，可指定指定标题
-	public function Glist($begin=0, $pages=15, $tid=0, $norm=0 )
+	public function Glist($begin=0, $pages=15, $tid=0, $norm=0, $label=0 )
 	{
-		return parent::event_getList($tid, $begin, $pages, $norm);
+		return parent::event_getList($tid, $begin, $pages, $norm, 0, $label);
 	}
 
 	//获取指定 用户UID 的内容列表，可指定指定标题
@@ -770,6 +775,15 @@ class Content extends Event_content
 	//修改指定 内容CID 的更新时间
 	public function URtime($cid=0){
 		return parent::event_updateReviseTime($cid);
+	}
+
+	//修改指定 内容CID 的所属标签
+	public function Ulabel($cid=0, $lid=0){
+		$value = 0;
+		if($cid && $lid){
+			$value = parent::data_update($cid, 'label', $lid);
+		}
+		return $value;
 	}
 
 

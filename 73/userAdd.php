@@ -211,6 +211,16 @@
 											<input type="hidden" id="basic" value="<?php echo $basic; ?>" />		
 											<input type="hidden" id="isvip" value="<?php echo $u -> Ivip(); ?>" />
 										</div>
+
+										<!-- 选择标签 -->
+										<div class="publish-label-list">
+											<?php foreach ($tl -> Glabel($Tv['tid']) as $key => $value) {	//输出全部标签 ?>
+											<a href="javascript:;" class="publish-label-col" tid="<?php echo $value['lid']; ?>" ><?php echo $value['name']; ?></a>
+											<?php } ?>
+											<input type="hidden" name="titleLabel" value="0" />
+											<div class="c"></div>
+										</div>
+
 									</div>
 									<div class="c"></div>
 							    </form>
@@ -416,7 +426,19 @@
 		$('#titleList .tits').click(function(){
 			$('#titleList').hide();
 			$('#conTitleShow').val($(this).html().replace(/\s/g, '')).show();
-			$('#conTitleId').val($(this).attr('tid'));
+
+			var tid = $(this).attr('tid');
+			$('#conTitleId').val(tid);
+
+			//获取和显示此标题的标签
+			$.ajax({
+				type: "POST",
+				url: "./ajax/ajax_user.php",
+				data: "getLabel=1&tid="+ tid,
+				success: function(msg){ 
+					console.log(msg);
+				}
+			});
 
 			//刷新按钮显示
 			$('#delTitle').removeClass('no');

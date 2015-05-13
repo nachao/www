@@ -60,7 +60,7 @@
 											<i class="purchase">+</i><em></em>
 											<div class="c"></div>
 										</div>
-										<div class="txt txt-big" <?php if($v['types'] ==0){ echo "style='min-height: 78px;'"; } ?> >
+										<div class="txt txt-big" <?php if($v['types'] ==0){ echo "style='max-height: 234px;'"; } ?> >
 											<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
 											<div class="are"><?php echo $v['content']; ?></div>
 											<?php }else{ ?>
@@ -69,6 +69,11 @@
 										</div>
 										<div class="use use-user">
 											<div class="use-user-data">
+												
+												<?php if($v['label'] != 0){	//判断此内容是否有标签 ?>
+												<p><a href="./list.php?tid=<?php echo $v['titleid']; ?>&label=<?php echo $v['label']; ?>"><?php echo $tl -> Gname($v['label']); ?></a></p>
+												<?php } ?>
+
 												<p>购买次数： <?php echo $v['click']; ?> 次</p>
 												<p>获取收入： <span class="golds"><?php echo $v['plus']; ?></span> <i></i></p>
 												<p>发布时间： <?php echo $o -> Cdate($v['base'], 1); ?></p>
