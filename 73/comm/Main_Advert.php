@@ -6,22 +6,6 @@
 /********************************************************************************************
 * 公共操作
 */
-class Comm_advert
-{	
-	//获取当前登录用户的 ID
-	//#调用方式 	
-	// $uid = $uid ? $uid : parent::Eid();
-	// protected function Eid(){
-	// 	$u = new Users();
-	// 	return $uid = $u -> Gid();
-	// }
-
-	// //判断
-	// protected function Ais($sql){
-	// 	$val = mysql_query($sql);
-	// 	return $val ? mysql_fetch_array($val) : false;
-	// }
-}
 
 
 

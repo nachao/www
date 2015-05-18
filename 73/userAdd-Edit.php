@@ -50,6 +50,10 @@
 		if($depict != $info['content']){
 			$c -> Utxt($cid, $o -> Chtml($depict));		//修改描述
 		}
+		//修改标签
+		if($_POST['titleLabel'] != $info['label']){
+			$c -> Ulabel($cid, $_POST['titleLabel']);
+		}
 
 		$c -> URtime($cid); //刷新修改时间
 
@@ -120,8 +124,6 @@
 										</div>
 										<?php } ?>
 
-
-										<?php echo $o -> Ccode($Rinfo['content'], 1); ?>
 										<!-- 文字 -->
 										<div class="col extent writing">
 											<div class="tip">请填写内容<i></i></div>
@@ -198,6 +200,17 @@
 											<input type="hidden" id="standard" value="7" />			
 											<input type="hidden" id="basic" value="<?php echo $basic; ?>" />		
 										</div>
+										
+										<?php if($Rinfo['titleid']){ ?>
+										<!-- 选择标签 -->
+										<div class="publish-label-list">
+											<?php foreach ($tl -> Glabel($Rinfo['titleid']) as $key => $value) { //输出全部标签 ?>
+											<a href="javascript:;" class="publish-label-col" lid="<?php echo $value['lid']; ?>" ><?php echo $value['name']; ?></a>
+											<?php } ?>
+											<input type="hidden" id="titleLabel" name="titleLabel" value="<?php echo $Rinfo['label']; ?>" />
+										</div>
+										<?php } ?>
+
 									</div>
 									<div class="c"></div>
 							    </form>
@@ -265,6 +278,22 @@
 		$('#uploadPhoto').click(function(){
 			$('#uploadPlugIn').toggle();
 		});
+
+		//选择标签
+		$('.publish-label-list a').click(function(){
+			var input = $(this).siblings('input');
+			if($(this).hasClass('act')){
+				input.val(0);
+				$(this).removeClass('act');
+			}else{
+				console.log($(this).attr('lid'));
+				input.val($(this).attr('lid'));
+				$(this).addClass('act').siblings('a').removeClass('act');
+			}
+		});
+
+		//初始化标签选择
+		$('.publish-label-list a[lid='+$('#titleLabel').val()+']').addClass('act');
 
 
 		//表单检测

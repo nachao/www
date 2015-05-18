@@ -852,6 +852,44 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .col .col-close-load{ line-height: 100px;width: 100%;text-align: center;color: #ccc;font-size: 16px;margin-top: 12px;display: inline-block;display: none; }
 .titleManage .col .col-close-load img{ position: relative;top: 2px;left: -10px; }
 
+/* 我的标题 - 标签管理 */
+.titleManage .cue-label{ padding-left: 190px; }
+.titleManage .cue-add-label{  }
+.titleManage .cue-label-col{ height: 33px;line-height: 33px;background: #f6f6f6;border-radius: 2px 2px 0 0;float: left;margin-left: 20px;border-bottom: 1px solid #e74c3c;margin-bottom: 20px; }
+/*.titleManage .cue-label-col:hover{ border-color: #d0d2d5; }*/
+.titleManage .cue-label-name{ float: left;padding: 0 12px;border: 1px solid #ddd;border-bottom: 0px;width: 67px;overflow: hidden;height: 33px; }
+.titleManage .cue-label-btn{ width: 33px;height: 32px;cursor: pointer;float: left;border-top: 1px solid #ddd;background: no-repeat center #f6f6f6; }
+.titleManage .cue-label-btn:hover{ background-color: #e74c3c;border-top-color: #e74c3c;color: white; }
+
+.titleManage .cue-label-rename{ background-image: url(../imgs/iconfont-zhongmingming.png); }
+.titleManage .cue-label-rename:hover{ background-image: url(../imgs/iconfont-zhongmingming-white.png); }
+.titleManage .cue-label-close{ background-image: url(../imgs/iconfont-shanchu.png); }
+.titleManage .cue-label-close:hover{ background-image: url(../imgs/iconfont-shanchu-white.png); }
+
+.label-normal{ position: relative;float: left;width: 158px; }
+.label-normal .cue-label-name{ width: 133px; }
+.label-normal .cue-label-btn{ opacity: .1;position: absolute;top: 0px; }
+.label-normal .cue-label-rename{ right: 35px; }
+.label-normal .cue-label-close{ right: 0px; }
+.label-normal:hover .cue-label-btn{ opacity: 1; }
+
+/* 我的标题 - 标签管理 - 重命名 */
+.label-rename{ display: none; }
+.label-rename .cue-label-btn{ width: auto;padding: 0 12px; }
+.label-rename .label-rename-no{ border-right: 1px solid #ddd; }
+.label-rename .label-rename-no:hover{ border-right-color: #e74c3c; }
+.label-rename .label-rename-input{ float: left;padding: 0 12px;border-top: 1px solid #ddd;border-left: 1px solid #ddd;width: 167px;height: 33px;background: transparent;display: inline-block;border-right: 1px solid #ddd; }
+
+.cue-label-add{ margin-left: 20px;float: left; }
+.label-add-input{ border-bottom: 1px solid #e74c3c;height: 33px;background: #f6f6f6;padding: 0 12px;float: left; }
+.label-add-btn{ width: auto;height: 34px;line-height: 34px; background: #e74c3c;color: white;padding: 0 12px;display: inline-block;float: left; }
+.label-add-yes{ border-radius: 3px; }
+.label-add-yes:hover{ background: #d82425; }
+.label-add-no{ background: #2f3c4e;border-radius: 0 3px 3px 0; }
+.label-add-no:hover{ background: #1B232E; }
+
+
+
 /* 我的标题 - 投资 */
 .use-invest{ display: inline-block;line-height: 35px;color: #9ba1a8;float: left;position: relative; }
 .use-invest span{ float: left;padding-right: 15px; }
@@ -885,6 +923,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .invest-list-col-act .tags-percent{ color: #d82425;font-weight: bold; }
 .invest-list-tip{ display: inline-block;border: 4px #d82425 solid;border-left-color: white; border-bottom-color: white;-webkit-transform:rotate(45deg);transform:rotate(45deg);position: absolute;top: 14px;right: -4px; }
 .invest-list-info{ line-height: 35px;text-align: right;padding-right: 20px;border-bottom: 1px dashed #ccc; }
+
 
 /* 加减一 */
 .modified{ float: left;width: auto;height: 33px;position: relative;background: red;border: 1px solid #ddd;background: #f6f6f6;border-left: 0px; }
@@ -1116,6 +1155,12 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* 提示 */
 .publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
+
+/* 发布、编辑内容 - 标签选择 */
+.publish-label-list{ border-top: 1px solid #eee;padding-top: 20px; }
+.publish-label-list a{ background-color: #ddd; font-weight: 700; border-radius: 3px; color: #fff; font-size: 12px; margin-right: 10px; cursor: pointer;display: inline-block;line-height: 33px;padding: 0 12px;margin-bottom: 10px; }
+.publish-label-list a:hover{ background-color: #999; }
+.publish-label-list a.act{ background: #e74c3c; }
 
 
 /*====
