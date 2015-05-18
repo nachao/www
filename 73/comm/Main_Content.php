@@ -30,8 +30,8 @@ class Data_content extends Comm_content
 	//添加内容
 	//#参数
 	// $cid= 内容ID ；$uid=发布者ID； $tid=标题ID； $type=内容类型ID； $con=内容描述； $img=图片地址； $mp3= 音乐地址； $swf= 视频地址； $money= 消费；$share= 标题分担
-	protected function data_addContent( $type=0, $cid=0, $uid=0, $tid=0, $con='', $img='', $mp3='', $gif='', $link='', $money='', $share=0, $plus=0, $effects=0){
-		$sql = "insert into `".parent::Mn()."`.`".parent::Fn()."content` (`id`, `cid`, `userid`, `user`, `icon`, `titleid`, `title`, `content`, `image`, `link`, `music`, `video`, `select`, `plus`, `base`, `weight`, `types`, `classify`, `consume`, `shareglod`, `effects`) values('', '".$cid."', '".$uid."', '', '', '".$tid."', '', '".$con."', '".$img."', '".$link."', '".$mp3."', '".$gif."', '', ".$plus.", '".time()."', ".time().", '".$type."', '".$tid."', '".$money."', ".$share.", '".$effects."');";
+	protected function data_addContent( $type=0, $cid=0, $uid=0, $tid=0, $con='', $img='', $mp3='', $gif='', $link='', $money='', $share=0, $plus=0, $effects=0, $label=0){
+		$sql = "insert into `".parent::Mn()."`.`".parent::Fn()."content` (`id`, `cid`, `userid`, `user`, `icon`, `titleid`, `title`, `content`, `image`, `link`, `music`, `video`, `select`, `plus`, `base`, `weight`, `types`, `classify`, `consume`, `shareglod`, `effects`, `label`) values('', '".$cid."', '".$uid."', '', '', '".$tid."', '', '".$con."', '".$img."', '".$link."', '".$mp3."', '".$gif."', '', ".$plus.", '".time()."', ".time().", '".$type."', '".$tid."', '".$money."', ".$share.", '".$effects."', '".$label."');";
 		return mysql_query($sql);
 	}
 
@@ -277,7 +277,7 @@ class Event_content extends Data_content
 	//提交发布表单
 	//#参数说明
 	// 	$type= 内容类型； $tit= 标题名； $con= 描述； $img= 图片地址； $mp3= 音乐地址；$gif= 视频地址 
-	protected function event_addContent( $type=0, $tid=0, $con='', $img='',$mp3='', $gif='' ,$uid=0, $recommend=0){
+	protected function event_addContent( $type=0, $tid=0, $con='', $img='',$mp3='', $gif='' ,$uid=0, $recommend=0, $label=0){
 		$uid = $uid ? $uid : parent::Eid();
 		$u = new Users();				
 		$t = new Title();	
@@ -294,10 +294,10 @@ class Event_content extends Data_content
 		//如果有指定的标题
 		if($tid){				
 			$share = $t -> Gshare($tid);
-			if($t -> IPSgold($tid)){				//如果分享金足够则支付
+			if( $t -> IPSgold($tid)){				//如果分享金足够则支付
 				$t -> Ushare($tid);
 				$deduct = $standard - $share;
-			}elseif($t -> IPFanother($tid)){			//否则，判断如果代付足够则代付支付
+			}elseif($t -> IPFanother($tid)){		//否则，判断如果代付足够则代付支付
 				$t -> USplus($share);
 				$deduct = $standard - $share;
 			}else{									//否则，转为普通支付（非标题支付）
@@ -328,7 +328,7 @@ class Event_content extends Data_content
 			$con= $o -> Chtml($con);			//编译描述
 
 			//插入数据
-			parent::data_Addcontent( $type, $cid ,$uid, $tid, $con, $img, $mp3, $gif, null, $deduct, $share, $recommend, $effects);
+			parent::data_Addcontent( $type, $cid ,$uid, $tid, $con, $img, $mp3, $gif, null, $deduct, $share, $recommend, $effects, $label);
 
 			//刷新发布用户信息
 			$u -> UAissue();		//刷新发布量
@@ -648,14 +648,14 @@ class Content extends Event_content
 	*/
 
 	//提交发布表单
-	public function Acon( $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0){
+	public function Acon( $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label){
 		switch ($type) {					//判断类型，并刷新描述内容
 			case 1: $con = $imgcon; $mp3 = ''; $gif = ''; break;	//图片
 			case 2: $con = $mp3con; $img = ''; $gif = ''; break;	//音乐
 			case 3: $con = $gifcon; $img = ''; $mp3 = ''; break;	//视频
 			default: $con = $con; $img = ''; $mp3 = ''; $gif = ''; break;	//文字
 		}
-		$cid = parent::event_addContent( $type, $tid, $con, $img, $mp3, $gif, null, $recommend );
+		$cid = parent::event_addContent( $type, $tid, $con, $img, $mp3, $gif, null, $recommend, $label);
 		if($cid){
 			$u = new Users();
 			$u -> UtoL('userAdd.php?ok='.$cid);

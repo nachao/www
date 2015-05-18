@@ -464,9 +464,9 @@ jQuery.fn.extend({
 				}else{
 					if(obj.next('i').length){
 						obj.html(val.num);
-						obj.next('i').html(val.unit+ '元');
+						obj.next('i').html(val.unit+ '分');
 					}else{
-						obj.html(val.num + (val.unit +'元'));
+						obj.html(val.num + (val.unit +'分'));
 					}
 				}
 			}
@@ -1063,6 +1063,35 @@ ncs.ajax = {
 	}
 }
 
+
+jQuery.extend({
+
+	g: function(data, funs, log){
+		$.ajax({ 
+			type: "POST", 
+			url: "./ajax/ajax_user.php", 
+			data: data,
+			success: function(msg){
+				msg = msg ? msg : 'underfind';
+				log ? console.log('[73] -> '+ data +' -> '+ msg) : null;
+				funs ? funs(msg) : null;
+			}
+		});
+	},
+
+	//获取指定标题的全部标签
+	titleGetLebel: function(tid, funs){
+		if(tid){
+			var arr = new Array;
+			$.g('tgl='+ tid, function(msg){
+				if(msg){
+					arr = eval('('+msg+')');
+					funs(arr);
+				}
+			});
+		}
+	}
+});
 
 /*
 * name: 弹出框

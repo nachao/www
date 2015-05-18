@@ -17,7 +17,7 @@
 
 	//是否提交表单
 	if(isset($_POST['submit'])){
-		$c -> Acon( $_POST['types'], $_POST['titleid'], $_POST['depict'], $_POST['beforeimg'], $_POST['imgDepict'], $_POST['music'], $_POST['musicDepict'], $_POST['video'], $_POST['videoDepict'], $_POST['recommend-sum'] );
+		$c -> Acon( $_POST['types'], $_POST['titleid'], $_POST['depict'], $_POST['beforeimg'], $_POST['imgDepict'], $_POST['music'], $_POST['musicDepict'], $_POST['video'], $_POST['videoDepict'], $_POST['recommend-sum'], $_POST['titleLabel'] );
 	}
 
 	$addOk = 0;
@@ -214,9 +214,9 @@
 
 										<!-- 选择标签 -->
 										<div class="publish-label-list">
-											<?php foreach ($tl -> Glabel($Tv['tid']) as $key => $value) {	//输出全部标签 ?>
-											<a href="javascript:;" class="publish-label-col" tid="<?php echo $value['lid']; ?>" ><?php echo $value['name']; ?></a>
-											<?php } ?>
+											<div id="publish-label-list">
+												<a href="javascript:;" class="publish-label-col no" id="publish-label-col-templet" tid="0" >-</a>
+											</div>
 											<input type="hidden" name="titleLabel" value="0" />
 											<div class="c"></div>
 										</div>
@@ -431,14 +431,30 @@
 			$('#conTitleId').val(tid);
 
 			//获取和显示此标题的标签
-			$.ajax({
-				type: "POST",
-				url: "./ajax/ajax_user.php",
-				data: "getLabel=1&tid="+ tid,
-				success: function(msg){ 
-					console.log(msg);
-				}
+			var labelRange = $('#publish-label-list'),
+				labelTemp = $('#publish-label-col-templet'),
+				labelObj = null;
+			$.titleGetLebel(tid, function(arr){
+				$(arr).each(function(key, value){
+					console.log(value);
+					labelObj = labelTemp.clone().removeAttr('id').addClass('publish-label-col-temp').removeClass('no');
+					labelRange.append(labelObj);
+					labelObj.html(value.name);
+					labelObj.click(function(){
+						var input = $(this).siblings('input');
+						if($(this).hasClass('act')){
+							input.val(0);
+							$(this).removeClass('act');
+						}else{
+							console.log($(this).attr('lid'));
+							input.val($(this).attr('lid'));
+							$(this).addClass('act').siblings('a').removeClass('act');
+						}
+					});
+				});
 			});
+
+					
 
 			//刷新按钮显示
 			$('#delTitle').removeClass('no');
@@ -590,8 +606,6 @@
 		$('#textDepict').blur(function(){
 			setCookie( cookieName + "textDepict" , $(this).val(), 1 );
 		});
-
-
 
 
 	</script>

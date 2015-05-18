@@ -510,6 +510,8 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /* 标题描述 */
 .describe{ padding: 20px 0 50px; }
 .describe p{ color: #6d7683;line-height: 30px;padding-bottom: 20px; }
+.describe p em{ background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer; }
+.describe p em.act{ background-color: #f0ad4e; }
 .describe h1{ font-weight: normal;font-size: 18px;color: #2f3c4e; }
 
 /* 内页 内容列表 */

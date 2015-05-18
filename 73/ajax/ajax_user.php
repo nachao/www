@@ -257,6 +257,9 @@
 	if (isset($_POST['getLabel'])) {
 		echo json_encode($tl -> Glabel($_POST['tid']));
 	}
+	if (isset($_POST['tgl'])) {
+		echo json_encode($tl -> Glabel($_POST['tgl']));
+	}
 
 	//添加标签
 	if (isset($_POST['addLabel'])) {
@@ -272,6 +275,7 @@
 	if (isset($_POST['closeLabel'])) {
 		echo $tl -> Uclose($_POST['lid']);
 	}
+
 
 
 ?>

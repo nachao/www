@@ -71,6 +71,13 @@ class Data_label extends Config
 		return parent::Ais($sql);
 	}
 
+	//
+	protected function data_selectContentTotal($lid=0){
+		$sql = "select count(`id`) FROM  `".parent::Fn()."content` WHERE  `label` =".$lid." LIMIT 1";
+	 	$row = parent::Ais($sql);
+	 	return $row[0];
+	}
+
 
 
 	/********************************************
@@ -182,6 +189,15 @@ class Label extends Event_label
 		if($lid){
 			$row = parent::data_selectLabel($lid);
 			$value = $row['name'];
+		}
+		return $value;
+	}
+
+	//获取指定 标签LID 的内容数量
+	public function GCtotal($lid=0){
+		$value = 0;
+		if($lid){
+			$value = parent::data_selectContentTotal($lid);
 		}
 		return $value;
 	}

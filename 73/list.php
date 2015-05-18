@@ -78,12 +78,10 @@
 					<div class="c"></div>
 					<p><?php echo $t -> Gcontent($tid); ?></p>
 					<p>
-						<!-- <em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">最后的香格里拉（下）</em>
-						<em style="background-color: #f0ad4e;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">最后的香格里拉（上）</em>
-						<em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;">转山转水只为你</em>
- -->
 						<?php foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签 ?>
-						<a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em style="background-color: #9ba1a8;padding: .2em .6em .3em;font-weight: 700;border-radius: .25em;color: #fff;font-size: 12px;margin-right: 10px;cursor: pointer;<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "background-color: #f0ad4e;"; } ?>"><?php echo $value['name']; ?></em></a>
+						<?php if($tl -> GCtotal($value['lid'])){ ?>
+						<a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a>
+						<?php } ?>
 						<?php } ?>
 					</p>
 					<!-- 标题列表 - 参数 -->
