@@ -134,7 +134,7 @@ include("./comm/head.php");
 										</div>
 
 										<?php if($c -> Itxt($Cv['cid'])){	//如果有文本则显示展开按钮 ?>
-										<div class="txt">
+										<div class="txt" <?php if($Cv['types'] ==0){ echo "style='max-height: 198px;'"; } ?>>
 											<div class="are"><?php echo $Cv['content']; ?></div>
 										</div>
 										<?php } ?>

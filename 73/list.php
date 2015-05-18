@@ -21,10 +21,10 @@
 	//初始化
 	$uid = 0;
 	$tid = 0;
+	$label = 0;
 
 	if($ist){
 		$tid = $_GET['tid'];
-		$label = 0;
 
 		if(isset($_GET['label'])){
 			$label = $_GET['label'];
@@ -78,11 +78,10 @@
 					<div class="c"></div>
 					<p><?php echo $t -> Gcontent($tid); ?></p>
 					<p>
-						<?php foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签 ?>
-						<?php if($tl -> GCtotal($value['lid'])){ ?>
-						<a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a>
-						<?php } ?>
-						<?php } ?>
+						<?php //foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签
+							//if($tl -> GCtotal($value['lid'])){ ?>
+							<!-- <a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a> -->
+							<?php //} } ?>
 					</p>
 					<!-- 标题列表 - 参数 -->
 					<div class="param-tag f">
@@ -246,6 +245,15 @@
 								</div>
 							</div>
 							<div class="cont">
+
+								<?php if($v['label']){	//输出内容的标签 ?>
+									<?php if($label && $v['label'] == $label){	//判断是否为当前查看的标签 ?>
+									<span class="label label-act <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></span>
+									<?php }else{ ?>
+									<a href="?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
+									<?php } ?>
+								<?php } ?>
+
 								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
 									<?php echo $c -> IGcontrol($v['cid']); ?>
 									<i class="purchase">+</i><em></em>
@@ -253,7 +261,7 @@
 								</div>
 
 								<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-									<div class="txt"><div class="are"><?php echo $v['content']; ?></div></div>
+									<div class="txt" <?php if($v['types'] ==0){ echo "style='max-height: 198px;'"; } ?>><div class="are"><?php echo $v['content']; ?></div></div>
 								<?php } ?>
 								
 								<div class="use">

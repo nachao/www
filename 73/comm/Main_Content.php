@@ -649,10 +649,11 @@ class Content extends Event_content
 
 	//提交发布表单
 	public function Acon( $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label){
+
 		switch ($type) {					//判断类型，并刷新描述内容
 			case 1: $con = $imgcon; $mp3 = ''; $gif = ''; break;	//图片
-			case 2: $con = $mp3con; $img = ''; $gif = ''; break;	//音乐
-			case 3: $con = $gifcon; $img = ''; $mp3 = ''; break;	//视频
+			case 2: $con = $gifcon; $img = ''; $mp3 = ''; break;	//视频
+			case 3: $con = $mp3con; $img = ''; $gif = ''; break;	//音乐
 			default: $con = $con; $img = ''; $mp3 = ''; $gif = ''; break;	//文字
 		}
 		$cid = parent::event_addContent( $type, $tid, $con, $img, $mp3, $gif, null, $recommend, $label);

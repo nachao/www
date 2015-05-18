@@ -72,7 +72,7 @@
 				</div>
 
 				<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-					<div class="txt"><div class="are"><?php echo $v['content']; ?></div></div>
+					<div class="txt" <?php if($v['types'] ==0){ echo "style='max-height: 234px;'"; } ?>><div class="are"><?php echo $v['content']; ?></div></div>
 				<?php } ?>
 				
 				<div class="use">
