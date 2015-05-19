@@ -225,10 +225,9 @@
 	</div>
 
 	<!-- 查看大图 -->
-	<div class="artwork">
-		<div class="con"></div>
-		<div class="btn"></div>
-	</div>
+	<img class="artwork-image" />
+	<div class="artwork-close">°</div>
+	<div class="artwork-bg"></div>
 
 	<script type="text/javascript">
 
@@ -246,6 +245,25 @@
 
 		//加载更多
 		$('#loadmore').loadmore();
+
+		//查看大图
+		$('.bigimg').click(function(){
+			var bg = $('.artwork-bg').show()
+				close = $('.artwork-close').show(),
+				image = $('.artwork-image').show();
+			image.attr('src', $(this).attr('href')).css({ width: 'auto'});
+			var ww = $(window).width()-300,
+				top = $(window).scrollTop() + 50;
+			if(image.width() > ww){
+				image.width(ww);
+			}
+			close.css({ top: top, marginLeft: image.width() /2 });
+			image.css({ marginLeft: -image.width()/2, top: top });
+			return false;
+		});
+		$('.artwork-close,.artwork-bg').click(function(){
+			$('.artwork-close,.artwork-image,.artwork-bg').hide();
+		});
 
 		//自动加载
 		// $(window).scroll(function(){
