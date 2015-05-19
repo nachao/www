@@ -922,13 +922,25 @@ class Title extends Event_title
 				'not'	=> $tid,
 			));
 		if($query){
-			$array = parent::Garr($query, function($row){
-					return array(
-						'tid'	=> $row['tid'],
-						'uid'	=> $row['userid'],
-						'title'	=> $row['title'],
-					);
-				});
+			// $array = parent::Garr($query, function($row){
+			// 		return array(
+			// 			'tid'	=> $row['tid'],
+			// 			'uid'	=> $row['userid'],
+			// 			'title'	=> $row['title']
+			// 		);
+			// 	});
+
+			$array = array();
+			if( !!$query && mysql_num_rows($query) > 0 ){	//判断是否有内容
+				while( $row = mysql_fetch_array($query)){	//遍历数据
+					$new = array(
+							'tid'	=> $row['tid'],
+							'uid'	=> $row['userid'],
+							'title'	=> $row['title'],
+						);
+					array_push($array, $new);
+				}
+			}
 
 			$max = count($array);
 			$key = parent::event_getRand($max, $num);
