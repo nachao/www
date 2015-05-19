@@ -166,6 +166,11 @@
 								</div>
 							</div>
 							<div class="cont">
+
+								<?php if($v['label']){	//输出内容的标签 ?>
+									<a href="?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
+								<?php } ?>
+
 								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
 									<?php echo $c -> IGcontrol($v['cid']); ?>
 									<i class="purchase">+</i><em></em>

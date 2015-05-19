@@ -549,8 +549,8 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .contentList .col .head .tag .notPass .tip{ line-height: 30px;font-size: 14px;color: #666;margin: 25px 0 0 0px; }
 .contentList .col .head .tag .notPass a{ display: inline-block;margin: 10px 0 0 0px;float: left; }
 .contentList .col .cont{ margin-top: 10px;border: 1px solid #d9dbdd;background: white url(../imgs/area_bottomBg.gif) repeat-x bottom;box-shadow: 0px 0px 10px #eee;border-radius: 3px;position: relative; }
-.contentList .col .cont .label{  padding: 1px 5px 2px 12px; font-weight: 700; color: #fff; font-size: 12px; cursor: pointer;position: absolute;left: 0px;top: 7px;border-radius: 0 3px 3px 0;z-index: 3;background: black;opacity: 0.6;display: inline-block; }
-.contentList .col .cont .label:hover{ opacity: 0.7; }
+.contentList .col .cont .label{  padding: 1px 5px 2px 12px; font-weight: 700; color: #fff; font-size: 12px; cursor: pointer;position: absolute;left: 0px;top: 7px;border-radius: 0 3px 3px 0;z-index: 3;background: black;opacity: 0.5;display: inline-block; }
+.contentList .col .cont .label:hover{ opacity: 0.6; }
 .contentList .col .cont .label-txt{ position: relative;background-color: #d9dbdd;opacity: 1; }
 .contentList .col .cont .label-txt:hover{ background-color: #ccc;opacity: 1; }
 .contentList .col .cont .label-act{ border-left-color: #f0ad4e;background-color: #f0ad4e;opacity: 0.8; }
@@ -1098,7 +1098,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .publish .col .cue:focus{ background-color: white;border-color: #ddd;box-shadow: 0 0 10px #ddd; }
 
 /* 文字 */
-.publish .writing .txt{ display: block;line-height: 22px;height: 209px;border: 1px solid #e4e6e8;border-radius: 2px;width: 666px;resize: vertical;font-size: 14px;color: #333; }
+.publish .writing .txt{ display: block;line-height: 22px;height: 209px;border: 1px solid #e4e6e8;border-radius: 2px;width: 636px;resize: vertical;font-size: 14px;color: #333;margin-top: 30px; }
 
 /* 图片 */
 .publish .picture .uploadPhoto{ border: 1px dashed #ddd;border-radius: 3px;padding: 20px;text-align: center;color: #ccc;margin-bottom: 30px;cursor: pointer; }
@@ -1167,7 +1167,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
 
 /* 发布、编辑内容 - 标签选择 */
-.publish-label-list{ border-top: 1px solid #eee;padding-top: 20px; }
+.publish-label-list{ border-top: 1px solid #eee;padding-top: 20px;margin-top: 16px; }
 .publish-label-list a{ background-color: #ddd; font-weight: 700; border-radius: 3px; color: #fff; font-size: 12px; margin-right: 10px; cursor: pointer;display: inline-block;line-height: 33px;padding: 0 12px;margin-bottom: 10px; }
 .publish-label-list a:hover{ background-color: #999; }
 .publish-label-list a.act{ background: #e74c3c; }

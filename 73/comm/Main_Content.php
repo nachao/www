@@ -30,8 +30,11 @@ class Data_content extends Comm_content
 	//添加内容
 	//#参数
 	// $cid= 内容ID ；$uid=发布者ID； $tid=标题ID； $type=内容类型ID； $con=内容描述； $img=图片地址； $mp3= 音乐地址； $swf= 视频地址； $money= 消费；$share= 标题分担
-	protected function data_addContent( $type=0, $cid=0, $uid=0, $tid=0, $con='', $img='', $mp3='', $gif='', $link='', $money='', $share=0, $plus=0, $effects=0, $label=0){
-		$sql = "insert into `".parent::Mn()."`.`".parent::Fn()."content` (`id`, `cid`, `userid`, `user`, `icon`, `titleid`, `title`, `content`, `image`, `link`, `music`, `video`, `select`, `plus`, `base`, `weight`, `types`, `classify`, `consume`, `shareglod`, `effects`, `label`) values('', '".$cid."', '".$uid."', '', '', '".$tid."', '', '".$con."', '".$img."', '".$link."', '".$mp3."', '".$gif."', '', ".$plus.", '".time()."', ".time().", '".$type."', '".$tid."', '".$money."', ".$share.", '".$effects."', '".$label."');";
+	protected function data_addContent($data=0){
+		$sql = "insert into `".parent::Mn()."`.`".parent::Fn()."content` ".
+				"(`id`, `cid`, `userid`, `titleid`, `content`, `cont`, `plus`, `base`, `types`, `consume`, `shareglod`, `effects`, `label`)".
+				" values".
+				"('', '".$data['cid']."', '".$data['uid']."', '".$data['tid']."', '".$data['text']."', '".$data['cont']."', ".$data['plus'].", '".time()."', '".$data['type']."', '".$data['spend']."', ".$data['help'].", '".$data['push']."', '".$data['label']."');";
 		return mysql_query($sql);
 	}
 
@@ -274,71 +277,6 @@ class Event_content extends Data_content
 	* 新增 add
 	*/
 
-	//提交发布表单
-	//#参数说明
-	// 	$type= 内容类型； $tit= 标题名； $con= 描述； $img= 图片地址； $mp3= 音乐地址；$gif= 视频地址 
-	protected function event_addContent( $type=0, $tid=0, $con='', $img='',$mp3='', $gif='' ,$uid=0, $recommend=0, $label=0){
-		$uid = $uid ? $uid : parent::Eid();
-		$u = new Users();				
-		$t = new Title();	
-		$o = new Tool();
-
-		//初始化参数
-		$cid 	= $u -> Gid().time();
-		$number = $u -> GTPnum() +1;	//获用户发布次数
-		$standard = $u -> GIsd();		//获取标准支付金
-		$share = 0;
-		$deduct = $u -> Gsd();		//获取当前用户的基础支付金
-		$effects = 0; 				//默认标示类型
-
-		//如果有指定的标题
-		if($tid){				
-			$share = $t -> Gshare($tid);
-			if( $t -> IPSgold($tid)){				//如果分享金足够则支付
-				$t -> Ushare($tid);
-				$deduct = $standard - $share;
-			}elseif($t -> IPFanother($tid)){		//否则，判断如果代付足够则代付支付
-				$t -> USplus($share);
-				$deduct = $standard - $share;
-			}else{									//否则，转为普通支付（非标题支付）
-				if($u -> Ivip()){					//判断如果为会员，刷新标准金
-					$deduct = $u -> GVsd();
-				}else{
-					$deduct = $standard;
-				}
-			}
-			$t -> UUtime($tid);	//刷新标题使用时间，time()
-			$t -> Unum($tid);	//刷新标题内容数量，+1
-		
-		}
-
-		$deduct = $number * $deduct;
-
-		//如果有推荐
-		if($recommend){
-			$effects = $recommend;
-			$recommend = rand(60,110);	//生成随机数
-			// $u -> UAplus($recommend);	//反馈给用户指定的金额
-
-			$deduct = $deduct + 10;	//扣除 1.00 元
-		}
-
-		//判断用户余额是否足够
-		if($u -> Gplus() >= $deduct){	
-			$con= $o -> Chtml($con);			//编译描述
-
-			//插入数据
-			parent::data_Addcontent( $type, $cid ,$uid, $tid, $con, $img, $mp3, $gif, null, $deduct, $share, $recommend, $effects, $label);
-
-			//刷新发布用户信息
-			$u -> UAissue();		//刷新发布量
-			$u -> URuse();			//刷新最新发布时间
-			$u -> USplus($deduct);	//刷新余额，扣除指定金额
-
-			return $cid;
-		}
-	}
-
 	//添加指定 用户UID（选填，默认当前登录用户） 的评论指定 内容CID 的记录
 	protected function event_addBuyLog($cid=0, $uid=0){
 		$uid = $uid ? $uid : parent::Eid();
@@ -412,7 +350,7 @@ class Event_content extends Data_content
 
 	//更新指定 内容CID 的描述
 	protected function event_updateContent($cid=0, $txt=''){
-		if($cid && $txt){
+		if($cid){
 			return parent::data_update($cid, 'content', $txt);
 		}
 	}
@@ -556,6 +494,9 @@ class Content extends Event_content
 	public function Gimage($cid=0)
 	{
 		$info = parent::event_getByCid($cid);
+		if($info['cont']){
+			return $info['cont'];
+		}
 		return $info['image'];
 	}
 
@@ -563,6 +504,9 @@ class Content extends Event_content
 	public function Gmusic($cid=0)
 	{
 		$info = parent::event_getByCid($cid);
+		if($info['cont']){
+			return $info['cont'];
+		}
 		return $info['music'];
 	}
 
@@ -570,7 +514,17 @@ class Content extends Event_content
 	public function Gvideo($cid=0)
 	{
 		$info = parent::event_getByCid($cid);
+		if($info['cont']){
+			return $info['cont'];
+		}
 		return $info['video'];
+	}
+
+	//获取指定 内容ID 的控件
+	public function Gcontrol($cid=0)
+	{
+		$info = parent::event_getByCid($cid);
+		return $info['cont'];
 	}
 
 	//获取指定 内容CID 的详细页的相关内容
@@ -631,7 +585,7 @@ class Content extends Event_content
 			switch($type){
 				case 0 : $html = "<div class='sawtooth'></div>"; break;		//文本
 				case 1 : $html = "<img class='img' src='".$this -> Gimage($cid)."' /><a class='bigimg' href='".$this -> Gimage($cid)."' title='Natural: 1100 x 687 pixels' target='_black'>查看大图</a><div class='sawtooth'></div>"; break;		//图片
-				case 2 : $html = "<embed class='gif' src='http://".$this -> Gvideo($cid)."' quality='high' wmode='Opaque' width='100%' height='100%' align='middle' allowscriptaccess='always' allowfullscreen='true' mode='transparent' type='application/x-shockwave-flash'>"; break;	//视频
+				case 2 : $html = "<embed class='gif' src='".$this -> Gvideo($cid)."' quality='high' wmode='Opaque' width='100%' height='100%' align='middle' allowscriptaccess='always' allowfullscreen='true' mode='transparent' type='application/x-shockwave-flash'>"; break;	//视频
 				case 3 : $html = "<embed class='mp3' src='".$this -> Gmusic($cid)."' type='application/x-shockwave-flash' width='257' height='33' wmode='transparent' /> "; break;		//音乐
 			}
 		}
@@ -648,19 +602,85 @@ class Content extends Event_content
 	*/
 
 	//提交发布表单
-	public function Acon( $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label){
+	public function Acon($data=0, $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label=0){
+		$u = new Users();				
+		$t = new Title();	
+		$o = new Tool();
 
-		switch ($type) {					//判断类型，并刷新描述内容
-			case 1: $con = $imgcon; $mp3 = ''; $gif = ''; break;	//图片
-			case 2: $con = $gifcon; $img = ''; $mp3 = ''; break;	//视频
-			case 3: $con = $mp3con; $img = ''; $gif = ''; break;	//音乐
-			default: $con = $con; $img = ''; $mp3 = ''; $gif = ''; break;	//文字
+		//初始化局域计算参数
+		$cid 	= $u -> Gid().time();	//生成CID
+		$number = $u -> GTPnum() +1;	//获取户发布次数
+		$standard = $u -> GIsd();		//获取标准支付金
+		$deduct = $u -> Gsd();			//获取当前用户的基础支付金
+		$share 	= 0;					//默认分享金
+		$plus = 0; 						//默认标示类型
+
+		//遍历出必要的参数
+		$uid 	= parent::Eid();	
+		$tid 	= isset($data['tid']) ? $data['tid'] : 0;
+		$type 	= isset($data['type']) ? $data['type'] : 0;
+		$text 	= isset($data['text']) ? $data['text'] : '';
+		$cont 	= isset($data['cont']) ? $data['cont'] : '';
+		$push 	= isset($data['push']) ? $data['push'] : 0;
+		$label 	= isset($data['label']) ? $data['label'] : 0;
+
+		//如果有指定的标题
+		if($tid){				
+			$share = $t -> Gshare($tid);
+			if( $t -> IPSgold($tid)){				//如果分享金足够则支付
+				$t -> Ushare($tid);
+				$deduct = $standard - $share;
+			}elseif($t -> IPFanother($tid)){		//否则，判断如果代付足够则代付支付
+				$t -> USplus($share);
+				$deduct = $standard - $share;
+			}else{									//否则，转为普通支付（非标题支付）
+				if($u -> Ivip()){					//判断如果为会员，刷新标准金
+					$deduct = $u -> GVsd();
+				}else{
+					$deduct = $standard;
+				}
+			}
+			$t -> UUtime($tid);	//刷新标题使用时间，time()
+			$t -> Unum($tid);	//刷新标题内容数量，+1
+		
 		}
-		$cid = parent::event_addContent( $type, $tid, $con, $img, $mp3, $gif, null, $recommend, $label);
-		if($cid){
-			$u = new Users();
-			$u -> UtoL('userAdd.php?ok='.$cid);
+
+		$deduct = $number * $deduct;
+
+		//如果有推荐
+		if($push){
+			$plus = rand(60,110);				//生成内容默认金额，随机数
+			$deduct = $deduct + (100 * 0.1);		//扣除 1.00 元（当前1折）
 		}
+
+		//判断用户余额是否足够
+		if($u -> Gplus() >= $deduct){	
+			$text= $o -> Chtml($text);			//编译描述
+
+			//插入数据
+			parent::data_Addcontent(array(
+					'type' 	=> $type,
+					'cid'	=> $cid,
+					'uid'	=> $uid,
+					'tid'	=> $tid,
+					'text' 	=> $text,
+					'cont'	=> $cont,
+
+					'plus'	=> $plus,		//默认金额
+					'spend'	=> $deduct,		//消费数额（含推送费）
+					'help'	=> $share,		//标题代付数额
+					'push'	=> $push,		//是否开启了推送
+					'label'	=> $label,		//标签
+				));
+
+			//刷新发布用户信息
+			$u -> UAissue();		//刷新发布量
+			$u -> URuse();			//刷新最新发布时间
+			$u -> USplus($deduct);	//刷新余额，扣除指定金额
+		}
+
+		//发布成功后跳转
+		$u -> UtoL('userAdd.php?ok='.$cid);
 	}
 
 	//添加指定 用户UID（选填） 购买指定 内容CID 
@@ -781,7 +801,7 @@ class Content extends Event_content
 	//修改指定 内容CID 的所属标签
 	public function Ulabel($cid=0, $lid=0){
 		$value = 0;
-		if($cid && $lid){
+		if($cid){
 			$value = parent::data_update($cid, 'label', $lid);
 		}
 		return $value;
