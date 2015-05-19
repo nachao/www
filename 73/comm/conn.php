@@ -62,6 +62,28 @@
 			$u = new Users();
 			return $uid = $u -> Guid();
 		}
+
+		//获取指定的数据列表，可以遍历所需字段
+		protected function Garr($query, $funs){
+			$array = array();
+			if( !!$query && mysql_num_rows($query) > 0 ){	//判断是否有内容
+				while( $row = mysql_fetch_array($query)){	//遍历数据
+					$row = $funs($row);
+					array_push($array, $row);
+				}
+			}
+			return $array;
+		}
+
+		//判断是否有值
+		protected function Is($val ,$default=0){
+			if(isset($val) && $val){
+				$val = $val;
+			}else{
+				$val = $default;
+			}
+			return $val;
+		}
 	
 	}
 

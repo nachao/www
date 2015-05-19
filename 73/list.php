@@ -47,8 +47,6 @@
 
 
 
-
-
 ?>
 
 	<div class="container pagecon">
@@ -66,7 +64,7 @@
 	
 				<?php if($ist){ $Tv = $t -> Ginfo($tid);	//如果有指定的标题 ?>
 				<!-- 标题描述 -->
-				<div class="describe <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" >
+				<div class="describe f <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" style="width: 760px;border-right: 1px dashed #ddd;padding: 20px 30px 0 0;margin-bottom: 50px;" >
 					<a href="?tid=<?php echo $tid; ?>"><h1 class="f"><?php echo $t -> Gtype($tid).'#'.$t -> Gtitle($tid); ?></h1></a>
 					<?php if($Tv['tid'] == '291429156432'){		//指定内容播放音乐 ?>
 						<object data="./swf/dewplayer.swf" width="200" height="20" name="dewplayer" id="dewplayer" type="application/x-shockwave-flash" style="float: right;margin-top: 15px;" >
@@ -84,7 +82,7 @@
 							<?php //} } ?>
 					</p>
 					<!-- 标题列表 - 参数 -->
-					<div class="param-tag f">
+					<div class="param-tag f" style="width: 680px;">
 						<span class="creator">创建者：
 							<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $u -> Gname($Tv['userid']); ?></a>
 						</span>
@@ -110,6 +108,7 @@
 						<span class="goumai"><em><?php echo $Tv['click']; ?></em> 次买账</span>
 						<?php } ?>
 					</div>
+
 					<!-- 标题列表 - 操作 -->
 					<div class="use-btn r">
 						<?php if(($t -> INact($tid) || $t -> Itype($tid, 2)) && !$t -> Icreator($tid)){	//有效的活动或者专题 且非创建者 则可关注和取消关注 ?>
@@ -124,9 +123,24 @@
 							<?php } ?>
 						<?php } ?>
 					</div>
+
 					<div class="c"></div>
 				</div>
 				<?php } ?>
+				
+				<?php if($ist){ ?>
+				<!-- 推荐标题 -->
+				<div class="recommend r">
+					<?php foreach ($t -> Ghot($tid) as $key => $value) { ?>
+						<a class="recommend-col" href="?tid=<?php echo $value['tid']; ?>" >
+							<img src="<?php echo $u -> Gicon($value['uid']); ?>" />
+							<span><?php echo $value['title']; ?></span>
+						</a>
+					<?php } ?>
+				</div>
+				<?php } ?>
+				
+				<div class="c"></div>
 
 				<?php if($ist && !$t -> Icon($tid)){	//如果没有标题的内容则给提示 ?>
 				<!-- 无内容提示 -->

@@ -168,7 +168,7 @@
 							<div class="cont">
 
 								<?php if($v['label']){	//输出内容的标签 ?>
-									<a href="?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
+									<a href="./list.php?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
 								<?php } ?>
 
 								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
@@ -224,11 +224,6 @@
 		</div>
 	</div>
 
-	<!-- 查看大图 -->
-	<img class="artwork-image" />
-	<div class="artwork-close">°</div>
-	<div class="artwork-bg"></div>
-
 	<script type="text/javascript">
 
 		//自动排序
@@ -246,24 +241,6 @@
 		//加载更多
 		$('#loadmore').loadmore();
 
-		//查看大图
-		$('.bigimg').click(function(){
-			var bg = $('.artwork-bg').show()
-				close = $('.artwork-close').show(),
-				image = $('.artwork-image').show();
-			image.attr('src', $(this).attr('href')).css({ width: 'auto'});
-			var ww = $(window).width()-300,
-				top = $(window).scrollTop() + 50;
-			if(image.width() > ww){
-				image.width(ww);
-			}
-			close.css({ top: top, marginLeft: image.width() /2 });
-			image.css({ marginLeft: -image.width()/2, top: top });
-			return false;
-		});
-		$('.artwork-close,.artwork-bg').click(function(){
-			$('.artwork-close,.artwork-image,.artwork-bg').hide();
-		});
 
 		//自动加载
 		// $(window).scroll(function(){

@@ -156,6 +156,17 @@ class Data_title extends Config
 		return mysql_query($sql);
 	}
 
+	//获取热门且最新的指定类型的 标题列表
+	protected function data_selectHotList($data){
+		$price 	= isset($data['price']) ? $data['price'] : 1;
+		$total 	= isset($data['total']) ? $data['total'] : 1;
+		$type 	= isset($data['type']) ? $data['type'] : 1;
+		$not 	= isset($data['not']) ? $data['not'] : 0;
+		$num 	= isset($data['num']) ? $data['num'] : 7;
+		$sql = "select *  FROM `".parent::Fn()."classify` WHERE `price` > ".$price." AND `number` > ".$total." AND `type` = ".$type." AND `tid` != ".$not." ORDER BY `id` DESC LIMIT 0, ".$num;
+		return mysql_query($sql);
+	}
+
 
 
 	/********************************************
@@ -637,6 +648,16 @@ class Event_title extends Data_title
 		}
 	}
 
+	//获取从 0 到指定数值之间不重复的指定 个数 的随机数s
+	protected function event_getRand($max=7, $num=3){
+		$numbers = range (0, $max-1); 
+		//shuffle 将数组顺序随即打乱 
+		shuffle ($numbers); 
+		//array_slice 取该数组中的某一段 
+		$result = array_slice($numbers, 0, $num); 
+		return $result; 
+	}
+
 
 }
 
@@ -892,6 +913,30 @@ class Title extends Event_title
 	//获取指定 标题ID 的投资所有用户列表
 	public function Ginvest($tid=0){
 		return parent::event_getTitleInvestList($tid);
+	}
+
+	//获取最新且热门的活动标题，可以指定输出数量 和 指定不输出的标题TID
+	public function Ghot($tid=0, $num=3){
+		$value = array();
+		$query = parent::data_selectHotList(array(
+				'not'	=> $tid,
+			));
+		if($query){
+			$array = parent::Garr($query, function($row){
+					return array(
+						'tid'	=> $row['tid'],
+						'uid'	=> $row['userid'],
+						'title'	=> $row['title'],
+					);
+				});
+
+			$max = count($array);
+			$key = parent::event_getRand($max, $num);
+			for($i=0; $i<$max; $i++){
+				array_push($value, $array[$key[$i]]);
+			}
+		}
+		return $value;
 	}
 
 

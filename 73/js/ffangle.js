@@ -790,6 +790,27 @@ jQuery.fn.extend({
 			headObj.attr('n', sum).golds();
 		}
 		return sum;
+	},
+
+	//查看原图
+	lookbig: function() {
+		$(this).click(function(){
+			var bg = $('.artwork-bg').show()
+				close = $('.artwork-close').show(),
+				image = $('.artwork-image').show();
+			image.attr('src', $(this).attr('href')).css({ width: 'auto'});
+			var ww = $(window).width()-300,
+				top = $(window).scrollTop() + 50;
+			if(image.width() > ww){
+				image.width(ww);
+			}
+			close.css({ top: top, marginLeft: image.width() /2 });
+			image.css({ marginLeft: -image.width()/2, top: top });
+			return false;
+		});
+		$('.artwork-close,.artwork-bg').click(function(){
+			$('.artwork-close,.artwork-image,.artwork-bg').hide();
+		});
 	}
 
 });
@@ -1091,6 +1112,7 @@ jQuery.extend({
 			});
 		}
 	}
+
 });
 
 /*
@@ -1148,6 +1170,6 @@ ncs.pop = {
 		});
 	}
 
-	//获取表单数据
 
 }
+
