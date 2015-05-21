@@ -60,7 +60,7 @@
 											<i class="purchase">+</i><em></em>
 											<div class="c"></div>
 										</div>
-										<div class="txt txt-big" <?php if($v['types'] ==0){ echo "style='max-height: 234px;'"; } ?> >
+										<div class="txt txt-big" <?php if($v['types'] ==0){ echo "style='max-height: 234px;min-height: 234px;'"; } ?> >
 											<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
 											<div class="are"><?php echo $v['content']; ?></div>
 											<?php }else{ ?>

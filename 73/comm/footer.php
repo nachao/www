@@ -81,5 +81,14 @@
 				-->
 			</div>
 		</div>
+
+		<!-- 查看大图 -->
+		<img class="artwork-image" />
+		<div class="artwork-close">°</div>
+		<div class="artwork-bg"></div>
+
+		<script type="text/javascript">
+			$('.bigimg').lookbig();	//查看大图
+		</script>
 	</body>
 </html>

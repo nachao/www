@@ -32,7 +32,8 @@
 
 		public $Verify = 0;		//显示指定状态的内容，所有内容发布后默认显示为 0；
 
-		public $LPages = 9;		//列表页 内容单次显示（加载）内容数量
+		public $LPages = 30;		//列表页 内容单次显示（加载）内容数量
+		
 		public $UPages = 9;		//用户页 内容单次显示（加载）内容数量
 		public $TLists = 9;		//标题页 内容单次显示（加载）内容数量
 
@@ -62,10 +63,35 @@
 			$u = new Users();
 			return $uid = $u -> Guid();
 		}
+
+		//获取指定的数据列表，可以遍历所需字段
+		protected function Garr($query, $funs){
+			$array = array();
+			if( !!$query && mysql_num_rows($query) > 0 ){	//判断是否有内容
+				while( $row = mysql_fetch_array($query)){	//遍历数据
+					$row = $funs($row);
+					array_push($array, $row);
+				}
+			}
+			return $array;
+		}
+
+		//判断是否有值
+		protected function Is($val ,$default=0){
+			if(isset($val) && $val){
+				$val = $val;
+			}else{
+				$val = $default;
+			}
+			return $val;
+		}
 	
 	}
 
 
+
+	//获取配置参数
+	$cf = new Config();
 	
 
 	// echo phpinfo();

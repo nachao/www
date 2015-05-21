@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50611
-Source Host           : localhost:3306
+Source Server         : ux73
+Source Server Version : 50169
+Source Host           : ux73.gotoftp2.com:3306
 Source Database       : ux73
 
 Target Server Type    : MYSQL
-Target Server Version : 50611
+Target Server Version : 50169
 File Encoding         : 65001
 
-Date: 2015-05-07 15:01:56
+Date: 2015-05-20 15:05:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,4 +38,4 @@ CREATE TABLE `ux73_banner` (
 -- ----------------------------
 INSERT INTO `ux73_banner` VALUES ('1', '731429112068', null, '1429112068', '1', './images/1.jpg', '321427775977', '0', '3', '广告公司');
 INSERT INTO `ux73_banner` VALUES ('2', '1429112338', null, '1429112265', '1', './images/004.jpg', '0', '291429156432', '2', '游记专题');
-INSERT INTO `ux73_banner` VALUES ('3', '1429112516', null, '1429112443', '1', './images/005.jpg', '0', '271430890209', '1', '第2期活动');
+INSERT INTO `ux73_banner` VALUES ('3', '1429112516', null, '1429112443', '1', './images/008.jpg', '0', '271432097636', '1', '大鱼杯活动');

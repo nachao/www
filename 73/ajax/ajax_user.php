@@ -276,6 +276,10 @@
 		echo $tl -> Uclose($_POST['lid']);
 	}
 
+	//判断指定标题名是否被使用（有效的标题）
+	if (isset($_POST['titleNameIsDo'])){
+		echo $t -> GTname($_POST['title']) ? 1 : 0;
+	}
 
 
 ?>

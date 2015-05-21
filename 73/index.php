@@ -11,7 +11,7 @@
 	include("./comm/head.php");	
 
 	//内容参数
-	$page = 18;		//每页显示的数量
+	$page = $cf -> LPages;		//每页显示的数量
 	$norm = 1;		//内容显示最低标准（金额：0.01元为单位）
 
 	//获取标题
@@ -166,6 +166,11 @@
 								</div>
 							</div>
 							<div class="cont">
+
+								<?php if($v['label']){	//输出内容的标签 ?>
+									<a href="./list.php?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
+								<?php } ?>
+
 								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
 									<?php echo $c -> IGcontrol($v['cid']); ?>
 									<i class="purchase">+</i><em></em>
@@ -173,7 +178,7 @@
 								</div>
 
 								<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-									<div class="txt"><div class="are"><?php echo $v['content']; ?></div></div>
+									<div class="txt" <?php if($v['types'] ==0){ echo "style='max-height: 198px;'"; } ?>><div class="are"><?php echo $v['content']; ?></div></div>
 								<?php } ?>
 								
 								<div class="use">
@@ -218,6 +223,7 @@
 			</div>
 		</div>
 	</div>
+
 	<script type="text/javascript">
 
 		//自动排序
@@ -234,6 +240,7 @@
 
 		//加载更多
 		$('#loadmore').loadmore();
+
 
 		//自动加载
 		// $(window).scroll(function(){

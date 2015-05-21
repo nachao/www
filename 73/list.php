@@ -11,7 +11,7 @@
 	include("./comm/head.php");	
 
 	//内容参数
-	$page = 9;		//每页显示的数量
+	$page = $cf -> LPages;		//每页显示的数量
 	$norm = 1;		//内容显示最低标准（金额：0.01元为单位）
 
 	//获取标题
@@ -21,10 +21,10 @@
 	//初始化
 	$uid = 0;
 	$tid = 0;
+	$label = 0;
 
 	if($ist){
 		$tid = $_GET['tid'];
-		$label = 0;
 
 		if(isset($_GET['label'])){
 			$label = $_GET['label'];
@@ -47,8 +47,6 @@
 
 
 
-
-
 ?>
 
 	<div class="container pagecon">
@@ -66,7 +64,7 @@
 	
 				<?php if($ist){ $Tv = $t -> Ginfo($tid);	//如果有指定的标题 ?>
 				<!-- 标题描述 -->
-				<div class="describe <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" >
+				<div class="describe f <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" style="width: 760px;border-right: 1px dashed #ddd;padding: 20px 30px 0 0;margin-bottom: 50px;" >
 					<a href="?tid=<?php echo $tid; ?>"><h1 class="f"><?php echo $t -> Gtype($tid).'#'.$t -> Gtitle($tid); ?></h1></a>
 					<?php if($Tv['tid'] == '291429156432'){		//指定内容播放音乐 ?>
 						<object data="./swf/dewplayer.swf" width="200" height="20" name="dewplayer" id="dewplayer" type="application/x-shockwave-flash" style="float: right;margin-top: 15px;" >
@@ -78,14 +76,13 @@
 					<div class="c"></div>
 					<p><?php echo $t -> Gcontent($tid); ?></p>
 					<p>
-						<?php foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签 ?>
-						<?php if($tl -> GCtotal($value['lid'])){ ?>
-						<a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a>
-						<?php } ?>
-						<?php } ?>
+						<?php //foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签
+							//if($tl -> GCtotal($value['lid'])){ ?>
+							<!-- <a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a> -->
+							<?php //} } ?>
 					</p>
 					<!-- 标题列表 - 参数 -->
-					<div class="param-tag f">
+					<div class="param-tag f" style="width: 680px;">
 						<span class="creator">创建者：
 							<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $u -> Gname($Tv['userid']); ?></a>
 						</span>
@@ -111,6 +108,7 @@
 						<span class="goumai"><em><?php echo $Tv['click']; ?></em> 次买账</span>
 						<?php } ?>
 					</div>
+
 					<!-- 标题列表 - 操作 -->
 					<div class="use-btn r">
 						<?php if(($t -> INact($tid) || $t -> Itype($tid, 2)) && !$t -> Icreator($tid)){	//有效的活动或者专题 且非创建者 则可关注和取消关注 ?>
@@ -125,9 +123,24 @@
 							<?php } ?>
 						<?php } ?>
 					</div>
+
 					<div class="c"></div>
 				</div>
 				<?php } ?>
+				
+				<?php if($ist){ ?>
+				<!-- 推荐标题 -->
+				<div class="recommend r">
+					<?php foreach ($t -> Ghot($tid) as $key => $value) { ?>
+						<a class="recommend-col" href="?tid=<?php echo $value['tid']; ?>" >
+							<img src="<?php echo $u -> Gicon($value['uid']); ?>" />
+							<span><?php echo $value['title']; ?></span>
+						</a>
+					<?php } ?>
+				</div>
+				<?php } ?>
+				
+				<div class="c"></div>
 
 				<?php if($ist && !$t -> Icon($tid)){	//如果没有标题的内容则给提示 ?>
 				<!-- 无内容提示 -->
@@ -246,6 +259,15 @@
 								</div>
 							</div>
 							<div class="cont">
+
+								<?php if($v['label']){	//输出内容的标签 ?>
+									<?php if($label && $v['label'] == $label){	//判断是否为当前查看的标签 ?>
+									<span class="label label-act <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></span>
+									<?php }else{ ?>
+									<a href="?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
+									<?php } ?>
+								<?php } ?>
+
 								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
 									<?php echo $c -> IGcontrol($v['cid']); ?>
 									<i class="purchase">+</i><em></em>
@@ -253,7 +275,7 @@
 								</div>
 
 								<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-									<div class="txt"><div class="are"><?php echo $v['content']; ?></div></div>
+									<div class="txt" <?php if($v['types'] ==0){ echo "style='max-height: 198px;'"; } ?>><div class="are"><?php echo $v['content']; ?></div></div>
 								<?php } ?>
 								
 								<div class="use">

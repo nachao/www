@@ -92,7 +92,11 @@
 								</div>
 								<div class="link"></div>
 								<?php } ?>
-								<div class="row"><input id="titApply" class="tit" type="text" name="titles" value="" placeholder="标题名（请输入 5至30个字的标题）" /></div>
+								<div class="row">
+									<input id="titApply" class="tit" type="text" name="titles" value="" placeholder="标题名（请输入 5至30个字的标题）" />
+									<span class="row-cue"></span>
+									<a class="tip row-tip r" id="row-tit-tip" href="javascript:;" ><span></span><i></i></a>
+								</div>
 								<div class="row"><textarea id="txtApply" class="txt" name="depict" placeholder="描述（请填写 10 至 500 字的描述）" ></textarea></div>
 								<div class="row" style="margin-top: 50px;">
 									<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
@@ -230,6 +234,8 @@
 			if( b > 5 && b < 30 ){
 				a.removeClass('cue_wrong');
 			}
+		}).blur(function(){
+			titleNameIsDo();
 		});
 
 		//检测描述
@@ -258,10 +264,8 @@
 			var a = true;
 
 			//检测标题
-			if( tl < 5 || tl > 30 ){
-				t.addClass('cue_wrong').val(tv);
-				a = false;
-			}
+			titleNameIsDo();
+			a = titIs;
 
 			//检测描述
 			if( cl < 10 || cl > 500 ){
@@ -289,6 +293,54 @@
 			$("#txtApply").val( $('#reviseDepict').val() );
 		}
 
+		//判断标题是否可用
+		var titAppl = '',
+			titIs = false;
+		function titleNameIsDo(){
+			var val = $('#titApply').val().replace(/\s/g,''),
+				cue = $('#row-tit-tip');
+
+			titIs = false;
+
+			//判断标题是否为空
+			if(val == ''){
+				cue.show().find('span').html('请填写标题名！');
+				return;
+			}
+
+			//判断文本框是否有修改
+			if(titAppl == val){
+				return;
+			}
+
+			//初始化样式
+			cue.hide().find('span').html('');
+
+			//判断标题名称长度
+			if(val.length < 5){
+				cue.show().find('span').html('标题名最少五个字！');
+				return;
+			}
+			if(val.length > 30){
+				cue.show().find('span').html('标题名最多三十个字！');
+				return;
+			}
+
+			//提交数据
+			$.g({
+				name: 'titleNameIsDo',
+				data: { 'title': val },
+				result: function(msg){
+					titAppl = val;
+					if(parseInt(msg)){
+						cue.show().find('span').html('已被使用！');
+					}else{
+						titIs = true;
+						cue.show().find('span').html('可用！');
+					}
+				}
+			});
+		}
 
 
 

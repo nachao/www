@@ -50,6 +50,7 @@
 		if($depict != $info['content']){
 			$c -> Utxt($cid, $o -> Chtml($depict));		//修改描述
 		}
+		
 		//修改标签
 		if($_POST['titleLabel'] != $info['label']){
 			$c -> Ulabel($cid, $_POST['titleLabel']);
@@ -123,6 +124,7 @@
 											<div class="c"></div>
 										</div>
 										<?php } ?>
+										<div class="c"></div>
 
 										<!-- 文字 -->
 										<div class="col extent writing">
@@ -138,12 +140,12 @@
 											<div class="tip">必选要选择一张图片<i></i></div>
 											<div class="con">
 												<div id="uploadPlugIn" style="height: 600px;display: none;" ><div id="altContent"></div></div>
-												<img id="imgHeadPhoto" src="<?php echo $Rinfo['image']; ?>" />
+												<img id="imgHeadPhoto" src="<?php echo $Rinfo['cont']; ?>" />
 												<div class="c"></div>
 											</div>
 											<div class="c"></div>
 											<div class="are"><textarea id="imgDepict" class="cue" name="imgDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>
-											<input class="conts" type="hidden" value="<?php echo $Rinfo['image']; ?>" name="beforeimg" id="beforeimg" />
+											<input class="conts" type="hidden" value="<?php echo $Rinfo['cont']; ?>" name="beforeimg" id="beforeimg" />
 										</div>
 										<!-- 图片 end -->
 
@@ -159,11 +161,11 @@
 													</p>
 													<p>怎么找视频地址？不知道话，请点 <a class='co' href="#" title="" >这里</a>。</p>
 												</div>
-												<input class="txt conts" id="j-vidsrc" type="text"  name="videoAddress"  value="" placeholder="请输入视频地址，例如：www.ffangle.com/xxx.swf" />
+												<input class="txt conts" id="j-vidsrc" type="text"  name="videoAddress"  value="<?php echo $Rinfo['cont']; ?>" placeholder="请输入视频地址，例如：www.ffangle.com/xxx.swf" />
 												<div class="c"></div>
 											</div>
 											<div class="result" style="display: block;">
-												<embed id="vidembed" src="<?php echo $Rinfo['video']; ?>" type="application/x-shockwave-flash" width="100%" height="350" allowfullscreen="true" allownetworking="all" allowscriptaccess="always">
+												<embed id="vidembed" src="<?php echo $Rinfo['cont']; ?>" type="application/x-shockwave-flash" width="100%" height="350" allowfullscreen="true" allownetworking="all" allowscriptaccess="always">
 												<div class="c"></div>
 											</div>
 											<div class="are"><textarea id="imgDepict" class="cue" name="videoDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>
@@ -178,11 +180,11 @@
 													<p>当前只支持 <a href="http://www.xiami.com" title="访问此网站" target="_blank" >虾米网</a> 的音乐</p>
 													<p>不知道怎么添加音乐，请点 <a class='co' href="#" title="" >这里</a>。</p>
 												</div>
-												<input class="txt conts" id="j-mussrc" name="musicAddress" type="text"  value="<?php echo $Rinfo['music']; ?>" placeholder="请输入音乐地址，例如：www.ffangle.com/xxx.swf" />
+												<input class="txt conts" id="j-mussrc" name="musicAddress" type="text"  value="<?php echo $Rinfo['cont']; ?>" placeholder="请输入音乐地址，例如：www.ffangle.com/xxx.swf" />
 												<div class="c"></div>
 											</div>
 											<div class="result" style="display: block;">
-												<embed id="musembed" src="<?php echo $Rinfo['music']; ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent">
+												<embed id="musembed" src="<?php echo $Rinfo['cont']; ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent">
 												<div class="c"></div>
 											</div>
 											<div class="are"><textarea id="imgDepict" class="cue" name="musicDepict" placeholder="描述（可以不写）" ><?php echo $o -> Ccode($Rinfo['content'], 1); ?></textarea></div>

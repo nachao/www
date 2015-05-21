@@ -17,7 +17,24 @@
 
 	//是否提交表单
 	if(isset($_POST['submit'])){
-		$c -> Acon( $_POST['types'], $_POST['titleid'], $_POST['depict'], $_POST['beforeimg'], $_POST['imgDepict'], $_POST['music'], $_POST['musicDepict'], $_POST['video'], $_POST['videoDepict'], $_POST['recommend-sum'], $_POST['titleLabel'] );
+
+		//判断类型
+		switch ($_POST['types']) {					//判断类型，并刷新描述内容
+			case 0: $text = $_POST['depict'];		$control = '';					break;	//文字
+			case 1: $text = $_POST['imgDepict']; 	$control = $_POST['beforeimg']; break;	//图片
+			case 2: $text = $_POST['videoDepict']; 	$control = $_POST['video']; 	break;	//视频
+			case 3: $text = $_POST['musicDepict']; 	$control = $_POST['music']; 	break;	//音乐
+		}
+
+		//提交数据
+		$c -> Acon(array(
+			'type' => $_POST['types'],			//类型
+			'tid'  => $_POST['titleid'],		//标题id
+			'text' => $text,					//文本描述
+			'cont' => $control,					//控件
+			'push' => $_POST['recommend-sum'],	//是否推送(1|0)
+			'label'=> $_POST['titleLabel'],		//标签id
+		));
 	}
 
 	$addOk = 0;
@@ -107,6 +124,7 @@
 											</div>
 											<div class="c"></div>
 										</div>
+										<div class="c"></div>
 
 										<!-- 文字 -->
 										<div class="col extent writing">
@@ -217,7 +235,7 @@
 											<div id="publish-label-list">
 												<a href="javascript:;" class="publish-label-col no" id="publish-label-col-templet" tid="0" >-</a>
 											</div>
-											<input type="hidden" name="titleLabel" value="0" />
+											<input type="hidden" name="titleLabel" id="titleLabel" value="0" />
 											<div class="c"></div>
 										</div>
 
@@ -436,12 +454,12 @@
 				labelObj = null;
 			$.titleGetLebel(tid, function(arr){
 				$(arr).each(function(key, value){
-					console.log(value);
 					labelObj = labelTemp.clone().removeAttr('id').addClass('publish-label-col-temp').removeClass('no');
 					labelRange.append(labelObj);
 					labelObj.html(value.name);
+					labelObj.attr('lid', value.lid);
 					labelObj.click(function(){
-						var input = $(this).siblings('input');
+						var input = $('#titleLabel');
 						if($(this).hasClass('act')){
 							input.val(0);
 							$(this).removeClass('act');
@@ -512,9 +530,6 @@
 		//表单检测
 		function check( obj ){
 
-			//显示提交动画
-			$('.j-add-prompt').addClass('j-prompt-submit-ajax').find('*').hide();
-
 			//获取参数
 			var type = $("input[name='types']").val();
 
@@ -538,6 +553,9 @@
 				$('#tipApply').show();
 				return false;	
 			}
+
+			//显示提交动画
+			$('.j-add-prompt').addClass('j-prompt-submit-ajax').find('*').hide();
 
 		}
 		
