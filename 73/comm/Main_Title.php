@@ -77,6 +77,12 @@ class Data_title extends Config
 		$sql = "select * FROM `".parent::Fn()."classify` WHERE  `".parent::Fn()."classify`.`tid` ='".$tid."' LIMIT 1;";
 		return parent::Ais($sql);
 	}
+
+	//获取指定 标题名称 的有效标题信息
+	protected function data_selectByTitle($name){
+		$sql = "select * FROM `".parent::Fn()."classify` WHERE `title` LIKE '".$name."' AND `start` = 1";
+		return parent::Ais($sql);
+	}
 	
 	//获取 标题列表 	#开始数，页数
 	// 参数说明
@@ -915,6 +921,15 @@ class Title extends Event_title
 		return parent::event_getTitleInvestList($tid);
 	}
 
+	//获取指定 标题名称 的有效标题的全部信息
+	public function GTname($title=''){
+		$value = array();
+		if($title){
+			$value = parent::data_selectByTitle($title);
+		}
+		return $value;
+	}
+
 	//获取最新且热门的活动标题，可以指定输出数量 和 指定不输出的标题TID
 	public function Ghot($tid=0, $num=3){
 		$value = array();
@@ -941,10 +956,8 @@ class Title extends Event_title
 					array_push($array, $new);
 				}
 			}
-
-			$max = count($array);
-			$key = parent::event_getRand($max, $num);
-			for($i=0; $i<$max; $i++){
+			$key = parent::event_getRand(count($array), $num);
+			for($i=0; $i<$num; $i++){
 				array_push($value, $array[$key[$i]]);
 			}
 		}

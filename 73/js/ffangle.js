@@ -794,7 +794,9 @@ jQuery.fn.extend({
 
 	//查看原图
 	lookbig: function() {
+		var scroll = 0;
 		$(this).click(function(){
+			scroll = $(window).scrollTop();	//记录当前滚动位置
 			var bg = $('.artwork-bg').show()
 				close = $('.artwork-close').show(),
 				image = $('.artwork-image').show();
@@ -809,6 +811,7 @@ jQuery.fn.extend({
 			return false;
 		});
 		$('.artwork-close,.artwork-bg').click(function(){
+			$('html,body').scrollTop(scroll);
 			$('.artwork-close,.artwork-image,.artwork-bg').hide();
 		});
 	}
@@ -960,10 +963,11 @@ function checkCookie(name){
 
 function delCookie(name){
     var exp = new Date(); 
-    exp.setTime(exp.getTime() - 1); 
+   		exp.setTime(exp.getTime() - 1); 
     var cval=getCookie(name); 
-    if(cval!=null) 
-    	document.cookie= name + "="+cval+";expires="+exp.toGMTString(); 
+    if(cval!=null){
+    	document.cookie= name + "=;expires="+exp.toGMTString(); 
+    }
 } 
 
 
@@ -1087,17 +1091,30 @@ ncs.ajax = {
 
 jQuery.extend({
 
-	g: function(data, funs, log){
-		$.ajax({ 
-			type: "POST", 
-			url: "./ajax/ajax_user.php", 
-			data: data,
-			success: function(msg){
-				msg = msg ? msg : 'underfind';
-				log ? console.log('[73] -> '+ data +' -> '+ msg) : null;
-				funs ? funs(msg) : null;
-			}
-		});
+	g: function(data){
+		var name = data.name || false,
+			param = data.data || '0';
+
+		//遍历参数
+		var str = '', 
+			key, val;
+		for(var key in param){
+			key = key.replace(/=|'|"/g,'');
+			val = param[key].replace(/=|'|"/g,'');
+			str += key +'='+ val;
+		}
+
+		if (name){
+			param = name + "=" + new Date().getTime() + "&" + str;
+			$.ajax({ 
+				type: "POST", 
+				url: "./ajax/ajax_user.php", 
+				data: param,
+				success: function(msg){
+					data.result ? data.result(msg) : null;
+				}
+			});
+		}
 	},
 
 	//获取指定标题的全部标签

@@ -3,9 +3,6 @@
 	//调用
 	include('../comm/base.php');
 
-
-	//获取配置参数
-	$cf = new Config();
 	
 	$begin = $_POST['begin'];
 	$pages = $cf -> LPages;
@@ -48,6 +45,20 @@
 
 	<?php foreach ($list as $k => $v) {	//输出内容，或者指定标题的内容 		?>
 		<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+
+			<!-- 标示 -->
+			<?php if($v['effects'] == 1){	//如果是顶 ?>
+				<div class="effects effects-very" alt="作者顶贴" ></div>
+			<?php } ?>
+
+			<?php if($v['effects'] == 2){	//如果是推荐 ?>
+				<div class="effects effects-recommend" alt="题主推荐" ></div>
+			<?php } ?>
+
+			<?php if($ist && isset($fcid) && $fcid == $v['cid']){	//如果是标题第一名的内容 ?>
+				<div class="effects effects-first" alt="活动第一名" ></div>
+			<?php } ?>
+			
 			<div class="head">
 
 				<?php if(!$ist){	//判断是否有标题，则不显示标题 ?>
