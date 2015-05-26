@@ -464,9 +464,9 @@ jQuery.fn.extend({
 				}else{
 					if(obj.next('i').length){
 						obj.html(val.num);
-						obj.next('i').html(val.unit+ '分');
+						obj.next('i').html(val.unit+ ' 分');
 					}else{
-						obj.html(val.num + (val.unit +'分'));
+						obj.html(val.num + (val.unit +' 分'));
 					}
 				}
 			}

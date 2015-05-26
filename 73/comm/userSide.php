@@ -7,7 +7,6 @@
 		// $u -> UtoL();
 	}
 
-
 ?>
 
 	<?php if(!$u -> Guid()){ ?>
@@ -105,6 +104,36 @@
 			<div class="c"></div>
 		</div>
 	<?php } ?>
+	
+	<!-- 我的金额记录 -->
+	<div class="commarea sideFondertit">
+		<div class="content">
+			<div class="head">
+				<div class="tit f"><em>金额记录</em><i>Fonder Titles</i></div>
+				<div class="gap"><i></i></div>
+			</div>
+			<div class="sumLog">
+
+				<?php foreach ($u -> Glog() as $key => $value) {
+					if($value['pay']){
+						$val = (intval($value['pay']) + 20);
+						$val = $val > 100 ? 100 : $val;
+						$val = $val/100;
+						echo '<div class="item pay" ><i style="opacity: '.$val.';" ></i><span class="tip"><i></i>'.$key.'<br />支出：<span class="golds" n="'.$value['pay'].'"></span></span></div>';
+					}else{
+						echo '<div class="item"><span class="tip"><i></i>'.$key.'</span></div>';
+					}
+				} ?>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			<div class="c"></div>
+		</div>
+		<div class="bottomSide"></div>
+	</div>
 	
 	<?php if($ect != "message" && 0){ //在留言板不显示此内容 ?>
 		<!-- 最新留言 -->
