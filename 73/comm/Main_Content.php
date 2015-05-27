@@ -39,10 +39,10 @@ class Data_content extends Comm_content
 	}
 
 	//添加一条用户评论记录
-	protected function data_addBuyLog($uid, $cid){
-		$sql = "insert INTO  `".parent::Mn()."`.`".parent::Fn()."logs_purchase` (`id` ,`time`, `uid`, `cid`)VALUES (NULL , ".time().", ".$uid.", ".$cid.") ;";
-		return mysql_query($sql);
-	}
+	// protected function data_addBuyLog($uid, $cid){
+	// 	$sql = "insert INTO  `".parent::Mn()."`.`".parent::Fn()."logs_purchase` (`id` ,`time`, `uid`, `cid`)VALUES (NULL , ".time().", ".$uid.", ".$cid.") ;";
+	// 	return mysql_query($sql);
+	// }
 
 
 
@@ -97,13 +97,6 @@ class Data_content extends Comm_content
 	// 	return mysql_query($sql);
 	// }
 	
-	//获取指定 用户UID 是否购买指定的 内容(CID)
-	protected function data_userIsBuy($uid=0, $cid=0){
-		$sql = "select * FROM  `".parent::Fn()."logs_purchase` WHERE  `cid` =".$cid." AND `uid` =".$uid.";";
-		return parent::Ais($sql);
-		return $row[0];
-	}
-	
 	//获取内容的总数量
 	protected function data_selectCount($norm=0, $uid=0, $tid=0){
 		$add = "";
@@ -117,7 +110,13 @@ class Data_content extends Comm_content
 		$row = parent::Ais($sql);
 		return $row[0];
 	}
-
+	
+	//获取指定 用户UID 是否购买指定的 内容(CID)
+	protected function data_userIsBuy($uid=0, $cid=0){
+		$sql = "select * FROM  `".parent::Fn()."logs_purchase` WHERE  `source_id` =".$cid." AND `out_uid` =".$uid.";";
+		return parent::Ais($sql);
+		return $row[0];
+	}
 
 
 	/********************************************
@@ -277,13 +276,13 @@ class Event_content extends Data_content
 	* 新增 add
 	*/
 
-	//添加指定 用户UID（选填，默认当前登录用户） 的评论指定 内容CID 的记录
-	protected function event_addBuyLog($cid=0, $uid=0){
-		$uid = $uid ? $uid : parent::Eid();
-		if($cid){
-			return parent::data_addBuyLog($uid, $cid);
-		}
-	}
+	// //添加指定 用户UID（选填，默认当前登录用户） 的评论指定 内容CID 的记录
+	// protected function event_addBuyLog($cid=0, $uid=0){
+	// 	$uid = $uid ? $uid : parent::Eid();
+	// 	if($cid){
+	// 		return parent::data_addBuyLog($uid, $cid);
+	// 	}
+	// }
 
 
 
@@ -674,9 +673,9 @@ class Content extends Event_content
 				));
 
 			//刷新发布用户信息
-			$u -> UAissue();		//刷新发布量
-			$u -> URuse();			//刷新最新发布时间
-			$u -> USplus($deduct);	//刷新余额，扣除指定金额
+			$u -> UAissue();					//刷新用户发布量
+			$u -> URuse();						//刷新用户最新发布时间
+			$u -> USplus($deduct, 'ccid', $cid);	//刷新用户余额，扣除指定金额
 		}
 
 		//发布成功后跳转
@@ -693,18 +692,20 @@ class Content extends Event_content
 			$num = 2 *5;			//作者默认收获，0.02 元吗，测试期间三倍收入。
 			if($u -> Guid()){					//登录用户才能操作
 				if($u -> Gplus() >= 1){			//如果用户金额足够
-					$u -> UAclick();				//用户刷新点评量
-					$u -> USplus();					//用户刷新的余额
-					parent::event_addBuyLog($cid);	//用户添加的购买记录
+
+					$u -> UAclick();					//用户刷新点评量
+					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
+					
 					$tid = $this -> Gtid($cid);
 					if($tid){
 						$num = $num -1;			//作者刷新获得的金额，分享 1分给标题
 						$t -> UAda($tid);		//标题刷新的金池，默认收入 1 分。
 						$t -> Ubuy($tid);		//标题刷新的购买次数
 					}
-					$u -> UAplus($num, $this -> Gauthor($cid));	//作者刷新的余额
+					$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
+
 					$this -> Uplus($cid, $num);	//刷新内容金额
-					$this -> UAclick($cid);	//内容刷新购买次数
+					$this -> UAclick($cid);		//内容刷新购买次数
 				}
 			}
 			$value = $num;//$cid;
@@ -768,7 +769,7 @@ class Content extends Event_content
 				$t -> Unum($tid, -1);						//刷新标题的内容数量
 			}
 			$value = $this -> GPgold($cid);
-			$u -> UAplus($value);	//返还发布所消耗的支付金
+			$u -> UAplus($value, 'dcid', $cid);	//返还发布所消耗的支付金
 		}
 		return $value;
 	}

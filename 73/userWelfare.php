@@ -45,7 +45,7 @@
 									</div>
 									<div class="text"><?php echo $BLv['depict']; ?></div>
 									<div class="right">
-										<div class="price"><span><em><?php echo sprintf("%.2f", $BLv['welfare']/100); ?></em> 元</span></div>
+										<div class="price"><span><em class="golds"><?php echo $BLv['welfare']; ?></em> 分</span></div>
 										<?php if($BLv['icon'] != "new" ){ //如果是新手福利则进行判断，用户条件是否足够 ?>
 										<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" title="">领取</a></div>
 										<?php }else if($u -> Gplus() < 10){ ?>
