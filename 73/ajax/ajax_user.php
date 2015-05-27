@@ -282,4 +282,10 @@
 	}
 
 
+	//获取用户的最近金额记录
+	if ( isset($_POST['UGlog']) ){
+		echo json_encode($u -> Glog());
+	}
+
+
 ?>

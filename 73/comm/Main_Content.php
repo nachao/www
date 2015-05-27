@@ -673,9 +673,9 @@ class Content extends Event_content
 				));
 
 			//刷新发布用户信息
-			$u -> UAissue();		//刷新发布量
-			$u -> URuse();			//刷新最新发布时间
-			$u -> USplus($deduct);	//刷新余额，扣除指定金额
+			$u -> UAissue();					//刷新用户发布量
+			$u -> URuse();						//刷新用户最新发布时间
+			$u -> USplus($deduct, 'ccid', $cid);	//刷新用户余额，扣除指定金额
 		}
 
 		//发布成功后跳转
@@ -694,16 +694,15 @@ class Content extends Event_content
 				if($u -> Gplus() >= 1){			//如果用户金额足够
 
 					$u -> UAclick();					//用户刷新点评量
-					$u -> USplus();						//用户刷新的余额
-					$u -> ASpay($uid, 'cid', $cid, 1);	//用户记录消费
-
+					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
+					
 					$tid = $this -> Gtid($cid);
 					if($tid){
 						$num = $num -1;			//作者刷新获得的金额，分享 1分给标题
 						$t -> UAda($tid);		//标题刷新的金池，默认收入 1 分。
 						$t -> Ubuy($tid);		//标题刷新的购买次数
 					}
-					$u -> UAplus($num, $this -> Gauthor($cid));	//作者刷新的余额
+					$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
 
 					$this -> Uplus($cid, $num);	//刷新内容金额
 					$this -> UAclick($cid);		//内容刷新购买次数
@@ -770,7 +769,7 @@ class Content extends Event_content
 				$t -> Unum($tid, -1);						//刷新标题的内容数量
 			}
 			$value = $this -> GPgold($cid);
-			$u -> UAplus($value);	//返还发布所消耗的支付金
+			$u -> UAplus($value, 'dcid', $cid);	//返还发布所消耗的支付金
 		}
 		return $value;
 	}

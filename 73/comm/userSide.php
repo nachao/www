@@ -114,21 +114,33 @@
 			</div>
 			<div class="sumLog">
 
-				<?php foreach ($u -> Glog() as $key => $value) {
-					if($value['pay']){
+				<?php foreach ($u -> Glog() as $key => $value) {	//输出用户最近三十天的收支记录
+					if ( $value['pay'] ) {
+						$pay = '<br />支出：<span class="golds" n="'.$value['pay'].'"></span><i></i>';
+					}else{
+						$pay = '';
+					}
+					if ( $value['income'] ) {
+						$income = '<br />收入：<span class="golds" n="'.$value['income'].'"></span><i></i>';
+					}else{
+						$income = '';
+					}
+					if ( $value['pay'] > $value['income'] ) {
+						$type = 'pay';
 						$val = (intval($value['pay']) + 20);
+					}else{
+						$type = 'income';
+						$val = (intval($value['income']) + 20);
+					}
+					if ( $value['pay'] || $value['income'] ) {
 						$val = $val > 100 ? 100 : $val;
 						$val = $val/100;
-						echo '<div class="item pay" ><i style="opacity: '.$val.';" ></i><span class="tip"><i></i>'.$key.'<br />支出：<span class="golds" n="'.$value['pay'].'"></span></span></div>';
+						echo '<div class="item '.$type.'" ><div class="con" style="opacity: '.$val.';" ></div><span class="tip"><em></em>'.$key.$income.$pay.'</span></div>';
 					}else{
 						echo '<div class="item"><span class="tip"><i></i>'.$key.'</span></div>';
 					}
 				} ?>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
+
 			</div>
 			<div class="c"></div>
 		</div>

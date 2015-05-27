@@ -151,7 +151,7 @@ jQuery.fn.extend({
 				var loop;
 
 				//获取当前浏览用户的余额
-				var userGold = parseInt($('#userGold').val());
+				var userGold = $(window).updateSum();
 
 				//余额不足提示
 				function tipGif(){
@@ -167,8 +167,7 @@ jQuery.fn.extend({
 				if( userGold > 0 ){
 					
 					//刷新用户金币数量
-					$('#userGold').val(userGold-1);
-					$('#headGold').html(userGold-1).golds();
+					$(window).updateSum(-1);
 
 					col.picture();	//查看图片事件
 					col.writing();	//查看文本事件
@@ -404,10 +403,10 @@ jQuery.fn.extend({
 			}
 
 			//如果小于 千位
-			if( val < 1000 ){
+			if( val < 10000 ){
 
 				val = {
-						num: (val/100).toFixed(2),
+						num: dh(val),
 						unit: ''
 					}
 
@@ -419,22 +418,22 @@ jQuery.fn.extend({
 				//如果是 万位
 				if( len > 10 ){
 					val = {
-						num: dh((val/10000000000).toFixed(2)),
+						num: dh((val/100000000).toFixed(2)),
 						unit: '亿'
 					}
 				}else if( len > 9 ){
 					val = {
-						num: dh((val/1000000000).toFixed(2)),
+						num: dh((val/10000000).toFixed(2)),
 						unit: '千万'
 					}
-				}else if( len > 6 ){
+				}else if( len >= 5 ){
 					val = {
-						num: dh((val/1000000).toFixed(2)),
+						num: dh((val/10000).toFixed(2)),
 						unit: '万'
 					}
 				}else{
 					val = {
-						num: dh((val/100).toFixed(2)),
+						num: dh(val),
 						unit: ''
 					}
 				}
@@ -442,19 +441,23 @@ jQuery.fn.extend({
 
 			//加逗号
 			function dh( val ){
-				var arr = String(val).split('.'),
-					len = arr[0].length-1,
+				var arr = String(val),
+					len = arr.length-1,
 					str = '';
 
-				//遍历
-				for( var i=len; i>=0; i-- ){
-					if( i!=len && (len-i)%3 == 0 ){
-						str = arr[0][i] + ',' + str;
-					}else{
-						str = arr[0][i] + str;
+				if(arr.indexOf('.') && arr.split('.')[0].length <= 3){
+					return val;
+				}else{
+					//遍历
+					for( var i=len; i>=0; i-- ){
+						if( i!=len && (len-i)%3 == 0 ){
+							str = arr[i] + ',' + str;
+						}else{
+							str = arr[i] + str;
+						}
 					}
+					return str;
 				}
-				return str +'.'+ arr[1];
 			}
 
 			//设置
@@ -463,10 +466,10 @@ jQuery.fn.extend({
 					obj.val(val.num + (val.unit?val.unit:''));
 				}else{
 					if(obj.next('i').length){
-						obj.html(val.num);
-						obj.next('i').html(val.unit+ ' 分');
+						obj.html(val.num + ' ');
+						obj.next('i').html(val.unit+ '分');
 					}else{
-						obj.html(val.num + (val.unit +' 分'));
+						obj.html(val.num  + ' ' + (val.unit));
 					}
 				}
 			}
@@ -676,6 +679,7 @@ jQuery.fn.extend({
 
 	//刷新页面用户金额 *******************************************************
 	updateSum: function(val){
+		val = val ? val : 0;
 
 		//获取元素
 		var sideobj = $('#userInfoGold'),
@@ -694,6 +698,8 @@ jQuery.fn.extend({
 		//侧栏
 		sideobj.attr('n', number);
 		sideobj.golds();
+
+		return number;
 	},
 
 	//验证账号和密码 *******************************************************
@@ -1128,6 +1134,18 @@ jQuery.extend({
 				}
 			});
 		}
+	},
+
+
+	//获取用户的金额记录
+	UGlog: function(uid){
+		uid = uid ? uid : 0;
+		$.g({
+			name: 'UGlog',
+			result: function(data){
+				console.log(data);
+			}
+		});
 	}
 
 
