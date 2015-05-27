@@ -278,7 +278,8 @@
 
 	//判断指定标题名是否被使用（有效的标题）
 	if (isset($_POST['do_title'])){
-		echo $t -> GTname($_POST['name']) ? 1 : 0;
+		$info = $t -> GTname($_POST['name']);
+		print_r($info['id']);
 	}
 
 

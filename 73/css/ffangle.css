@@ -772,6 +772,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .applyTitle .head .tit em{ background: url(../imgs/sideSupport_headIcon.gif) no-repeat 0 center;padding-left: 38px; }
 .applyTitle .head .gap i{ width: 28px; }
 .applyTitle .formlist{ margin-top: 30px;padding-bottom: 10px;position: relative; }
+.applyTitle .formlist .parameter{ display: none; }
 .applyTitle .formlist .row{ margin-top: 20px;min-height: 35px;width: 100%;position: relative; }
 .applyTitle .formlist .row .radio{ display: inline-block;border-radius: 3px;overflow: hidden;padding-left: 1px;float: left; }
 .applyTitle .formlist .row .radio label,.applyTitle .formlist .row .radio .names{ height: 33px;line-height: 33px; border: 1px solid #ddd;margin-left: -1px;float: left;background: #f6f6f6;cursor: pointer;color: #666;text-align: center;width: 80px; }
@@ -786,14 +787,15 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .applyTitle .formlist .row .radio .act em{ color: white; }
 .applyTitle .formlist .row .radio .act:hover{ border-color: #e74c3c;color: white; }
 .applyTitle .formlist .row .tit{ height: 33px;background: #f6f6f6 url(../imgs/tagtag.png) no-repeat 10px center;width: 450px;padding: 0 10px 0 35px;border: 1px solid #e4e6e8;border-radius: 2px;color: #444;font-size: 13px; }
-.applyTitle .formlist .row .tit:focus{ background-color: white; }
+.applyTitle .formlist .row .tit:focus{ background-color: white;box-shadow: 0 0 10px #e4e6e8; }
 .applyTitle .formlist .row .txt{ display: block;padding: 6px 10px 6px 35px;line-height: 22px;height: 145px;background: #f6f6f6 url(../imgs/tagJianjie.png) no-repeat 10px 9px;border: 1px solid #e4e6e8;border-radius: 2px;width: 660px;resize: vertical;font-size: 13px;color: #666; }
+.applyTitle .formlist .row .txt:focus{ background-color: white;box-shadow: 0 0 10px #e4e6e8; }
 .applyTitle .formlist .row .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
 .applyTitle .formlist .row .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px;color: white;cursor: pointer; }
 .applyTitle .formlist .row .sub:hover{ background: #ca2d1d; }
-.applyTitle .formlist .row .tag{ line-height: 35px; }
+.applyTitle .formlist .row .tag{ line-height: 35px;height:35px;position: relative; }
 .applyTitle .formlist .row .tag input{ color: #e74c3c;font-size: 30px;font-family: Arial;width: 100px;display: inline-block; }
-.applyTitle .formlist .row .tag em{ display: none; }
+.applyTitle .formlist .row .tag i{ position: absolute;right: 0px;top: 0px;height: 35px;line-height: 50px; }
 .applyTitle .formlist .row .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 2px 5px;position: absolute;top: -35px;left: 0px;display: none;cursor: default; }
 .applyTitle .formlist .row .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 40px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #bbb; border-top-color: transparent; border-left-color: transparent;  }
 .applyTitle .formlist .link{ width: 100%;height: 0px;overflow: hidden;border-top: 1px dashed #eee;margin: 20px 0 10px; }
@@ -803,7 +805,11 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* 标题申请页 - 浮动提示 */
 .applyTitle .formlist .row .row-tip{ padding: 9px 18px;top: 0px;left: 510px; }
-.applyTitle .formlist .row .row-tip i{ left: -4px;top: 50%;bottom: 0px;border-left-color: #bbb;border-right-color: transparent;margin-top: -4px; }
+.applyTitle .formlist .row .row-tip i{ left: -4px;top: 50%;bottom: 0px;border-color: #bbb;margin-top: -4px; }
+.applyTitle .formlist .row .row-depict-tip{ top: auto;left: auto;bottom: -43px;right: 0px; }
+.applyTitle .formlist .row .row-depict-tip i{ left: 50%;top: -4px;margin: 0 0 0 -4px; }
+.applyTitle .formlist .row .row-sum-tip{ left: auto;top: 0px;right: 170px; }
+.applyTitle .formlist .row .row-sum-tip i{ left: auto;right: -4px; }
 
 /* 标题页 - 申请页面 - 说明 */
 .applyTitleP{ margin-top: 30px; }
@@ -1608,7 +1614,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .sumLog .item .tip{ display: inline-block;width: 100px;height: auto;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 2px 5px;position: absolute;top: 28px;left: 50%;margin-left: -50px; display: none;cursor: default;z-index: 3; }
 .sumLog .item .tip em{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;top: -3px;left: 48px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 3px solid #bbb;  }
 .sumLog .item .tip i{ color: white; }
-.sumLog .pay .con{ background: #d82425;display: inline-block;width: 100%;height: 100%;float: left; }
+.sumLog .pay .con{ background: #e74c3c;display: inline-block;width: 100%;height: 100%;float: left; }
 .sumLog .income .con{ background: #5e9e2e;display: inline-block;width: 100%;height: 100%;float: left; }
 .sumLog .item:hover{ margin: 0px;width: 38.7px;height: 22px; }
 .sumLog .item:hover .tip{ display: inline-block; }

@@ -908,18 +908,18 @@ class Users extends Event_user
 		$uid = $uid ? $uid : $this -> Guid();
 
 		$day = 24 *60 *60;
-		$start = strtotime(date('Y-m-d',time())) + $day;
+		$begin = strtotime(date('Y-m-d',time())) + $day;
 		$time = 0;
 
 		$arr = array();
 		$key = '';
 
 		for($i=0; $i<=31; $i++){
-			$time = $start - $day * $i;
-			$key = date('Y-m-d', $time-1);//.' = '. ($time - 1) .' ~ '. ($time - $day) .'<br />';
+			$time = $begin - $day * $i;
+			$key = date('Y-m-d', $time-1);
 			$start = $time-$day;
-			$end = $time-1;
-			
+			$end = $time -1;
+
 			$arr[$key]['pay'] = parent::data_selectSumlog($uid, $start, $end);			//获取用户指定天数的支出总和
 			$arr[$key]['income'] = parent::data_selectSumlog($uid, $start, $end, 1);	//获取用户指定天数的收入总和
 		}
@@ -1216,6 +1216,9 @@ class Users extends Event_user
 			$in_uid = 0;
 		}
 		if($source == 'csid'){	//购买徽章内容
+			$in_uid = 0;
+		}
+		if($source == 'ctid'){	//创建标题
 			$in_uid = 0;
 		}
 		parent::data_addSumLog($in_uid, $uid, $source, $source_id, 0, $sum);
