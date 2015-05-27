@@ -1,6 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
+<<<<<<< HEAD
 Source Server         : localhost
 Source Server Version : 50611
 Source Host           : localhost:3306
@@ -11,6 +12,18 @@ Target Server Version : 50611
 File Encoding         : 65001
 
 Date: 2015-05-21 15:04:30
+=======
+Source Server         : ux73
+Source Server Version : 50169
+Source Host           : ux73.gotoftp2.com:3306
+Source Database       : ux73
+
+Target Server Type    : MYSQL
+Target Server Version : 50169
+File Encoding         : 65001
+
+Date: 2015-05-22 21:21:30
+>>>>>>> 22d1fbeec651a1ccd690a68550ffc1e56515afeb
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +41,11 @@ CREATE TABLE `ux73_label` (
   `status` int(1) DEFAULT '1' COMMENT '状态：0=关闭；1=开启',
   `name` varchar(100) DEFAULT NULL COMMENT '标签名',
   PRIMARY KEY (`id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+=======
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+>>>>>>> 22d1fbeec651a1ccd690a68550ffc1e56515afeb
 
 -- ----------------------------
 -- Records of ux73_label
@@ -44,4 +61,9 @@ INSERT INTO `ux73_label` VALUES ('63', '14315388316', '101427698727', '291431350
 INSERT INTO `ux73_label` VALUES ('64', '14315388386', '101427698727', '291431350032', '1431538838', '1431538857', '1');
 INSERT INTO `ux73_label` VALUES ('65', '14315388446', '101427698727', '291431350032', '1431538844', '1', '徒搭去圣地 - （下）');
 INSERT INTO `ux73_label` VALUES ('66', '14315388496', '101427698727', '291431350032', '1431538849', '1', '转山转水只为你');
+<<<<<<< HEAD
 INSERT INTO `ux73_label` VALUES ('67', '14315388596', '101427698727', '291431350032', '1431538859', '1', '朝圣，梅里');
+=======
+INSERT INTO `ux73_label` VALUES ('67', '14315388596', '101427698727', '291431350032', '1431538859', '1432192038', '朝圣，梅里');
+INSERT INTO `ux73_label` VALUES ('68', '14321920446', '101427698727', '291431350032', '1432192044', '1', '最后的香格里拉 （下）');
+>>>>>>> 22d1fbeec651a1ccd690a68550ffc1e56515afeb

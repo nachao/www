@@ -62,6 +62,7 @@
 										<span class="names s1">选择类型</span>
 										<label class="act"><input type="radio" name="types" value="1" checked />活动</label>
 										<label><input type="radio" name="types" value="2" />专题</label>
+										<label><input type="radio" name="types" value="3" />任务</label>
 										<input id="typesVal" type="hidden" value="0" />		
 									</div>
 								</div>
@@ -195,14 +196,22 @@
 
 		//选择类型
 		$("input[name='types']").click(function(){
+			var type = parseInt($(this).val());
 
 			//选择活动
-			if( parseInt($(this).val()) == 1 ){
+			if ( type == 1 ) {
 				$('#activity').show();
 				amount();	//合计
+			}
 			
 			//选择专题
-			}else{
+			if ( type == 2 ) {
+				$('#activity').hide();
+				amount(100);	//合计
+			}
+			
+			//选择任务
+			if ( type == 3 ) {
 				$('#activity').hide();
 				amount(100);	//合计
 			}
@@ -235,7 +244,7 @@
 				a.removeClass('cue_wrong');
 			}
 		}).blur(function(){
-			titleNameIsDo();
+			doTitle();
 		});
 
 		//检测描述
@@ -255,32 +264,40 @@
 				c = $('#txtApply');
 
 			//获取参数
-			var tv = t.val().replace(/\s/g,''),
-				tl = tv.length,
-				cv = c.val().replace(/\s/g,''),
+			var cv = c.val().replace(/\s/g,''),
 				cl = cv.length;
 
 			//初始化参数
 			var a = true;
 
 			//检测标题
-			titleNameIsDo();
-			a = titIs;
+			doTitle(function(is){
+				if ( is ) {
+					titleTip('可用！');
+					console.log(1111);
+				}else{
+					titleTip('已被使用！');
+				}
+			});
+			// a = titIs;
 
 			//检测描述
-			if( cl < 10 || cl > 500 ){
-				c.addClass('cue_wrong').val(cv);
-				a = false;
-			}
+			// if( cl < 10 || cl > 500 ){
+			// 	c.addClass('cue_wrong').val(cv);
+			// 	a = false;
+			// }
+
+			// console.log(a);
 
 			//检测余额是否足够
-			if( parseInt($('#userGold').val()) < parseInt($('#totalTote').attr('tote')) ){
-				$('#tipApply').show();
-				a = false;
-			}
+			// if( parseInt($('#userGold').val()) < parseInt($('#totalTote').attr('tote')) ){
+			// 	$('#tipApply').show();
+			// 	a = false;
+			// }
 
+					console.log(222.);
 			//返回
-			return a; 
+			return false; 
 		}
 
 
@@ -293,51 +310,67 @@
 			$("#txtApply").val( $('#reviseDepict').val() );
 		}
 
+		//申请页标题提示
+		function titleTip(value){
+			var tip = $('#row-tit-tip'),
+				cue = tip.find('span').html('');
+			if( value ){
+				tip.show();
+				cue.html(value);
+			}else{
+				tip.hide();
+			}
+			
+		}
+
 		//判断标题是否可用
 		var titAppl = '',
 			titIs = false;
-		function titleNameIsDo(){
-			var val = $('#titApply').val().replace(/\s/g,''),
-				cue = $('#row-tit-tip');
 
-			titIs = false;
+		function doTitle(funs){
+			var val = $('#titApply').val().replace(/\s/g,'');
 
 			//判断标题是否为空
-			if(val == ''){
-				cue.show().find('span').html('请填写标题名！');
+			if( val == '' ){
+				titleTip('请填写标题名！');
+				funs(false);
 				return;
 			}
 
 			//判断文本框是否有修改
-			if(titAppl == val){
+			if( titAppl == val ){
+				funs(false);
 				return;
 			}
-
-			//初始化样式
-			cue.hide().find('span').html('');
 
 			//判断标题名称长度
-			if(val.length < 5){
-				cue.show().find('span').html('标题名最少五个字！');
+			if( val.length < 5 ){
+				titleTip('标题名最少五个字！');
+				funs(false);
 				return;
 			}
-			if(val.length > 30){
-				cue.show().find('span').html('标题名最多三十个字！');
+			if( val.length > 30 ){
+				titleTip('标题名最多三十个字！');
+				funs(false);
 				return;
 			}
 
 			//提交数据
 			$.g({
-				name: 'titleNameIsDo',
-				data: { 'title': val },
+				name: 'do_title',
+				data: { 
+					'name': val 
+				},
 				result: function(msg){
-					titAppl = val;
-					if(parseInt(msg)){
-						cue.show().find('span').html('已被使用！');
-					}else{
-						titIs = true;
-						cue.show().find('span').html('可用！');
-					}
+					funs ? funs(msg) : null;
+					// console.log(fun);
+					// titAppl = val;
+					// if(!!parseInt(msg)){
+					// 	cue.show().find('span').html('已被使用！');
+					// }else{
+					// 	titIs = true;
+					// 	cue.show().find('span').html('可用！');
+					// }
 				}
 			});
 		}

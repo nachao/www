@@ -1130,7 +1130,84 @@ jQuery.extend({
 		}
 	}
 
+
+
+
 });
+
+
+/**
+@ NA模块化
+@ 说明：na 为全局对象实现 mvc 分层
+@ m: 数据层;	v: 视图层;	c: 逻辑层
+**/
+window.na = {};
+
+
+
+//=======================
+// [na.m] - 数据层
+//====
+window.na.m = {};
+
+// [na.m] - 获取 Ajax 数据
+window.na.m.get = function(url, fun){
+	var name = data.name || false,
+		param = data.data || '0';
+
+	//遍历参数
+	var str = '', 
+		key, val;
+	for(var key in param){
+		key = key.replace(/=|'|"/g,'');
+		val = param[key].replace(/=|'|"/g,'');
+		str += key +'='+ val;
+	}
+
+	if (name){
+		param = name + "=" + new Date().getTime() + "&" + str;
+		$.ajax({ 
+			type: "GET", 
+			url: "./ajax/ajax_user.php", 
+			data: param,
+			success: function(msg){
+				fun ? fun(msg) : null;
+			}
+		});
+	}
+}
+
+// [na.m] - 设置 Ajax 数据
+window.na.m.post = function(url, fun){
+	var name = data.name || false,
+		param = data.data || '0';
+
+	//遍历参数
+	var str = '', 
+		key, val;
+	for(var key in param){
+		key = key.replace(/=|'|"/g,'');
+		val = param[key].replace(/=|'|"/g,'');
+		str += key +'='+ val;
+	}
+
+	if (name){
+		param = name + "=" + new Date().getTime() + "&" + str;
+		$.ajax({ 
+			type: "POST", 
+			url: "./ajax/ajax_user.php", 
+			data: param,
+			success: function(msg){
+				fun ? fun(msg) : null;
+			}
+		});
+	}
+}
+
+
+
+
+
 
 /*
 * name: 弹出框
