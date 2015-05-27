@@ -68,6 +68,12 @@ class Data_user extends Config
 	}
 
 
+	//添加用户金额记录
+	protected function data_addSumLog($in_uid=0, $out_uid=0, $source='-', $source_id=0, $types=1, $sum=0){
+		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_purchase` (`id`, `time`, `in_uid`, `out_uid`, `source`, `source_id`, `types`, `sum`) VALUES (NULL, '".time()."', '".$in_uid."', '".$out_uid."', '".$source."', '".$source_id."', '".$types."', '".$sum."');";
+		return mysql_query($sql);
+	}
+
 
 	/********************************************
 	* 创建
@@ -187,6 +193,12 @@ class Data_user extends Config
 	}
 
 
+	//获取指定 用户UID 的指定 时间段TIME 内容的指定 类型TYPE 的变动总金额
+	protected function data_selectSumlog($uid=0, $start=0, $end=0, $type=0){
+		$sql = "SELECT sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND  `out_uid` = ".$uid." AND `types` = ".$type." LIMIT 1";
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
+	}
 
 
 	/********************************************
@@ -886,6 +898,27 @@ class Users extends Event_user
 	}
 
 
+	//获取指定用户最近30天金额变动记录
+	public function Glog($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+
+		$day = 24 *60 *60;
+		$start = strtotime(date('Y-m-d',time())) + $day;
+		$time = 0;
+
+		$arr = array();
+		$key = '';
+
+		for($i=0; $i<=31; $i++){
+			$time = $start - $day * $i;
+			$key = date('Y-m-d', $time-1);//.' = '. ($time - 1) .' ~ '. ($time - $day) .'<br />';
+
+			//获取用户指定天数的支出总和
+			$arr[$key]['pay'] = parent::data_selectSumlog($uid, $time-$day, $time-1);
+		}
+		return $arr;
+	}
+
 
 	/********************************************
 	* 判断 is
@@ -1145,6 +1178,26 @@ class Users extends Event_user
 			$value = parent::event_addFeedback($u -> Guid(), $txt); 
 		}
 		return $value;
+	}
+
+	//添加一条用户金额收入记录
+	public function ASincome($uid, $source, $source_id, $sum){
+		parent::data_addSumLog($uid, 0, $source, $source_id, 1, $sum);
+	}
+
+	//添加一条用户金额支出记录
+	public function ASpay($uid, $source, $source_id, $sum){
+		$t = new Title();
+		$t = new Content();
+
+		//获取收入用户
+		if($source == 'tid'){
+			$in_uid = $t -> Gcreator($source_id);
+		}
+		if($source == 'cid'){
+			$in_uid = $t -> Gauthor($source_id);
+		}
+		parent::data_addSumLog($in_uid, $uid, $source, $source_id, 0, $sum);
 	}
 
 

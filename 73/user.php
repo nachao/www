@@ -9,6 +9,9 @@
 
 	//引用样式头部
 	include("./comm/head.php");		
+
+
+	// echo strtotime();
 ?>
 
 	<div class="container pagecon">

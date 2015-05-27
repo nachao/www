@@ -167,7 +167,7 @@
 							</div>
 							<div class="cont">
 
-								<?php if($v['label']){	//输出内容的标签 ?>
+								<?php if($v['label']){	//输出内容的标签  ?>
 									<a href="./list.php?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
 								<?php } ?>
 
