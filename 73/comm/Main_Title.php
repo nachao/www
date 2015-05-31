@@ -86,11 +86,28 @@ class Data_title extends Config
 	
 	//获取 标题列表 	#开始数，页数
 	// 参数说明
-	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$type= 指定的标题类型（选，默认无） ； $grade = 购买次数标准（选，默认没有标准）
-	protected function data_selectList( $begin=0, $pages=9, $type=0, $grade=0){
-		$pages = $pages ? $pages : 9;
-		$type = $type ? "AND  `type` =".$type : '';
-		$sql = "select * FROM  `".parent::Fn()."classify` WHERE ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 )) AND `click` >= ".$grade." ".$type." ORDER BY `id` DESC LIMIT ".$begin." , ".$pages;
+	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$type= 指定的标题类型（选，默认无） ； $grade = 购买次数标准（选，默认没有标准）；$sort = 排序方式
+	protected function data_selectList( $begin=0, $pages=9, $type=0, $grade=0, $sort='id'){
+		$pages = $pages < 9 ? 9 : $pages;
+		$sql = "select * FROM  `".parent::Fn()."classify` WHERE";
+		// echo $type;
+		//全部
+		if ( $type == 0 ) {
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ))";
+		}
+		//活动
+		if ( $type == 1 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		//专题
+		if ( $type == 2 ) {
+			$sql = $sql." `start` !=3 AND `type` =".$type;
+		}
+		//任务
+		if ( $type == 3 ) {
+			$sql = $sql." `duration` < ".time()." AND `type` =".$type;
+		}
+		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
 		return mysql_query($sql);
 	}
 
@@ -678,7 +695,7 @@ class Title extends Event_title
 	*/
 
 	//获取 标题列表
-	public function Glist($begin=0, $pages=0, $type=0, $grade=0){
+	public function Glist($type=0, $begin=0, $pages=0, $grade=0){
 		return parent::event_get($begin, $pages, $type, $grade);
 	}
 
@@ -988,8 +1005,8 @@ class Title extends Event_title
 	}
 
 	//判断是否有被使用
-	public function Iuse(){
-		return count(parent::event_get());
+	public function Iuse($type=0){
+		return count(parent::event_get(0, 0, $type));
 	}
 
 	//判断指定 标题TID 是否有内容
@@ -1009,8 +1026,12 @@ class Title extends Event_title
 		$value = '';
 		if( $typeid == 1 ){
 			$value = '活动';
-		}else{
+		}
+		if( $typeid == 2 ){
 			$value = '专题';
+		}
+		if( $typeid == 3 ){
+			$value = '任务';
 		}
 		return $value;
 	}

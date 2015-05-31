@@ -1204,6 +1204,7 @@ class Users extends Event_user
 	public function ASpay($uid, $source, $source_id, $sum){
 		$t = new Title();
 		$t = new Content();
+		$in_uid = 0;
 
 		//获取收入用户
 		if($source == 'tid'){	//创建标题
@@ -1221,7 +1222,9 @@ class Users extends Event_user
 		if($source == 'ctid'){	//创建标题
 			$in_uid = 0;
 		}
-		parent::data_addSumLog($in_uid, $uid, $source, $source_id, 0, $sum);
+		if ( $sum ) { 
+			return parent::data_addSumLog($in_uid, $uid, $source, $source_id, 0, $sum);
+		}
 	}
 
 
