@@ -14,7 +14,7 @@
 		<div class="operate f" <?php if($ect == 'user'){ ?> style="border-top-color: #e74c3c;" <?php } ?> >
 			<div class="icon"><a href="./user.php" ><?php echo $u -> Gname(); ?></a><i></i></div>
 			<div class="link">
-				<a href="javascript:;" class="price" ><span class="glyphicon glyphicon-fire"></span><em id="headGold" class="golds" n="<?php echo $u -> Gplus(); ?>" ></em></a>
+				<a href="javascript:;" class="price" ><span class="glyphicon glyphicon-fire"></span><em id="headGold" class="golds" n="<?php echo $u -> Gplus(); ?>" ></em> <i></i></a>
 				<a class="fabu <?php if( $ect == "fabu" ){ ?>act<?php } ?>" href="./userAdd.php" ><span class="glyphicon glyphicon-pencil"></span>发布</a>
 				<a href="./user.php" ><span class="glyphicon glyphicon-user"></span>个人中心</a>
 				<a href="./userExchange.php" ><span class="glyphicon glyphicon-barcode"></span>提现</a>

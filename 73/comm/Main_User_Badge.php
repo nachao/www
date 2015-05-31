@@ -330,7 +330,7 @@ class Users_badge extends Event_user_badge
 		$gain = $info['gain'];
 		$purchase = $info['purchase'];
 		if( $gain == '购买' ){	//判断
-			$gain = sprintf("%.2f", $purchase/100).' 元';
+			$gain = '<em class="golds">'.$purchase.'</em> 分';
 		}
 		return array(	
 			'str' => $gain,
@@ -379,16 +379,16 @@ class Users_badge extends Event_user_badge
 
 	//刷新指定 用户UID 领取指定 福利SID 的时间
 	public function Ureceive($sid=0, $uid=0){
-		$value = 0;
+		$uid = $uid ? $uid : parent::Eid();
+		$u = new Users();
+		$sum = 0;
 		if($this -> Ireceive($sid) == 0){
 			$row = $this -> GBinfo($sid);
-			$u = new Users();
-			$u -> UAplus($row['welfare']);
-			if(parent::event_updateReceive($sid)){
-				$value = $row['welfare'];
-			}
+			$sum = $row['welfare'];
+			$u -> UAplus($sum, 'sid', $sid);	//刷新用户金额
+			parent::event_updateReceive($sid);	//刷新领取时间
 		}
-		return $value;
+		return $sum;
 	}
 
 	//更新第一名
@@ -484,6 +484,7 @@ class Users_badge extends Event_user_badge
 			//如果是购买会员
 			if( $info['icon'] == "vip" ){		
 				$u -> Uvip(strtotime('+7day'));	//则开通会员
+				$u -> USplus($info['purchase'], 'csid', $sid);	//扣款
 			}
 			$value = parent::event_addBadge($sid, $uid);
 		}

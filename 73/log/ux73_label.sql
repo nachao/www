@@ -1,16 +1,13 @@
 /*
 Navicat MySQL Data Transfer
-
-Source Server         : ux73
-Source Server Version : 50169
-Source Host           : ux73.gotoftp2.com:3306
+Source Server         : localhost
+Source Server Version : 50611
+Source Host           : localhost:3306
 Source Database       : ux73
 
 Target Server Type    : MYSQL
-Target Server Version : 50169
+Target Server Version : 50611
 File Encoding         : 65001
-
-Date: 2015-05-22 21:21:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +25,8 @@ CREATE TABLE `ux73_label` (
   `status` int(1) DEFAULT '1' COMMENT '状态：0=关闭；1=开启',
   `name` varchar(100) DEFAULT NULL COMMENT '标签名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+
 
 -- ----------------------------
 -- Records of ux73_label

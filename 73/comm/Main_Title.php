@@ -86,11 +86,28 @@ class Data_title extends Config
 	
 	//获取 标题列表 	#开始数，页数
 	// 参数说明
-	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$type= 指定的标题类型（选，默认无） ； $grade = 购买次数标准（选，默认没有标准）
-	protected function data_selectList( $begin=0, $pages=9, $type=0, $grade=0){
-		$pages = $pages ? $pages : 9;
-		$type = $type ? "AND  `type` =".$type : '';
-		$sql = "select * FROM  `".parent::Fn()."classify` WHERE ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 )) AND `click` >= ".$grade." ".$type." ORDER BY `id` DESC LIMIT ".$begin." , ".$pages;
+	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$type= 指定的标题类型（选，默认无） ； $grade = 购买次数标准（选，默认没有标准）；$sort = 排序方式
+	protected function data_selectList( $begin=0, $pages=9, $type=0, $grade=0, $sort='id'){
+		$pages = $pages < 9 ? 9 : $pages;
+		$sql = "select * FROM  `".parent::Fn()."classify` WHERE";
+		// echo $type;
+		//全部
+		if ( $type == 0 ) {
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ))";
+		}
+		//活动
+		if ( $type == 1 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		//专题
+		if ( $type == 2 ) {
+			$sql = $sql." `start` !=3 AND `type` =".$type;
+		}
+		//任务
+		if ( $type == 3 ) {
+			$sql = $sql." `duration` < ".time()." AND `type` =".$type;
+		}
+		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
 		return mysql_query($sql);
 	}
 
@@ -480,28 +497,7 @@ class Event_title extends Data_title
 	*/
 
 
-	//创建新标题 提交表单
-	//#参数备注		
-	// $tit= 标题名称； $con= 标题描述； $type= 标题类型（1=活动、2=专题）； $price= 金币池； $reward= 奖金； $days= 有效时间
 	protected function event_addNewTitle( $tit='', $con='', $type=0, $price=0, $reward=0, $days=0){
-		if( $tit != '' && $con != '' ){			//判断是否有参数
-			$u = new Users();
-			if($price +$reward < $u -> Gplus()){	//判断余额是否足够
-				if( $type == 2 ){				//如果是专题类型，则刷新参数
-					$price 	= 100;
-					$reward = 0;
-					$duration = strtotime(date('Y-m-d')) + 24*60*60 -1;
-				}else{
-					$duration = strtotime("+".$days." day");		//到期的时间戳
-				}
-				$o = new Tool();
-				$con = $o -> Chtml($con);	//编译
-				$tid = $u -> Gid().time();	//标题自定义 ID(*重要参数)
-				$this -> event_addUserFollowTit($tid);		//关注用户自己创建的标题
-				parent::data_createNew($u -> Guid(), $tid, $tit, $con, $price, $duration, $reward, $type );	//提交数据
-				return $tid;
-			}
-		}
 	}
 
 	//添加指定 用户ID（选填，默认为登录用户） 关注指定的 标题ID
@@ -699,7 +695,7 @@ class Title extends Event_title
 	*/
 
 	//获取 标题列表
-	public function Glist($begin=0, $pages=0, $type=0, $grade=0){
+	public function Glist($type=0, $begin=0, $pages=0, $grade=0){
 		return parent::event_get($begin, $pages, $type, $grade);
 	}
 
@@ -1009,8 +1005,8 @@ class Title extends Event_title
 	}
 
 	//判断是否有被使用
-	public function Iuse(){
-		return count(parent::event_get());
+	public function Iuse($type=0){
+		return count(parent::event_get(0, 0, $type));
 	}
 
 	//判断指定 标题TID 是否有内容
@@ -1030,8 +1026,12 @@ class Title extends Event_title
 		$value = '';
 		if( $typeid == 1 ){
 			$value = '活动';
-		}else{
+		}
+		if( $typeid == 2 ){
 			$value = '专题';
+		}
+		if( $typeid == 3 ){
+			$value = '任务';
 		}
 		return $value;
 	}
@@ -1151,21 +1151,68 @@ class Title extends Event_title
 	* 添加 add
 	*/
 
-	//添加新标题 提交表单
-	public function Atit( $tit='', $con='', $type=0, $gold=0, $award=0, $days=0){
-		if( $tit !=  '' && $con != '' ){
-			$tid = parent::event_addNewTitle( $tit, $con, $type, $gold, $award, $days);
-			if($tid){
-				$u = new Users();
-				$u -> UtoL('userTitle-Apply.php?ok='.$tid);
+	//创建新标题 提交表单
+	//#参数备注		
+	// $tit= 标题名称； $con= 标题描述； $type= 标题类型（1=活动、2=专题）； $price= 金币池； $reward= 奖金； $days= 有效时间
+	public function Atit( $tit='', $con='', $type=0, $price=0, $reward=0, $days=0){
+		$u = new Users();
+		$o = new Tool();
+		$result = array();
+		if( $tit != '' && $con != '' ){				//判断是否有参数
+			$info = $this -> GTname($tit);
+			if( $info['id'] ){
+				$result['status'] = 1300;		//标题已存在
+			}else{
+				if($price + $reward < $u -> Gplus()){	//判断余额是否足够
+					//活动
+					if( $type == 1 ){
+						$duration = strtotime("+".$days." day");
+					}
+					//专题类型
+					if( $type == 2 ){					
+						$duration = strtotime("+3 day");
+						$days = 3;
+					}
+					//任务
+					if( $type == 3 ){
+						$duration = strtotime("+3 day");
+						$days = 3;
+					}
+					//小组
+					if( $type == 4 ){
+						$duration = strtotime("+365 day");
+						$days = 365;
+					}
+					$con = $o -> Chtml($con);	//编译
+					$tid = $u -> Gid().time();	//标题自定义 ID(*重要参数)
+
+					$u -> USplus($price + $reward, 'ctid', $tid);		//创建者扣款
+
+					$this -> Afollow($tid);		//关注用户自己创建的标题
+
+					//提交数据
+					if ( parent::data_createNew($u -> Guid(), $tid, $tit, $con, $price, $duration, $reward, $type ) ){	
+						$result['status'] = 0;		//操作成功
+						$result['tid'] = $tid;		//保持数据
+						// $u -> UtoL('userTitle-Apply.php?ok='.$tid);
+					} else {
+						$result['status'] = 1200;	//SQL执行失败
+					}
+				}else{
+					$result['status'] = 1100;	//余额不足
+				}
 			}
+		}else{
+			$result['status'] = 1000;	//参数不完整
 		}
+		return $result;
 	}
 
 	//添加指定 用户ID 关注指定 标题TID
 	public function Afollow( $tid=0, $uid=0){
+		$uid = $uid ? $uid : parent::Eid();
 		if($tid){
-			return parent::event_addUserFollowTit( $tid, $uid );
+			return parent::data_addUserFollowTit( $uid, $tid );
 		}
 	}
 

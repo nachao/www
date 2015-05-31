@@ -68,6 +68,12 @@ class Data_user extends Config
 	}
 
 
+	//添加用户金额记录
+	protected function data_addSumLog($in_uid=0, $out_uid=0, $source='-', $source_id=0, $types=1, $sum=0){
+		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_purchase` (`id`, `time`, `in_uid`, `out_uid`, `source`, `source_id`, `types`, `sum`) VALUES (NULL, '".time()."', '".$in_uid."', '".$out_uid."', '".$source."', '".$source_id."', '".$types."', '".$sum."');";
+		return mysql_query($sql);
+	}
+
 
 	/********************************************
 	* 创建
@@ -187,6 +193,17 @@ class Data_user extends Config
 	}
 
 
+	//获取指定 用户UID 的指定 时间段TIME(一天) 内容的指定 类型TYPE 的变动总金额
+	protected function data_selectSumlog($uid=0, $start=0, $end=0, $type=0){
+		$sql = "select sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND ";
+		if($type){
+			$sql = $sql." `in_uid` = ".$uid." AND `types` = ".$type." LIMIT 1";		//收入
+		}else{	
+			$sql = $sql." `out_uid` = ".$uid." AND `types` = ".$type." LIMIT 1";	//支出
+		}
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
+	}
 
 
 	/********************************************
@@ -886,6 +903,29 @@ class Users extends Event_user
 	}
 
 
+	//获取指定用户最近30天金额变动记录
+	public function Glog($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+
+		$day = 24 *60 *60;
+		$begin = strtotime(date('Y-m-d',time())) + $day;
+		$time = 0;
+
+		$arr = array();
+		$key = '';
+
+		for($i=0; $i<=31; $i++){
+			$time = $begin - $day * $i;
+			$key = date('Y-m-d', $time-1);
+			$start = $time-$day;
+			$end = $time -1;
+
+			$arr[$key]['pay'] = parent::data_selectSumlog($uid, $start, $end);			//获取用户指定天数的支出总和
+			$arr[$key]['income'] = parent::data_selectSumlog($uid, $start, $end, 1);	//获取用户指定天数的收入总和
+		}
+		return $arr;
+	}
+
 
 	/********************************************
 	* 判断 is
@@ -998,13 +1038,21 @@ class Users extends Event_user
 	*/
 
 	//刷新指定 用户ID（选填，默认为登录用户） 的金币，添加指定 数量NUM（选填，默认为1） 的金额
-	public function UAplus($num=1, $uid=0 ){
-		return parent::event_updatePlus($this -> Gplus($uid) +$num, $uid );
+	public function UAplus($num=1, $source='', $source_id=0, $uid=0 ){
+		$uid = $uid ? $uid : $this -> event_uid();
+		if ( parent::event_updatePlus($this -> Gplus($uid) +$num, $uid ) ){
+			$this -> ASincome($uid, $source, $source_id, $num);		//进账记录
+		}
+		return $num;
 	}
 
 	//刷新指定 用户ID（选填） 的金币，扣除指定 数量NUM（选填，默认为1） 的金额
-	public function USplus($num=1, $uid=0){
-		return parent::event_updatePlus($this -> Gplus($uid) -$num, $uid );
+	public function USplus($num=1, $source='', $source_id=0, $uid=0){
+		$uid = $uid ? $uid : $this -> event_uid();
+		if ( parent::event_updatePlus($this -> Gplus($uid) -$num, $uid ) ){
+			$this -> ASpay($uid, $source, $source_id, $num);		//支出记录
+		}
+		return $num;
 	}
 
 	//刷新指定 用户ID（选填） 的 发布量NUM（选填，默认为 1）
@@ -1145,6 +1193,38 @@ class Users extends Event_user
 			$value = parent::event_addFeedback($u -> Guid(), $txt); 
 		}
 		return $value;
+	}
+
+	//添加一条用户金额收入记录
+	public function ASincome($uid, $source, $source_id, $sum){
+		parent::data_addSumLog($uid, 0, $source, $source_id, 1, $sum);
+	}
+
+	//添加一条用户金额支出记录
+	public function ASpay($uid, $source, $source_id, $sum){
+		$t = new Title();
+		$t = new Content();
+		$in_uid = 0;
+
+		//获取收入用户
+		if($source == 'tid'){	//创建标题
+			$in_uid = $t -> Gcreator($source_id);
+		}
+		if($source == 'cid'){	//购买内容
+			$in_uid = $t -> Gauthor($source_id);
+		}
+		if($source == 'ccid'){	//创建内容
+			$in_uid = 0;
+		}
+		if($source == 'csid'){	//购买徽章内容
+			$in_uid = 0;
+		}
+		if($source == 'ctid'){	//创建标题
+			$in_uid = 0;
+		}
+		if ( $sum ) { 
+			return parent::data_addSumLog($in_uid, $uid, $source, $source_id, 0, $sum);
+		}
 	}
 
 

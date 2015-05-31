@@ -10,6 +10,13 @@ $ect="title";
 //引用样式头部
 include("./comm/head.php");	
 
+//类型
+$type = 0;
+
+//获取指定类型
+if (isset($_GET['type'])) {
+	$type = $_GET['type'];
+}
 
 ?>
 
@@ -20,13 +27,24 @@ include("./comm/head.php");
 			<div class="center">
 
 				<!-- 操作栏 -->
-				<div class="actionbar"></div>
+				<div class="actionbar">
+					<!-- 分类 -->
+					<div class=	"actionbar-type">
+						<a class="actionbar-btn actionbar-s0 <?php echo $type == 0 ? 'actionbar-btn-act actionbar-s0-act' : ''; ?>" href="?#">全部</a>
+						<a class="actionbar-btn actionbar-s1 <?php echo $type == 1 ? 'actionbar-btn-act actionbar-s1-act' : ''; ?>" href="?type=1">活动</a>
+						<a class="actionbar-btn actionbar-s2 <?php echo $type == 2 ? 'actionbar-btn-act actionbar-s2-act' : ''; ?>" href="?type=2">专题</a>
+						<a class="actionbar-btn actionbar-s3 <?php echo $type == 3 ? 'actionbar-btn-act actionbar-s3-act' : ''; ?>" href="?type=3">任务</a>
+					</div>
+					<!-- 赛选 -->
+				</div>
 
-				<?php if(!$t -> Iuse()){ ?>
+				<?php if(!$t -> Iuse($type)){ ?>
 					<!-- 没有标题时的提示 -->
 					<div class="Ncon notTit">
 						<h1>抱歉没有找到相关内容！</h1>
-						<p>你可以去申请属于自己专属的 “个人专题”；也可以申请让大家参与进来的 “活动标题”。</p>
+						<p>你可以去申请属于自己专属的 “个人专题”；</p>
+						<p>也可以申请让大家参与进来的 “活动标题”；</p>
+						<p>以及发布任务。</p>
 						
 						<?php if($u -> Guid()){ ?>
 						<div class="btn">
@@ -37,10 +55,12 @@ include("./comm/head.php");
 				<?php } ?>
 
 				<!-- 标题列表 -->
-				<?php if($t -> Iuse()){   //判断是否有标题内容，如果有标题内容则输出  ?>
+				<?php
+
+				if(1 || $t -> Iuse($type)){   //判断是否有标题内容，如果有标题内容则输出  ?>
 				<div class="contentList titleList" style="width: 100%;overflow: initial;" >
 
-					<?php foreach($t -> Glist() as $key => $Tv) {	//循环输出全部标题 ?>
+					<?php foreach($t -> Glist($type) as $key => $Tv) {	//循环输出全部标题 ?>
 
 						<?php if($t -> Gcost($Tv['tid']) > 0){  		//判断是否需要维护
 								if(!$t -> USMcharges($Tv['tid'])){		//如果没有维护成功
@@ -51,7 +71,7 @@ include("./comm/head.php");
 								}
 						} ?> 
 						<div class="col titleCol <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?> type_<?php echo $Tv['type']; ?> sh" tid="<?php echo $Tv['tid']; ?>" >
-							<div class="icon-type <?php if($t -> Itype($Tv['tid'], 2)){ echo 'icon-type-e'; } ?>"></div>
+							<div class="icon-type <?php if($t -> Itype($Tv['tid'], 2)){ echo 'icon-type-e'; } if($Tv['tid'] == 3){ echo 'icon-type-task'; } ?>"></div>
 							<div class="head">
 								<!-- 标题列表 - 标题 -->
 								<div class="tit">
