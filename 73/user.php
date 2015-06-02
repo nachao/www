@@ -8,7 +8,15 @@
 	$ect="user";	
 
 	//引用样式头部
-	include("./comm/head.php");		
+	include("./comm/head.php");	
+
+	$page = 1;
+	$number = 9;
+	$total = $c -> Gtotel(0, $u -> Guid());
+
+	if ( isset($_GET['page'])) {
+		$page = $_GET['page'];	
+	}
 
 
 	// echo strtotime();
@@ -28,7 +36,7 @@
 
 				<div class="leftarea f" style="width: 800px;">
 						
-					<?php $Ulist = $c -> GUlist(0, 99, 0, 0, $u -> Ik() ? $u -> Gcid() : 0);					
+					<?php $Ulist = $c -> GUlist(($page - 1) * $number, $number, 0, 0, $u -> Ik() ? $u -> Gcid() : 0);					
 					if(count($Ulist) > 0){ 	//如果有内容 ?>
 						<div class="contentList" style="margin:0px;width: 100%;position: relative;top: -30px;">
 							
@@ -104,13 +112,20 @@
 									</div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
-
+							
+							<!-- 分页 -->
+							<div class="paging" total="<?php echo $total; ?>" number="<?php echo $number; ?>" current="<?php echo $page; ?>" >
+								<div class="paging-use"></div>
+								<div class="paging-link">
+									<div class="paging-link-fill"></div>
+								</div>
+							</div>
 						</div>
 					<?php }else{	//如果没有内容 ?>
 						<div class="noContent userNot <?php if($u -> IVuser()){ echo "visitNot"; }	//如果访问他人	?>">
 							<div class="are">
 							
-								<?php if($u -> Gid() && !$u -> IVuser()){	//用户在自己的个人中心可以见此按钮 ?>
+								<?php if($u -> Gid() && !$u -> IVuser()){	//用户在自己的个人中心可以见此按钮 ?>	
 									<a class="publish" href="./userAdd.php" title="">发<span>布</span></a>
 								<?php } ?>
 
@@ -133,6 +148,9 @@
 	<?php } ?>
 
 	<script type="text/javascript">
+
+
+
 
 	// if( a[i].childNodes() )
 	// a[i].setAttribute('href', 'javascript:;');

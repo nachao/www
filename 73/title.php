@@ -1,22 +1,33 @@
 <?php
 	
-//引用公共文件
-include("./comm/base.php");	
+	//引用公共文件
+	include("./comm/base.php");	
 
-//设置选择菜单
-Global $ect;
-$ect="title"; 	
+	//设置选择菜单
+	Global $ect;
+	$ect="title"; 	
 
-//引用样式头部
-include("./comm/head.php");	
+	//引用样式头部
+	include("./comm/head.php");	
 
-//类型
-$type = 0;
+	//类型
+	$type = 0;
 
-//获取指定类型
-if (isset($_GET['type'])) {
-	$type = $_GET['type'];
-}
+	//获取指定类型
+	if (isset($_GET['type'])) {
+		$type = $_GET['type'];
+	}
+
+
+	$page = 1;
+	$number = 1;
+	$total = $t -> Gtotal($type);
+	$total = $total <= 0 ? 1 : $total;
+
+	if ( isset($_GET['page'])) {
+		$page = $_GET['page'];	
+	}
+
 
 ?>
 
@@ -38,7 +49,7 @@ if (isset($_GET['type'])) {
 					<!-- 赛选 -->
 				</div>
 
-				<?php if(!$t -> Iuse($type)){ ?>
+				<?php if(!$t -> Iuse($type, ($page - 1) * $number, $number)){ ?>
 					<!-- 没有标题时的提示 -->
 					<div class="Ncon notTit">
 						<h1>抱歉没有找到相关内容！</h1>
@@ -57,10 +68,10 @@ if (isset($_GET['type'])) {
 				<!-- 标题列表 -->
 				<?php
 
-				if(1 || $t -> Iuse($type)){   //判断是否有标题内容，如果有标题内容则输出  ?>
+				if(1){   //判断是否有标题内容，如果有标题内容则输出  ?>
 				<div class="contentList titleList" style="width: 100%;overflow: initial;" >
 
-					<?php foreach($t -> Glist($type) as $key => $Tv) {	//循环输出全部标题 ?>
+					<?php foreach($t -> Glist($type, ($page - 1) * $number, $number) as $key => $Tv) {	//循环输出全部标题 ?>
 
 						<?php if($t -> Gcost($Tv['tid']) > 0){  		//判断是否需要维护
 								if(!$t -> USMcharges($Tv['tid'])){		//如果没有维护成功
@@ -190,6 +201,15 @@ if (isset($_GET['type'])) {
 				</div>
 				<div class="c"></div>
 				<?php } ?>
+
+				<!-- 分页 -->
+				<div class="paging" total="<?php echo $total; ?>" number="<?php echo $number; ?>" current="<?php echo $page; ?>" >
+					<div class="paging-use"></div>
+					<div class="paging-link">
+						<div class="paging-link-fill"></div>
+					</div>
+				</div>
+				<div class="c"></div>
 			</div>
 		</div>
 	</div>

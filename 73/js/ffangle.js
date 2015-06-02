@@ -834,8 +834,136 @@ jQuery.fn.extend({
 		}else{
 			tip.hide();
 		}
-	}
+	},
 
+	//分页
+	paging: function(){
+		$(this).each(function(){
+
+			//获取地址参数
+			var string = location.href,
+   				index = string.indexOf("?");
+   			string = string.substr(index + 1); 	//取得所有参数   stringvar.substr(start [, length ]
+
+			//获取分页参数
+			var paging = $(this),
+				total = parseInt($(this).attr('total')),
+				number = parseInt($(this).attr('number')),
+				current = parseInt($(this).attr('current')),
+				pages = Math.ceil(total/number);
+
+			//获取元素
+			var use = $(this).find('.paging-use').empty(),
+				link = $(this).find('.paging-link'),
+				fill = $(this).find('.paging-link-fill');
+
+			//配置参数
+			var length = 10,
+				leftSide = parseInt((length - 1) / 2),
+				rightSide = length - leftSide - 1;
+			length = length > pages ? pages : length;
+
+			//临时变量
+			var begin = 0,
+				end = 0,
+				i = 0,
+				key = null,
+				val = null,
+				array = [],
+				param = {},
+				url = '',
+				width = 0;
+
+			//计算总页数
+			pages = Math.ceil(total/number);
+
+			//初始化位置动画
+			width = parseInt(100/pages);
+			width = width <= 10 ? 10 : width;
+			fill.css({ width: width / 100 * (link.width() - 10) });
+			fill.css({ left: (current-1) / (pages-1) * (link.width() - 10 - fill.width()) });
+
+
+			//遍历地址参数
+			array = string.split("&");
+			for ( i = 0; i < array.length; i++ ) { 
+				index = array[i].indexOf("="); 
+				if ( index > 0 ) { 
+					key = array[i].substring(0, index);
+					val = array[i].substr(index + 1);
+					param[key] = val;
+				} 
+			}
+
+			//获取最左最右的按钮索引
+			begin = current - leftSide;
+			begin = begin <= 0 ? 1 : begin;
+			end = current + rightSide;
+			if ( end - begin < length - 1 ) {
+				end = begin + length - 1;
+			}
+			if ( end > pages ) {
+				end = pages;
+			}
+			if ( end - begin < length - 1 ) {
+				begin = end - length + 1;
+			}
+
+			//获取新的参数
+			function newParam(index){
+				param.page = index;
+				var url = '',
+					key = null;
+				for ( key in param ) {
+					if ( url ) {
+						url += '&';
+					} else {
+						url += '?'
+					}
+					url += key + '=' + param[key];
+				}
+				if ( current == index ) {
+					url = 'javascript:;';
+				}
+				if ( index <= 0 ) {
+					url = 'javascript:;';
+				}
+				if ( index > pages ) {
+					url = 'javascript:;';
+				}
+				return url;
+			}
+
+			//输出按钮
+			use.append('<a class="paging-btn paging-fast" href="'+ newParam(current - 1) +'" key="'+ (current - 1) +'" >上一页</a>');
+			for ( i = begin; i <= end; i++ ) {
+				use.append('<a class="paging-btn" href="'+ newParam(i) +'" key="'+ i +'" >'+ i +'</a>');
+			}
+			use.append('<a class="paging-btn paging-fast" href="'+ newParam(current + 1) +'" key="'+ (current + 1) +'" >下一页</a>');
+
+			//按钮绑定事件
+			// paging.find('.paging-btn').click(function(){
+			// 	if ( !$(this).hasClass('paging-not paging-fast') ){
+			// 		$(this).addClass('paging-act').siblings('.paging-btn:not(.paging-fast)').removeClass('paging-act');
+			// 	}
+			// });
+
+			//当前选择页数
+			paging.find('.paging-btn[key='+ current +']').addClass('paging-act');
+
+			//如果当前是第一页则上一页点击无效
+			if ( current == 1 ){
+				paging.find('.paging-fast:first').addClass('paging-not');
+			}
+
+			//如果当前是最后一页则下一页点击无效
+			if ( current == pages ){
+				paging.find('.paging-fast:last').addClass('paging-not');
+			}
+
+
+		});
+	}
 
 });
 
@@ -851,6 +979,9 @@ $(document).ready(function(){
 	$('.radio[selection]').each(function(){
 		$(this).find('label').eq( parseInt($(this).attr('selection'))-1 ).addClass('act').find('input').attr('checked','checked');
 	});
+
+	//分页
+	$('.paging').paging();
 });
 
 

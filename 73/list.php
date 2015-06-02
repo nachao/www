@@ -82,7 +82,7 @@
 							<?php //} } ?>
 					</p>
 					<!-- 标题列表 - 参数 -->
-					<div class="param-tag f" style="width: 680px;">
+					<div class="param-tag f" style="width: 670px;">
 						<span class="creator">创建者：
 							<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $u -> Gname($Tv['userid']); ?></a>
 						</span>
