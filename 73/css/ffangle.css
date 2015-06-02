@@ -878,11 +878,17 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .col .head{ position: relative;padding-top: 80px;border-radius: 5px 5px 0 0; }
 .titleManage .col .head .tit{ height: 80px;position: absolute;top: 0px;left: 0px;width: 100%;background: #9ba1a8;border-bottom: 1px solid #eee;border-radius: 5px 5px 0 0; }
 .titleManage .col .head .tit a{ font-size: 17px;color: white;line-height: 80px;text-indent: 30px;display: inline-block;width: 100%;height: 80px;-webkit-transition: 0.3s; transition: 0.3s;box-shadow: 0 -2px 0px rgba(0,0,0,0.1) inset;background-size: 50px 50px; }
-.titleManage .col .head .tit-activity a{ background-color: #9ba1a8; background-image: -webkit-linear-gradient(top right,rgba(255,255,255,.1) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.1) 75%,transparent 75%,transparent); }
-.titleManage .col .head .tit-special a{ background-color: #9ba1a8;background-image: linear-gradient(135deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(225deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(315deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(45deg,rgba(255,255,255,.1) 25%,transparent 25%);background-size: 50px 50px; }
 .titleManage .col .head .tit a:hover{ text-decoration: none; }
+
+.titleManage .col .head .tit-activity a{ background-color: #9ba1a8; background-image: -webkit-linear-gradient(top right,rgba(255,255,255,.1) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.1) 75%,transparent 75%,transparent); }
 .titleManage .col .head .tit-activity a:hover{ background-color: #d82425;}
+
+.titleManage .col .head .tit-special a{ background-color: #9ba1a8;background-image: linear-gradient(135deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(225deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(315deg,rgba(255,255,255,.1) 25%,transparent 25%),linear-gradient(45deg,rgba(255,255,255,.1) 25%,transparent 25%);background-size: 50px 50px; }
 .titleManage .col .head .tit-special a:hover{ background-color: #63a62f;}
+
+.titleManage .col .head .tit-task a{ background-color: #9ba1a8;background-image: -webkit-linear-gradient(left,rgba(255,255,255,.1) 50%,transparent 50%,transparent);background-size: 50px 50px; }
+.titleManage .col .head .tit-task a:hover{ background-color: #ffab4a;}
+
 .titleManage .col .head .tag{ padding-top: 15px; }
 .titleManage .col .head .tag span{ margin: 15px 15px 0 0; }
 
@@ -1136,6 +1142,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .publish .picture .con img{ border: 0px;float: left;max-width: 100%; }
 .publish .picture .con #divPreview a{ display: inline-block;width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;background: rgba(0,0,0,.1);color: white;text-align: center;line-height: 100px;text-decoration: none;display: none;opacity: 0; }
 .publish .picture .con #divPreview:hover a{ opacity: 1; }
+.publish .picture .picture-edit{ background: url(../imgs/loading.gif) no-repeat center #f6f6f6;min-height: 100px; }
 
 /* 视频 */
 .publish .video .con{ position: relative; }

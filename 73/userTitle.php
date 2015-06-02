@@ -96,6 +96,9 @@
 									}
 									if($t -> Itype($Tv['tid'] ,2)){	//如果是专题
 										$titStyleClass = 'tit-special';
+									}
+									if($t -> Itype($Tv['tid'] ,3)){	//如果是任务
+										$titStyleClass = 'tit-task';
 									} ?>
 									<div class="tit <?php echo $titStyleClass; ?>" >
 										<a href="./list.php?tid=<?php echo $Tv['tid']; ?>"><?php echo $title -> ITval($Tv['type'])."#". $Tv['title']; ?></a>

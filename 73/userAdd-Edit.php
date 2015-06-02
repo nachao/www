@@ -138,9 +138,9 @@
 										<div class="col extent picture">
 											<div class="uploadPhoto" id="uploadPhoto">重新选择图片</div>
 											<div class="tip">必选要选择一张图片<i></i></div>
-											<div class="con">
+											<div class="con picture-edit">
 												<div id="uploadPlugIn" style="height: 600px;display: none;" ><div id="altContent"></div></div>
-												<img id="imgHeadPhoto" src="<?php echo $Rinfo['cont']; ?>" />
+												<img id="imgHeadPhoto" src="<?php echo $Rinfo['cont'] ? $Rinfo['cont'] : $Rinfo['image']; ?>" />
 												<div class="c"></div>
 											</div>
 											<div class="c"></div>

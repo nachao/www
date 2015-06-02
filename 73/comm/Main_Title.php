@@ -92,7 +92,7 @@ class Data_title extends Config
 		$sql = "select * FROM  `".parent::Fn()."classify` WHERE";
 		//全部
 		if ( $type == 0 ) {
-			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ))";
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time()."))";
 		}
 		//活动
 		if ( $type == 1 ) {
@@ -104,7 +104,7 @@ class Data_title extends Config
 		}
 		//任务
 		if ( $type == 3 ) {
-			$sql = $sql." `duration` < ".time()." AND `type` =".$type;
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
 		}
 		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
 		return mysql_query($sql);
@@ -115,7 +115,7 @@ class Data_title extends Config
 		$sql = "select count(`id`) FROM  `".parent::Fn()."classify` WHERE";
 		//全部
 		if ( $type == 0 ) {
-			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ))";
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time()."))";
 		}
 		//活动
 		if ( $type == 1 ) {
@@ -144,7 +144,8 @@ class Data_title extends Config
 
 	//获取指定 用户UID 关注的所有 活动标题和专题标题 以及自己创建的所有标题 列表【用户侧栏我的标题，我关注的】
 	protected function data_selectUserFollowList($uid=0, $begin=0 ,$pages=15 ){
-		$sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE (`t`.`start` = 1 AND ((`t`.`type` = 1 AND `t`.`duration` > ".time().") OR `t`.`type` =2)) AND (`t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid.") GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
+		// $sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE (`t`.`start` = 1 AND ((`t`.`type` = 1 AND `t`.`duration` > ".time().") OR `t`.`type` =2)) AND (`t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid.") GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
+		$sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE `t`.`start` = 1 AND `t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid." GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
 		return mysql_query($sql);
 	}
 	
@@ -793,7 +794,7 @@ class Title extends Event_title
 	//获取指定 活动标题ID 的剩余日期
 	public function Gsurplus($tid=0){
 		if($tid){
-			if(parent::event_getType($tid) == 1){	//必须为活动标题
+			// if(parent::event_getType($tid) == 1){	//必须为活动标题
 				$end = parent::event_getDuration($tid);
 				$current = time();
 				if( $end <= $current){
@@ -809,7 +810,7 @@ class Title extends Event_title
 					}
 				}
 				return $time;
-			}
+			// }
 		}
 	}
 
@@ -1305,8 +1306,8 @@ class Title extends Event_title
 
 	//更新指定 标题ID 的购买 次数NUM（选填，默认为 +1）
 	public function Ubuy($tid=0, $num=1){
-		if($tid){
-			return parent::event_updateClick( $tid, parent::event_getNumber($tid) +$num );
+		if( $tid ){
+			return parent::event_updateClick( $tid, parent::event_getClick($tid) +$num );
 		}
 	}
 

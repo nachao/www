@@ -67,7 +67,7 @@
 											<label class="act"><input type="radio" value="1" checked />活动</label>
 											<label><input type="radio" value="2" />专题</label>
 											<label><input type="radio" value="3" />任务</label>
-											<label><input type="radio" value="4" />小组</label>
+											<!-- <label><input type="radio" value="4" />小组</label> -->
 										</div>
 									</div>
 									<!-- 活动参数 -->
