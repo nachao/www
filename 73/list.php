@@ -173,7 +173,7 @@
 								</div>
 								<div class="price f">
 									<span><?php echo $u -> Gname($uid); ?></span>
-									<em id="userInfoGold" class="golds" n="<?php echo $u -> Gplus($uid); ?>" ></em><i>元</i>
+									<em class="golds" n="<?php echo $u -> Gplus($uid); ?>" ></em><i>元</i>
 									<div class="c"></div>
 								</div>
 								<div class="c"></div>

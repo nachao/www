@@ -85,6 +85,24 @@
 			}
 			return $val;
 		}
+
+		//获取系统Status值说明
+		public function log($key){
+			switch ($key) {
+				case 0: $msg = '操作成功'; break;
+				
+				case 1000: $msg = '参数不完整'; break;
+
+				case 1100: $msg = '余额不足'; break;
+
+				case 1200: $msg = 'SQL执行失败'; break;
+
+				case 1300: $msg = '标题已存在'; break;
+				
+				default: $msg = '未知错误'; break;
+			}
+			return $msg;
+		}
 	
 	}
 

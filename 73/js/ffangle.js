@@ -151,7 +151,7 @@ jQuery.fn.extend({
 				var loop;
 
 				//获取当前浏览用户的余额
-				var userGold = parseInt($('#userGold').val());
+				var userGold = $(window).updateSum();
 
 				//余额不足提示
 				function tipGif(){
@@ -167,8 +167,7 @@ jQuery.fn.extend({
 				if( userGold > 0 ){
 					
 					//刷新用户金币数量
-					$('#userGold').val(userGold-1);
-					$('#headGold').html(userGold-1).golds();
+					$(window).updateSum(-1);
 
 					col.picture();	//查看图片事件
 					col.writing();	//查看文本事件
@@ -374,7 +373,6 @@ jQuery.fn.extend({
 
 	//设置金币显示方式	*******************************************************
 	golds: function(){
-
 		if($(this).length == 1){
 			return gg($(this));
 		}else{
@@ -404,10 +402,10 @@ jQuery.fn.extend({
 			}
 
 			//如果小于 千位
-			if( val < 1000 ){
+			if( val < 10000 ){
 
 				val = {
-						num: (val/100).toFixed(2),
+						num: dh(val),
 						unit: ''
 					}
 
@@ -419,22 +417,22 @@ jQuery.fn.extend({
 				//如果是 万位
 				if( len > 10 ){
 					val = {
-						num: dh((val/10000000000).toFixed(2)),
+						num: dh((val/100000000).toFixed(2)),
 						unit: '亿'
 					}
 				}else if( len > 9 ){
 					val = {
-						num: dh((val/1000000000).toFixed(2)),
+						num: dh((val/10000000).toFixed(2)),
 						unit: '千万'
 					}
-				}else if( len > 6 ){
+				}else if( len >= 5 ){
 					val = {
-						num: dh((val/1000000).toFixed(2)),
+						num: dh((val/10000).toFixed(2)),
 						unit: '万'
 					}
 				}else{
 					val = {
-						num: dh((val/100).toFixed(2)),
+						num: dh(val),
 						unit: ''
 					}
 				}
@@ -442,32 +440,34 @@ jQuery.fn.extend({
 
 			//加逗号
 			function dh( val ){
-				var arr = String(val).split('.'),
-					len = arr[0].length-1,
+				var arr = String(val),
+					len = arr.length-1,
 					str = '';
 
-				//遍历
-				for( var i=len; i>=0; i-- ){
-					if( i!=len && (len-i)%3 == 0 ){
-						str = arr[0][i] + ',' + str;
-					}else{
-						str = arr[0][i] + str;
+				if(arr.indexOf('.') && arr.split('.')[0].length <= 3){
+					return val;
+				}else{
+					//遍历
+					for( var i=len; i>=0; i-- ){
+						if( i!=len && (len-i)%3 == 0 ){
+							str = arr[i] + ',' + str;
+						}else{
+							str = arr[i] + str;
+						}
 					}
+					return str;
 				}
-				return str +'.'+ arr[1];
 			}
 
 			//设置
 			if( typeof(obj) == 'object' ){
+				if(obj.next('i').length){
+					obj.next('i').html(' ' + val.unit + '分');
+				}
 				if( obj.is('input') ){
-					obj.val(val.num + (val.unit?val.unit:''));
+					obj.val(val.num);
 				}else{
-					if(obj.next('i').length){
-						obj.html(val.num);
-						obj.next('i').html(val.unit+ ' 分');
-					}else{
-						obj.html(val.num + (val.unit +' 分'));
-					}
+					obj.html(val.num);
 				}
 			}
 
@@ -676,6 +676,7 @@ jQuery.fn.extend({
 
 	//刷新页面用户金额 *******************************************************
 	updateSum: function(val){
+		val = val ? val : 0;
 
 		//获取元素
 		var sideobj = $('#userInfoGold'),
@@ -694,6 +695,8 @@ jQuery.fn.extend({
 		//侧栏
 		sideobj.attr('n', number);
 		sideobj.golds();
+
+		return number;
 	},
 
 	//验证账号和密码 *******************************************************
@@ -814,7 +817,25 @@ jQuery.fn.extend({
 			$('html,body').scrollTop(scroll);
 			$('.artwork-close,.artwork-image,.artwork-bg').hide();
 		});
+	},
+
+	//提示标签
+	tip: function(value){
+		var tip = $(this),
+			cue = tip.find('span').html(''),
+			auto = null;
+		if( value ){
+			tip.stop().fadeIn(200);
+			clearTimeout(auto);
+			auto = setTimeout(function(){
+				tip.fadeOut(700);
+			}, 3000);
+			cue.html(value);
+		}else{
+			tip.hide();
+		}
 	}
+
 
 });
 
@@ -831,98 +852,6 @@ $(document).ready(function(){
 		$(this).find('label').eq( parseInt($(this).attr('selection'))-1 ).addClass('act').find('input').attr('checked','checked');
 	});
 });
-
-
-//设置金币显示方式
-// function goldShow( val ){
-
-// 	var	arr = [], 
-// 		str = '', 
-// 		len = 0,
-// 		obj = typeof(val) == 'object' ? val : 0;
-
-// 	//初始化
-// 	val = val ? val : 0;
-	
-// 	//如果给的参数是对象的话
-// 	if( typeof(val) == "object" ){
-
-// 		//获取元素的参数
-// 		val = !!$(val).attr('n') ? Number($(val).attr('n')) : Number($(val).html());
-// 		val = val ? val : 0;
-	
-// 	//否则直接以字符串转换成数字
-// 	}else{
-// 		val = Number(val);
-// 	}
-
-// 	//如果小于 千位
-// 	if( val < 1000 ){
-
-// 		val = {
-// 				num: (val/100).toFixed(2),
-// 				unit: ''
-// 			}
-
-// 	}else{
-
-// 		//获得数字长度
-// 		len = String(val).length;
-
-// 		//如果是 万位
-// 		if( len > 10 ){
-// 			val = {
-// 				num: dh((val/10000000000).toFixed(2)),
-// 				unit: '亿'
-// 			}
-// 		}else if( len > 9 ){
-// 			val = {
-// 				num: dh((val/1000000000).toFixed(2)),
-// 				unit: '千万'
-// 			}
-// 		}else if( len > 6 ){
-// 			val = {
-// 				num: dh((val/1000000).toFixed(2)),
-// 				unit: '万'
-// 			}
-// 		}else{
-// 			val = {
-// 				num: dh((val/100).toFixed(2)),
-// 				unit: ''
-// 			}
-// 		}
-// 	}
-
-// 	//加逗号
-// 	function dh( val ){
-// 		var arr = String(val).split('.'),
-// 			len = arr[0].length-1,
-// 			str = '';
-
-// 		//遍历
-// 		for( var i=len; i>=0; i-- ){
-// 			if( i!=len && (len-i)%3 == 0 ){
-// 				str = arr[0][i] + ',' + str;
-// 			}else{
-// 				str = arr[0][i] + str;
-// 			}
-// 		}
-// 		return str +'.'+ arr[1];
-// 	}
-
-// 	//设置
-// 	if( typeof(obj) == 'object' ){
-// 		if( obj.is('input') ){
-// 			obj.val(val.num + (val.unit?val.unit:''));
-// 		}else{
-// 			obj.html(val.num + (val.unit?val.unit:''));
-// 		}
-// 	}
-
-// 	//返回数据
-// 	return val;
-// }
-
 
 
 
@@ -1035,60 +964,6 @@ function pagess(v, defact){
 
 
 
-
-
-
-//功能化
-var ncs = new Object();
-
-
-/*
-* name: 弹出框
-* anthor: nachao
-* function: 初始化
-* paramter: -
-*/
-ncs.ajax = {
-	url: "./ajax/ajax_user.php",
-
-	//初始化
-	init: function(file){
-		if(file){
-			this.url = "./ajax/"+ file;	//重置数据文件
-		}
-	},
-
-	//输出地址
-	log: function(){
-		return this.url;
-	},
-
-	//提交数据
-	set: function(val, funs){
-		$.ajax({
-			type: "POST",
-			url: this.url,
-			data: val,
-			success: function(msg){
-				funs? funs(msg): null;
-			}
-		});
-	},
-
-	//获取数据
-	get: function(val, funs){
-		$.ajax({
-			type: "POST",
-			url: this.url,
-			data: val,
-			success: function(msg){
-				funs? funs(msg): null;
-			}
-		});
-	}
-}
-
-
 jQuery.extend({
 
 	g: function(data){
@@ -1128,8 +1003,40 @@ jQuery.extend({
 				}
 			});
 		}
-	}
+	},
 
+
+	//获取用户的金额记录
+	UGlog: function(uid){
+		uid = uid ? uid : 0;
+		$.g({
+			name: 'UGlog',
+			result: function(data){
+				console.log(data);
+			}
+		});
+	},
+
+
+	//获取用户的缓存账号余额（单位：分）
+	// operate = 对当前金额进行加或者减。
+	// accountBalance = ABalance
+	Usum: function(operate){
+		var obj = $('#userGold'),
+			sideObj = $('#userInfoGold'),
+			headObj = $('#headGold'),
+			sum = parseInt(obj.val());
+
+		//判断是否有加减操作
+		if(operate && operate != 0){
+			sum += operate;
+			obj.val(sum);
+			
+			sideObj.attr('n', sum).golds();
+			headObj.attr('n', sum).golds();
+		}
+		return sum;
+	}
 
 
 
@@ -1207,7 +1114,7 @@ window.na.m.post = function(url, fun){
 
 
 
-
+var ncs = {};
 
 /*
 * name: 弹出框

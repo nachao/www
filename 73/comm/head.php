@@ -42,7 +42,7 @@
 
 						<!-- LOGO -->
 						<div class="logo f"><a href="./" ><em>七十三号馆</em><i>没有交易功能的微博不是一个好论坛</i></a>
-							<span class="version" title="内部测试版 1.3.9" >Alpha</span>
+							<span class="version" title="内部测试版 1.4.9" >Alpha</span>
 						</div>
 
 						<!-- 广告 -->
