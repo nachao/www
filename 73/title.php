@@ -93,9 +93,9 @@
 									<span class="creator">创建者：
 										<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $users -> Gname($Tv['userid']); ?></a>
 									</span>
-									<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
 
 									<?php if($t -> Iact($Tv['tid'])){ 	//活动标题参数 ?>
+										<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
 										<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
 										<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
 										<?php echo $t -> ISnormal($Tv['tid']); ?>
@@ -109,9 +109,19 @@
 											<!-- <span class="first">获胜者：<a href="./list.php?uid=<?php echo $t -> Gfirst($Tv['tid']); ?>"><?php echo $u -> Gname($t -> Gfirst($Tv['tid'])); ?></a></span> -->
 										<?php } ?>
 
-									<?php }else{	//专题参数 ?>
-									<!-- <span class="shoucang"><em><?php echo $Tv['click']; ?></em> 人喜欢</span> -->
+									<?php } ?>
+
+									<?php if ( $Tv['type'] == 2 ) {	//专题参数 ?>
+									<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
+									<span class="shoucang"><em><?php echo $Tv['click']; ?></em> 次购买</span>
 									<span class="guanzhu"><em><?php echo $t -> GFtotal($Tv['tid']); ?></em> 人关注</span>
+									<?php } ?>
+
+									<?php if ( $Tv['type'] == 3 ) {	//专题参数 ?>
+									<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
+									<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
+									<!-- <span class="shoucang"><em><?php echo $Tv['click']; ?></em> 人喜欢</span> -->
+									<span class="guanzhu"><em><?php echo $t -> GFtotal($Tv['tid']); ?></em> 人加入</span>
 									<?php } ?>
 
 								</div>
@@ -128,8 +138,10 @@
 										<?php }else{ ?>
 											<?php if($t -> Iact($Tv['tid'])){ 	//活动标题 ?>
 												<a class="buy follow r" href="javascript:;" >参与活动</a>
-											<?php }else{	//专题 ?>
+											<?php } elseif ( $Tv['type'] == 2 ) {	//专题 ?>
 												<a class="buy follow r" href="javascript:;" >关注专题</a>
+											<?php } elseif ( $Tv['type'] == 3 ) {	//任务 ?>
+												<a class="buy follow r" href="javascript:;" >接受任务</a>
 											<?php } ?>
 										<?php } ?>
 									<?php } ?>
