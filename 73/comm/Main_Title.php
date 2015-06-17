@@ -92,7 +92,7 @@ class Data_title extends Config
 		$sql = "select * FROM  `".parent::Fn()."classify` WHERE";
 		//全部
 		if ( $type == 0 ) {
-			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time()."))";
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time().") OR (`type` =4 AND `duration` > ".time()."))";
 		}
 		//活动
 		if ( $type == 1 ) {
@@ -104,6 +104,10 @@ class Data_title extends Config
 		}
 		//任务
 		if ( $type == 3 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		//任务
+		if ( $type == 4 ) {
 			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
 		}
 		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
@@ -1061,6 +1065,27 @@ class Title extends Event_title
 		}
 		if( $typeid == 3 ){
 			$value = '任务';
+		}
+		if( $typeid == 4 ){
+			$value = '挑战';
+		}
+		return $value;
+	}
+
+	//判断标题分类根据 类型ID 返回对应的样式名称
+	public function ITclass($typeid){
+		$value = '';
+		if( $typeid == 1 ){
+			$value = 'tit-activity';
+		}
+		if( $typeid == 2 ){
+			$value = 'tit-special';
+		}
+		if( $typeid == 3 ){
+			$value = 'tit-task';
+		}
+		if( $typeid == 4 ){
+			$value = 'tit-surpass';
 		}
 		return $value;
 	}

@@ -45,6 +45,7 @@
 						<a class="actionbar-btn actionbar-s1 <?php echo $type == 1 ? 'actionbar-btn-act actionbar-s1-act' : ''; ?>" href="?type=1">活动</a>
 						<a class="actionbar-btn actionbar-s2 <?php echo $type == 2 ? 'actionbar-btn-act actionbar-s2-act' : ''; ?>" href="?type=2">专题</a>
 						<a class="actionbar-btn actionbar-s3 <?php echo $type == 3 ? 'actionbar-btn-act actionbar-s3-act' : ''; ?>" href="?type=3">任务</a>
+						<a class="actionbar-btn actionbar-s3 <?php echo $type == 4 ? 'actionbar-btn-act actionbar-s3-act' : ''; ?>" href="?type=4">挑战</a>
 					</div>
 					<!-- 赛选 -->
 				</div>
@@ -70,9 +71,7 @@
 
 				if(1){   //判断是否有标题内容，如果有标题内容则输出  ?>
 				<div class="contentList titleList" style="width: 100%;overflow: initial;" >
-
 					<?php foreach($t -> Glist($type, ($page - 1) * $number, $number) as $key => $Tv) {	//循环输出全部标题 ?>
-
 						<?php if($t -> Gcost($Tv['tid']) > 0){  		//判断是否需要维护
 								if(!$t -> USMcharges($Tv['tid'])){		//如果没有维护成功
 									if($t -> Gcost($Tv['tid']) > 300){	//如果连续超过3天无法维护
@@ -142,6 +141,8 @@
 												<a class="buy follow r" href="javascript:;" >关注专题</a>
 											<?php } elseif ( $Tv['type'] == 3 ) {	//任务 ?>
 												<a class="buy follow r" href="javascript:;" >接受任务</a>
+											<?php } elseif ( $Tv['type'] == 4 ) {	//跳转 ?>
+												<a class="buy follow r" href="javascript:;" >参与挑战</a>
 											<?php } ?>
 										<?php } ?>
 									<?php } ?>

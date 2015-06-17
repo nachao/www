@@ -64,8 +64,8 @@
 	
 				<?php if($ist){ $Tv = $t -> Ginfo($tid);	//如果有指定的标题 ?>
 				<!-- 标题描述 -->
-				<div class="describe f <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" style="width: 760px;border-right: 1px dashed #ddd;padding: 20px 30px 0 0;margin-bottom: 50px;" >
-					<a href="?tid=<?php echo $tid; ?>"><h1 class="f"><?php echo $t -> Gtype($tid).'#'.$t -> Gtitle($tid); ?></h1></a>
+				<div class="describe f <?php if($t -> Ifollow($Tv['tid'])){ echo 'col_follow'; } //是否已关注 ?>" tid="<?php echo $Tv['tid']; ?>" >
+					<a href="?tid=<?php echo $tid; ?>"><h1 class="f"><?php echo $t -> ITval($Tv['type']).'#'.$t -> Gtitle($tid); ?></h1></a>
 					<?php if($Tv['tid'] == '291429156432'){		//指定内容播放音乐 ?>
 						<object data="./swf/dewplayer.swf" width="200" height="20" name="dewplayer" id="dewplayer" type="application/x-shockwave-flash" style="float: right;margin-top: 15px;" >
 							<param name="movie" value="./mp3/dewplayer.swf" />
@@ -75,19 +75,14 @@
 					<?php } ?>
 					<div class="c"></div>
 					<p><?php echo $t -> Gcontent($tid); ?></p>
-					<p>
-						<?php //foreach ($tl -> Glabel($tid) as $key => $value) { //输出全部标签
-							//if($tl -> GCtotal($value['lid'])){ ?>
-							<!-- <a href="?tid=<?php echo $tid; ?>&label=<?php echo $value['lid']; ?>"><em class="<?php if(isset($_GET['label']) && $value['lid'] == $_GET['label']){ echo "act"; } ?>"><?php echo $value['name']; ?></em></a> -->
-							<?php //} } ?>
-					</p>
 					<!-- 标题列表 - 参数 -->
-					<div class="param-tag f" style="width: 670px;">
+					<div class="param-tag f" style="width: 670px;border-top: 1px dashed #E7E7E7;padding-top: 10px;">
 						<span class="creator">创建者：
 							<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $u -> Gname($Tv['userid']); ?></a>
 						</span>
-						<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
-						<?php if($t -> Iact($Tv['tid'])){ 	//活动标题参数 ?>
+
+						<?php if( $Tv['type'] == 1 ){ 	//活动标题参数 ?>
+							<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
 							<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
 							<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
 							<?php echo $t -> ISnormal($Tv['tid']); ?>
@@ -103,9 +98,22 @@
 									<a href="./list.php?uid=<?php echo $t -> Gfirst($Tv['tid']); ?>"><?php echo $u -> Gname($t -> Gfirst($Tv['tid'])); ?></a>
 								</span>
 							<?php }else{ $fcid = 0; } ?>
+						<?php } ?>
 
-						<?php }else{	//专题参数 ?>
-						<span class="goumai"><em><?php echo $Tv['click']; ?></em> 次买账</span>
+						<?php if( $Tv['type'] == 2 ){	//专题参数 ?>
+							<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
+							<span class="goumai"><em><?php echo $Tv['click']; ?></em> 次买账</span>
+						<?php } ?>
+
+						<?php if( $Tv['type'] == 3 ){	//任务参数 ?>
+							<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
+							<span class="jine">参与人数：<em class="golds"><?php echo $Tv['reward']; ?></em> 人</span>
+						<?php } ?>
+
+						<?php if( $Tv['type'] == 4 ){ 	//挑战参数 ?>
+							<span class="time">剩余时间：<?php echo $t -> Gsurplus($Tv['tid']); ?></span>
+							<span class="jine">押金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
+							<span class="jine">参与者：<em class="golds"><?php echo $Tv['reward']; ?></em> 人</span>
 						<?php } ?>
 					</div>
 
@@ -127,17 +135,68 @@
 					<div class="c"></div>
 				</div>
 				<?php } ?>
-				
-				<?php if($ist){ ?>
-				<!-- 推荐标题 -->
-				<div class="recommend r">
-					<?php foreach ($t -> Ghot($tid) as $key => $value) { ?>
-						<a class="recommend-col" href="?tid=<?php echo $value['tid']; ?>" >
-							<img src="<?php echo $u -> Gicon($value['uid']); ?>" />
-							<span><?php echo $value['title']; ?></span>
-						</a>
-					<?php } ?>
-				</div>
+
+				<?php if( $Tv['type'] == 1 ){ ?>
+					<!-- 推荐标题 -->
+					<div class="recommend r">
+						<?php foreach ($t -> Ghot($tid) as $key => $value) { ?>
+							<a class="recommend-col" href="?tid=<?php echo $value['tid']; ?>" >
+								<img src="<?php echo $u -> Gicon($value['uid']); ?>" />
+								<span><?php echo $value['title']; ?></span>
+							</a>
+						<?php } ?>
+					</div>
+				<?php } ?>
+
+				<?php if( $Tv['type'] == 4 ){ ?>
+					<!-- 挑战标题 -->
+					<div class="surpass-digg r">
+						<div class="surpass-col">
+							<a class="surpass-btn" href="javascript:;" ><img src="http://webimg1.meitudata.com/201503/30/551909ca17728.jpg" alt="" /></a>
+							<div class="surpass-tip">
+								<p><span>排名：</span> 第 1 名</p>
+								<p><span>总得分：</span> <em class="gold" n="213">123</em> <i>分</i></p>
+								<p><span>百分比：</span> 12%</p>
+								<p><span>状态：</span> <!-- <i class="surpass-tip-up">↑</i> --><i class="surpass-tip-down">↓</i></p>
+							</div>
+						</div>
+						<div class="surpass-col">
+							<a class="surpass-btn" href="javascript:;" ><img src="http://webimg1.meitudata.com/201503/30/551909ca17728.jpg" alt="" /></a>
+							<div class="surpass-tip">
+								<p><span>排名：</span> 第 2 名</p>
+								<p><span>总得分：</span> <em class="gold" n="213">123</em> <i>分</i></p>
+								<p><span>百分比：</span> 12%</p>
+								<p><span>状态：</span> <!-- <i class="surpass-tip-up">↑</i> --><i class="surpass-tip-down">↓</i></p>
+							</div>
+						</div>
+						<div class="surpass-col">
+							<a class="surpass-btn" href="javascript:;" ><img src="http://webimg1.meitudata.com/201503/30/551909ca17728.jpg" alt="" /></a>
+							<div class="surpass-tip">
+								<p><span>排名：</span> 第 3 名</p>
+								<p><span>总得分：</span> <em class="gold" n="213">123</em> <i>分</i></p>
+								<p><span>百分比：</span> 12%</p>
+								<p><span>状态：</span> <!-- <i class="surpass-tip-up">↑</i> --><i class="surpass-tip-down">↓</i></p>
+							</div>
+						</div>
+						<div class="surpass-col">
+							<a class="surpass-btn" href="javascript:;" ><img src="http://webimg1.meitudata.com/201503/30/551909ca17728.jpg" alt="" /></a>
+							<div class="surpass-tip">
+								<p><span>排名：</span> 第 4 名</p>
+								<p><span>总得分：</span> <em class="gold" n="213">123</em> <i>分</i></p>
+								<p><span>百分比：</span> 12%</p>
+								<p><span>状态：</span> <!-- <i class="surpass-tip-up">↑</i> --><i class="surpass-tip-down">↓</i></p>
+							</div>
+						</div>
+						<div class="surpass-col">
+							<a class="surpass-btn" href="javascript:;" ><img src="http://webimg1.meitudata.com/201503/30/551909ca17728.jpg" alt="" /></a>
+							<div class="surpass-tip">
+								<p><span>排名：</span> 第 5 名</p>
+								<p><span>总得分：</span> <em class="gold" n="213">123</em> <i>分</i></p>
+								<p><span>百分比：</span> 12%</p>
+								<p><span>状态：</span> <!-- <i class="surpass-tip-up">↑</i> --><i class="surpass-tip-down">↓</i></p>
+							</div>
+						</div>
+					</div>
 				<?php } ?>
 				
 				<div class="c"></div>

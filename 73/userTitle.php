@@ -88,24 +88,14 @@
 							<?php $t -> USMcharges($Tv['tid']); //维护专题标题 ?>
 							<div class="col titleCol col_follow j_title_message sh" tid="<?php echo $Tv['tid']; ?>" >
 								<div class="head">
-
-									<?php 
-									$titStyleClass = '';
-									if($t -> Itype($Tv['tid'] ,1)){	//如果是活动
-										$titStyleClass = 'tit-activity';
-									}
-									if($t -> Itype($Tv['tid'] ,2)){	//如果是专题
-										$titStyleClass = 'tit-special';
-									}
-									if($t -> Itype($Tv['tid'] ,3)){	//如果是任务
-										$titStyleClass = 'tit-task';
-									} ?>
-									<div class="tit <?php echo $titStyleClass; ?>" >
-										<a href="./list.php?tid=<?php echo $Tv['tid']; ?>"><?php echo $title -> ITval($Tv['type'])."#". $Tv['title']; ?></a>
+									<div class="tit <?php echo $t -> ITclass($Tv['type']); ?>" >
+										<a href="./list.php?tid=<?php echo $Tv['tid']; ?>"><?php echo $t -> ITval($Tv['type'])."#". $Tv['title']; ?></a>
 									</div>
 
 									<!-- 我的标题列表	#参数们 -->
 									<div class="param-tag tag f j-title-param">
+
+										<?php ?>
 										<span class="creator">创建者：<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $users -> Gname($Tv['userid']); ?></a></span>
 
 										<span class="gold">池：
@@ -216,7 +206,7 @@
 									<div class="c"></div>
 								</div>
 
-								<?php if($Tv['userid'] == $u -> Guid() && $t -> GCtime($Tv['tid'])){ //如果当前访问者是题主且标题状态正常，则可以管理	?>
+								<?php if($Tv['userid'] == $u -> Guid() && $t -> GCtime($Tv['tid']) && $Tv['type'] == 2 ){ //如果当前访问者是题主且标题状态正常，则可以管理	?>
 									<!-- 题主管理界面 -->
 									<div class="depict j-title-manage" style="display: none;">
 										<div class="txt">
@@ -346,6 +336,28 @@
 												<?php } ?>
 											<?php } ?>
 
+											<input class="confirm amend r j-title-manage-affirm" type="button" value="确认修改" />
+											<a href="javascript:;" class="depict-link j-title-manage-close" >关闭</a>
+											<div class="prompt"><div>修改成功</div></div>
+											<div class="c"></div>
+										</div>
+									</div>
+								<?php } ?>
+
+								<?php if($Tv['userid'] == $u -> Guid() && $Tv['type'] == 3 ){ //任务管理界面	?>
+									<div class="depict j-title-manage" style="display: none;">
+										<div class="txt">
+											<textarea class="cue j-manage-depict" def="<?php echo $o -> Ccode($Tv['content']); ?>"><?php echo $o -> Ccode($Tv['content'], 1); ?></textarea>
+											<div class="radio" style="overflow: inherit;">
+												<span class="names s1" style="width: 190px;">增加奖金（单位：0.01 元）</span>
+												<div class="modified" max="<?php echo $price; ?>" min="0" >
+													<input type="button" value="-" class="btn prev">
+													<input type="text" value="0" class="txt j-manage-reward">
+													<input type="button" value="+" class="btn next">
+												</div>
+												<a class="modifiedTip j-tip-reward r" href="javascript:;" title="">金池金额不足！<i></i></a>
+												<span class="radio-hint">从金池中转入。</span>
+											</div>
 											<input class="confirm amend r j-title-manage-affirm" type="button" value="确认修改" />
 											<a href="javascript:;" class="depict-link j-title-manage-close" >关闭</a>
 											<div class="prompt"><div>修改成功</div></div>

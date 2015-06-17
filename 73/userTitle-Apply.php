@@ -67,13 +67,14 @@
 											<label class="act"><input type="radio" value="1" checked />活动</label>
 											<label><input type="radio" value="2" />专题</label>
 											<label><input type="radio" value="3" />任务</label>
+											<label><input type="radio" value="4" />挑战</label>
 											<!-- <label><input type="radio" value="4" />小组</label> -->
 										</div>
 									</div>
 									<!-- 活动参数 -->
 									<div id="activity" class="parameter" style="display: inline-block;" >
 										<div class="row">
-											<div class="radio" id="parameter-time">
+											<div class="radio parameter-time" id="parameter-time">
 												<span class="names s2">有效时间</span>
 												<label><input type="radio" value="1" />1天</label>
 												<label class="act"><input type="radio" value="7" checked />7天</label>
@@ -83,7 +84,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="radio" id="parameter-bonus">
+											<div class="radio parameter-bonus" id="parameter-bonus">
 												<span class="names s3">第一名奖金</span>
 												<label class="act"><input type="radio" value="1000" checked /><em>1000</em> 分</label>
 												<label><input type="radio" value="2000" /><em>2000</em> 分</label>
@@ -127,6 +128,29 @@
 												<label class="act"><input type="radio" name="days" value="3" checked />3天</label>
 											</div>
 										</div> -->
+									</div>
+									<!-- 挑战参数 -->
+									<div id="surpass" class="parameter" >
+										<div class="row">
+											<div class="radio parameter-time" >
+												<span class="names s2">挑战时长</span>
+												<label><input type="radio" value="1" />1天</label>
+												<label><input type="radio" value="3" />3天</label>
+												<label><input type="radio" value="7" />7天</label>
+												<label><input type="radio" value="15" />15天</label>
+												<label><input type="radio" value="30" />30天</label>	
+											</div>
+										</div>
+										<div class="row">
+											<div class="radio parameter-bonus" >
+												<span class="names s3">押金</span>
+												<label><input type="radio" value="100" /><em>100</em> 分</label>
+												<label><input type="radio" value="300" /><em>300</em> 分</label>
+												<label><input type="radio" value="500" /><em>500</em> 分</label>
+												<label><input type="radio" value="1000" /><em>1000</em> 分</label>
+												<label><input type="radio" value="5000" /><em>5000</em> 分</label>
+											</div>
+										</div>
 									</div>
 									<!-- 小组参数 -->
 									<!-- <div id="team" class="parameter" >
@@ -224,7 +248,7 @@
 		}
 
 		//选择有效时间
-		$("#parameter-time input").click(function(){
+		$(".parameter-time input").click(function(){
 			switch(parseInt($(this).val())){	//判断
 				case 7 	: num = 500 ; break;
 				case 15 : num = 1000 ; break;
@@ -238,7 +262,7 @@
 		});
 
 		//选择奖金
-		$("#parameter-bonus input").click(function(){
+		$(".parameter-bonus input").click(function(){
 			$('#numsVal').val($(this).val());
 			amount();	//合计
 		});
@@ -277,10 +301,8 @@
 			
 			//选择小组
 			if ( type == 4 ) {
-				$('#team').show();
-				$('#numsVal').val(0);	//奖金
-				$('#moneyVal').val(3000);	//金池
-				amount(3000);	//合计
+				$('#surpass').show();
+				amount(0);	//合计
 			}
 		});
 
