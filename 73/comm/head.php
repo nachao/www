@@ -13,7 +13,7 @@
 		<meta http-equiv="expires"content="Wed, 26 Feb 1997 08:21:57 GMT">
 		<link rel="stylesheet" type="text/css" href="./css/common.css" />
 		<link rel="stylesheet" type="text/css" href="./css/ffangle.css" />
-        <link rel="icon" href="./myicon-ico.png" type="image/gif" >
+        <link rel="icon" href="./icon-red.png" type="image/gif" >
 		<script type="text/javascript" src="./js/jquery-1.11.0.min.js" ></script>
 		<script type="text/javascript" src="./js/ffangle.js" ></script>
 	</head>
@@ -41,7 +41,7 @@
 					<div class="row">
 
 						<!-- LOGO -->
-						<div class="logo f"><a href="./" ><em>七十三号馆</em><i>没有交易功能的微博不是一个好论坛</i></a>
+						<div class="logo f"><a href="./" ><em>? 七十三号馆</em><i>没有交易功能的微博不是一个好论坛</i></a>
 							<span class="version" title="内部测试版 1.4.9" >Alpha</span>
 						</div>
 
