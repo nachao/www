@@ -136,6 +136,11 @@ jQuery.fn.extend({
 
 	},
 
+	//瀑布流排序
+	waterfall: function(){
+		$(ths)
+	},
+
 	//购买 *******************************************************
 	purchase: function(){
 		$(this).click(function(){ 
@@ -173,12 +178,12 @@ jQuery.fn.extend({
 					col.writing();	//查看文本事件
 					col.addClass('col_possess');	//确认已购买
 
-					col.find('.confirmBtn').off('click').html('去评论').attr('href', col.find('.look').attr('href'));	//重置购买按钮
+					col.find('.praise').addClass('praise-act');	//重置购买按钮
 
 					//提交数据
 					$.ajax({ type: "POST", url: "./ajax/ajax_user.php", data: "praise=" + cid, success: 
 						function(msg){
-							console.log(msg);
+							// console.log(msg);
 
 							//修改显示数量
 							col.find('.golds').attr('n', now+ parseInt(msg)).golds();
@@ -235,12 +240,17 @@ jQuery.fn.extend({
 								tip.slideUp(100);
 								big.show();
 								img.css({ cursor:'default' });
+
+								$('.contentList').jw13217(true);	//自动排序
 							});
 						}else{
 							img.css({ cursor:'pointer' });
 							tip.show();
 							big.hide();
-							$(obj).stop().animate({ maxHeight:defH }).off('mouseenter');
+							$(obj).stop().animate({ maxHeight:defH }, function(){
+
+								// $('.contentList').jw13217();	//自动排序
+							}).off('mouseenter');
 						}
 					});
 

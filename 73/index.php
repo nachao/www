@@ -192,21 +192,14 @@
 										<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
 									<?php } ?>
 
-									<?php if($c -> Ibuy($v['cid'])){		//如果可以查看 ?>
-										<a class="buy confirmBtn r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >去评论</a>
-										<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-									<?php }else{  //需要购买 ?>
+									<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
+										<!-- <a class="skip look r" href="javascript:;" >展开</a> -->
+									<?php } ?>
 
-										<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
-											<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-											<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-										<?php }else{ ?>
-											<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-										
+									<a class="buy confirmBtn purchase iconfont icon-qipaoa r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
+
+									<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
+										<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
 									<?php } ?>
 
 								</div>
@@ -409,6 +402,12 @@
 				main.hide();
 			});
 		});
+
+
+		//如果高度改变，重新排序瀑布
+		// $('.contentList').resize(function(){
+		// 	console.log($(this).height());
+		// });
 
 	</script>
 
