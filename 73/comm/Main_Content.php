@@ -118,6 +118,12 @@ class Data_content extends Comm_content
 		return $row[0];
 	}
 
+	//获取指定 内容CID 的指定 时间段TIME(一天) 内容的收入总金额
+	protected function data_selectSumlog($cid=0, $start=0, $end=0 ){
+		$sql = "select sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND `source_id` = ".$cid." AND `types` = 1 AND `source` = 'cid' LIMIT 1";
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
+	}
 
 	/********************************************
 	* 更新 update
@@ -529,6 +535,27 @@ class Content extends Event_content
 	//获取指定 内容CID 的详细页的相关内容
 	public function Ginterfix($cid=0){
 		return parent::event_getInterfix($cid);
+	}
+
+	//获取指定 内容CID 的收支情况
+	public function Gincome($cid=0){
+		$day = 24 *60 *60;
+		$begin = strtotime(date('Y-m-d',time())) + $day;
+		$time = 0;
+
+		$arr = array();
+		$key = '';
+
+		for($i=0; $i<=6; $i++){
+			$time = $begin - $day * $i;
+			$key = date('Y-m-d', $time-1);
+			$start = $time-$day;
+			$end = $time -1;
+
+			// $arr[$key]['pay'] = parent::data_selectSumlog($cid, $start, $end);			//获取用户指定天数的支出总和
+			$arr[$key]['income'] = parent::data_selectSumlog($cid, $start, $end);	//获取用户指定天数的收入总和
+		}
+		return $arr;
 	}
 
 

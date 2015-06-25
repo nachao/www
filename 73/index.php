@@ -52,7 +52,7 @@
 
 ?>
 
-	<div class="container pagecon">
+	<div class="container pagecon Lite">
 
 		<!-- 主体 -->
 		<div class="main">
@@ -182,7 +182,9 @@
 								<?php } ?>
 								
 								<div class="use">
-									<div class="num f"><span class="gold golds" n="<?php echo $v['plus']; ?>" title="内容目前的收入."></span> <i>元</i></div>
+									<div class="num cols-sum f">
+										<span class="gold golds" n="<?php echo $v['plus']; ?>" title="内容目前的收入."></span> <i>元</i>
+									</div>
 
 									<?php if($u -> Guid()){	//登录后显示的提示 ?>
 										<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
@@ -223,7 +225,14 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<!-- 内容收情况 -->
+	<ul class="income-detailed" id="incomeDetailed">
+		<ol class="idd-item">
+			<li class="idd-pillar"></li>
+			<li class="idd-depict"><em></em><i></i></li>
+		</ol>
+	</ul>
 	<script type="text/javascript">
 
 		//自动排序
@@ -332,6 +341,74 @@
 			});
 
 		})();
+
+		//获取指定内容的收支情况
+		$('.col').income();
+
+		//动画显示收支详细
+		$('.cols-sum').hover(function(){
+			//获取数据
+			var max = 0,
+				num = 0,
+				data = JSON.parse($(this).parents('.col').data('income')),
+				arr = [],
+				time = [];
+
+			//遍历参数
+			for ( var key in data ) {
+				time.push(key);
+				num = parseInt(data[key].income);
+				if ( num > max ) {
+					max = num;
+				}
+				arr.push(num);
+			}
+			$(arr).each(function(key, val){
+				if ( val ) {
+					val = parseInt(val / max * 100);
+				}
+				if ( val < 20 ) {
+					val += 10;
+				}
+				arr[key] = val;
+			});	
+
+			//获取元素
+			var main = $(this).find('.income-detailed');
+
+			//初始化元素
+			if ( main.length == 0 ) {
+				$(this).prepend($('#incomeDetailed').clone().removeAttr('id'));	//复制模板
+				main = $(this).find('.income-detailed');
+				var obj = main.find('.idd-item:first');
+				$(arr).each(function(key, val){	//复制柱形
+					var item = main.find('.idd-item:first').clone();
+					item.find('.idd-depict').html(time[key] + '<i></i>');
+					main.append(item);
+				});
+				obj.remove();
+			}
+			// console.log(arr);
+			//执行动画
+			var now = 0,
+				pillar = main.show().find('.idd-pillar').css({ height: 0 });
+			auto();
+			function auto(){
+				if ( now <= arr.length ) {
+					pillar.eq(now).stop().animate({ height: arr[now] + '%' }, 300);
+					now += 1;
+					setTimeout(function(){
+						auto();
+					}, 100);
+				}
+			}
+		}, function(){
+			var main = $(this).find('.income-detailed'),
+				pillar = main.find('.idd-pillar');
+			pillar.stop().animate({ height: 0 }, 200, function(){
+				main.hide();
+			});
+		});
 
 	</script>
 
