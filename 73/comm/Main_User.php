@@ -192,7 +192,6 @@ class Data_user extends Config
 		return mysql_query($sql);
 	}
 
-
 	//获取指定 用户UID 的指定 时间段TIME(一天) 内容的指定 类型TYPE 的变动总金额
 	protected function data_selectSumlog($uid=0, $start=0, $end=0, $type=0){
 		$sql = "select sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND ";

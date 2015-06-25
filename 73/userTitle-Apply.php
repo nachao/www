@@ -132,7 +132,7 @@
 									<!-- 挑战参数 -->
 									<div id="surpass" class="parameter" >
 										<div class="row">
-											<div class="radio parameter-time" >
+											<div class="radio parameter-time" id="surpass-time">
 												<span class="names s2">挑战时长</span>
 												<label><input type="radio" value="1" />1天</label>
 												<label><input type="radio" value="3" />3天</label>
@@ -142,13 +142,13 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="radio parameter-bonus" >
+											<div class="radio parameter-bonus" id="surpass-bonus">
 												<span class="names s3">押金</span>
 												<label><input type="radio" value="100" /><em>100</em> 分</label>
 												<label><input type="radio" value="300" /><em>300</em> 分</label>
 												<label><input type="radio" value="500" /><em>500</em> 分</label>
 												<label><input type="radio" value="1000" /><em>1000</em> 分</label>
-												<label><input type="radio" value="5000" /><em>5000</em> 分</label>
+												<label><input type="radio" value="5000" /><em>5000</em> 分</label>	
 											</div>
 										</div>
 									</div>
@@ -250,10 +250,13 @@
 		//选择有效时间
 		$(".parameter-time input").click(function(){
 			switch(parseInt($(this).val())){	//判断
-				case 7 	: num = 500 ; break;
-				case 15 : num = 1000 ; break;
-				case 30 : num = 2000 ; break;
-				case 90 : num = 5000; break;
+				case 1 	: num = 10 	; break;
+				case 3 	: num = 20 	; break;
+				case 5 	: num = 40 	; break;
+				case 7 	: num = 50 	; break;
+				case 15 : num = 100 ; break;
+				case 30 : num = 200 ; break;
+				case 90 : num = 500 ; break;
 				default	: num = 0 	; break;
 			}
 			$('#daysVal').val($(this).val());
@@ -299,11 +302,22 @@
 				amount(100);	//合计
 			}
 			
-			//选择小组
+			//选择挑战
 			if ( type == 4 ) {
 				$('#surpass').show();
 				amount(0);	//合计
+				// $('#numsVal').val(0);	//奖金
+				// $('#moneyVal').val(3000);	//金池
+				// amount(3000);	//合计
 			}
+			
+			//选择小组
+			// if ( type == 4 ) {
+			// 	$('#team').show();
+			// 	$('#numsVal').val(0);	//奖金
+			// 	$('#moneyVal').val(3000);	//金池
+			// 	amount(3000);	//合计
+			// }
 		});
 
 		//初始化显示

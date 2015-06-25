@@ -288,5 +288,10 @@
 		echo json_encode($u -> Glog());
 	}
 
+	//获取指定内容的收支情况
+	if ( isset($_POST['income']) ) {
+		echo json_encode($c -> Gincome($_POST['cid']));
+	}
+
 
 ?>

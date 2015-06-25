@@ -963,6 +963,23 @@ jQuery.fn.extend({
 
 
 		});
+	},
+
+	//获取指定内容最近7天的收支情况
+	income: function(){
+		$(this).each(function(){
+			$(this).mouseenter(function(){
+				var col = $(this),
+					cid = col.attr('cid');
+				$.g({
+					name: 'income',
+					data: { 'cid': cid },
+					result: function(data){
+						col.data('income', data);
+					}
+				});
+			});
+		});
 	}
 
 });

@@ -19,8 +19,8 @@
 	}
 
 
-	$page = 1;
-	$number = 9;
+	$page = 1;		//当前默认打开页数
+	$number = 9;	//每页显示数量
 	$total = $t -> Gtotal($type);
 	$total = $total <= 0 ? 1 : $total;
 
