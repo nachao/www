@@ -43,8 +43,8 @@
 	// $bnid = $admin -> Abanner('', './list.php?tid=291429104152', 0, 291429104152);
 	// echo $admin -> Uact($bnid);
 
-	$admin -> UBsrc('731429112068', './images/1.jpg');
-	$admin -> UBact('731429112068');
+	// $admin -> UBsrc('731429112068', './images/1.jpg');
+	// $admin -> UBact('731429112068');
 
 
 	// $an -> Anotice("【新加入功能】发布内容时，可以选择“推送”，用户支付 1 元，内容随机分配0.60元至1.10元之间。");
@@ -131,7 +131,7 @@
 					<div class="row"></div>
 					<?php foreach ($list as $k => $v) {	//输出内容，或者指定标题的内容 		?>
 						<?php $is_look = !$u -> Guid()?' col_possess':'';	//如果没有登录默认内容可以查看 ?>
-						<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+						<div class="col col_possess<?php //echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
 
 							<!-- 标示 -->
 							<?php if($v['effects'] == 1){	//如果是顶 ?>
@@ -197,11 +197,7 @@
 									<?php } ?>
 
 									<a class="buy confirmBtn purchase iconfont icon-qipaoa r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
-
-									<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
-										<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
-									<?php } ?>
-
+									<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
 								</div>
 							</div>
 						</div>

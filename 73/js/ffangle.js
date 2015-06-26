@@ -146,7 +146,7 @@ jQuery.fn.extend({
 		$(this).click(function(){ 
 			var obj = $(this),
 				col = obj.parents('.col');
-			if( !col.hasClass('col_possess') ){	//如果还没购买
+			// if( !col.hasClass('col_possess') ){	//如果还没购买
 
 				//获取参数
 				var	cid = parseInt(col.attr('cid')),
@@ -165,9 +165,8 @@ jQuery.fn.extend({
 					clearTimeout(loop);
 					loop = setTimeout(function(){
 						tip.fadeOut('slow');
-					}, 3000);
+					}, 1000);
 				}
-
 				//判断当前是否登录，登录状态且持有金币数量足够
 				if( userGold > 0 ){
 					
@@ -183,10 +182,17 @@ jQuery.fn.extend({
 					//提交数据
 					$.ajax({ type: "POST", url: "./ajax/ajax_user.php", data: "praise=" + cid, success: 
 						function(msg){
-							// console.log(msg);
+							console.log(msg);
 
 							//修改显示数量
 							col.find('.golds').attr('n', now+ parseInt(msg)).golds();
+
+							//修改收支情况
+							col.income();
+
+							//启动游客收入
+							$(window).visitorIncome();
+							$('#visitorTotal').html(parseInt($('#visitorTotal').html()) + 1);
 						}
 					});
 
@@ -195,7 +201,7 @@ jQuery.fn.extend({
 				}
 
 				return false;
-			}
+			// }
 		});
 	},
 
@@ -706,6 +712,13 @@ jQuery.fn.extend({
 		sideobj.attr('n', number);
 		sideobj.golds();
 
+		//如果是游客
+		var visitor = $('#visitorBtn');
+		if ( visitor.length ) {
+			visitor.find('span').html( number );
+			$('#visitorSum').attr('n', number).golds();
+		}
+
 		return number;
 	},
 
@@ -990,6 +1003,34 @@ jQuery.fn.extend({
 				});
 			});
 		});
+	},
+
+	//游客收入
+	visitorIncome: function(){
+		var visitor = $('#visitorBtn'),
+			name = '73income'+ $('#userIs').val(),
+			timing = parseInt(checkCookie(name)) || 0;
+		var once = 1000;
+		// visitor.find('i').css({ height: parseInt(timing/60*100) + '%' });
+		clearTimeout(window.loop);
+		if ( visitor.length ) {
+			if ( timing >=60 ){
+				timing = 0;
+				$(window).updateSum(1);
+				$.g({
+					name: 'visitorIncome',
+					data: { 'uid': $('#userIs').val() }
+				});
+			}
+			timing += 1;
+			setCookie(name, timing, 1);
+			visitor.find('i').stop().animate({ height: parseInt(timing/60*100) + '%' }, once);
+			if ( $(window).updateSum() < 24 ) {
+				window.loop = setTimeout(function(){
+					$(window).visitorIncome();
+				}, once);
+			}
+		}
 	}
 
 });

@@ -293,5 +293,11 @@
 		echo json_encode($c -> Gincome($_POST['cid']));
 	}
 
+	//游客收入
+	if ( isset($_POST['visitorIncome']) ) {
+		$sum = $u -> Gplus();
+		$sum = $sum + 1;
+		return $uv -> Usum($_POST['uid'], $sum);
+	}
 
 ?>

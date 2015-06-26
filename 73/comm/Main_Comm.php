@@ -110,6 +110,24 @@ class Tool
 		return $ip;
 	}
 
+	//获取当前用户 ip
+	// public function Gip() { 
+	// 	if (getenv('HTTP_CLIENT_IP')) { 
+	// 		$ip = getenv('HTTP_CLIENT_IP'); 
+	// 	} elseif (getenv('HTTP_X_FORWARDED_FOR')) { 
+	// 		$ip = getenv('HTTP_X_FORWARDED_FOR'); 
+	// 	} elseif (getenv('HTTP_X_FORWARDED')) { 
+	// 		$ip = getenv('HTTP_X_FORWARDED'); 
+	// 	} elseif (getenv('HTTP_FORWARDED_FOR')) { 
+	// 		$ip = getenv('HTTP_FORWARDED_FOR'); 
+	// 	} elseif (getenv('HTTP_FORWARDED')) { 
+	// 		$ip = getenv('HTTP_FORWARDED'); 
+	// 	} else { 
+	// 		$ip = $_SERVER['REMOTE_ADDR']; 
+	// 	} 
+	// 	return $ip; 
+	// } 
+
 	//获取 今天 0点的时间戳
 	public function GNtime(){
 		return strtotime(date('Y-m-d'));

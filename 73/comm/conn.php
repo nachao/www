@@ -61,7 +61,7 @@
 		// $uid = $uid ? $uid : parent::Eid();
 		protected function Eid(){
 			$u = new Users();
-			return $uid = $u -> Guid();
+			return $u -> Guid();
 		}
 
 		//获取指定的数据列表，可以遍历所需字段

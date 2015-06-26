@@ -112,9 +112,9 @@ class Data_content extends Comm_content
 	}
 	
 	//获取指定 用户UID 是否购买指定的 内容(CID)
-	protected function data_userIsBuy($uid=0, $cid=0){
+	protected function data_userIsBuy($uid=-1, $cid=0){
 		$sql = "select * FROM  `".parent::Fn()."logs_purchase` WHERE  `source_id` =".$cid." AND `out_uid` =".$uid.";";
-		return parent::Ais($sql);
+		$row = parent::Ais($sql);
 		return $row[0];
 	}
 
@@ -266,11 +266,11 @@ class Event_content extends Data_content
 	}
 
 	//获取指定 用户(UID)（选填） 购买过指定的 内容(CID) 的记录信息
-	protected function event_isBuy($cid=0, $uid=0){
-		if($cid){
-			return parent::data_userIsBuy($uid, $cid);
-		}
-	}
+	// protected function event_isBuy($cid=0, $uid=0){
+	// 	if($cid){
+	// 		return parent::data_userIsBuy($uid, $cid);
+	// 	}
+	// }
 
 	//判断指定 用户UID（选填） 是否可以查看指定的 内容ID  
 	// protected function event_isSee($cid=0, $uid=0){
@@ -586,7 +586,7 @@ class Content extends Event_content
 	public function Ibuy($cid=0, $uid=0){
 		$uid = $uid ? $uid : parent::Eid();
 		if($cid){
-			return $this -> Iauthor($cid, $uid) || parent::event_isBuy($cid, $uid);
+			return $this -> Iauthor($cid, $uid) || parent::data_userIsBuy($uid, $cid);
 		}
 	}
 
@@ -716,10 +716,14 @@ class Content extends Event_content
 		$t = new Title();
 		$value = 0;
 		if($cid){
-			$num = 2 *5;			//作者默认收获，0.02 元吗，测试期间三倍收入。
-			if($u -> Guid()){					//登录用户才能操作
-				if($u -> Gplus() >= 1){			//如果用户金额足够
-
+			$num = 2;
+			if ( $u -> Is() ) {
+				$num = $num *5;			//作者默认收获，0.02 元吗，测试期间三倍收入。
+			} else {
+				$num = 1;
+			}
+			if($u -> Gplus() >= 1){			//如果用户金额足够
+				if($u -> Is()){				//登录用户才能操作
 					$u -> UAclick();					//用户刷新点评量
 					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
 					
@@ -729,11 +733,14 @@ class Content extends Event_content
 						$t -> UAda($tid);		//标题刷新的金池，默认收入 1 分。
 						$t -> Ubuy($tid);		//标题刷新的购买次数
 					}
-					$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
-
-					$this -> Uplus($cid, $num);	//刷新内容金额
-					$this -> UAclick($cid);		//内容刷新购买次数
+				} else {	//游客
+					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
 				}
+
+				$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
+
+				$this -> Uplus($cid, $num);	//刷新内容金额
+				$this -> UAclick($cid);		//内容刷新购买次数
 			}
 			$value = $num;//$cid;
 		}

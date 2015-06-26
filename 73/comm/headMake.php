@@ -5,12 +5,22 @@
 		$u -> Uout();
 	}
 
+	//如果是游客
+	if ( !$u -> Is() ) {
+		$visitorInfo = $uv -> Anew();
+		// $uid = $o -> Gip();
+		// $u -> Acache($uid, 'visitor');
+		// $sum = 24;			//默认
+	}
 
+	//获取参数
+	$uid = $u -> Guid();
+	$sum = $u -> Gplus();
 ?>
 
 <!-- 搜索 及 注册按钮 -->
 <div class="make r">
-	<?php if($u -> Guid()){ //判断是的登录	------------------------------ ?>
+	<?php if($u -> Is()){ //判断是的登录	------------------------------ ?>
 		<div class="operate f" <?php if($ect == 'user'){ ?> style="border-top-color: #e74c3c;" <?php } ?> >
 			<div class="icon"><a href="./user.php" ><?php echo $u -> Gname(); ?></a><i></i></div>
 			<div class="link">
@@ -32,6 +42,6 @@
 		<a class="login f" href="./login.php" >注册/登录</a>
 	<?php } //---------------------------------------- ?>
 	<!-- 用户信息 -->
-	<input type="hidden" value="<?php echo $u -> Gplus(); ?>" id="userGold" />
-	<input type="hidden" value="<?php echo $u -> Guid(); ?>" id="userIs" />
+	<input type="hidden" value="<?php echo $sum; ?>" id="userGold" />
+	<input type="hidden" value="<?php echo $uid; ?>" id="userIs" />
 </div>

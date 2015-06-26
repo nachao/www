@@ -1266,6 +1266,9 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .floatside .s3{ background-position: 0 0px; }
 .floatside a.s2{ background: url(../imgs/iconfont-fankui.png) no-repeat center #bbb;background-size: 60%; }
 .floatside a.s2:hover{ background-color: #e74c3c; }
+.floatside .s4{ background-position: 0 -50px;background-color: #bbb;text-align: center;color: white;line-height: 50px;font-family: Arial;font-size: 24px;position: relative; }
+.floatside .s4 i{ position: absolute;bottom: 0px;left: 0px;width: 100%;height: 0px;background: rgba(0,0,0,.2);z-index: 2; }
+.floatside .s4:hover{ background-position: 0 -50px;background-color: #e74c3c; }
 
 
 
@@ -1754,6 +1757,7 @@ margin: auto; }
 .Lite .contentList .col .use .buy{ background: transparent;border: 0px;color: #666;margin-left: 0px;display: inline-block;width: 50px;height: 50px;line-height: 50px;position: relative;top: -10px;padding: 0px;text-align: center;font-size: 25px;color: #ddd;transition: 0.3s; }
 .Lite .contentList .col .use .buy:hover{ color: #e74c3c;font-size: 45px; }
 .Lite .contentList .col .use .skip{ background: transparent;border: 0px;text-decoration: underline; }
+.Lite .contentList .col .use .tip{ right: 40px;top: -25px; }
 
 /* 赞按钮 */
 .Lite .contentList .col .use .praise span{ text-align: center;text-indent: 0px; }

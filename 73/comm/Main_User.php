@@ -268,7 +268,18 @@ class Event_user extends Data_user
 
 	//根据缓存获取用户 ID
 	protected function event_uid(){
-		return $this -> event_uis() ? $_COOKIE[self::CN] : 0;
+		$uid = '0';
+		if ( $this -> event_uis() ) {
+			$uid = $_COOKIE[self::CN];
+		}
+		if ( !$uid ) {
+			$uid = $_COOKIE['73visitor'];
+			$uid = str_replace(':', '', $uid);	
+		}
+		if ( !$uid ) {
+			$uid = '-1';
+		}
+		return $uid;
 	}
 
 	//获取用户信息
@@ -445,7 +456,12 @@ class Event_user extends Data_user
 	//刷新指定 用户ID（选填，默认为登录用户） 的 数量NUM 金币
 	protected function event_updatePlus($num=0, $uid=0){
 		$uid = $uid ? $uid : $this -> event_uid();
+		$uv = new Users_visitor();
 		if($num >= 0){
+			//如果是游客
+			if ( !$this -> Is() ) {
+				return $uv -> Usum($uid, $num);
+			}
 			parent::data_update($uid, 'plus', $num);
 			return $num;
 		}
@@ -666,6 +682,11 @@ class Users extends Event_user
 
 	//获取用户余额，根据 用户ID（选填，默认为登录用户）
 	public function Gplus($uid=0){
+		$uv = new Users_visitor();
+		//如果是游客
+		if ( !$this -> Is() ) {
+			return $uv -> Gsum($uid);
+		}
 		if(!$uid && parent::event_uis()){	//没有参数且有登录用户的情况下
 			$uid = parent::event_uid();
 		}
@@ -953,6 +974,10 @@ class Users extends Event_user
 		return isset($_GET['k']);
 	}
 
+	public function Is(){
+		return parent::event_uis();
+	}
+
 	//判断是否登录 没有登录则跳转至 内容列表页
 	public function INtoL(){
 		if(!parent::event_uis()){
@@ -1168,11 +1193,23 @@ class Users extends Event_user
 			$invited = null;
 		}
 		parent::event_addUser($uid, $account, $password, $effigy, $invited, $ip);		//创建用户所有数据
-
-		setcookie("73userid", $uid, time()+24*3600, "/");	//存入本地缓存 - 有效时间 1 天	
 		// userStatusSet( $nid, "个人中心");	//刷新状态	
+		$this -> Acache($uid);
 
 		return $uid;	//返回数据
+	}
+
+	//添加用户浏览器缓存
+	public function Acache($uid=0, $type=''){
+		$name = '73userid';
+		if ( $type == 'visitor' ) {
+			$name = '73visitor';
+		}
+		if ( $uid ) {
+			setcookie( $name, $uid, time()+24*3600, "/");	//存入本地缓存 - 有效时间 1 天	
+		} else {
+			setcookie( $name, '', time()-3600);
+		}
 	}
 
 	//激活码 --添加 激活码CDK 
@@ -1207,10 +1244,10 @@ class Users extends Event_user
 
 		//获取收入用户
 		if($source == 'tid'){	//创建标题
-			$in_uid = $t -> Gcreator($source_id);
+			// $in_uid = $t -> Gcreator($source_id);
 		}
 		if($source == 'cid'){	//购买内容
-			$in_uid = $t -> Gauthor($source_id);
+			// $in_uid = $t -> Gauthor($source_id);
 		}
 		if($source == 'ccid'){	//创建内容
 			$in_uid = 0;
