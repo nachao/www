@@ -9,7 +9,7 @@
 
 ?>
 
-	<?php if(!$u -> Guid()){ ?>
+	<?php if(!$u -> Is()){ ?>
 		<!-- 快速登录 -->
 		<div class="commarea sideFastentry" style="margin-top: 0px;">
 			<div class="content">
@@ -72,7 +72,7 @@
 		</script>
 	<?php } ?>
 	
-	<?php if($u -> Guid()){ ?>
+	<?php if($u -> Is()){ ?>
 		<!-- 用户信息 -->
 		<div class="userInfo" userid="<?php echo $suid; ?>" style="margin:0px;" >
 
@@ -103,49 +103,81 @@
 			</div>
 			<div class="c"></div>
 		</div>
-	<?php } ?>
 	
-	<!-- 我的金额记录 -->
-	<div class="commarea sideFondertit">
-		<div class="content">
-			<div class="head">
-				<div class="tit f"><em>金额记录</em><i>Fonder Titles</i></div>
-				<div class="gap"><i></i></div>
-			</div>
-			<div class="sumLog">
+		<!-- 我的金额记录 -->
+		<div class="commarea sideFondertit">
+			<div class="content">
+				<div class="head">
+					<div class="tit f"><em>金额记录</em><i>Fonder Titles</i></div>
+					<div class="gap"><i></i></div>
+				</div>
+				<div class="sumLog">
 
-				<?php foreach ($u -> Glog() as $key => $value) {	//输出用户最近三十天的收支记录
-					if ( $value['pay'] ) {
-						$pay = '<br />支出：<span class="golds" n="'.$value['pay'].'"></span><i></i>';
-					}else{
-						$pay = '';
-					}
-					if ( $value['income'] ) {
-						$income = '<br />收入：<span class="golds" n="'.$value['income'].'"></span><i></i>';
-					}else{
-						$income = '';
-					}
-					if ( $value['pay'] > $value['income'] ) {
-						$type = 'pay';
-						$val = (intval($value['pay']) + 20);
-					}else{
-						$type = 'income';
-						$val = (intval($value['income']) + 20);
-					}
-					if ( $value['pay'] || $value['income'] ) {
-						$val = $val > 100 ? 100 : $val;
-						$val = $val/100;
-						echo '<div class="item '.$type.'" ><div class="con" style="opacity: '.$val.';" ></div><span class="tip"><em></em>'.$key.$income.$pay.'</span></div>';
-					}else{
-						echo '<div class="item"><span class="tip"><i></i>'.$key.'</span></div>';
-					}
-				} ?>
+					<?php foreach ($u -> Glog() as $key => $value) {	//输出用户最近三十天的收支记录
+						if ( $value['pay'] ) {
+							$pay = '<br />支出：<span class="golds" n="'.$value['pay'].'"></span><i></i>';
+						}else{
+							$pay = '';
+						}
+						if ( $value['income'] ) {
+							$income = '<br />收入：<span class="golds" n="'.$value['income'].'"></span><i></i>';
+						}else{
+							$income = '';
+						}
+						if ( $value['pay'] > $value['income'] ) {
+							$type = 'pay';
+							$val = (intval($value['pay']) + 20);
+						}else{
+							$type = 'income';
+							$val = (intval($value['income']) + 20);
+						}
+						if ( $value['pay'] || $value['income'] ) {
+							$val = $val > 100 ? 100 : $val;
+							$val = $val/100;
+							echo '<div class="item '.$type.'" ><div class="con" style="opacity: '.$val.';" ></div><span class="tip"><em></em>'.$key.$income.$pay.'</span></div>';
+						}else{
+							echo '<div class="item"><span class="tip"><i></i>'.$key.'</span></div>';
+						}
+					} ?>
 
+				</div>
+				<div class="c"></div>
 			</div>
-			<div class="c"></div>
+			<div class="bottomSide"></div>
 		</div>
-		<div class="bottomSide"></div>
-	</div>
+
+		<!-- 我关注的标题 -->
+		<div class="commarea sideFondertit">
+			<div class="content">
+				<div class="head">
+					<div class="tit f"><em>我的标题</em><i>Fonder Titles</i></div>
+					<div class="gap"><i></i></div>
+				</div>
+				<div class="list">
+
+					<?php foreach ($t -> GUFlist(0, $suid) as $key => $TFv) {	//输出用户关注的标题 ?>
+						<a class="one" href="./list.php?tid=<?php echo $TFv['tid']; ?>" ><?php echo $t -> ITval($TFv['type']).'#'.$TFv['title']; ?><span>(<?php echo $TFv['number']; ?>)</span><i>&gt;</i></a>
+					<?php } ?>
+
+				</div>
+
+				<?php if(count($t -> GUFlist(0, $suid)) <= 0){	//如果没有关注的标题 ?>
+					<div class="notFollow">
+						<div class="tip">暂时还未关注标题！</div>
+
+						<?php  if($u -> Guid()){	//如果用户是在自己的个人中心时候显示 ?>
+							<a class="skip" href="./title.php" title="">逛标题</a>
+							<a class="skip" href="./titleApply.php" title="">申请标题</a>
+						<?php } ?>
+
+					</div>
+				<?php } //输出我关注的标题结束 -------------------------------------- ?>
+
+				<div class="c"></div>
+			</div>
+			<div class="bottomSide"></div>
+		</div>
+	<?php } ?>
 	
 	<?php if($ect != "message" && 0){ //在留言板不显示此内容 ?>
 		<!-- 最新留言 -->
@@ -177,40 +209,6 @@
 					<div class="c"></div>
 					<div class="newMessage"><a href="./userMessage.php<?php echo $u -> Ik() ? '?k='.$u -> Gcid() : ''; ?>" title="">去留言</a></div>
 				</div>
-				<div class="c"></div>
-			</div>
-			<div class="bottomSide"></div>
-		</div>
-	<?php } ?>
-	
-	<?php if($u -> Guid()){ ?>
-		<!-- 我关注的标题 -->
-		<div class="commarea sideFondertit">
-			<div class="content">
-				<div class="head">
-					<div class="tit f"><em>我的标题</em><i>Fonder Titles</i></div>
-					<div class="gap"><i></i></div>
-				</div>
-				<div class="list">
-
-					<?php foreach ($t -> GUFlist(0, $suid) as $key => $TFv) {	//输出用户关注的标题 ?>
-						<a class="one" href="./list.php?tid=<?php echo $TFv['tid']; ?>" ><?php echo $t -> ITval($TFv['type']).'#'.$TFv['title']; ?><span>(<?php echo $TFv['number']; ?>)</span><i>&gt;</i></a>
-					<?php } ?>
-
-				</div>
-
-				<?php if(count($t -> GUFlist(0, $suid)) <= 0){	//如果没有关注的标题 ?>
-					<div class="notFollow">
-						<div class="tip">暂时还未关注标题！</div>
-
-						<?php  if($u -> Guid()){	//如果用户是在自己的个人中心时候显示 ?>
-							<a class="skip" href="./title.php" title="">逛标题</a>
-							<a class="skip" href="./titleApply.php" title="">申请标题</a>
-						<?php } ?>
-
-					</div>
-				<?php } //输出我关注的标题结束 -------------------------------------- ?>
-
 				<div class="c"></div>
 			</div>
 			<div class="bottomSide"></div>

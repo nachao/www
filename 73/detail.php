@@ -145,9 +145,15 @@
 										<div class="col">
 											<a href="?cid=<?php echo $con['cid']; ?>" >
 												<?php if($Atype==0){ ?><div class="con"><?php echo $con['content']; ?></div><?php } ?>
-												<?php if($Atype==1){ ?><div class="pic" style="background-image: url(<?php echo $con['image']; ?>);"></div><?php } ?>
-												<?php if($Atype==2){ ?><embed class="gif" src="http://<?php echo $con['video']; ?>" quality="high" wmode="Opaque" width="100%" height="100%" align="middle" allowscriptaccess="always" allowfullscreen="true" mode="transparent" type="application/x-shockwave-flash"><?php } ?>
-												<?php if($Atype==3){ ?><embed class="mp3" src="<?php echo $con['music']; ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent" /><?php } ?>
+												<?php if($Atype==1){ ?>
+													<div class="pic" style="background-image: url(<?php echo $c -> Gimage($con['cid']); ?>);"></div>
+												<?php } ?>
+												<?php if($Atype==2){ ?>
+													<embed class="gif" src="<?php echo $c -> Gvideo($con['cid']); ?>" quality="high" wmode="Opaque" width="100%" height="100%" align="middle" allowscriptaccess="always" allowfullscreen="true" mode="transparent" type="application/x-shockwave-flash">
+												<?php } ?>
+												<?php if($Atype==3){ ?>
+													<embed class="mp3" src="<?php echo $c -> Gmusic($con['cid']); ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent" />
+												<?php } ?>
 												<div class="info">
 													<div class="txt"><?php if( $Atype!=0 ){ echo $con['content']; } ?></div>
 													<div class="ico">

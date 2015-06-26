@@ -87,7 +87,7 @@
 				<?php } ?>
 				
 				<div class="use">
-					<div class="num f"><span class="gold golds" n="<?php echo $v['plus']; ?>"></span> <i>元</i></div>
+					<div class="num cols-sum f"><span class="gold golds" n="<?php echo $v['plus']; ?>"></span> <i>元</i></div>
 					
 					<?php if($u -> Guid()){	//登录后显示的提示 ?>
 						<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>

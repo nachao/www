@@ -196,7 +196,7 @@
 										<!-- <a class="skip look r" href="javascript:;" >展开</a> -->
 									<?php } ?>
 
-									<a class="buy confirmBtn purchase iconfont icon-qipaoa r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
+									<a class="buy confirmBtn iconfont icon-qipaoa r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
 									<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
 								</div>
 							</div>
@@ -206,7 +206,7 @@
 					<div class="c"></div>
 
 					<?php if($total > $page){	//如果内容超过一页则显示加载按钮 ?>
-						<div class="loadMore"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容</a></div>
+						<div class="loadMore"><a id="loadmore" class="loadmore-act" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
 					<?php } ?>
 
 				</div>
@@ -333,71 +333,6 @@
 
 		//获取指定内容的收支情况
 		$('.col').income();
-
-		//动画显示收支详细
-		$('.cols-sum').hover(function(){
-			//获取数据
-			var max = 0,
-				num = 0,
-				data = JSON.parse($(this).parents('.col').data('income')),
-				arr = [],
-				time = [];
-
-			//遍历参数
-			for ( var key in data ) {
-				time.push(key);
-				num = parseInt(data[key].income);
-				if ( num > max ) {
-					max = num;
-				}
-				arr.push(num);
-			}
-			$(arr).each(function(key, val){
-				if ( val ) {
-					val = parseInt(val / max * 100);
-				}
-				if ( val < 20 ) {
-					val += 10;
-				}
-				arr[key] = val;
-			});	
-
-			//获取元素
-			var main = $(this).find('.income-detailed');
-
-			//初始化元素
-			if ( main.length == 0 ) {
-				$(this).prepend($('#incomeDetailed').clone().removeAttr('id'));	//复制模板
-				main = $(this).find('.income-detailed');
-				var obj = main.find('.idd-item:first');
-				$(arr).each(function(key, val){	//复制柱形
-					var item = main.find('.idd-item:first').clone();
-					item.find('.idd-depict').html(time[key] + '<i></i>');
-					main.append(item);
-				});
-				obj.remove();
-			}
-			// console.log(arr);
-			//执行动画
-			var now = 0,
-				pillar = main.show().find('.idd-pillar').css({ height: 0 });
-			auto();
-			function auto(){
-				if ( now <= arr.length ) {
-					pillar.eq(now).stop().animate({ height: arr[now] + '%' }, 300);
-					now += 1;
-					setTimeout(function(){
-						auto();
-					}, 100);
-				}
-			}
-		}, function(){
-			var main = $(this).find('.income-detailed'),
-				pillar = main.find('.idd-pillar');
-			pillar.stop().animate({ height: 0 }, 200, function(){
-				main.hide();
-			});
-		});
 
 
 		//如果高度改变，重新排序瀑布

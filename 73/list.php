@@ -136,7 +136,7 @@
 				</div>
 				<?php } ?>
 
-				<?php if( $Tv['type'] == 1 ){ ?>
+				<?php if( isset($Tv) && $Tv['type'] == 1 ){ ?>
 					<!-- 推荐标题 -->
 					<div class="recommend r">
 						<?php foreach ($t -> Ghot($tid) as $key => $value) { ?>
@@ -148,7 +148,7 @@
 					</div>
 				<?php } ?>
 
-				<?php if( $Tv['type'] == 4 ){ ?>
+				<?php if( isset($Tv) && $Tv['type'] == 4 ){ ?>
 					<!-- 挑战标题 -->
 					<div class="surpass-digg r">
 						<div class="surpass-col">
@@ -259,7 +259,7 @@
 							</div>
 							<div class="c"></div>
 								
-							<?php if($isu && ($u -> Guid() && ($u -> Guid() != $uid))){ //登录后可见，其他用户可见 ?>
+							<?php if($isu && ($u -> Is() && ($u -> Guid() != $uid))){ //登录后可见，其他用户可见 ?>
 								<!-- 关注用户 -->
 								<?php if($u -> Ifollow($uid)){ 	//如果关注过此用户 ?>
 									<div class="user-follow user-follow-has">

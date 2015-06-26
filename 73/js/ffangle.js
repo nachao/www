@@ -8,11 +8,14 @@ jQuery.fn.extend({
 			row = top.find(".row"),
 			col = top.find(".col:not(.colDes)");
 
+
 		//控制deleteCon
 		var loop;
 
-		//获取框架参数
+		//绑定收支情况特效
+		col.income();
 
+		//获取框架参数
 		function rowHeight(){
 			var arr = new Array();
 			row.each(function(){
@@ -138,7 +141,7 @@ jQuery.fn.extend({
 
 	//瀑布流排序
 	waterfall: function(){
-		$(ths)
+		
 	},
 
 	//购买 *******************************************************
@@ -146,7 +149,7 @@ jQuery.fn.extend({
 		$(this).click(function(){ 
 			var obj = $(this),
 				col = obj.parents('.col');
-			// if( !col.hasClass('col_possess') ){	//如果还没购买
+			if( !obj.hasClass('praise-act') ){	//如果还没购买
 
 				//获取参数
 				var	cid = parseInt(col.attr('cid')),
@@ -201,7 +204,7 @@ jQuery.fn.extend({
 				}
 
 				return false;
-			// }
+			}
 		});
 	},
 
@@ -318,6 +321,7 @@ jQuery.fn.extend({
 			}
 		});
 	},
+
 
 	//关注 和 取消关注 标题 	*******************************************************
 	attention: function(){
@@ -535,6 +539,8 @@ jQuery.fn.extend({
 
 				// console.log("begin=" + begin +"&uid="+ uid +"&tid="+ tid);
 
+				var btn = $(this).addClass('loadmore-act');
+
 				//提交数据
 				$.ajax({
 					type: "POST",
@@ -567,6 +573,8 @@ jQuery.fn.extend({
 						}
 
 						isGo = 1;
+
+						btn.removeClass('loadmore-act');
 					}
 				});
 			}
@@ -1000,6 +1008,69 @@ jQuery.fn.extend({
 					result: function(data){
 						col.data('income', data);
 					}
+				});
+			});
+			$(this).find('.cols-sum').hover(function(){
+				//获取数据
+				var max = 0,
+					num = 0,
+					data = JSON.parse($(this).parents('.col').data('income')),
+					arr = [],
+					time = [];
+
+				//遍历参数
+				for ( var key in data ) {
+					time.push(key);
+					num = parseInt(data[key].income);
+					if ( num > max ) {
+						max = num;
+					}
+					arr.push(num);
+				}
+				$(arr).each(function(key, val){
+					if ( val ) {
+						val = parseInt(val / max * 100);
+					}
+					if ( val < 20 ) {
+						val += 10;
+					}
+					arr[key] = val;
+				});	
+
+				//获取元素
+				var main = $(this).find('.income-detailed');
+
+				//初始化元素
+				if ( main.length == 0 ) {
+					$(this).prepend($('#incomeDetailed').clone().removeAttr('id'));	//复制模板
+					main = $(this).find('.income-detailed');
+					var obj = main.find('.idd-item:first');
+					$(arr).each(function(key, val){	//复制柱形
+						var item = main.find('.idd-item:first').clone();
+						item.find('.idd-depict').html(time[key] + '<i></i>');
+						main.append(item);
+					});
+					obj.remove();
+				}
+				// console.log(arr);
+				//执行动画
+				var now = 0,
+					pillar = main.show().find('.idd-pillar').css({ height: 0 });
+				auto();
+				function auto(){
+					if ( now <= arr.length ) {
+						pillar.eq(now).stop().animate({ height: arr[now] + '%' }, 300);
+						now += 1;
+						setTimeout(function(){
+							auto();
+						}, 100);
+					}
+				}
+			}, function(){
+				var main = $(this).find('.income-detailed'),
+					pillar = main.find('.idd-pillar');
+				pillar.stop().animate({ height: 0 }, 200, function(){
+					main.hide();
 				});
 			});
 		});
