@@ -272,7 +272,7 @@ class Event_user extends Data_user
 		if ( $this -> event_uis() ) {
 			$uid = $_COOKIE[self::CN];
 		}
-		if ( !$uid ) {
+		if ( !$uid && isset($_COOKIE['73visitor']) ) {
 			$uid = $_COOKIE['73visitor'];
 			$uid = str_replace(':', '', $uid);	
 		}
@@ -658,14 +658,26 @@ class Users extends Event_user
 
 	//根据 用户UID 获取用户头像
 	public function Gicon($uid=0){
-		$info = parent::event_get($uid);
-		return $info['icon'];
+		$uv = new Users_visitor();
+		if ( $this -> Is() ) { 
+			$info = parent::event_get($uid);
+			$icon = $info['icon'];
+		} else {
+			$icon = $uv -> Gicon();
+		}
+		return $icon;
 	}
 
 	//根据用户 id 获取用户名
 	public function Gname($uid=0){
-		$info = parent::event_get($uid);
-		return $info['name'];
+		$uv = new Users_visitor();
+		if ( $this -> Is() ) {
+			$info = parent::event_get($uid);
+			$name = $info['name'];
+		} else {
+			$name = $uv -> Gname();
+		}
+		return $name;
 	}
 
 	//根据指定 用户UID 的最近一次登录时间

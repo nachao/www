@@ -206,7 +206,7 @@
 					<div class="c"></div>
 
 					<?php if($total > $page){	//如果内容超过一页则显示加载按钮 ?>
-						<div class="loadMore"><a id="loadmore" class="loadmore-act" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
+						<div class="loadMore"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
 					<?php } ?>
 
 				</div>
@@ -339,6 +339,8 @@
 		// $('.contentList').resize(function(){
 		// 	console.log($(this).height());
 		// });
+			//启动游客收入
+			$(window).visitorIncome();
 
 	</script>
 

@@ -9,7 +9,7 @@
 
 ?>
 
-	<?php if(!$u -> Is()){ ?>
+	<?php if(!$u -> Is() && 0){ ?>
 		<!-- 快速登录 -->
 		<div class="commarea sideFastentry" style="margin-top: 0px;">
 			<div class="content">
@@ -20,7 +20,7 @@
 				<input class="txt" id="sideAcccount" type="text" placeholder="用户名" />
 				<input class="txt" id="sidePwd" type="password" placeholder="密码" />
 				<input class="btn" id="sideEntry" type="submit" value="登录" />
-				<div class="c"></div>
+				<div class="c" ></div>
 			</div>
 			<div class="bottomSide"></div>
 		</div>
@@ -71,6 +71,63 @@
 
 		</script>
 	<?php } ?>
+
+	<!-- 留言板 -->
+	<div class="commarea" style="margin-top: 0px;">
+		<div class="content">
+			<div class="head">
+				<div class="tit f"><em>评论板</em><i>Fast Entry</i></div>
+				<div class="gap"><i></i></div>
+			</div>
+			<div class="messageBoard">
+				<div class="message-publish">
+					<textarea class="message-p-text" id="messagePText" placeholder="请输入评论" ></textarea>
+					<a class="message-p-btn" id="messagePBtn" href="javascript:;">发布</a>
+				</div>
+				<div class="c"></div>
+				<div class="message-loading" id="messageLoading"></div>
+				<div class="message-list" id="messageList">
+					<div class="message-title">全部评论</div>
+					<div class="message-rows" id="messageTemplet" style="display: none;" >
+						<div class="message-r-icon">
+							<a href="javascript:;" >
+								<img src="" />
+							</a>
+						</div>
+						<div class="message-r-info">
+							<div class="message-i-name">
+								<a href="javascript:;" ></a>
+							</div>
+							<div class="message-i-text"></div>
+							<div class="message-i-other">
+								<div class="message-o-time"></div>
+								<div class="message-o-use">
+									<a class="message-u-good" href="javascript:;" title="" >赞 0</a>
+									<a class="message-u-bad" href="javascript:;" title="" >踩 0</a>
+									<a class="message-u-reply" href="javascript:;" title="" >回复</a>
+								</div>
+								<div class="c"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="message-page" total="11" number="4" current="1" >
+					<div class="message-pa-btn">
+						<a class="message-b-act" href="javascript:;" >1</a>
+						<a href="javascript:;" >2</a>
+						<a href="javascript:;" >3</a>
+						<a href="javascript:;" >4</a>
+						<a href="javascript:;" >5</a>
+						<a href="javascript:;" >6</a>
+						<a href="javascript:;" >7</a>
+					</div>
+					<div class="message-pa-link"></div>
+					<div class="c"></div>
+				</div>
+			</div>
+		</div>
+		<div class="bottomSide"></div>
+	</div>
 	
 	<?php if($u -> Is()){ ?>
 		<!-- 用户信息 -->

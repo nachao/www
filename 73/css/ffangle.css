@@ -1733,6 +1733,45 @@ margin: auto; }
 .idd-item:hover .idd-pillar{ background-color: #bbb; }
 
 
+
+/*====
+ 详细页留言板
+====*/
+.message-publish{ margin-top: 20px; }
+.message-loading{ height: 100px;background: url(../imgs/concept-f.gif) no-repeat center; }
+.message-p-text{ display: inline-block;width: 290px;line-height: 20px;height: 60px; padding: 8px;border: 1px solid #ddd;resize: none;float: left;border-radius: 3px;background-color: #f8f8f8; }
+.message-p-text:focus{ background-color: white; }
+.message-p-btn{ display: inline-block;width: 50px;height: 28px;line-height: 28px;float: right;background: #d80c18;text-align: center;color: white;margin-top: 10px;border-radius: 3px; }
+.message-p-btn:hover{ background-color: red; }
+.message-list{ display: none; }
+.message-title{ display: inline-block;width: 100%;font-size: 16px;height: 50px;line-height: 50px; }
+
+.message-rows{ padding: 20px 0;border-bottom: 1px solid #ccc; }
+.message-r-icon{ display: inline-block;float: left; }
+.message-r-icon a{ display: inline-block;width: 30px;height: 30px; }
+.message-r-icon img{ display: inline-block;width: 100%;height: 100%;border-radius: 3px; }
+.message-r-info{ margin-left: 40px; }
+.message-i-name{ height: 20px;line-height: 20px; }
+.message-i-name a{ color: #d80c18; }
+.message-i-name a:hover{ text-decoration: underline; }
+.message-i-text{ padding: 5px 0; }
+.message-i-other{ margin-top: 5px; }
+.message-o-time{ float: left;color: #999; }
+.message-o-use{ float: right; }
+.message-o-use a{ color: #999;display: inline-block;height: 14px;line-height: 14px; float: left;padding: 0 10px; }
+.message-o-use a:hover{ color: #d80c18; }
+.message-o-use a.message-u-bad{ border-left: 1px solid #ccc; }
+.message-o-use a.message-u-reply{ border-left: 1px solid #ccc;padding-right: 0px; }
+
+/* 分页 */
+.message-page{ height: 33px;position: relative;margin-top: 20px;text-align: center; }
+.message-pa-btn a{ display: inline-block;width: 28px;height: 28px;border-radius: 3px;background: #ddd;text-align: center;line-height: 33px;color: #999;margin: 0 3	px;z-index: 2;position: relative; }
+.message-pa-btn a:hover{ box-shadow: 0 0 10px #ccc inset; }
+a.message-b-act{ background: #d80c18;color: white; }
+.message-pa-link{ display: inline-block;width: 100%;height: 0px;border-top: 1px solid #ddd;position: absolute;top: 50%;left: 0px; }
+
+
+
 /*====
 图标字体
 ====*/

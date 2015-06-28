@@ -172,7 +172,7 @@
 							<div class="bottomSide"></div>
 						</div>
 						
-						<?php if($um -> ICmessage($_GET['cid'])){ ?>
+						<?php if(0 && $um -> ICmessage($_GET['cid'])){ ?>
 							<!-- 显示全部留言 -->
 							<div class="commarea detailAuthor">
 								<div class="content">
@@ -294,7 +294,7 @@
 							</div>
 						<?php } ?>
 						
-						<!-- 添加留言 -->
+						<!-- 添加留言
 						<div class="commarea detailAuthor">
 							<div class="content">
 								<div class="head">
@@ -313,7 +313,6 @@
 									<?php } ?>
 
 									<form method="get" onsubmit="return tijiao();" style="position:relative;" >
-										<!-- <div id="txtDiv" class="txt" contentEditable=true ></div> -->
 										<textarea id="txtAre" class="txt" name="addMessage"></textarea>
 										<input type="hidden" name="p" value="<?php echo 0; ?>" />
 										<input id="huifuMid" type="hidden" name="huifuMid" value="" />
@@ -327,6 +326,7 @@
 							</div>
 							<div class="bottomSide"></div>
 						</div>
+						 -->
 
 					<?php }else{ ?>
 					<div class="msgwu msgwu"></div>
@@ -448,28 +448,55 @@
 
 
 		//发布留言
-		// $('#huifuSub').click(function(){
-		// 	var cid = $('.contentList').attr('cid'),
-		// 		top = 0;
+		$('#messagePBtn').click(function(){
+			var cid = $('.contentList').attr('cid'),
+				obj = $('#messagePText'),
+				text = obj.val().replace(/\s/g, '');
+			if( text != '' ){
+				$.g({
+					name: 'addMessage',
+					data: { 'cid': cid, 'txt': text },
+					result: function(value){
+						obj.val('');
+						$(window).commentIn(value);
+					}
+				});
+			}
+		});
 
-		// 	$('.messageList').each(function(i){
-		// 		top = $(this).context.getBoundingClientRect().top + $(document).scrollTop();
-		// 	});
-		// 	if( $('#txtDiv').html()!= '' ){
-		// 		$.ajax({
-		// 			type: "POST",
-		// 			url: "./ajax/ajax_message.php",
-		// 			data: "addMessage="+ cid +"&t="+ $('#txtDiv').html(),
-		// 			success: function(msg){
-		// 				// console.log( msg );
-		// 				$('#txtDiv').html('');
-		// 				$('html,body').stop().animate({ scrollTop:top -100 },function(){
-		// 					location.reload();
-		// 				});
-		// 			}
-		// 		});
-		// 	}
-		// });
+		
+		//获取指定内容的全部评论
+		var cid = $('.contentList').attr('cid');
+		$.g({
+			name: 'getM',
+			data: { 'cid': cid },
+			result: function(value){
+				$(window).commentIn(value);
+				// value = JSON.parse(value);
+				// var templet = $('#messageTemplet'),
+				// 	loading = $('#messageLoading'),
+				// 	list = $('#messageList'),
+				// 	rows = null;
+				// if ( value.length == 0 ) {	//如果没有数据
+				// 	loading.hide();
+				// } else {
+				// 	$(value).each(function(key, arr){
+				// 		rows = templet.clone();
+				// 		rows.removeAttr('id').show().addClass('message-rows-temp');
+				// 		rows.find('.message-r-icon img').attr('src', arr.icon);
+				// 		rows.find('.message-i-name a').html(arr.name);
+				// 		rows.find('.message-i-text').html(arr.content);
+				// 		rows.find('.message-o-time').html(arr.range);
+				// 		list.append(rows);
+				// 		//显示内容隐藏加载
+				// 		if ( key == value.length -1 ) {
+				// 			loading.hide();
+				// 			list.show();
+				// 		}
+				// 	});
+				// }
+			}
+		});
 
 
 

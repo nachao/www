@@ -14,14 +14,6 @@
 	}
 
 
-	//发布留言
-	if( isset($_POST['addMessage']) ){
-		$cid = $_POST['addMessage'];		//内容id
-		$aim = CT_contentGetUid($cid);		//此用户的留言板
-		$con = $_POST['t'];
-		echo addMessage( $aim, $con, null, null, null, $cid );
-	}
-
 
 ?>
 

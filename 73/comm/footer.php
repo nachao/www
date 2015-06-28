@@ -35,7 +35,7 @@
 					<h1 class="pop-title">游客中心</h1>
 					<div class="pop-form">
 						<div class="pop-form-info">
-							<a class="pop-form-icon" href="javascript:;" ><img src="../imgs/default.gif" alt="" /></a>
+							<a class="pop-form-icon" href="javascript:;" ><img src="<?php echo $uv -> Gicon(); ?>" alt="" /></a>
 							<p><span class="pop-form-span">名称：</span>-</p>
 							<p><span class="pop-form-span">IP：</span><?php echo $o -> Gip(); ?></p>
 							<p><span class="pop-form-span">余额：</span><span id="visitorSum" class="golds" n="<?php echo $u -> Gplus(); ?>" ></span> <i></i></p>
@@ -100,7 +100,7 @@
 			// goldShow($('#headGold'));
 
 			//启动游客收入
-			$(window).visitorIncome();
+			// $(window).visitorIncome();
 
 		</script>
 		<div class="footer">

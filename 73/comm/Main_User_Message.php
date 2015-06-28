@@ -172,10 +172,16 @@ class Event_user_message extends Data_user_message
 
 	//获取指定 内容CID 的全部一级留言，不包含回复
 	protected function event_getContentOneMessage($cid=0, $begin=0, $page=99){
+		$u = new Users();
+		$o = new Tool();
 		$array = array();
 		$query = parent::data_selectOneMessageList($cid, $begin, $page );	//最新
 		if( !!$query && mysql_num_rows($query) > 0 ){	//遍历数据
 			while( $row = mysql_fetch_array($query)){	//获取单个内容数
+				$row['icon'] = $u -> Gicon($row['speaker']);
+				$row['name'] = $u -> Gname($row['speaker']);
+				$row['range'] = $o -> Crange($row['time']);
+				$row['up'] = $o -> Crange($row['time']);
 				array_push($array, $row);
 			}
 		}
@@ -208,12 +214,12 @@ class Event_user_message extends Data_user_message
 	*/
 
 	//添加指定 用户UID 的留言
-	protected function event_addMessage($con='', $uid=0, $mid=0, $hmid=0){
-		if($con && $mid){
-			$o = new Tool();
-			return parent::data_addMessage($o -> Chtml($con), $uid, $mid, $hmid);
-		}
-	}
+	// protected function event_addMessage($con='', $uid=0, $mid=0, $hmid=0){
+	// 	if($con && $mid){
+	// 		$o = new Tool();
+	// 		return parent::data_addMessage($o -> Chtml($con), $uid, $mid, $hmid);
+	// 	}
+	// }
 
 
 
@@ -420,17 +426,29 @@ class Users_message extends Event_user_message
 	*/
 
 	//添加指定 用户UID 的留言
-	public function Amessage($con='', $uid=0, $mid=0, $hmid=0, $huid=0){
-		$uid = $uid ? $uid : $this -> Guid();
+	public function Amessage($con='', $mid=0, $uid=0, $hmid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		$o = new Tool();
+		$u = new Users();
 
+		$con = $o -> Chtml($con);
 		// if($huid && $muid != $uid){		//如果有回复且浏览不在当前登录用户界面 则添加至回复者的留言板
 		// 	parent::event_addMessage($con, $uid, $huid, $hmid);
 		// }
+		parent::data_addMessage($con, $uid, $mid, $hmid);
+		
+		$info = Array(
+				'icon' => $u -> Gicon(),
+				'name' => $u -> Gname(),
+				'content' => $con,
+				'range' => '刚刚'
+			);
+		return $info;
 
-		if(parent::event_addMessage($con, $uid, $mid)){		//添加当前留言板的留言数据
-			return 1;
+		// if(parent::event_addMessage($con, $uid, $mid)){		//添加当前留言板的留言数据
+			// return 1;
 			// $u -> UtoL("?c=".$mid."&message=1");
-		}
+		// }
 	}
 
 

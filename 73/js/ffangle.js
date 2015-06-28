@@ -13,7 +13,7 @@ jQuery.fn.extend({
 		var loop;
 
 		//绑定收支情况特效
-		col.income();
+		// col.income();
 
 		//获取框架参数
 		function rowHeight(){
@@ -191,7 +191,7 @@ jQuery.fn.extend({
 							col.find('.golds').attr('n', now+ parseInt(msg)).golds();
 
 							//修改收支情况
-							col.income();
+							// col.income();
 
 							//启动游客收入
 							$(window).visitorIncome();
@@ -1102,6 +1102,41 @@ jQuery.fn.extend({
 				}, once);
 			}
 		}
+	},
+
+	//输出指定数据的留言
+	commentIn: function(value){
+		value = JSON.parse(value);
+		var templet = $('#messageTemplet'),
+			loading = $('#messageLoading'),
+			list = $('#messageList'),
+			item = $('.message-rows-temp'),
+			first = item.length <= 0,		//是否输出之前的评论内容
+			rows = null;
+		if ( value.length == 0 ) {	//如果没有数据
+			loading.hide();
+		} else {
+			$(value).each(function(key, arr){
+				console.log(arr);
+				rows = templet.clone();
+				rows.removeAttr('id').show().addClass('message-rows-temp');
+				rows.find('.message-r-icon img').attr('src', arr.icon);
+				rows.find('.message-i-name a').html(arr.name);
+				rows.find('.message-i-text').html(arr.content);
+				rows.find('.message-o-time').html(arr.range);
+				if ( first ) {
+					list.append(rows);
+				} else {
+					templet.after(rows);
+					rows.hide().slideDown();
+				}
+				//显示内容隐藏加载
+				if ( key == value.length -1 ) {
+					loading.hide();
+					list.show();
+				}
+			});
+		}
 	}
 
 });
@@ -1240,14 +1275,17 @@ jQuery.extend({
 		var name = data.name || false,
 			param = data.data || '0';
 
+		// console.log(param);
 		//遍历参数
 		var str = '', 
 			key, val;
 		for(var key in param){
 			key = key.replace(/=|'|"/g,'');
-			val = param[key].replace(/=|'|"/g,'');
+			val = param[key] ? param[key].replace(/=|'|"/g,'') : '';
+			str += str ? '&' : '';
 			str += key +'='+ val;
 		}
+		// console.log(str);
 
 		if (name){
 			param = name + "=" + new Date().getTime() + "&" + str;

@@ -60,6 +60,25 @@ class Tool
 		return $time;
 	}
 
+	//获取指定时间戳距现在的时间
+	public function Crange($time=0){
+		$time = time() - $time;
+		if ( $time > 0 ) {
+			if($time < 60){
+				$text = '刚刚';
+			}elseif( $time/60 <= 60 ){
+				$text = round($time/60) .'分钟前';
+			}elseif( $time/60/60 <= 24 ){
+				$text = round($time/60/60).'小时前';
+			}elseif(  $time/60/60/24 <= 365  ){
+				$text = round($time/60/60/24) .'天前';
+			}else{
+				$text = round($time/60/60/24/365) .'年前';
+			}
+		}
+		return $text;
+	}
+
 	//页面文本转换 编码
 	public function Chtml($str=''){
 		$str = str_replace("<", "&lt;", $str);

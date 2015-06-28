@@ -28,9 +28,8 @@ class Data_user_visitor extends Config
 
 	//添加指定 用户UID 的留言记录
 	// 参数：firsttime= 第一次访问时间；lasttime= 最近一次访问时间
-	protected function data_add($ip='', $sum=0, $uid=0){
-		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."visitor` (`id`, `firsttime`, `lasttime`, `ip`, `sum`, `name`, `icon`, `status`, `uid`) VALUES (NULL, '".time()."', '".time()."', '".$ip."', '".$sum."', NULL, NULL, '1', '".$uid."');";
-		echo $sql;
+	protected function data_add($ip='', $sum=0, $uid=0, $icon=''){
+		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."visitor` (`id`, `firsttime`, `lasttime`, `ip`, `sum`, `name`, `icon`, `status`, `uid`) VALUES (NULL, '".time()."', '".time()."', '".$ip."', '".$sum."', NULL, '".$icon."', '1', '".$uid."');";
 		return mysql_query($sql);
 	}
 
@@ -204,6 +203,28 @@ class Users_visitor extends Event_user_visitor
 		return parent::data_selectZjnbTotal($uid);
 	}
 
+	//获取指定 游客UID 的头像
+	public function Gicon($uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		$info = parent::data_selectByUid($uid);
+		$icon = $info['icon'];
+		if ( !$icon ) {
+			$icon = '../imgs/default.gif';
+		}
+		return $icon;
+	}
+
+	//获取指定 游客UID 的名称
+	public function Gname($uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		$info = parent::data_selectByUid($uid);
+		$name = $info['name'];
+		if ( !$name ) {
+			$name = $info['ip'];
+		}
+		return $name;
+	}
+
 
 
 
@@ -249,10 +270,14 @@ class Users_visitor extends Event_user_visitor
 		$uid = str_replace(':', '', $ip);
 		//判断新游客是否有数据记录
 		if ( count(parent::data_selectByUid($uid)) == 1 ) {
-			return parent::data_add($ip, $sum, $uid);
+			$icon = '../icon/'.rand(1,26).'.jpg';
+			return parent::data_add($ip, $sum, $uid, $icon);
 		}
 		//缓存
 		$u -> Acache($uid, 'visitor');
+		if ( !isset($_COOKIE['73visitor']) ) {
+			$u -> UtoL('index.php');
+		}
 	}
 
 

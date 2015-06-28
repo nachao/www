@@ -85,9 +85,27 @@
 	}
 
 	//添加留言
+	// if( isset($_POST['addMessage']) ){
+	// 	echo $um -> addMessage();
+	// }
+
+
+	//发布留言（评论）
 	if( isset($_POST['addMessage']) ){
-		echo addMessage();
+		// $cid = $_POST['addMessage'];		//内容id
+		// $aim = CT_contentGetUid($cid);		//此用户的留言板
+		echo json_encode($um -> Amessage( $_POST['txt'], $_POST['cid'] ));
 	}
+
+	//获取评论
+	if ( isset($_POST['getM']) ) {
+		echo json_encode($um -> GCmessage($_POST['cid']));
+	}
+
+
+
+
+
 
 	//点赞
 	if( isset($_POST['praise']) ){
