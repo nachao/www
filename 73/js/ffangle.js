@@ -1107,36 +1107,32 @@ jQuery.fn.extend({
 	//输出指定数据的留言
 	commentIn: function(value){
 		value = JSON.parse(value);
+		var res = value.res;
 		var templet = $('#messageTemplet'),
-			loading = $('#messageLoading'),
-			list = $('#messageList'),
+			loading = $('#messageLoading').hide(),
+			list = $('#messageList').show(),
 			item = $('.message-rows-temp'),
 			first = item.length <= 0,		//是否输出之前的评论内容
 			rows = null;
-		if ( value.length == 0 ) {	//如果没有数据
-			loading.hide();
-		} else {
-			$(value).each(function(key, arr){
-				console.log(arr);
-				rows = templet.clone();
-				rows.removeAttr('id').show().addClass('message-rows-temp');
-				rows.find('.message-r-icon img').attr('src', arr.icon);
-				rows.find('.message-i-name a').html(arr.name);
-				rows.find('.message-i-text').html(arr.content);
-				rows.find('.message-o-time').html(arr.range);
-				if ( first ) {
-					list.append(rows);
-				} else {
-					templet.after(rows);
-					rows.hide().slideDown();
-				}
-				//显示内容隐藏加载
-				if ( key == value.length -1 ) {
-					loading.hide();
-					list.show();
-				}
-			});
+		if ( value.status == '1101' ) {	//如果是首次加载 或者 分页切换
+			list.empty();
 		}
+		$(res).each(function(key, arr){
+			rows = templet.clone();
+			rows.removeAttr('id').show().addClass('message-rows-temp');
+			rows.find('.message-r-icon img').attr('src', arr.icon);
+			rows.find('.message-i-name a').html(arr.name);
+			rows.find('.message-i-text').html(arr.content);
+			rows.find('.message-o-time').html(arr.range);
+			if ( value.status == '1101' ) {	//如果是首次加载 或者 分页切换
+				list.append(rows);
+			}
+			if ( value.status == '1102' ) {	//新增评论
+				templet.after(rows);
+				rows.hide().slideDown();
+				list.show();
+			}
+		});
 	}
 
 });
@@ -1281,7 +1277,7 @@ jQuery.extend({
 			key, val;
 		for(var key in param){
 			key = key.replace(/=|'|"/g,'');
-			val = param[key] ? param[key].replace(/=|'|"/g,'') : '';
+			val = param[key] ? String(param[key]).replace(/=|'|"/g,'') : '';
 			str += str ? '&' : '';
 			str += key +'='+ val;
 		}

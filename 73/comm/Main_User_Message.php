@@ -171,7 +171,7 @@ class Event_user_message extends Data_user_message
 	}
 
 	//获取指定 内容CID 的全部一级留言，不包含回复
-	protected function event_getContentOneMessage($cid=0, $begin=0, $page=99){
+	protected function event_getContentOneMessage($cid=0, $begin=1, $page=1){
 		$u = new Users();
 		$o = new Tool();
 		$array = array();
@@ -185,7 +185,14 @@ class Event_user_message extends Data_user_message
 				array_push($array, $row);
 			}
 		}
-		return $array;
+		$data = array(
+				'status' => '1101',	//输出默认显示内容
+				'total' => parent::data_selectMessageTotal($cid),
+				'number' => '1',		//每页显示的评论数量
+				'page' => $begin,
+				'res' =>  $array
+			);
+		return $data;
 	}
 
 	//获取指定 目标MID 留言总数
@@ -312,8 +319,8 @@ class Users_message extends Event_user_message
 	}
 
 	//获取指定 内容CID 的全部留言
-	public function GCmessage($cid=0){
-		return parent::event_getContentOneMessage($cid);
+	public function GCmessage($cid=0, $begin=0){
+		return parent::event_getContentOneMessage($cid, $begin);
 	}
 
 	//获取指定用户的留言总数，不包含回复
@@ -392,7 +399,7 @@ class Users_message extends Event_user_message
 
 	//获取指定 目标MID 的留言总数
 	public function Gtotal($mid=0){
-		return parent::event_getMessageTotal($mid);
+		return parent::data_selectMessageTotal($mid);
 	}
 
 
@@ -436,6 +443,11 @@ class Users_message extends Event_user_message
 		// 	parent::event_addMessage($con, $uid, $huid, $hmid);
 		// }
 		parent::data_addMessage($con, $uid, $mid, $hmid);
+
+		//如果是游客，评论则会扣分
+		if ( !$u -> Is() ) {
+			$u -> USplus(1, 'comment', $mid);
+		}
 		
 		$info = Array(
 				'icon' => $u -> Gicon(),
@@ -443,7 +455,11 @@ class Users_message extends Event_user_message
 				'content' => $con,
 				'range' => '刚刚'
 			);
-		return $info;
+		$data = array(
+				'status' => '1102',	//输出新增内容
+				'res' =>  $info
+			);
+		return $data;
 
 		// if(parent::event_addMessage($con, $uid, $mid)){		//添加当前留言板的留言数据
 			// return 1;

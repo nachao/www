@@ -72,8 +72,9 @@
 		</script>
 	<?php } ?>
 
+	<?php if ( isset($position) && $position == 'detail' ) { ?>
 	<!-- 留言板 -->
-	<div class="commarea" style="margin-top: 0px;">
+	<div class="commarea" style="margin: 0 0 30px;">
 		<div class="content">
 			<div class="head">
 				<div class="tit f"><em>评论板</em><i>Fast Entry</i></div>
@@ -104,34 +105,35 @@
 								<div class="message-o-use">
 									<a class="message-u-good" href="javascript:;" title="" >赞 0</a>
 									<a class="message-u-bad" href="javascript:;" title="" >踩 0</a>
-									<a class="message-u-reply" href="javascript:;" title="" >回复</a>
+									<!-- <a class="message-u-reply" href="javascript:;" title="" >回复</a> -->
 								</div>
 								<div class="c"></div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="message-page" total="11" number="4" current="1" >
-					<div class="message-pa-btn">
-						<a class="message-b-act" href="javascript:;" >1</a>
-						<a href="javascript:;" >2</a>
-						<a href="javascript:;" >3</a>
-						<a href="javascript:;" >4</a>
-						<a href="javascript:;" >5</a>
-						<a href="javascript:;" >6</a>
-						<a href="javascript:;" >7</a>
+				<div class="message-page" >
+					<a class="message-page-btn message-pa-next" href="javascript:;" >&gt;</a>
+					<div class="message-page-current">
+						<div class="message-current-use">
+							<a href="javascript:;" >1</a>
+							<a href="javascript:;" >2</a>
+							<a href="javascript:;" >3</a>
+						</div>
+						<div class="message-current-num"><span>1</span><i></i></div>
 					</div>
-					<div class="message-pa-link"></div>
-					<div class="c"></div>
+					<a class="message-page-btn message-page-prev" href="javascript:;" >&lt;</a>
 				</div>
+				<div class="c"></div>
 			</div>
 		</div>
 		<div class="bottomSide"></div>
 	</div>
+	<?php } ?>
 	
 	<?php if($u -> Is()){ ?>
 		<!-- 用户信息 -->
-		<div class="userInfo" userid="<?php echo $suid; ?>" style="margin:0px;" >
+		<div class="userInfo" userid="<?php echo $suid; ?>" style="margin-top: 0px;" >
 
 			<?php if($u -> Guid() && !isset($_GET['c'])){ ?>
 			<div class="withdraw"><a href="./userExchange.php" title=""></a></div>

@@ -13,9 +13,8 @@
 		$cid = $_GET['cid'];
 	}
 
-
-
-
+	//当前位置
+	$position = 'detail';
 ?>
 
 	<div class="container pagecon">
@@ -459,6 +458,11 @@
 					result: function(value){
 						obj.val('');
 						$(window).commentIn(value);
+
+						//如果是游客则刷新积分
+						if ( $('#pop-3').length ) {
+							$(window).updateSum(-1);
+						}
 					}
 				});
 			}
@@ -466,37 +470,39 @@
 
 		
 		//获取指定内容的全部评论
-		var cid = $('.contentList').attr('cid');
-		$.g({
-			name: 'getM',
-			data: { 'cid': cid },
-			result: function(value){
-				$(window).commentIn(value);
-				// value = JSON.parse(value);
-				// var templet = $('#messageTemplet'),
-				// 	loading = $('#messageLoading'),
-				// 	list = $('#messageList'),
-				// 	rows = null;
-				// if ( value.length == 0 ) {	//如果没有数据
-				// 	loading.hide();
-				// } else {
-				// 	$(value).each(function(key, arr){
-				// 		rows = templet.clone();
-				// 		rows.removeAttr('id').show().addClass('message-rows-temp');
-				// 		rows.find('.message-r-icon img').attr('src', arr.icon);
-				// 		rows.find('.message-i-name a').html(arr.name);
-				// 		rows.find('.message-i-text').html(arr.content);
-				// 		rows.find('.message-o-time').html(arr.range);
-				// 		list.append(rows);
-				// 		//显示内容隐藏加载
-				// 		if ( key == value.length -1 ) {
-				// 			loading.hide();
-				// 			list.show();
-				// 		}
-				// 	});
-				// }
-			}
-		});
+		function messageList () {
+			var cid = $('.contentList').attr('cid'),
+				page = parseInt($('.message-current-num span').html());
+			$.g({
+				name: 'getM',
+				data: { 'cid': cid, 'page': page },
+				result: function(value){
+					$(window).commentIn(value);
+
+					//输出页数按钮
+					value = JSON.parse(value);
+					var total = value.total,
+						number = value.number,
+						page = Math.ceil(total / number);
+
+					var contain = $('.message-current-use').empty(),
+						message = $('.message-page');
+					if ( page ) {
+						for ( var i = 1; i <= page; i++ ) {
+							contain.append('<a href="javascript:;" >'+ i +'</a>');
+						}
+						contain.find('a').click(function(){
+							$('.message-current-num span').html($(this).html());
+							messageList();
+						});
+						message.show();
+					}
+				}
+			});
+		}
+		messageList();
+
+		//选择评论页数
 
 
 

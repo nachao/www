@@ -28,8 +28,14 @@ class Data_user_visitor extends Config
 
 	//添加指定 用户UID 的留言记录
 	// 参数：firsttime= 第一次访问时间；lasttime= 最近一次访问时间
+	// protected function data_add($ip='', $sum=0, $uid=0, $icon=''){
+	// 	$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."visitor` (`id`, `firsttime`, `lasttime`, `ip`, `sum`, `name`, `icon`, `status`, `uid`) VALUES (NULL, '".time()."', '".time()."', '".$ip."', '".$sum."', NULL, '".$icon."', '1', '".$uid."');";
+	// 	return mysql_query($sql);
+	// }
+
+	//创建新用户
 	protected function data_add($ip='', $sum=0, $uid=0, $icon=''){
-		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."visitor` (`id`, `firsttime`, `lasttime`, `ip`, `sum`, `name`, `icon`, `status`, `uid`) VALUES (NULL, '".time()."', '".time()."', '".$ip."', '".$sum."', NULL, '".$icon."', '1', '".$uid."');";
+		$sql = "insert into `".parent::Mn()."`.`".parent::Fn()."user` (`id` ,`uid` , `name`, `pwd`, `icon`, `lastdate`, `lastact`, `register_ip`, `register_time`, `plus`, `visitor`) values(NULL, ".$uid." , NULL, NULL, '".$icon."', '".time()."', NULL, '".$ip."', '".time()."', '".$sum."', 0)";
 		return mysql_query($sql);
 	}
 
@@ -58,7 +64,7 @@ class Data_user_visitor extends Config
 
 	//获取指定 游客UID 信息 
 	protected function data_selectByUid($uid=0){
-		$sql = "select * FROM  `".parent::Fn()."visitor` WHERE  `uid` =".$uid." LIMIT 0 , 1";
+		$sql = "select *  FROM `".parent::Fn()."user` WHERE `uid` = ".$uid." AND `visitor` = 0";
 		return parent::Ais($sql);
 	}
 
@@ -192,7 +198,7 @@ class Users_visitor extends Event_user_visitor
 		$info = parent::data_selectByUid($uid);
 		$sum = 0;
 		if ( count($info) > 1 ) {
-			$sum = $info['sum'];
+			$sum = $info['plus'];
 		}
 		return $sum;
 	}
@@ -201,28 +207,6 @@ class Users_visitor extends Event_user_visitor
 	public function GZtotal($uid=0){
 		$uid = $uid ? $uid : parent::Eid();
 		return parent::data_selectZjnbTotal($uid);
-	}
-
-	//获取指定 游客UID 的头像
-	public function Gicon($uid=0){
-		$uid = $uid ? $uid : parent::Eid();
-		$info = parent::data_selectByUid($uid);
-		$icon = $info['icon'];
-		if ( !$icon ) {
-			$icon = '../imgs/default.gif';
-		}
-		return $icon;
-	}
-
-	//获取指定 游客UID 的名称
-	public function Gname($uid=0){
-		$uid = $uid ? $uid : parent::Eid();
-		$info = parent::data_selectByUid($uid);
-		$name = $info['name'];
-		if ( !$name ) {
-			$name = $info['ip'];
-		}
-		return $name;
 	}
 
 

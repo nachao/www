@@ -1297,7 +1297,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .pop-form-info p{ font-size: 14px;line-height: 30px;color: #333; }
 .pop-form-span{ display: inline-block;width: 100px;text-align: right;margin-right: 10px;color: #999;font-size: 12px; }
 .pop-form-icon{ display: inline-block;width: 70px;height: 70px;margin-left: 100px; }
-.pop-form-icon img{ width: 100%;height: 100%;float: left;border-radius: 70px; }
+.pop-form-icon img{ width: 100%;height: 100%;float: left;border-radius: 3px; }
 
 /*====
 分页
@@ -1764,13 +1764,20 @@ margin: auto; }
 .message-o-use a.message-u-reply{ border-left: 1px solid #ccc;padding-right: 0px; }
 
 /* 分页 */
-.message-page{ height: 33px;position: relative;margin-top: 20px;text-align: center; }
-.message-pa-btn a{ display: inline-block;width: 28px;height: 28px;border-radius: 3px;background: #ddd;text-align: center;line-height: 33px;color: #999;margin: 0 3	px;z-index: 2;position: relative; }
-.message-pa-btn a:hover{ box-shadow: 0 0 10px #ccc inset; }
-a.message-b-act{ background: #d80c18;color: white; }
-.message-pa-link{ display: inline-block;width: 100%;height: 0px;border-top: 1px solid #ddd;position: absolute;top: 50%;left: 0px; }
-
-
+.message-page{ display: none;margin-top: 20px; }
+.message-page-btn{ display: inline-block;height: 24px;width: 24px; border: 1px solid #ccc;background-color: #fff;float: right;font-family: 宋体;line-height: 24px;text-align: center; }
+.message-page-btn:hover{ border-color: #bbb; }
+.message-page-current{ display: inline-block;height: 24px;width: 45px;float: right;margin: 0 3px;position: relative;cursor: pointer;border: 1px solid transparent; }
+.message-current-num{ line-height: 24px; }
+.message-current-num{ text-align: left;text-indent: 8px; }
+.message-current-num i{ display: inline-block;width: 0px;height: 0px;border: 3px solid #aaa;border-top-color: transparent;border-left-color: transparent;-webkit-transform: rotate(45deg);transform: rotate(45deg);position: absolute;right: 10px;top: 7px; }
+.message-current-use{ display: none;width: 45px;position: absolute;bottom: 24px;left: -1px;background-color: #fff;border: 1px solid #ccc;border-bottom: 0px; }
+.message-current-use a{ display: inline-block;width: 100%;height: 24px;line-height: 24px; }
+.message-current-use a:hover{ background-color: #eee; }
+.message-page-current:hover{ border: 1px solid #ccc;background-color: #fff; }
+.message-page-current:hover .message-current-num i{ -webkit-transform: rotate(-135deg);transform: rotate(-135deg);top: 10px; }
+.message-page-current:hover .message-current-use{ display: inline-block; }
+.message-page-current-act .message-current-use{ display: inline-block; }
 
 /*====
 图标字体
@@ -1816,7 +1823,7 @@ a.message-b-act{ background: #d80c18;color: white; }
 
 
 .icon-maozi:before { content: "\e600"; }
-.icon-qipaoa:before { content: "\e606"; }
+.icon-qipaoa:before { content: "\e607"; }
 .icon-shuye:before { content: "\e601"; }
 .icon-zan:before { content: "\e608"; }
 .icon-zhuan:before { content: "\e602"; }

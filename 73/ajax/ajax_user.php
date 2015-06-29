@@ -99,7 +99,7 @@
 
 	//获取评论
 	if ( isset($_POST['getM']) ) {
-		echo json_encode($um -> GCmessage($_POST['cid']));
+		echo json_encode($um -> GCmessage($_POST['cid'], $_POST['page']));
 	}
 
 

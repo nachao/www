@@ -459,9 +459,9 @@ class Event_user extends Data_user
 		$uv = new Users_visitor();
 		if($num >= 0){
 			//如果是游客
-			if ( !$this -> Is() ) {
-				return $uv -> Usum($uid, $num);
-			}
+			// if ( !$this -> Is() ) {
+			// 	return $uv -> Usum($uid, $num);
+			// }
 			parent::data_update($uid, 'plus', $num);
 			return $num;
 		}
@@ -659,23 +659,18 @@ class Users extends Event_user
 	//根据 用户UID 获取用户头像
 	public function Gicon($uid=0){
 		$uv = new Users_visitor();
-		if ( $this -> Is() ) { 
-			$info = parent::event_get($uid);
-			$icon = $info['icon'];
-		} else {
-			$icon = $uv -> Gicon();
-		}
+		$info = parent::event_get($uid);
+		$icon = $info['icon'];
 		return $icon;
 	}
 
 	//根据用户 id 获取用户名
 	public function Gname($uid=0){
 		$uv = new Users_visitor();
-		if ( $this -> Is() ) {
-			$info = parent::event_get($uid);
-			$name = $info['name'];
-		} else {
-			$name = $uv -> Gname();
+		$info = parent::event_get($uid);
+		$name = $info['name'];
+		if ( !$name ) {
+			$name = $info['register_ip'];
 		}
 		return $name;
 	}
@@ -789,6 +784,18 @@ class Users extends Event_user
 	public function Gpwd($uid=0){
 		$info = parent::event_get($uid);
 		return $info['pwd'];
+	}
+
+	//获取指定 用户UID 的点赞量
+	public function Gzan($uid=0){
+		$info = parent::event_get($uid);
+		return $info['comments'];
+	}
+
+	//获取指定 用户UID 的注册IP
+	public function Gip($uid=0){
+		$info = parent::event_get($uid);
+		return $info['register_ip'];
 	}
 
 

@@ -28,18 +28,18 @@
 		</div>
 		<?php } ?>
 	
-		<?php //if ( !$u -> Is() ) {	//如果是游客 ?>
+		<?php if ( !$u -> Is() ) {	//如果是游客 ?>
 			<div class="pop" id="pop-3" >
 				<div class="pop-bg"></div>
 				<div class="pop-main">
 					<h1 class="pop-title">游客中心</h1>
 					<div class="pop-form">
 						<div class="pop-form-info">
-							<a class="pop-form-icon" href="javascript:;" ><img src="<?php echo $uv -> Gicon(); ?>" alt="" /></a>
+							<a class="pop-form-icon" href="javascript:;" ><img src="<?php echo $u -> Gicon(); ?>" alt="" /></a>
 							<p><span class="pop-form-span">名称：</span>-</p>
-							<p><span class="pop-form-span">IP：</span><?php echo $o -> Gip(); ?></p>
+							<p><span class="pop-form-span">IP：</span><?php echo $u -> Gip(); ?></p>
 							<p><span class="pop-form-span">余额：</span><span id="visitorSum" class="golds" n="<?php echo $u -> Gplus(); ?>" ></span> <i></i></p>
-							<p><span class="pop-form-span">喜欢：</span><span id="visitorTotal" ><?php echo $uv -> GZtotal(); ?></span> 条内容</p>
+							<p><span class="pop-form-span">喜欢：</span><span id="visitorTotal" ><?php echo $u -> Gzan(); ?></span> 条内容</p>
 							<p><span class="pop-form-span">停留时长：</span><span id="" >-</span></p>
 						</div>
 						<div class="pop-form-col">
@@ -50,7 +50,7 @@
 					<div class="pop-colse"></div>
 				</div>
 			</div>
-		<?php //} ?>
+		<?php } ?>
 
 		<script type="text/javascript">
 
@@ -100,7 +100,7 @@
 			// goldShow($('#headGold'));
 
 			//启动游客收入
-			// $(window).visitorIncome();
+			$(window).visitorIncome();
 
 		</script>
 		<div class="footer">
