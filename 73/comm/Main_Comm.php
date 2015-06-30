@@ -63,6 +63,7 @@ class Tool
 	//获取指定时间戳距现在的时间
 	public function Crange($time=0){
 		$time = time() - $time;
+		$text = '';
 		if ( $time > 0 ) {
 			if($time < 60){
 				$text = '刚刚';

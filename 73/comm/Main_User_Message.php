@@ -87,10 +87,34 @@ class Data_user_message extends Config
 		return $row[0];
 	}
 
+	//获取评论总数
+	protected function data_selectTotal(){
+		$sql = "select count(`id`) FROM  `".parent::Fn()."message`";
+		$row = parent::Ais($sql);
+		return $row[0];
+	}
+
+	//获取指定 评论ID 的信息
+	protected function data_selectById( $mid=0 ){
+		$sql = "select * FROM  `".parent::Fn()."message` WHERE  `id` ='".$mid."' ;";
+		return parent::Ais($sql);
+	}
+
+	//获取指定 用户UID 的指定 内容CID 的评论信息总数
+	protected function data_selectUserTotal( $uid=0, $mid=0 ){
+		$sql = "select count(`id`) FROM  `".parent::Fn()."message` WHERE  `speaker` ='".$uid."' AND `position` ='".$mid."';";
+		$row = parent::Ais($sql);
+		return $row[0];
+	}
+
 
 	/********************************************
 	* 刷新 update
 	*/
+	protected function data_update( $mid=0, $key='up', $val=0 ){
+		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."message` SET  `".$key."` =  '".$val."' WHERE  `".parent::Fn()."message`.`id` =".$mid.";";
+		return mysql_query($sql);
+	}
 
 }
 
@@ -171,24 +195,34 @@ class Event_user_message extends Data_user_message
 	}
 
 	//获取指定 内容CID 的全部一级留言，不包含回复
-	protected function event_getContentOneMessage($cid=0, $begin=1, $page=1){
+	protected function event_getContentOneMessage($cid=0, $begin=0, $page=10){
 		$u = new Users();
 		$o = new Tool();
 		$array = array();
+		if ( $begin != 0 ) {
+			$begin = $begin + $page - 1;
+		}
 		$query = parent::data_selectOneMessageList($cid, $begin, $page );	//最新
 		if( !!$query && mysql_num_rows($query) > 0 ){	//遍历数据
 			while( $row = mysql_fetch_array($query)){	//获取单个内容数
 				$row['icon'] = $u -> Gicon($row['speaker']);
 				$row['name'] = $u -> Gname($row['speaker']);
 				$row['range'] = $o -> Crange($row['time']);
-				$row['up'] = $o -> Crange($row['time']);
+				if ( $row['reply'] ) {
+					$info = parent::data_selectById($row['reply']);
+					$row['reply'] = array(
+							'name' => $u -> Gname($info['speaker']),
+							'uid' => $info['speaker'],
+							'text' => $info['content']
+						);
+				}
 				array_push($array, $row);
 			}
 		}
 		$data = array(
 				'status' => '1101',	//输出默认显示内容
 				'total' => parent::data_selectMessageTotal($cid),
-				'number' => '1',		//每页显示的评论数量
+				'number' => $page,		//每页显示的评论数量
 				'page' => $begin,
 				'res' =>  $array
 			);
@@ -413,6 +447,12 @@ class Users_message extends Event_user_message
 	public function ICmessage($cid=0){
 		return count(parent::event_getContentOneMessage($cid)) > 0;
 	}
+	
+	//判断指定 用户UID 是否有参与过指定的 内容CID 的评论
+	public function IUmessage($cid=0, $uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		return parent::data_selectUserTotal( $uid, $cid ) > 0;
+	}
 
 
 
@@ -421,8 +461,20 @@ class Users_message extends Event_user_message
 	*/
 
 	//刷新指定 用户ID（选填） 的最近访问留言
-	public function UNmessage($uid=0){
-		return parent::event_updateNewMessage($uid);
+	// public function UNmessage($uid=0){
+	// 	return parent::event_updateNewMessage($uid);
+	// }
+
+	//刷新指定 评论MID 的赞
+	public function Uup($mid=0){
+		$info = parent::data_selectById($mid);
+		return parent::data_update($mid, 'up', $info['up'] + 1);
+	}
+
+	//刷新指定 评论MID 的踩
+	public function Udown($mid=0){
+		$info = parent::data_selectById($mid);
+		return parent::data_update($mid, 'down', $info['down'] + 1);
 	}
 
 
@@ -433,7 +485,7 @@ class Users_message extends Event_user_message
 	*/
 
 	//添加指定 用户UID 的留言
-	public function Amessage($con='', $mid=0, $uid=0, $hmid=0){
+	public function Amessage($con='', $mid=0, $hmid=0, $uid=0 ){
 		$uid = $uid ? $uid : parent::Eid();
 		$o = new Tool();
 		$u = new Users();
@@ -448,16 +500,31 @@ class Users_message extends Event_user_message
 		if ( !$u -> Is() ) {
 			$u -> USplus(1, 'comment', $mid);
 		}
+
+		//如果是回复
+		$reply = '0';
+		if ( $hmid ) {
+			$info = parent::data_selectById($hmid);
+			$reply = array(
+				'name' => $u -> Gname($info['speaker']),
+				'uid' => $info['speaker'],
+				'text' => $info['content']
+			);
+		}
 		
-		$info = Array(
+		$row = Array(
+				'id' => parent::data_selectTotal() + 1,
 				'icon' => $u -> Gicon(),
 				'name' => $u -> Gname(),
 				'content' => $con,
-				'range' => '刚刚'
+				'range' => '刚刚',
+				'reply' => $reply
 			);
+		$array = array();
+		array_push($array, $row);
 		$data = array(
 				'status' => '1102',	//输出新增内容
-				'res' =>  $info
+				'res' =>  $array
 			);
 		return $data;
 

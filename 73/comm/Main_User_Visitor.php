@@ -45,11 +45,6 @@ class Data_user_visitor extends Config
 	* 删除
 	*/
 
-	//删除指定留言
-	protected function data_deleteMessageDel($uid=0, $mid=0){
-		$sql = "delete FROM `".parent::Mn()."`.`".parent::Fn()."message` WHERE `".parent::Fn()."message`.`id` = ".$mid." AND `".parent::Fn()."message`.`uid` =".$uid." LIMIT 1;";
-		return mysql_query($sql);
-	}
 
 	//删除指定留言下面的所有回复
 	// protected function data_deleteMessageDelHf($uid=0, $hid=0){
@@ -82,7 +77,7 @@ class Data_user_visitor extends Config
 
 	//刷新指定 游客UID 的指定 字段VAL 的 参数NUM
 	protected function data_update($uid=0, $val='', $num=0 ){
-		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."visitor` SET  `".$val."` =  '".$num."' WHERE  `".parent::Fn()."visitor`.`uid` =".$uid;
+		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."user` SET  `".$val."` =  '".$num."' WHERE  `".parent::Fn()."user`.`uid` =".$uid;
 		return mysql_query($sql);
 	}
 
@@ -176,32 +171,6 @@ class Users_visitor extends Event_user_visitor
 	* 获取 get
 	*/
 
-	//获取指定 用户UID 距上次查看留言之后的未读留言信息数量
-	public function Gvisitor($uid=0){
-		return parent::data_selectByUid($uid);
-	}
-
-	//获取当前游客的 UID
-	// public function Guid(){
-	// 	$uid = $uid ? $uid : parent::Eid();
-	// 	$info = parent::data_selectByUid($uid);
-	// 	$sum = 0;
-	// 	if ( count($info) > 1 ) {
-	// 		$sum = $info['sum'];
-	// 	}
-	// 	return $sum;
-	// }
-
-	//获取指定 游客UID 的金额
-	public function Gsum($uid=0){
-		$uid = $uid ? $uid : parent::Eid();
-		$info = parent::data_selectByUid($uid);
-		$sum = 0;
-		if ( count($info) > 1 ) {
-			$sum = $info['plus'];
-		}
-		return $sum;
-	}
 
 	//获取指定 游客UID 的点赞次数
 	public function GZtotal($uid=0){

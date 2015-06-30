@@ -1755,6 +1755,8 @@ margin: auto; }
 .message-i-name a{ color: #d80c18; }
 .message-i-name a:hover{ text-decoration: underline; }
 .message-i-text{ padding: 5px 0; }
+.message-i-text a{ color: #d80c18; }
+.message-i-text a:hover{ text-decoration: underline; }
 .message-i-other{ margin-top: 5px; }
 .message-o-time{ float: left;color: #999; }
 .message-o-use{ float: right; }
@@ -1762,6 +1764,7 @@ margin: auto; }
 .message-o-use a:hover{ color: #d80c18; }
 .message-o-use a.message-u-bad{ border-left: 1px solid #ccc; }
 .message-o-use a.message-u-reply{ border-left: 1px solid #ccc;padding-right: 0px; }
+.message-o-use a.message-u-act{ color: #d80c18; }
 
 /* 分页 */
 .message-page{ display: none;margin-top: 20px; }
@@ -1769,15 +1772,25 @@ margin: auto; }
 .message-page-btn:hover{ border-color: #bbb; }
 .message-page-current{ display: inline-block;height: 24px;width: 45px;float: right;margin: 0 3px;position: relative;cursor: pointer;border: 1px solid transparent; }
 .message-current-num{ line-height: 24px; }
-.message-current-num{ text-align: left;text-indent: 8px; }
+.message-current-num span{ text-align: left;text-indent: 10px;display: inline-block; }
 .message-current-num i{ display: inline-block;width: 0px;height: 0px;border: 3px solid #aaa;border-top-color: transparent;border-left-color: transparent;-webkit-transform: rotate(45deg);transform: rotate(45deg);position: absolute;right: 10px;top: 7px; }
 .message-current-use{ display: none;width: 45px;position: absolute;bottom: 24px;left: -1px;background-color: #fff;border: 1px solid #ccc;border-bottom: 0px; }
-.message-current-use a{ display: inline-block;width: 100%;height: 24px;line-height: 24px; }
+.message-current-use a{ display: inline-block;width: 100%;height: 24px;line-height: 24px;text-indent: 10px; }
 .message-current-use a:hover{ background-color: #eee; }
 .message-page-current:hover{ border: 1px solid #ccc;background-color: #fff; }
 .message-page-current:hover .message-current-num i{ -webkit-transform: rotate(-135deg);transform: rotate(-135deg);top: 10px; }
 .message-page-current:hover .message-current-use{ display: inline-block; }
 .message-page-current-act .message-current-use{ display: inline-block; }
+
+/* 回复框 */
+.message-i-reply{ margin-top: 10px;display: none; }
+.message-reply-text{ display: inline-block;width: 250px;line-height: 20px;height: 40px; padding: 8px;border: 1px solid #ddd;resize: none;float: left;border-radius: 3px;background-color: #f8f8f8; }
+.message-reply-text:focus{ background-color: white; }
+.message-reply-btn{ display: inline-block;width: 50px;height: 28px;line-height: 28px;float: right;background: #d80c18;text-align: center;color: white;margin-top: 10px;border-radius: 3px; }
+.message-reply-btn:hover{ background-color: red; }
+
+
+
 
 /*====
 图标字体

@@ -7,7 +7,7 @@
 
 	//如果是游客
 	if ( !$u -> Is() ) {
-		$visitorInfo = $uv -> Anew();
+		$uv -> Anew();
 		// $uid = $o -> Gip();
 		// $u -> Acache($uid, 'visitor');
 		// $sum = 24;			//默认
@@ -16,6 +16,7 @@
 	//获取参数
 	$uid = $u -> Guid();
 	$sum = $u -> Gplus();
+
 ?>
 
 <!-- 搜索 及 注册按钮 -->

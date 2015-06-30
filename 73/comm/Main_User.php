@@ -103,8 +103,8 @@ class Data_user extends Config
 	*/
 	
 	//获取当前用户的全部信息，根据ID
-	protected function data_selectByUid($uid=0){
-		$sql = "select * FROM  `".parent::Fn()."user` WHERE  `uid` LIKE  ".$uid;
+	protected function data_selectByUid($uid=0, $visitor=0){
+		$sql = "select * FROM  `".parent::Fn()."user` WHERE  `uid` = ".$uid." AND `visitor` =".$visitor;
 		return parent::Ais($sql);
 	}
 
@@ -203,6 +203,14 @@ class Data_user extends Config
 		$row = parent::Ais($sql);
 		return $row[0] ? $row[0] : 0;
 	}
+
+	//获取指定 用户UID 的支出指定 类型TYPE 的总数量
+	protected function data_selectPurchaseSum($uid=0, $source='cid'){
+		$sql = "select count(`id`)  FROM `".parent::Fn()."logs_purchase` WHERE `out_uid` = ".$uid." AND  `source` LIKE  '".$source."'";
+		$row = parent::Ais($sql);
+		return $row[0];
+	}
+
 
 
 	/********************************************
@@ -689,18 +697,10 @@ class Users extends Event_user
 
 	//获取用户余额，根据 用户ID（选填，默认为登录用户）
 	public function Gplus($uid=0){
-		$uv = new Users_visitor();
-		//如果是游客
-		if ( !$this -> Is() ) {
-			return $uv -> Gsum($uid);
-		}
-		if(!$uid && parent::event_uis()){	//没有参数且有登录用户的情况下
-			$uid = parent::event_uid();
-		}
-		if($uid > 0){	//判断是否有参数
-			return parent::event_getA($uid);
-		}else{
-			return 0;
+		$uid = $uid ? $uid : $this -> event_uid();
+		if( $uid ){	//判断是否有参数
+			$info = parent::event_get($uid);
+			return $info['plus'];
 		}
 	}
 
@@ -963,6 +963,12 @@ class Users extends Event_user
 			$arr[$key]['income'] = parent::data_selectSumlog($uid, $start, $end, 1);	//获取用户指定天数的收入总和
 		}
 		return $arr;
+	}
+
+	//获取指定 用户UID 的点赞总次数
+	public function GZtotal($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		return parent::data_selectPurchaseSum($uid, 'cid');
 	}
 
 

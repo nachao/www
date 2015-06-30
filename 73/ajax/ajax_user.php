@@ -84,6 +84,16 @@
 		echo $ue -> Gsurplus();
 	}
 
+
+
+
+
+
+
+
+
+
+
 	//添加留言
 	// if( isset($_POST['addMessage']) ){
 	// 	echo $um -> addMessage();
@@ -92,14 +102,26 @@
 
 	//发布留言（评论）
 	if( isset($_POST['addMessage']) ){
-		// $cid = $_POST['addMessage'];		//内容id
-		// $aim = CT_contentGetUid($cid);		//此用户的留言板
-		echo json_encode($um -> Amessage( $_POST['txt'], $_POST['cid'] ));
+		$fid = 0;
+		if ( isset($_POST['huifu']) ) {
+			$fid = $_POST['huifu'];
+		}
+		echo json_encode($um -> Amessage( $_POST['txt'], $_POST['cid'], $fid ));
 	}
 
 	//获取评论
 	if ( isset($_POST['getM']) ) {
 		echo json_encode($um -> GCmessage($_POST['cid'], $_POST['page']));
+	}
+
+	//评论点赞
+	if ( isset($_POST['messageUp']) ) {
+		echo $um -> Uup($_POST['mid']);
+	}
+
+	//评论点踩
+	if ( isset($_POST['messageDown']) ) {
+		echo $um -> Udown($_POST['mid']);
 	}
 
 

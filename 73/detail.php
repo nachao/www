@@ -36,7 +36,7 @@
 						$cid = $_GET['cid'];
 						$con = $c -> Ginfo($cid); 	?>
 						<div class="contentList" style="margin:0px;" cid="<?php echo $cid; ?>" >
-							<div class="col<?php echo $c -> Ibuy($con['cid']) ? ' col_possess' : ''; ?>" cid="<?php echo $con['cid']; ?>" now="<?php echo $con['plus']; ?>" style="display: block;" >
+							<div class="col col_possess" cid="<?php echo $con['cid']; ?>" now="<?php echo $con['plus']; ?>" style="display: block;" >
 
 									<!-- 标示 -->
 									<?php if($con['effects'] == 1){	//如果是顶 ?>
@@ -78,21 +78,11 @@
 										
 										<div class="use">
 											<div class="num f"><span class="gold golds" n="<?php echo $con['plus']; ?>"></span> <i></i></div>
-										
-											<?php if($u -> Guid()){	//登录后显示的提示 ?>
-												<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-											<?php }else{			//未登录后显示的提示 ?>
-												<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
+											<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+											<?php if($c -> Itxt($con['cid'])){	//如果有文本则显示展开按钮 ?>
+												<a class="skip look r" href="javascript:;" >展开</a>
 											<?php } ?>
-
-											<?php if($c -> Ibuy($con['cid'])){		//如果可以查看 ?>
-												<?php if($c -> Itxt($con['cid'])){	//如果有文本则显示展开按钮 ?>
-													<a class="skip look r" href="javascript:;" >展开</a>
-												<?php } ?>
-											<?php }else{  //需要购买 ?>
-												<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-											<?php } ?>
-
+											<a class="buy confirmBtn purchase r" href="javascript:;" >赞一个</a>
 										</div>
 									</div>
 								</div>
@@ -450,7 +440,7 @@
 		$('#messagePBtn').click(function(){
 			var cid = $('.contentList').attr('cid'),
 				obj = $('#messagePText'),
-				text = obj.val().replace(/\s/g, '');
+				text = obj.val().replace(/\s/g, '').substr(0, 200);
 			if( text != '' ){
 				$.g({
 					name: 'addMessage',
@@ -468,14 +458,23 @@
 			}
 		});
 
+		//评论字数长度控制
+		$('#messagePText').keydown(function(){
+			if ( $(this).val().length > 200 ) {
+				$(this).val($(this).val().substr(0, 200));
+			}
+		})
+
+
+
 		
 		//获取指定内容的全部评论
 		function messageList () {
 			var cid = $('.contentList').attr('cid'),
-				page = parseInt($('.message-current-num span').html());
+				select = parseInt($('.message-current-num span').html()) -1;
 			$.g({
 				name: 'getM',
-				data: { 'cid': cid, 'page': page },
+				data: { 'cid': cid, 'page': select },
 				result: function(value){
 					$(window).commentIn(value);
 
@@ -484,16 +483,21 @@
 					var total = value.total,
 						number = value.number,
 						page = Math.ceil(total / number);
-
 					var contain = $('.message-current-use').empty(),
-						message = $('.message-page');
-					if ( page ) {
+						message = $('.message-page');	
+					if ( page > 1 ) {
 						for ( var i = 1; i <= page; i++ ) {
-							contain.append('<a href="javascript:;" >'+ i +'</a>');
+							if ( (i-1) != select ) {
+								contain.append('<a href="javascript:;" >'+ i +'</a>');
+							}
 						}
 						contain.find('a').click(function(){
-							$('.message-current-num span').html($(this).html());
-							messageList();
+							var span = $('.message-current-num span'),
+								value = $(this).html();
+							if ( value != span.html() ) {
+								span.html(value);
+								messageList();
+							}
 						});
 						message.show();
 					}

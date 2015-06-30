@@ -196,7 +196,7 @@
 										<!-- <a class="skip look r" href="javascript:;" >展开</a> -->
 									<?php } ?>
 
-									<a class="buy confirmBtn iconfont icon-qipaoa r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
+									<a class="buy confirmBtn iconfont icon-qipaoa <?php echo $um -> IUmessage($v['cid']) ? 'praise-act' : ''; ?> r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
 									<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
 								</div>
 							</div>

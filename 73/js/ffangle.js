@@ -648,8 +648,6 @@ jQuery.fn.extend({
 					url: "../ajax/ajax_user.php",
 					data: "recommendSet=" + cid,
 					success: function(msg){
-						console.log(msg);
-
 						//转为关注
 						// obj.html('关注此用户').parents('.user-follow').removeClass(' user-follow-has');
 						// obj.off('click').click(function(){ $(this).followUser(); });
@@ -792,7 +790,6 @@ jQuery.fn.extend({
 			if(value.indexOf('.swf') >= 0){
 				value = 'http://'+ value;
 				input.val(value);
-				console.log(input.val());
 				var v = value;
 
 				//只支持指定网站的视频
@@ -1083,6 +1080,9 @@ jQuery.fn.extend({
 			timing = parseInt(checkCookie(name)) || 0;
 		var once = 1000;
 		// visitor.find('i').css({ height: parseInt(timing/60*100) + '%' });
+		if ( $(window).updateSum() >= 24 ) {
+			timing = 0;
+		}
 		clearTimeout(window.loop);
 		if ( visitor.length ) {
 			if ( timing >=60 ){
@@ -1115,15 +1115,65 @@ jQuery.fn.extend({
 			first = item.length <= 0,		//是否输出之前的评论内容
 			rows = null;
 		if ( value.status == '1101' ) {	//如果是首次加载 或者 分页切换
-			list.empty();
+			item.remove();
 		}
 		$(res).each(function(key, arr){
 			rows = templet.clone();
 			rows.removeAttr('id').show().addClass('message-rows-temp');
 			rows.find('.message-r-icon img').attr('src', arr.icon);
-			rows.find('.message-i-name a').html(arr.name);
-			rows.find('.message-i-text').html(arr.content);
+			rows.find('.message-i-name a').html(arr.name).attr('href', './list.php?uid='+ arr.speaker);
 			rows.find('.message-o-time').html(arr.range);
+			rows.find('.message-reply-btn').attr('mid', arr.id);
+			rows.find('.message-u-good span').html(arr.up);
+			rows.find('.message-u-bad span').html(arr.down);
+			rows.find('.message-u-reply').click(function(){
+				$(this).parents('.message-r-info').find('.message-i-reply').toggle();
+			});
+			//赞
+			rows.find('.message-u-good').click(function(){
+				$.g({ name: 'messageUp', data: { 'mid': arr.id } });
+				var span = $(this).find('span'),
+					num = parseInt(span.html());
+				span.html(num + 1);
+				$(this).addClass('message-u-act');
+			});
+			//踩
+			rows.find('.message-u-bad').click(function(){
+				$.g({ name: 'messageDown', data: { 'mid': arr.id } });
+				var span = $(this).find('span'),
+					num = parseInt(span.html());
+				span.html(num + 1);
+				$(this).addClass('message-u-act');
+			});
+			//点击回复评论
+			rows.find('.message-reply-btn').click(function(){
+				var reply = $(this).parents('.message-i-reply'),
+					cid = $('.contentList').attr('cid'),
+					fid = $(this).attr('mid'),
+					obj = reply.find('#messageReplyText'),
+					text = obj.val().replace(/\s/g, '');
+				if( text != '' ){
+					$.g({
+						name: 'addMessage',
+						data: { 'cid': cid, 'txt': text, 'huifu': fid },
+						result: function(value){
+							obj.val('');
+							reply.hide();
+							$(window).commentIn(value);
+							if ( $('#pop-3').length ) {	//如果是游客则刷新积分
+								$(window).updateSum(-1);
+							}
+						}
+					});
+				}
+			});
+			//如果是回复的内容
+			if ( typeof(arr.reply) == 'object' ) {
+				arr.content += ' //';
+				arr.content += '<a href="./list.php?uid='+ arr.reply.uid +'" >@'+ arr.reply.name +'</a>：';
+				arr.content += arr.reply.text;
+			}
+			rows.find('.message-i-text').html(arr.content);
 			if ( value.status == '1101' ) {	//如果是首次加载 或者 分页切换
 				list.append(rows);
 			}
@@ -1277,7 +1327,7 @@ jQuery.extend({
 			key, val;
 		for(var key in param){
 			key = key.replace(/=|'|"/g,'');
-			val = param[key] ? String(param[key]).replace(/=|'|"/g,'') : '';
+			val = String(param[key]).replace(/=|'|"/g,'');
 			str += str ? '&' : '';
 			str += key +'='+ val;
 		}
@@ -1316,7 +1366,7 @@ jQuery.extend({
 		$.g({
 			name: 'UGlog',
 			result: function(data){
-				console.log(data);
+				// console.log(data);
 			}
 		});
 	},

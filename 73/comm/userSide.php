@@ -91,9 +91,7 @@
 					<div class="message-title">全部评论</div>
 					<div class="message-rows" id="messageTemplet" style="display: none;" >
 						<div class="message-r-icon">
-							<a href="javascript:;" >
-								<img src="" />
-							</a>
+							<a href="javascript:;" ><img src="" /></a>
 						</div>
 						<div class="message-r-info">
 							<div class="message-i-name">
@@ -103,12 +101,17 @@
 							<div class="message-i-other">
 								<div class="message-o-time"></div>
 								<div class="message-o-use">
-									<a class="message-u-good" href="javascript:;" title="" >赞 0</a>
-									<a class="message-u-bad" href="javascript:;" title="" >踩 0</a>
-									<!-- <a class="message-u-reply" href="javascript:;" title="" >回复</a> -->
+									<a class="message-u-good" href="javascript:;" title="" >赞 <span>0</span></a>
+									<a class="message-u-bad" href="javascript:;" title="" >踩 <span>0</span></a>
+									<a class="message-u-reply" href="javascript:;" title="" >回复</a>
 								</div>
 								<div class="c"></div>
 							</div>
+							<div class="message-i-reply">
+								<textarea class="message-reply-text" id="messageReplyText" placeholder="请输入评论" ></textarea>
+								<a class="message-reply-btn" id="messageReplyBtn" href="javascript:;">回复</a>
+							</div>
+							<div class="c"></div>
 						</div>
 					</div>
 				</div>
