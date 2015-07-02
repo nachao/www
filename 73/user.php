@@ -144,8 +144,54 @@
 	
 	<?php if($u -> Ifirst()){ //判断是否首次登陆	?>
 	<!-- 提示信息 -->
-	<div class="globalShade"><i></i><em>×</em><span></span></div>
+	<!-- <div class="globalShade"><i></i><em>×</em><span></span></div> -->
 	<?php } ?>
+
+	<!-- 教程 - 注册成功 -->
+	<div class="course course-user no">
+		<div class="course-dialog"><i></i>
+			<p>Good！你已经注册成功了自己的账户。</p>
+			<p>这里是 <em>用户中心</em>，我们先从这里开始讲起吧。</p>
+			<p class="tip">提示：您什么都没法，什么这里空空如也。</p>
+			<div class="btn">
+				<a href="javascript::">好的</a>
+				<a href="javascript::">不</a>
+			</div>
+		</div>
+		<div class="c"></div>
+		<img class="course-figure" src="./course/2.gif" />
+	</div>
+
+	<!-- 教程 - 进入能力界面 -->
+	<div class="course course-enterAbility no">
+		<div class="course-dialog"><i></i>
+			<p>点击 <em>我的能力</em>，跟我一起去个神奇的地方吧。</p>
+			<p class="tip">提示：前方高能！这个位置 →</p>
+			<div class="btn">
+				<a href="javascript::">不</a>
+			</div>
+		</div>
+		<div class="c"></div>
+		<img class="course-figure" src="./course/3.gif" />
+	</div>
+
+	<!-- 教程 - 欢迎回来 -->
+	<div class="course course-entry no">
+		<div class="course-dialog"><i></i>
+			<p>欢迎回来！小的恭候您多时了。</p>
+			<p>请让我简单的给你汇报下，你离开的这1天里都发生了什么。</p>
+			<p><b>新增收入：</b><em>1,253 分</em></p>
+			<p><b>当前的神：</b><em>站长</em>，你排第 <em>42</em> 位，为土豪名列。</p>
+			<p><b>新报道的后辈们：</b><em>301 位</p></p>
+			<p class="tip">提示：点击不再提醒后，可以在个人设置中再次找到我。</p>
+			<div class="btn">
+				<a href="javascript::">知道了，谢谢</a>
+				<a href="javascript::">不再提醒</a>
+			</div>
+		</div>
+		<div class="c"></div>
+		<img class="course-figure" src="./course/4.gif" />
+	</div>
 
 	<script type="text/javascript">
 

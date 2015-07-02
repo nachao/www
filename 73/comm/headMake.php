@@ -34,7 +34,7 @@
 				<a href="./userFollow.php" ><span class="glyphicon glyphicon-ok"></span>关注的用户</a>
 				<!-- <a <?php if( $ect == "collect" ){	 ?>class="act"<?php } ?> href="javascript:;" ><span class="glyphicon glyphicon-star"></span>收藏夹</a> -->
 				<!-- <a <?php if( $ect == "friends" ){	 ?>class="act"<?php } ?> href="javascript:;" ><span class="glyphicon glyphicon-heart"></span>我的好友</a> -->
-				<a href="./userWelfare.php" ><span class="glyphicon glyphicon-th-large"></span>徽章/福利</a>
+				<a href="./userWelfare.php" ><span class="glyphicon glyphicon-th-large"></span>我的能力</a>
 				<a href="./userEffigy.php" ><span class="glyphicon glyphicon-cog"></span>个人设置</a>
 				<a href="?out=1" ><span class="glyphicon glyphicon-off"></span>注销</a>
 			</div>
