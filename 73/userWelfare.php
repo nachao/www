@@ -9,6 +9,13 @@
 
 	//引用样式头部
 	include("./comm/head.php");
+
+	/*-------------------------------
+	
+	收益类：翻倍、推广牛人、每日福利、一呼百应、实时数据。
+
+	
+	------------------------------------*/
 ?>
 
 	<div class="container pagecon">
@@ -19,23 +26,10 @@
 
 				<!-- 操作栏 -->
 				<div class="actionbar"></div>
-				<div class="leftarea f">
-
-					<!-- 我拥有的徽章 -->
-					<div class="commarea badgeHead">
-						<div class="content">
-							<div class="head">
-								<div class="tit f"><em>我的徽章 / 福利</em></div>
-								<div class="gap"><i></i></div>
-							</div>
-							<div class="c"></div>
-						</div>
-						<div class="bottomSide"></div>
-					</div>
+				<div class="badgeList ">
 
 					<?php if(count($ub -> Gbadge())){ ?>
 						<!-- 输出全部 我拥有的徽章 -->
-						<div class="badgeList ">
 							<?php foreach($ub -> Gbadge() as $BLk => $BLv ){ //输出内容开始 --------------------------------  
 								$bid = $BLv['sid'];
 								$img = $BLv['icon'];
@@ -47,8 +41,12 @@
 							?>
 								<div class="col" bid="<?php echo $bid; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $img; ?>"></i></div>
+										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
+										<div class="progress">
+											<span class="progress-txt">● 0%</span>
+											<span class="progress-con"></span>
+										</div>
 									</div>
 									<div class="text"><?php echo $cue; ?></div>
 									<div class="right">
@@ -62,25 +60,12 @@
 									<div class="received <?php echo $can; ?>" ></div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
-						</div>
+
 					<?php }else{ ?>
-						<div class="noContent badgeNot"></div>
+						<!-- <div class="noContent badgeNot"></div> -->
 					<?php } ?>
 
-					<!-- 全部徽章 -->
-					<div class="commarea badgeHead" style="margin-top: 90px;">
-						<div class="content">
-							<div class="head">
-								<div class="tit f"><em>未获得的徽章</em></div>
-								<div class="gap"><i></i></div>
-							</div>
-							<div class="c"></div>
-						</div>
-						<div class="bottomSide"></div>
-					</div>
-
-					<!-- 输出全部徽章 -->
-					<div class="badgeList">
+						<!-- 输出全部徽章 -->
 						<?php foreach ($ub -> Gspecial() as $k => $v) { //输出内容开始 --------------------------------
 							$is = !$ub -> IBbe($v['sid']);
 							$sid = $v['sid'];
@@ -92,10 +77,14 @@
 							$num = $BLgain['num'];
 							$txt = $ub -> IBfree($v['gain']);
 							if ( $is ) { ?>
-								<div class="col" bid="<?php echo $sid; ?>" >
+								<div class="col col-full" bid="<?php echo $sid; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $img; ?>"></i></div>
+										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
+										<div class="progress">
+											<span class="progress-txt">● 0%</span>
+											<span class="progress-con"></span>
+										</div>
 									</div>
 									<div class="text">
 										<?php echo $cue; ?>
@@ -113,9 +102,8 @@
 								</div>
 						<?php }
 						} //输出内容结束 -------------------------------- ?>
-					</div>
+
 				</div>
-				<div class="rightarea r"><?php include("./comm/userSide.php");	//导入 用户页 - 右侧信息 	?></div>
 				<div class="c"></div>
 			</div>
 		</div>
