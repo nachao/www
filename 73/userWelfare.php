@@ -39,7 +39,7 @@
 								$btn = $BLv['icon'] != "new" || $u -> Gplus() < 10;		//如果是新手福利则进行判断，用户条件是否足够
 								$can = !$ub -> Ireceive($BLv['sid']) ? 'no' :'';		//判断是否可以领取
 							?>
-								<div class="col" bid="<?php echo $bid; ?>" >
+								<div class="col col-full" bid="<?php echo $bid; ?>" >
 									<div class="left">
 										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
@@ -50,11 +50,12 @@
 									</div>
 									<div class="text"><?php echo $cue; ?></div>
 									<div class="right">
-										<div class="price">
+										<!-- <div class="price">
 											<span><em class="golds"><?php echo $num; ?></em> 分</span>
-										</div>
+										</div> -->
+										<div class="right-info">剩余使用次数：10 次</div>
 										<?php if( $can ){ ?>
-											<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" >领取</a></div>
+											<!-- <div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" >领取</a></div> -->
 										<?php } ?>
 									</div>
 									<div class="received <?php echo $can; ?>" ></div>
@@ -77,14 +78,14 @@
 							$num = $BLgain['num'];
 							$txt = $ub -> IBfree($v['gain']);
 							if ( $is ) { ?>
-								<div class="col col-full" bid="<?php echo $sid; ?>" >
+								<div class="col" bid="<?php echo $sid; ?>" >
 									<div class="left">
 										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
-										<div class="progress">
+										<!-- <div class="progress">
 											<span class="progress-txt">● 0%</span>
 											<span class="progress-con"></span>
-										</div>
+										</div> -->
 									</div>
 									<div class="text">
 										<?php echo $cue; ?>
@@ -128,7 +129,7 @@
 	</div>
 
 	<!-- 教程 - 选哪个好呢 -->
-	<div class="course course-user">
+	<div class="course course-user no">
 		<div class="course-dialog"><i></i>
 			<p>每个技能都有详细说明，不过这么多还是会眼花缭乱。</p>
 			<p>淡定，让我们先想想要在这怎么玩？</p>
