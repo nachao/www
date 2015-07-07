@@ -11,20 +11,19 @@
 		
 	<div class="container pagecon">
 		<div class="entrycenter">
-			<div class="entrybg"style="background: transparent;">
+			<div class="entrybg"></div>
 
-				<!-- 教程 -->
-				<div class="course course-register">
-					<div class="course-dialog"><i></i>
-						<p>Hi，欢迎来到七十三号馆！</p>
-						<p>你只需要输入 <em>“账号”</em> 和 <em>“密码”</em> 就可以完成注册了。</p>
-						<p class="tip">提示：账号只能是中文，密码没有限制（密码为 1 也是可以的）。</p>
-					</div>
-					<div class="c"></div>
-					<img class="course-figure" src="./course/1.gif" />
+			<!-- 教程 -->
+			<div class="course course-register">
+				<div class="course-dialog"><i></i>
+					<p>Hi，欢迎来到七十三号馆！</p>
+					<p>你只需要输入 <em>“账号”</em> 和 <em>“密码”</em> 就可以完成注册了。</p>
+					<p class="tip">提示：账号只能是中文，密码没有限制（密码为 1 也是可以的）。</p>
 				</div>
-				
+				<div class="c"></div>
+				<img class="course-figure" src="./course/1.gif" />
 			</div>
+
 			<div class="enter">
 				<div class="head"><h5>登录</h5><p>log on</p></div>
 				<div class="head" style="left: 400px;"><h5>注册</h5><p>register</p></div>
@@ -120,6 +119,8 @@
 				//验证账号
 				$('#account').blur();
 
+				$('.entrybg').stop().animate({ left: 625 });
+
 			});
 
 			//点击登录
@@ -144,6 +145,8 @@
 
 				//验证账号
 				$('#account').blur();
+
+				$('.entrybg').stop().animate({ left: 0 });
 
 			});
 

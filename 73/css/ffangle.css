@@ -992,11 +992,11 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /*===
  登陆 和 注册 
  ===*/
-.entrycenter{ width: 1024px;height: auto;margin: 100px auto;overflow: hidden;position: relative;border-radius: 3px; }
-.entrybg{ width: 100%;height:500px; background: url(../imgs/enterBg.jpg) left top no-repeat; }
+.entrycenter{ width: 1024px;height: 500px;margin: 100px auto;overflow: hidden;position: relative;border-radius: 3px; }
+.entrybg{ width: 100%;height:100%; background: url(../imgs/enterBg.jpg) left top no-repeat;position: absolute;top: 0px;left: 0px;z-index: 2; }
 
 /*进入*/
-.enter{ width: 400px;height:500px;position: absolute;top: 0px;right: 0px;background: white;overflow: hidden; }
+.enter{ width: 400px;height:500px;position: absolute;top: 0px;right: 0px;background: white;overflow: hidden;z-index: 3; }
 .enter .head{ width: 100%;height: 100px;text-align: center;color: white;position: absolute;top: 100px; }
 .enter .head h5{ margin: 0px;font-size: 32px;line-height: 40px;width: 100%;color: #de4c00; }
 .enter .head p{ font-size:20px;margin: 0px;font-family: Arial;color: #de4c00; }

@@ -1094,12 +1094,24 @@ class Users extends Event_user
 	public function Inew($uid=0){
 		$uid = $uid ? $uid : $this -> Guid();
 		$info = parent::event_getInfo($uid);
-		if ( $info['lastactive'] <= 0 ) {
+		if ( $info['lastskip'] <= 0 ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	// 判断是否刚刚登陆
+	public function Ilogin($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		$info = parent::event_getInfo($uid);
+		if ( $info['lastdate'] >= $info['lastskip'] ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 
 
@@ -1185,6 +1197,13 @@ class Users extends Event_user
 	public function Ulogin($time=0, $uid=0){
 		return parent::event_updateVip($time, $uid);
 	}
+
+	//刷新指定 用户UID 的最近跳转时间
+	public function Uskip($uid=0){
+		$uid = $uid ? $uid : $this -> event_uid();
+		return parent::data_update($uid, 'lastskip', time());
+	}
+
 
 
 
