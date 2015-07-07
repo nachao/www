@@ -161,37 +161,52 @@
 		<div class="c"></div>
 		<img class="course-figure" src="./course/2.gif" />
 	</div>
-
+	
+	<?php if ( $u -> Inew() ) {		// 判断是否为新用户	?>
 	<!-- 教程 - 进入能力界面 -->
-	<div class="course course-enterAbility no">
+	<div class="course course-enterAbility">
 		<div class="course-dialog"><i></i>
 			<p>点击 <em>我的能力</em>，跟我一起去个神奇的地方吧。</p>
 			<p class="tip">提示：前方高能！这个位置 →</p>
 			<div class="btn">
-				<a href="javascript::">不</a>
+				<a class="course-btn-no" href="javascript::">不了</a>
 			</div>
 		</div>
 		<div class="c"></div>
 		<img class="course-figure" src="./course/3.gif" />
 	</div>
+	<script>
+		var course = $('.course-enterAbility'),
+			operate = $('.header .operate'),
+			style = 'operate_act';
+		operate.addClass(style);
+		course.find('.course-btn-no').click(function(){	//关闭
+			operate.removeClass(style);
+			course.hide();
+		});
+	</script>
 
+	<?php } else {	// 如果非新用户 ?>
 	<!-- 教程 - 欢迎回来 -->
-	<div class="course course-entry no">
+	<div class="course course-entry">
 		<div class="course-dialog"><i></i>
-			<p>欢迎回来！小的恭候您多时了。</p>
-			<p>请让我简单的给你汇报下，你离开的这1天里都发生了什么。</p>
-			<p><b>新增收入：</b><em>1,253 分</em></p>
-			<p><b>当前的神：</b><em>站长</em>，你排第 <em>42</em> 位，为土豪名列。</p>
-			<p><b>新报道的后辈们：</b><em>301 位</p></p>
+			<div class="course-text">
+				<p>欢迎回来！小的恭候您多时了。</p>
+				<p>请让我简单的给你汇报下，你离开的这<span class="course-text-time">123</span>里都发生了什么。</p>
+				<p><b>新增收入：</b><em class="course-text-num">1,253</em> 分</p>
+				<p><b>当前的神：</b><em class="course-text-first">站长</em>，你排第 <em class="course-text-digg">42</em> 位，为土豪名列。</p>
+				<p><b>新报道的后辈们：</b><em class="course-text-user">301</em> 位</p>
+			</div>
 			<p class="tip">提示：点击不再提醒后，可以在个人设置中再次找到我。</p>
 			<div class="btn">
-				<a href="javascript::">知道了，谢谢</a>
-				<a href="javascript::">不再提醒</a>
+				<a class="course-btn-yes" href="javascript::">知道了，谢谢</a>
+				<!-- <a class="course-btn-no" href="javascript::">不再提醒</a> -->
 			</div>
 		</div>
 		<div class="c"></div>
 		<img class="course-figure" src="./course/4.gif" />
 	</div>
+	<?php } ?>
 
 	<script type="text/javascript">
 
@@ -274,6 +289,10 @@
 		$('.col_possess').writing();
 
 
+		//获取用户汇报
+		$('.course-entry').report();
+
+
 
 		
 
@@ -308,17 +327,17 @@
 
 
 		//新手提示
-		if( $('.globalShade').length > 0 ){
-			$('.header .operate').addClass('operate_act');
-			$('.header .operate .link a').eq(7).addClass('act');
+		// if( $('.globalShade').length > 0 ){
+		// 	$('.header .operate').addClass('operate_act');
+		// 	$('.header .operate .link a').eq(7).addClass('act');
 
-			//关闭提示
-			$('.globalShade em').click(function(){
-				$('.globalShade').remove();
-				$('.header .operate').removeClass('operate_act');
-				$('.header .operate .link a').eq(7).removeClass('act');
-			});
-		}
+		// 	//关闭提示
+		// 	$('.globalShade em').click(function(){
+		// 		$('.globalShade').remove();
+		// 		$('.header .operate').removeClass('operate_act');
+		// 		$('.header .operate .link a').eq(7).removeClass('act');
+		// 	});
+		// }
 
 	</script>
 

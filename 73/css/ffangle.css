@@ -1053,11 +1053,12 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeHead .head .gap i{ width: 28px; }
 .badgeList{ margin: 0 -15px;float: left; }
 .badgeList .col{ width: 258px; border: 1px solid #d9dbdd; background: white url(../imgs/area_bottomBg.gif) repeat-x bottom; box-shadow: 0px 0px 10px #eee; border-radius: 3px; margin: 0 20px; position: relative; float: left; padding-bottom: 6px; margin-bottom: 30px; }
-.badgeList .col .left{ height: 148px; width: 100%;  display: block; overflow: hidden; border-radius: 3px 3px 0 0;position: relative; }
+.badgeList .col .left{ height: 148px; width: 100%;  display: block; overflow: hidden; border-radius: 3px 3px 0 0;position: relative;height: 308px;box-shadow: none;transition: 0.5s; }
 
 /* 徽章 - 大图 */
 .badgeList .col .icon{ width: 100%; height: 100%; float: left; position: relative; }
-.badgeList .col .icon i{ background: no-repeat center transparent; display: inline-block; width: 60px; height: 60px; float: left; background-size: 90%; position: absolute; left: 50%; margin-left: -30px; border-radius: 3px; z-index: 9; top: 25px; color: #666; text-align: center;line-height: 60px;font-size: 37px; }
+/*.badgeList .col .icon i{ background: no-repeat center transparent; display: inline-block; width: 60px; height: 60px; float: left; background-size: 90%; position: absolute; left: 50%; margin-left: -30px; border-radius: 3px; z-index: 9; top: 25px; color: #666; text-align: center;line-height: 60px;font-size: 37px; }*/
+.badgeList .col .icon i{ position: absolute; top: 50px; left: 40px; background-size: 90px; height: 170px;line-height: 170px; width: 170px; text-align: center; background-position: center; margin: 0px;font-size: 73px;transition: 0.5s;color: #999; }
 .badgeList .col .icon .vip{ background-image: url(../imgs/glory-vipBig.png) ; }
 .badgeList .col .icon .new:before{ content: '\e604'; }
 .badgeList .col .icon .one{ background-image: url(../imgs/glory-1Big.png) ; }
@@ -1071,6 +1072,53 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeList .col .icon .welfare:before{ content: '\e604'; }
 .badgeList .col .icon .doubled:before{ content: '\e601'; }
 
+.badgeList .col .name{ line-height: 30px;text-align: center;opacity: 0.8;float: left;width: 100%;position: absolute;top: 200px; font-size: 20px;transition: 0.5s;color: #666; }
+.badgeList .col .text{ color: #444; margin: 20px; height: 120px; overflow: hidden; height: 0px;margin: 0 20px;transition: 0.5s;font-family: 微软雅黑;font-size: 14px; }
+.badgeList .col .text .tip{ position: absolute;top: 0px;left: 0px;width: 560px;height: 100%;background: white url(../imgs/loading.gif) no-repeat center;display: none;z-index: 2; }
+.badgeList .col .text .tip .result{ display: inline-block;width: 100%;height: 100%;background: url(../imgs/msgwu-icon.png) no-repeat 205px 64px white;line-height: 160px;font-size: 20px;text-indent: 100px;background-size: 5%;display: none;position: relative;color: black; }
+.badgeList .col .text .tip .result p{ position: absolute;top: 30px;left: 150px;color: #d82425; }
+.badgeList .col .text .tip .result p a{ color: #d82425;text-decoration: underline; }
+.badgeList .col .text .tip .result p a:hover{ font-weight: bold; }
+.badgeList .col .right{ text-align: center; padding: 20px 0; border-top: 1px solid #eee;float: left;width: 100%;position: relative;height: 31px;line-height: 31px; }
+.badgeList .col .right-info{ font-size: 14px;text-align: left;margin-left: 20px;color: #444; }
+.badgeList .col .price{ float: left; margin-left: 20px;line-height: 28px; }
+.badgeList .col .price span{ font-size: 16px;/*color: #d82425;*/opacity: 0.8;font-family: Arial, 微软雅黑; }
+.badgeList .col .price span em{ font-size: 16px;/*color: #d82425;*/ }
+.badgeList .col .btn{ float: right; margin-right: 20px; }
+.badgeList .col .btn a{ width: auto; font-weight: normal; line-height: 30px; display: inline-block; font-family: 微软雅黑; padding: 0 20px;color: white;font-size: 14px;background: #e74c3c;border-radius: 2px; }
+.badgeList .col .btn a:hover{ background-color: #d82425; }
+.badgeList .col .received{ position: absolute;width: 200px;height: 100%;z-index: 2;right: 0px;top: 0px;background: url(../imgs/badgeList_msg.png) no-repeat 95px 50px;opacity: 0.9; }
+
+.badgeList .col .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #666;padding: 2px 5px;position: absolute;top: -13px;left: 157px;display: none;cursor: default; }
+.badgeList .col .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 40px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #666; border-top-color: transparent; border-left-color: transparent;  }
+
+.badgeList .col .progress{ display: none; width: 100%; background: transparent; position: absolute; bottom: 0px; left: 0px; }
+.badgeList .col .progress-txt{ color: black;opacity: 0.3;margin-left: 10px;line-height: 24px;font-size: 12px; }
+.badgeList .col .progress-con{ display: block; height: 7px; background: rgba(0,0,0,.2); width: 3%; border-radius: 0 3px 3px 0; }
+.badgeList .col:hover .progress{ display: inline-block; }
+
+/*.badgeList .col:hover .left{ background: #e74c3c; box-shadow: 0px -3px 5px #df3f2e inset; }
+.badgeList .col:hover .icon i{ color: white; }
+.badgeList .col:hover .name{ color: white; }*/
+
+
+.badgeList .col:hover .left{ height: 148px;background: #aaa; }
+.badgeList .col:hover .icon i{ width: 60px;height: 60px;line-height: 60px;color: white;top: 25px;left: 50%; margin-left: -30px; font-size: 50px; }
+.badgeList .col:hover .text{ height: 120px;margin: 20px; }
+.badgeList .col:hover .name{ color: white;top: 85px;font-size: 16px; }
+
+
+/* 全屏 */
+.badgeList .col-full .left{ height: 308px;background: #e74c3c;box-shadow: none;transition: 0.5s; }
+.badgeList .col-full .icon i{ left: 40px; background-size: 90px; height: 170px;line-height: 170px; width: 170px; text-align: center; background-position: center; margin: 0px;font-size: 73px;transition: 0.5s;color: white; }
+.badgeList .col-full .text{ height: 0px;margin: 0 20px;transition: 0.5s; }
+.badgeList .col-full .right{ border-top: 1px solid #eee; }
+.badgeList .col-full .name{ top: 200px; font-size: 20px;transition: 0.5s;color: white; }
+.badgeList .col-full .progress{ display: none; }
+.badgeList .col-full:hover .left{ height: 148px;background: #e74c3c; }
+.badgeList .col-full:hover .icon i{ width: 60px;height: 60px;line-height: 60px;color: white;top: 25px;left: 50%; margin-left: -30px; }
+.badgeList .col-full:hover .text{ height: 120px;margin: 20px; }
+.badgeList .col-full:hover .name{ color: white;top: 85px; }
 
 
 /* 徽章 - 小图 */
@@ -1086,45 +1134,8 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .glory .ceshi{ background-image: url(../imgs/glory-ceshi.png); }
 .glory .friend{ background-image: url(../imgs/glory-friend.png) ; }
 
-.badgeList .col .name{ font-size: 13px;line-height: 30px;text-align: center;color: #666;opacity: 0.8;float: left;width: 100%;position: absolute;top: 85px; }
-.badgeList .col .text{ color: #444; margin: 20px; height: 120px; overflow: hidden; }
-.badgeList .col .text .tip{ position: absolute;top: 0px;left: 0px;width: 560px;height: 100%;background: white url(../imgs/loading.gif) no-repeat center;display: none;z-index: 2; }
-.badgeList .col .text .tip .result{ display: inline-block;width: 100%;height: 100%;background: url(../imgs/msgwu-icon.png) no-repeat 205px 64px white;line-height: 160px;font-size: 20px;text-indent: 100px;background-size: 5%;display: none;position: relative;color: black; }
-.badgeList .col .text .tip .result p{ position: absolute;top: 30px;left: 150px;color: #d82425; }
-.badgeList .col .text .tip .result p a{ color: #d82425;text-decoration: underline; }
-.badgeList .col .text .tip .result p a:hover{ font-weight: bold; }
-.badgeList .col .right{ text-align: center; padding: 20px 0; border-top: 1px solid #D5D5D5;float: left;width: 100%;position: relative;height: 31px;line-height: 31px; }
-.badgeList .col .right-info{ font-size: 14px;text-align: left;margin-left: 20px;color: #444; }
-.badgeList .col .price{ float: left; margin-left: 20px;line-height: 28px; }
-.badgeList .col .price span{ font-size: 16px;color: #d82425;opacity: 0.8;font-family: Arial, 微软雅黑; }
-.badgeList .col .price span em{ font-size: 20px;color: #d82425; }
-.badgeList .col .btn{ float: right; margin-right: 20px; }
-.badgeList .col .btn a{ width: auto; font-weight: normal; line-height: 28px; display: inline-block; font-family: 微软雅黑; padding: 0 20px; }
-.badgeList .col .received{ position: absolute;width: 200px;height: 100%;z-index: 2;right: 0px;top: 0px;background: url(../imgs/badgeList_msg.png) no-repeat 95px 50px;opacity: 0.9; }
 
-.badgeList .col .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #666;padding: 2px 5px;position: absolute;top: -13px;left: 157px;display: none;cursor: default; }
-.badgeList .col .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 40px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #666; border-top-color: transparent; border-left-color: transparent;  }
 
-.badgeList .col .progress{ display: none; width: 100%; background: transparent; position: absolute; bottom: 0px; left: 0px; }
-.badgeList .col .progress-txt{ color: black;opacity: 0.3;margin-left: 10px;line-height: 24px;font-size: 12px; }
-.badgeList .col .progress-con{ display: block; height: 7px; background: rgba(0,0,0,.2); width: 3%; border-radius: 0 3px 3px 0; }
-.badgeList .col:hover .progress{ display: inline-block; }
-
-.badgeList .col:hover .left{ background: #e74c3c; box-shadow: 0px -3px 5px #df3f2e inset; }
-.badgeList .col:hover .icon i{ color: white; }
-.badgeList .col:hover .name{ color: white; }
-
-/* 全屏 */
-.badgeList .col-full .left{ height: 308px;background: #e74c3c;box-shadow: none;transition: 0.5s; }
-.badgeList .col-full .icon i{ top: 70px; left: 40px; background-size: 90px; height: 170px;line-height: 170px; width: 170px; text-align: center; background-position: center; margin: 0px;font-size: 73px;transition: 0.5s;color: white; }
-.badgeList .col-full .text{ height: 0px;margin: 0 20px;transition: 0.5s; }
-.badgeList .col-full .right{ border-top: 1px solid #eee; }
-.badgeList .col-full .name{ top: 200px; font-size: 20px;transition: 0.5s;color: white; }
-.badgeList .col-full .progress{ display: none; }
-.badgeList .col-full:hover .left{ height: 148px;background: #e74c3c; }
-.badgeList .col-full:hover .icon i{ width: 60px;height: 60px;line-height: 60px;color: white;top: 25px;left: 50%; margin-left: -30px; font-size: 37px; }
-.badgeList .col-full:hover .text{ height: 120px;margin: 20px; }
-.badgeList .col-full:hover .name{ color: white;top: 85px;font-size: 14px; }
 
 /*====
 发布

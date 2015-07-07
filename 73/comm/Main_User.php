@@ -971,6 +971,18 @@ class Users extends Event_user
 		return parent::data_selectPurchaseSum($uid, 'cid');
 	}
 
+	//获取指定 用户UID 的报告
+	public function Greport( $uid = 0 ){
+		$uid = $uid ? $uid : $this -> Guid();
+		return array(
+				'time' => 1,
+				'num' => 2,
+				'first' => 3,
+				'digg' => 4,
+				'user' => 5
+			);
+	}
+
 
 	/********************************************
 	* 判断 is
@@ -1075,6 +1087,18 @@ class Users extends Event_user
 			$value = 1;
 		}
 		return $value;
+	}
+
+
+	// 判断是否为新用户
+	public function Inew($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		$info = parent::event_getInfo($uid);
+		if ( $info['lastactive'] <= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 

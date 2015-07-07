@@ -97,7 +97,7 @@
 										<div class="price"><span><?php echo $BLgain['str']; ?></span></div>
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
 										<div class="btn">
-											<a class="<?php echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" ><?php echo $txt; ?></a>
+											<a class="<?php //echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
 										</div>
 									</div>
 								</div>

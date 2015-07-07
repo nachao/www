@@ -337,7 +337,18 @@
 	if ( isset($_POST['visitorIncome']) ) {
 		$sum = $u -> Gplus();
 		$sum = $sum + 1;
-		return $uv -> Usum($_POST['uid'], $sum);
+		echo $uv -> Usum($_POST['uid'], $sum);
 	}
+
+
+
+
+	//用户情况报表
+	if ( isset($_POST['userReport']) ) {
+		echo json_encode($u -> Greport($_POST['uid']));
+	}
+
+
+
 
 ?>

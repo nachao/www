@@ -1183,9 +1183,30 @@ jQuery.fn.extend({
 				list.show();
 			}
 		});
+	},
+
+	//用户情况汇报
+	report: function(){
+		var obj = $(this);
+		$.g({
+			name: 'userReport',
+			data: { 'uid': $('#userIs').val() },
+			result: function(data){
+				data = JSON.parse(data);
+				console.log(data);
+
+				obj.find('.course-text-time').html(data.time);
+				obj.find('.course-text-num').html(data.num);
+				obj.find('.course-text-first').html(data.first);
+				obj.find('.course-text-digg').html(data.digg);
+				obj.find('.course-text-user').html(data.user);
+			}
+		});
 	}
 
 });
+
+
 
 $(document).ready(function(){
 	$('.radio').each(function(){
@@ -1202,6 +1223,16 @@ $(document).ready(function(){
 
 	//分页
 	$('.paging').paging();
+
+	//下一步教程
+
+	//关闭教程
+	$('.course-btn-yes').click(function(){
+		$(this).parents('.course').hide();
+	});
+
+	//不再提示教程
+
 });
 
 
