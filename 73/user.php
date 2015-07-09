@@ -18,6 +18,11 @@
 		$page = $_GET['page'];	
 	}
 
+	
+	// 如果不是首次今日
+	if ( !$u -> Inew() ) {
+		$u -> Uskip();
+	} 
 
 	// echo strtotime();
 ?>
@@ -185,17 +190,18 @@
 			course.hide();
 		});
 	</script>
+	<?php } ?>
 
-	<?php } else {	// 如果非新用户 ?>
+	<?php if ( !$u -> Inew() && $u -> Ilogin() ) { ?>
 	<!-- 教程 - 欢迎回来 -->
 	<div class="course course-entry">
 		<div class="course-dialog"><i></i>
 			<div class="course-text">
 				<p>欢迎回来！小的恭候您多时了。</p>
-				<p>请让我简单的给你汇报下，你离开的这<span class="course-text-time">123</span>里都发生了什么。</p>
-				<p><b>新增收入：</b><em class="course-text-num">1,253</em> 分</p>
-				<p><b>当前的神：</b><em class="course-text-first">站长</em>，你排第 <em class="course-text-digg">42</em> 位，为土豪名列。</p>
-				<p><b>新报道的后辈们：</b><em class="course-text-user">301</em> 位</p>
+				<p>请让我简单的给你汇报下，你离开的这<span class="course-text-time">-</span>里都发生了什么。</p>
+				<p><b>新增收入：</b><em class="course-text-num">-</em> 分</p>
+				<p><b>当前的神：</b><em class="course-text-first">-</em>，你排第 <em class="course-text-digg">-</em> 位，为土豪名列。</p>
+				<p><b>新报道的后辈们：</b><em class="course-text-user">-</em> 位</p>
 			</div>
 			<p class="tip">提示：点击不再提醒后，可以在个人设置中再次找到我。</p>
 			<div class="btn">
