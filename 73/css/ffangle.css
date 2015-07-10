@@ -157,7 +157,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 
 /* 头部 */
-.header{ width: 100%;box-shadow: 0 1px 3px rgba(0,0,0,.1);background: white;position: relative;z-index: 2; }
+.header{ width: 100%;box-shadow: 0 1px 3px rgba(0,0,0,.1);background: white;position: relative;z-index: 9; }
 .header .topgap{ height: 2px;width: 100%;background: url(../imgs/header_topBg.gif) repeat-x; }
 .header .bottomgap{ width: 100%;height: 7px;background: url(../imgs/area_bottomBg.gif) repeat-x; }
 
@@ -1052,13 +1052,13 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeHead .head .tit em{ background: url(../imgs/badge_headIcon.gif) no-repeat 0 center;padding-left: 38px; }
 .badgeHead .head .gap i{ width: 28px; }
 .badgeList{ margin: 0 -15px;float: left; }
-.badgeList .col{ width: 258px; border: 1px solid #d9dbdd; background: white url(../imgs/area_bottomBg.gif) repeat-x bottom; box-shadow: 0px 0px 10px #eee; border-radius: 3px; margin: 0 20px; position: relative; float: left; padding-bottom: 6px; margin-bottom: 30px; }
-.badgeList .col .left{ height: 148px; width: 100%;  display: block; overflow: hidden; border-radius: 3px 3px 0 0;position: relative;height: 308px;box-shadow: none;transition: 0.5s; }
+.badgeList .col{ width: 258px; border: 1px solid #d9dbdd; background: white url(../imgs/area_bottomBg.gif) repeat-x bottom; /*box-shadow: 0px 0px 10px #eee;*/ border-radius: 3px; margin: 0 20px; position: relative; float: left; padding-bottom: 6px; margin-bottom: 30px;height: 240px;overflow: hidden; }
+.badgeList .col .left{ height: 170px; width: 100%;  display: block; overflow: hidden; border-radius: 3px 3px 0 0;position: absolute;box-shadow: none;transition: 0.5s;background: white;z-index: 2; }
 
 /* 徽章 - 大图 */
 .badgeList .col .icon{ width: 100%; height: 100%; float: left; position: relative; }
 /*.badgeList .col .icon i{ background: no-repeat center transparent; display: inline-block; width: 60px; height: 60px; float: left; background-size: 90%; position: absolute; left: 50%; margin-left: -30px; border-radius: 3px; z-index: 9; top: 25px; color: #666; text-align: center;line-height: 60px;font-size: 37px; }*/
-.badgeList .col .icon i{ position: absolute; top: 50px; left: 40px; background-size: 90px; height: 170px;line-height: 170px; width: 170px; text-align: center; background-position: center; margin: 0px;font-size: 73px;transition: 0.5s;color: #999; }
+.badgeList .col .icon i{ position: absolute; left: 40px; background-size: 50px; height: 170px;line-height: 125px; width: 170px; text-align: center; background-position: center; margin: 0px;font-size: 50px;transition: 0.5s;color: #2f3c4e; }
 .badgeList .col .icon .vip{ background-image: url(../imgs/glory-vipBig.png) ; }
 .badgeList .col .icon .new:before{ content: '\e604'; }
 .badgeList .col .icon .one{ background-image: url(../imgs/glory-1Big.png) ; }
@@ -1072,20 +1072,35 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeList .col .icon .welfare:before{ content: '\e604'; }
 .badgeList .col .icon .doubled:before{ content: '\e601'; }
 
-.badgeList .col .name{ line-height: 30px;text-align: center;opacity: 0.8;float: left;width: 100%;position: absolute;top: 200px; font-size: 20px;transition: 0.5s;color: #666; }
-.badgeList .col .text{ color: #444; margin: 20px; height: 120px; overflow: hidden; height: 0px;margin: 0 20px;transition: 0.5s;font-family: 微软雅黑;font-size: 14px; }
+.badgeList .col .icon .e61a:before{ content: '\e61a'; }
+.badgeList .col .icon .e613:before{ content: '\e613'; }
+.badgeList .col .icon .e602:before{ content: '\e602'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e603:before{ content: '\e603'; }
+.badgeList .col .icon .e617:before{ content: '\e617'; }
+.badgeList .col .icon .e616:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+.badgeList .col .icon .e601:before{ content: '\e601'; }
+
+.badgeList .col .name{ line-height: 30px;text-align: center;opacity: 0.8;float: left;width: 100%;position: absolute;top: 100px; font-size: 18px;transition: 0.5s;color: #2f3c4e; }
+.badgeList .col .text{ overflow: hidden; transition: 0.5s; font-family: 微软雅黑; font-size: 14px; display: block; margin: 0px; height: 128px; padding: 20px; position: absolute; top: 170px; left: 0px; width: 218px;background: #2f3c4e;color: white; }
 .badgeList .col .text .tip{ position: absolute;top: 0px;left: 0px;width: 560px;height: 100%;background: white url(../imgs/loading.gif) no-repeat center;display: none;z-index: 2; }
 .badgeList .col .text .tip .result{ display: inline-block;width: 100%;height: 100%;background: url(../imgs/msgwu-icon.png) no-repeat 205px 64px white;line-height: 160px;font-size: 20px;text-indent: 100px;background-size: 5%;display: none;position: relative;color: black; }
 .badgeList .col .text .tip .result p{ position: absolute;top: 30px;left: 150px;color: #d82425; }
 .badgeList .col .text .tip .result p a{ color: #d82425;text-decoration: underline; }
 .badgeList .col .text .tip .result p a:hover{ font-weight: bold; }
-.badgeList .col .right{ text-align: center; padding: 20px 0; border-top: 1px solid #eee;float: left;width: 100%;position: relative;height: 31px;line-height: 31px; }
+.badgeList .col .right{ text-align: center; padding: 20px 0 26px; border-top: 1px solid #eee;float: left;width: 100%;position: absolute;height: 31px;line-height: 31px;z-index: 3;background: white;bottom: 0px; }
 .badgeList .col .right-info{ font-size: 14px;text-align: left;margin-left: 20px;color: #444; }
 .badgeList .col .price{ float: left; margin-left: 20px;line-height: 28px; }
 .badgeList .col .price span{ font-size: 16px;/*color: #d82425;*/opacity: 0.8;font-family: Arial, 微软雅黑; }
 .badgeList .col .price span em{ font-size: 16px;/*color: #d82425;*/ }
-.badgeList .col .btn{ float: right; margin-right: 20px; }
-.badgeList .col .btn a{ width: auto; font-weight: normal; line-height: 30px; display: inline-block; font-family: 微软雅黑; padding: 0 20px;color: white;font-size: 14px;background: #e74c3c;border-radius: 2px; }
+.badgeList .col .btn{ float: right;  }
+.badgeList .col .btn a{ width: auto; font-weight: normal; line-height: 30px; display: inline-block; font-family: 微软雅黑; padding: 0 20px;color: white;font-size: 14px;background: #e74c3c;border-radius: 3px 0 0 3px;position: relative;left: 75px;transition: 0.5s; }
 .badgeList .col .btn a:hover{ background-color: #d82425; }
 .badgeList .col .received{ position: absolute;width: 200px;height: 100%;z-index: 2;right: 0px;top: 0px;background: url(../imgs/badgeList_msg.png) no-repeat 95px 50px;opacity: 0.9; }
 
@@ -1102,10 +1117,12 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .badgeList .col:hover .name{ color: white; }*/
 
 
-.badgeList .col:hover .left{ height: 148px;background: #aaa; }
-.badgeList .col:hover .icon i{ width: 60px;height: 60px;line-height: 60px;color: white;top: 25px;left: 50%; margin-left: -30px; font-size: 50px; }
-.badgeList .col:hover .text{ height: 120px;margin: 20px; }
-.badgeList .col:hover .name{ color: white;top: 85px;font-size: 16px; }
+.badgeList .col:hover{  }
+.badgeList .col:hover .left{ top: -170px; }
+/*.badgeList .col:hover .icon i{ width: 60px;height: 60px;line-height: 60px;color: white;top: 25px;left: 50%; margin-left: -30px; font-size: 50px; }*/
+.badgeList .col:hover .text{ top: 0px; }
+.badgeList .col:hover .btn a{ left: 0px; }
+/*.badgeList .col:hover .name{ color: white;top: 85px;font-size: 16px; }*/
 
 
 /* 全屏 */
@@ -1874,35 +1891,49 @@ margin: auto; }
 /*====
  教程 
 ====*/
-.course-dialog{ background: white; display: inline-block; padding: 20px; position: relative; border-radius: 10px; right: 199px; border-left: 3px solid #868686; border-right: 3px solid #868585; }
+.course{ z-index: 9; }
+.course-dialog{ background: white; display: inline-block; padding: 20px; position: relative; border-radius: 10px; right: 199px; border: 2px solid #2C2C2C; z-index: 2; }
 .course-dialog p{ font-size: 13px; color: #3C3C3C; line-height: 28px; }
 .course-dialog p.tip{ color: #999;font-size: 12px; }
 .course-dialog em{ color: #de4c00; }
-.course-dialog i{ display: inline-block; width: 0px; height: 0px; border: 14px solid white; border-top-color: transparent; border-left-color: transparent; -webkit-transform: rotate(45deg); transform: rotate(45deg); position: absolute; bottom: -11px; right: 182px; border-radius: 3px; }
+.course-dialog i{ display: inline-block; width: 0px; height: 0px; border: 11px solid #2C2C2C; border-top-color: transparent; border-left-color: transparent; -webkit-transform: rotate(45deg); transform: rotate(45deg); position: absolute; bottom: -11px; right: 182px; border-radius: 3px; }
 .course-dialog .btn{ text-align: right;margin-top: 10px; }
 .course-dialog .btn a{ font-weight: bold;padding: 2px 10px; }
 .course-dialog .btn a:hover{ color: #de4c00; }
-.course-figure{ position: relative; top: 30px; left: 0px; }
+.course-figure{ position: relative; top: 30px; left: 0px;z-index: 2; }
+.course-bg{ position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background: rgba(0,0,0,.1); }
 
 /* 注册 */
 .course-register{ display: inline-block; position: relative; top: 126px; left: 246px; }
 .course-register .course-dialog i{ right: 151px; }
 
 /* 注册成功 */
-.course-user{ position: absolute;top: 320px;left: 50%;margin-left: -20px; }
-.course-user .course-dialog{ right: 143px; }
-.course-user .course-dialog i{ right: 105px; }
+.course-user{ position: absolute;top: 320px;left: 50%;margin-left: 0px; }
+.course-user .course-dialog{ right: 0px; }
+.course-user .course-dialog i{ right: 245px; }
 
 /* 登录成功 */
 .course-entry{ position: absolute;top: 256px;left: 50%;margin-left: 50px; }
 .course-entry .course-dialog{ right: 50px;width: 425px; }
 .course-entry .course-dialog i{ right: 356px; }
 
-/* 进入能力界面 */
-.course-enterAbility{ position: absolute;top: 398px;left: 50%;margin-left: 120px; }
-.course-enterAbility .course-dialog{ right: 23px; }
-.course-enterAbility .course-dialog i{ right: 215px; }
+/* 能力界面 */
+.course-ability{ position: absolute;top: 398px;left: 50%;margin-left: 0px; }
+.course-ability .course-dialog{ right: 0px; }
+.course-ability .course-dialog i{ right: auto;left: 100px; }
+.course-ability .course-figure{ left: 66px; }
 
+/* 能力说明 */
+.course-abilityExplain{ position: absolute;top: 398px;left: 50%;margin-left: -100px; }
+.course-abilityExplain .course-dialog{ right: 0px; }
+.course-abilityExplain .course-dialog i{ right: auto;left: 100px; }
+.course-abilityExplain .course-figure{ left: 66px; }
+
+/* 学会能力 */
+.course-abilityFinish{ position: absolute;top: 398px;left: 50%;margin-left: -100px; }
+.course-abilityFinish .course-dialog{ right: 0px; }
+.course-abilityFinish .course-dialog i{ right: auto;left: 100px; }
+.course-abilityFinish .course-figure{ left: 66px; }
 
 /*.icon-maozi:before { content: "\e600"; }
 .icon-qipaoa:before { content: "\e607"; }

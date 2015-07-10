@@ -20,9 +20,9 @@
 
 	
 	// 如果不是首次今日
-	if ( !$u -> Inew() ) {
-		$u -> Uskip();
-	} 
+	// if ( !$u -> Inew() ) {
+	// 	$u -> Uskip();
+	// } 
 
 	// echo strtotime();
 ?>
@@ -152,44 +152,47 @@
 	<!-- <div class="globalShade"><i></i><em>×</em><span></span></div> -->
 	<?php } ?>
 
-	<!-- 教程 - 注册成功 -->
-	<div class="course course-user no">
-		<div class="course-dialog"><i></i>
-			<p>Good！你已经注册成功了自己的账户。</p>
-			<p>这里是 <em>用户中心</em>，我们先从这里开始讲起吧。</p>
-			<p class="tip">提示：您什么都没法，什么这里空空如也。</p>
-			<div class="btn">
-				<a href="javascript::">好的</a>
-				<a href="javascript::">不</a>
+	<?php if ( $uc -> Ifinish('user') ) {		// 首次进入用户中心	?>
+		<!-- 教程 - 注册成功 -->
+		<div class="course course-user">
+			<div class="course-dialog"><i></i>
+				<p>Good！你已经注册成功了自己的账户。</p>
+				<p>这里是 <em>用户中心</em>，我们先从这里开始讲起吧。</p>
+				<p class="tip">提示：目前这儿还是空空如也。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">好的</a>
+					<a class="course-btn-no" href="javascript::">不</a>
+				</div>
 			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/2.gif" />
 		</div>
-		<div class="c"></div>
-		<img class="course-figure" src="./course/2.gif" />
-	</div>
-	
-	<?php if ( $u -> Inew() ) {		// 判断是否为新用户	?>
-	<!-- 教程 - 进入能力界面 -->
-	<div class="course course-enterAbility">
-		<div class="course-dialog"><i></i>
-			<p>点击 <em>我的能力</em>，跟我一起去个神奇的地方吧。</p>
-			<p class="tip">提示：前方高能！这个位置 →</p>
-			<div class="btn">
-				<a class="course-btn-no" href="javascript::">不了</a>
+		<!-- 教程 - 进入能力界面 -->
+		<div class="course course-enterAbility no">
+			<div class="course-dialog"><i></i>
+				<p>点击 <em>我的能力</em>，跟我一起去个神奇的地方吧。</p>
+				<p class="tip">提示：前方高能！这个位置 →</p>
+				<div class="btn">
+					<a class="course-btn-no" href="javascript::">不了</a>
+				</div>
 			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/3.gif" />
 		</div>
-		<div class="c"></div>
-		<img class="course-figure" src="./course/3.gif" />
-	</div>
-	<script>
-		var course = $('.course-enterAbility'),
-			operate = $('.header .operate'),
-			style = 'operate_act';
-		operate.addClass(style);
-		course.find('.course-btn-no').click(function(){	//关闭
-			operate.removeClass(style);
-			course.hide();
-		});
-	</script>
+		<script>
+			$('.course-user .course-btn-yes').click(function(){	// 继续教程
+				$('.course-user').hide();
+				$('.course-enterAbility').removeClass('no');
+				$('.header .operate').addClass('operate_act');
+			});
+			$('.course-user .course-btn-no').click(function(){	// 关闭教程
+				$('.course-user').fadeOut();
+			});
+			$('.course-enterAbility .course-btn-no').click(function(){	// 关闭教程
+				$('.header .operate').removeClass('operate_act');
+				$('.course-enterAbility').fadeOut();
+			});
+		</script>
 	<?php } ?>
 
 	<?php if ( !$u -> Inew() && $u -> Ilogin() ) { ?>

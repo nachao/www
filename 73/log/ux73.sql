@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50611
 File Encoding         : 65001
 
-Date: 2015-07-09 17:52:39
+Date: 2015-07-10 20:03:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -42,7 +42,7 @@ CREATE TABLE `ux73_ad` (
 INSERT INTO `ux73_ad` VALUES ('45', null, '', null, '', '0', null, '0', '', '', './imgs/not-ad.png', '1427721122', '');
 INSERT INTO `ux73_ad` VALUES ('50', null, 'www.fashiondes.com/', null, 'FASHIONDES.com', '1', null, '141429156444', 'FASHIONDES.com是国内首个基于读者视野的时尚频道，也是发现一切生活之美的独立平台，实时更新全球热门时尚生活资讯。欢迎投稿与分享。', 'http://webimg1.meitudata.com/201504/16/552f6050de7b0.jpg', 'http://webimg1.meitudata.com/201504/16/552f605d35793.jpg', '1429168256', null);
 INSERT INTO `ux73_ad` VALUES ('48', null, 'www.baidu.com', null, '百度图片', '114', null, '101427698727', '全球最大的中文搜索引擎、致力于让网民更便捷地获取信息，找到所求。百度超过千亿的中文网页数据库，可以瞬间找到相关的搜索结果。', 'http://webimg1.meitudata.com/201503/30/55194f16271a9.jpg', 'http://webimg1.meitudata.com/201503/30/55194f28dedc6.jpg', '1427722769', '113');
-INSERT INTO `ux73_ad` VALUES ('1', null, null, null, 'FASHIONDES.com', '1', null, '141429156444', 'FASHIONDES.com是国内首个基于读者视野的时尚频道，也是发现一切生活之美的独立平台，实时更新全球热门时尚生活资讯。欢迎投稿与分享。', 'http://webimg1.meitudata.com/201504/16/552f6050de7b0.jpg', './imgs/not-ad.png', '1436243133', '');
+INSERT INTO `ux73_ad` VALUES ('1', null, null, null, 'FASHIONDES.com', '1', null, '141429156444', 'FASHIONDES.com是国内首个基于读者视野的时尚频道，也是发现一切生活之美的独立平台，实时更新全球热门时尚生活资讯。欢迎投稿与分享。', 'http://webimg1.meitudata.com/201504/16/552f6050de7b0.jpg', './imgs/not-ad.png', '1436503693', '');
 INSERT INTO `ux73_ad` VALUES ('49', null, 'www.iqiyi.com', null, '爱奇艺-中国领先的视频门户', '114', null, '111427723099', '爱奇艺(iQIYI.COM),网络视频播放平台;是国内首家专注于提供免费、高清网络视频服务的大型视频网站。爱奇艺影视内容丰富多元,涵盖电影、电视剧、综艺、纪录片、动画片...', 'http://webimg1.meitudata.com/201503/30/55195586c3e71.jpg', 'http://webimg1.meitudata.com/201503/30/5519558fd9b7a.jpg', '1427724034', null);
 
 -- ----------------------------
@@ -92,7 +92,7 @@ INSERT INTO `ux73_cdk` VALUES ('164', '362e6aff07', '1431924543', '171431924543'
 INSERT INTO `ux73_cdk` VALUES ('165', '14a34f70ad', '1432695124', '181432695124', '0');
 INSERT INTO `ux73_cdk` VALUES ('166', 'c193a9169a', '1435815541', '211435815541', '0');
 INSERT INTO `ux73_cdk` VALUES ('167', 'c6490d6377', '1435815945', '221435815945', '0');
-INSERT INTO `ux73_cdk` VALUES ('168', '014138b522', '0', null, '1');
+INSERT INTO `ux73_cdk` VALUES ('168', '014138b522', '1436506843', '231436506843', '0');
 INSERT INTO `ux73_cdk` VALUES ('169', 'e96fe8bf48', '0', null, '1');
 INSERT INTO `ux73_cdk` VALUES ('170', 'a6497e47a1', '0', null, '1');
 INSERT INTO `ux73_cdk` VALUES ('171', 'e544f74612', '0', null, '1');
@@ -400,6 +400,27 @@ INSERT INTO `ux73_content` VALUES ('266', '271435725482', '201427430248', null, 
 INSERT INTO `ux73_content` VALUES ('267', '291436245842', '101427698727', null, null, '0', null, '啊啊啊', '', null, null, null, null, '0', null, '0', '0', '0', '1436245842', null, '0', '0', null, '7', '0', '0', '0', '0');
 
 -- ----------------------------
+-- Table structure for `ux73_course`
+-- ----------------------------
+DROP TABLE IF EXISTS `ux73_course`;
+CREATE TABLE `ux73_course` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) DEFAULT '0',
+  `course_id` int(11) DEFAULT '0' COMMENT '教程进行状态，每个状态就能又一次',
+  `time` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='1=已进入用户中心；\r\n2=已进能力页；\r\n3=已标题列表；\r\n4=已发布内容；\r\n5=已看详细页；\r\n6=已进入体现；\r\n7=已进入首页；';
+
+-- ----------------------------
+-- Records of ux73_course
+-- ----------------------------
+INSERT INTO `ux73_course` VALUES ('9', '221435815945', '1', '1436506643');
+INSERT INTO `ux73_course` VALUES ('10', '231436506843', '1', '1436520672');
+INSERT INTO `ux73_course` VALUES ('11', '231436506843', '2', '1436520676');
+INSERT INTO `ux73_course` VALUES ('12', '101427698727', '1', '1436521427');
+INSERT INTO `ux73_course` VALUES ('13', '101427698727', '2', '1436521430');
+
+-- ----------------------------
 -- Table structure for `ux73_exchange`
 -- ----------------------------
 DROP TABLE IF EXISTS `ux73_exchange`;
@@ -596,7 +617,7 @@ CREATE TABLE `ux73_logs_purchase` (
   `types` tinyint(1) DEFAULT '0' COMMENT '1=收入、0=支出',
   `sum` int(11) DEFAULT '0' COMMENT '金额（单位：分）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=716 DEFAULT CHARSET=utf8 COMMENT='用户收入和支出记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=717 DEFAULT CHARSET=utf8 COMMENT='用户收入和支出记录表';
 
 -- ----------------------------
 -- Records of ux73_logs_purchase
@@ -1116,6 +1137,7 @@ INSERT INTO `ux73_logs_purchase` VALUES ('712', '1435725545', '201427430248', '0
 INSERT INTO `ux73_logs_purchase` VALUES ('713', '1435815542', '1', '0', 'NaN', '0', '1', '30');
 INSERT INTO `ux73_logs_purchase` VALUES ('714', '1435815945', '1', '0', 'NaN', '0', '1', '30');
 INSERT INTO `ux73_logs_purchase` VALUES ('715', '1436245842', '0', '101427698727', 'ccid', '291436245842', '0', '7');
+INSERT INTO `ux73_logs_purchase` VALUES ('716', '1436506843', '1', '0', 'NaN', '0', '1', '30');
 
 -- ----------------------------
 -- Table structure for `ux73_logs_specialuse`
@@ -1129,7 +1151,7 @@ CREATE TABLE `ux73_logs_specialuse` (
   `receive` bigint(20) DEFAULT NULL COMMENT '福利领取时间，每天 0 点为一次可领取',
   `status` int(11) DEFAULT '1' COMMENT '状态：1=有效；n=关闭时间戳',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=utf8 COMMENT='用户徽章使用记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8 COMMENT='用户徽章使用记录表';
 
 -- ----------------------------
 -- Records of ux73_logs_specialuse
@@ -1206,12 +1228,15 @@ INSERT INTO `ux73_logs_specialuse` VALUES ('213', '201427430248', '801', '143516
 INSERT INTO `ux73_logs_specialuse` VALUES ('215', '131427770385', '803', '1435163842', '0', '1435288683');
 INSERT INTO `ux73_logs_specialuse` VALUES ('216', '201427430248', '801', '1435288683', '0', '1435724734');
 INSERT INTO `ux73_logs_specialuse` VALUES ('218', '131427770385', '803', '1435288683', '0', '1435724735');
-INSERT INTO `ux73_logs_specialuse` VALUES ('220', '131427770385', '802', '1435724735', '0', '1');
-INSERT INTO `ux73_logs_specialuse` VALUES ('221', '121427768841', '803', '1435724735', '0', '1');
+INSERT INTO `ux73_logs_specialuse` VALUES ('220', '131427770385', '802', '1435724735', '0', '1436506280');
+INSERT INTO `ux73_logs_specialuse` VALUES ('221', '121427768841', '803', '1435724735', '0', '1436506280');
 INSERT INTO `ux73_logs_specialuse` VALUES ('222', '201427430248', '102', '1435725535', '1435725544', '1');
 INSERT INTO `ux73_logs_specialuse` VALUES ('223', '201427430248', '103', '1435725540', '1435725545', '1');
 INSERT INTO `ux73_logs_specialuse` VALUES ('224', '1', '102', '1436157271', '0', '1');
 INSERT INTO `ux73_logs_specialuse` VALUES ('225', '101427698727', '102', '1436246610', '0', '1');
+INSERT INTO `ux73_logs_specialuse` VALUES ('226', '101427698727', '801', '1436506280', '0', '1');
+INSERT INTO `ux73_logs_specialuse` VALUES ('227', '131427770385', '802', '1436506280', '0', '1');
+INSERT INTO `ux73_logs_specialuse` VALUES ('228', '121427768841', '803', '1436506280', '0', '1');
 
 -- ----------------------------
 -- Table structure for `ux73_logs_visitor`
@@ -1366,35 +1391,33 @@ CREATE TABLE `ux73_special` (
 -- ----------------------------
 -- Records of ux73_special
 -- ----------------------------
-INSERT INTO `ux73_special` VALUES ('4', '801', 'one', '财富榜第一名', '排行榜会实时刷新，但此图标会在每天的 0 点刷新其拥有者。<br />\n①、每天 0 点后您可以领取相应的丰富金额福利（金额数量会随着广告的价位相对的改变）；<br />\n②、特殊奖励；\n', '0', '999', '自动发放', '0');
-INSERT INTO `ux73_special` VALUES ('6', '901', 'ceshi', '内测会员', 'Welfare is looking for grass root most loved resource sharing platform, looking for some fun, welfare will be nice, fresh information collected to share to everyone. <br /><br />\r\nAt the same time, we also hope that the grass root people can put you cherish the welfare to share out, everybody happy is really...', '0', '9999', '官方授予', null);
-INSERT INTO `ux73_special` VALUES ('7', '802', 'two', '财富榜第二名', '排行榜会实时刷新，但此图标会在每天的 0 点刷新其拥有者。<br />\n①、每天 0 点后您可以领取相应的丰富金额福利（金额数量会随着广告的价位相对的改变）；<br />\n②、特殊奖励；\n', '0', '888', '自动发放', '0');
-INSERT INTO `ux73_special` VALUES ('10', '803', 'three', '财富榜第三名', '排行榜会实时刷新，但此图标会在每天的 0 点刷新其拥有者。<br />\n①、每天 0 点后您可以领取相应的丰富金额福利（金额数量会随着广告的价位相对的改变）；<br />\n②、特殊奖励；\n', '0', '777', '自动发放', '0');
-INSERT INTO `ux73_special` VALUES ('9', '102', 'promotion', '推广牛人', '发布内容时，可以支付相应的金额让自己的内容上首页。', '0', '73', '免费', '100');
-INSERT INTO `ux73_special` VALUES ('11', '103', 'doubled', '翻倍', '短时间内指定的内容收入翻倍，每天可以使用相应的次数。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('12', '105', 'aa', '一呼百应', '邀请好友，当好友成文平民后得到相应的奖励。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('13', '104', 'aa', '账单数据', '在查看自己的最近30天的收入情况，以及发布内容的详细数据.', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('14', '111', 'aa', '表情包', '可以更换评论和留言时的表情。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('15', '112', 'aa', '人物包', '可以更换提现信息人物。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('16', '113', 'aa', '皮肤库', '可以更换背景。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('17', '114', 'aa', '收藏夹', '可以查看自己所有点赞过的内容。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('18', '115', 'aa', '体验', '体验最近的功能。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('19', '121', 'aa', '陨石', '首页相应数量的内容扣相应百分比的分。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('20', '122', 'aa', '静止', '短时间内容指定内容无法被点赞。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('21', '123', 'aa', '盗窃', '短时间指定内容的收入为自己所有。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('22', '124', 'aa', '禁言', '短时内用户无法评论。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('23', '125', 'aa', '失足', '短时间内发布内容消耗增高。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('24', '131', 'aa', '翅膀', '用户永久免除静止、盗窃伤害。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('25', '132', 'aa', '单挑', '指定一个用户如果对方接受两人开启挑战指定时间内得分比拼，赢家得两人收入。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('26', '133', 'aa', '芳芳的朋友', '不定时的可以领取福利或者其他什么惊喜。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('27', '134', 'aa', '朋友圈', '可以关注指定的用户。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('28', '135', 'aa', '牛仔', '用户永久免除禁言、失足伤害。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('29', '141', 'aa', '守护', '指定数量用户短时间内容免除陨石、静止、盗窃伤害。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('30', '142', 'aa', '分享', '指定数量用户短时间拥有自己的所有技能', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('31', '143', 'aa', '战旗', '指定数量用户短时间消费减少相应数量.', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('32', '144', 'aa', '祝福', '指定数量用户短时间内收入得到相应的百分比增长。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('33', '145', 'aa', '组团', '组建一个队伍，可以邀请和移除成员，每周需缴纳维护费，按人数收费。', '0', '0', '购买', '100');
-INSERT INTO `ux73_special` VALUES ('34', '101', 'welfare', '每日福利', '每天领取相应的福利。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('4', '801', 'e61a', '财富榜前十', '排行榜会实时刷新，但此图标会在每天的 0 点刷新其拥有者。<br />\n①、每天 0 点后您可以领取相应的丰富金额福利（金额数量会随着广告的价位相对的改变）；<br />\n②、特殊奖励；\n', '0', '999', '自动发放', '0');
+INSERT INTO `ux73_special` VALUES ('6', '901', 'e613', '内测会员', 'Welfare is looking for grass root most loved resource sharing platform, looking for some fun, welfare will be nice, fresh information collected to share to everyone. <br /><br />\r\nAt the same time, we also hope that the grass root people can put you cherish the welfare to share out, everybody happy is really...', '0', '9999', '官方授予', null);
+INSERT INTO `ux73_special` VALUES ('9', '102', 'e602', '推广牛人', '发布内容时，可以支付相应的金额让自己的内容上首页。', '0', '73', '免费', '100');
+INSERT INTO `ux73_special` VALUES ('11', '103', 'e601', '翻倍', '短时间内指定的内容收入翻倍，每天可以使用相应的次数。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('12', '105', 'e603', '一呼百应', '邀请好友，当好友成文平民后得到相应的奖励。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('13', '104', 'e617', '账单数据', '在查看自己的最近30天的收入情况，以及发布内容的详细数据.', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('14', '111', 'e616', '表情包', '可以更换评论和留言时的表情。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('15', '112', 'e618', '人物包', '可以更换提现信息人物。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('16', '113', 'e611', '皮肤库', '可以更换背景。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('17', '114', 'e619', '收藏夹', '可以查看自己所有点赞过的内容。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('18', '115', 'e612', '体验', '体验最近的功能。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('19', '121', 'e60f', '陨石', '首页相应数量的内容扣相应百分比的分。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('20', '122', 'e615', '静止', '短时间内容指定内容无法被点赞。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('21', '123', 'e604', '盗窃', '短时间指定内容的收入为自己所有。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('22', '124', 'e60e', '禁言', '短时内用户无法评论。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('23', '125', 'e608', '失足', '短时间内发布内容消耗增高。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('24', '131', 'e61a', '翅膀', '用户永久免除静止、盗窃伤害。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('25', '132', 'e614', '单挑', '指定一个用户如果对方接受两人开启挑战指定时间内得分比拼，赢家得两人收入。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('26', '133', 'e600', '芳芳的朋友', '不定时的可以领取福利或者其他什么惊喜。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('27', '134', 'e61b', '朋友圈', '可以关注指定的用户。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('28', '135', 'e60a', '牛仔', '用户永久免除禁言、失足伤害。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('29', '141', 'e607', '守护', '指定数量用户短时间内容免除陨石、静止、盗窃伤害。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('30', '142', 'e60d', '分享', '指定数量用户短时间拥有自己的所有技能', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('31', '143', 'e60b', '战旗', '指定数量用户短时间消费减少相应数量.', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('32', '144', 'e606', '祝福', '指定数量用户短时间内收入得到相应的百分比增长。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('33', '145', 'e610', '组团', '组建一个队伍，可以邀请和移除成员，每周需缴纳维护费，按人数收费。', '0', '0', '购买', '100');
+INSERT INTO `ux73_special` VALUES ('34', '101', 'e604', '每日福利', '每天领取相应的福利。', '0', '0', '购买', '100');
 
 -- ----------------------------
 -- Table structure for `ux73_titleshare`
@@ -1442,39 +1465,41 @@ CREATE TABLE `ux73_user` (
   `newMessage` varchar(20) DEFAULT '0' COMMENT '最近一次进入 自己的留言界面时间',
   `statusDate` varchar(20) DEFAULT NULL,
   `statusSeat` varchar(20) CHARACTER SET gbk DEFAULT NULL,
-  `email` varchar(50) CHARACTER SET gbk DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '邮箱',
   `register_ip` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '注册IP',
   `register_time` int(11) DEFAULT '0' COMMENT '注册时间',
-  `vip` int(11) DEFAULT NULL,
-  `describe` varchar(100) CHARACTER SET gbk DEFAULT NULL,
+  `vip` int(11) DEFAULT '0' COMMENT '会员到期时间',
+  `describe` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT '用户描述',
   `entrys` int(10) DEFAULT '0' COMMENT '登录次数',
   `visitor` int(1) DEFAULT '1' COMMENT '0=游客，1=会员',
+  `prompt` int(1) DEFAULT '1' COMMENT '是否显示教程：1=教程进行中、0=关闭教程、2=每次登陆提示、3=关闭登陆提示',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ux73_user
 -- ----------------------------
-INSERT INTO `ux73_user` VALUES ('29', '101427698727', '0', '站长', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/30/551909ca17728.jpg', '1436435532', '1436245842', '0', '19919', '132', '0', '1433136116', null, null, null, '127.0.0.1', '1427698727', '1433297997', null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('39', '121427795139', '0', '九月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6cbc9709f.jpg', '1427795139', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795139', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('38', '111427795114', '0', '南台月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6ca051411.jpg', '1427795114', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795114', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('37', '101427795057', '0', '大姐大', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6c66eb3a2.jpg', '1427795058', '0', '0', '10', '0', '0', '0', null, null, null, '127.0.0.1', '1427795057', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('36', '91427795025', '0', '时光', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6c45dfbeb.jpg', '1427795025', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795025', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('35', '81427794933', '0', '攻城狮', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6bea66911.jpg', '1430235554', '1430235595', '0', '86', '62', '0', '1427869735', null, null, null, '127.0.0.1', '1427794933', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('34', '71427784723', '0', '灯塔', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a441b77323.jpg', '1435297655', '1430372364', '0', '82', '42', '0', '0', null, null, null, '127.0.0.1', '1427784723', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('27', '201427430248', '0', '芳芳', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201505/20/555c3b223556b.jpg', '1435725232', '1435725482', '0', '111', '137', '0', '0', null, null, null, '127.0.0.1', '1427430248', '1428388724', '4个回答 - 提问时间: 2013年07月16日\n板的问题Function name must be a string in D:wampwwwadd.php on line...2012-09', '0', '0');
-INSERT INTO `ux73_user` VALUES ('28', '211427435691', '0', '哈哈哈笑', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6bb1c2d9a.jpg', '1427794880', '0', '0', '997', '1', '0', '0', null, null, null, '127.0.0.1', '1427435691', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('30', '111427723099', '0', '苹果', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201505/02/5544d0e035975.jpg', '1432743660', '1430575364', '0', '22', '41', '0', '0', null, null, null, '::1', '1427723099', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('31', '121427768841', '0', '屌爆天', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a0623ccad6.jpg', '1435306207', '1430234892', '0', '1088', '21', '0', '0', null, null, null, '127.0.0.1', '1427768841', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('32', '131427770385', '0', '点点', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a0c151343b.jpg', '1435296944', '1430984987', '0', '5807', '34', '0', '0', null, null, null, '127.0.0.1', '1427770385', '1433750658', null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('33', '141427781015', '131427770385', '鹳狸猿', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a35a892033.jpg', '1435288732', '1430372046', '0', '333', '50', '0', '1427966320', null, null, null, '127.0.0.1', '1427781015', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('40', '131427797021', null, '我是章鱼', null, 'ecaab6049e91395de7d530941cbf6eef', './imgs/default.gif', '1427797071', '0', '0', '0', '0', '0', '0', null, null, null, '125.71.2.246', '1427797021', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('51', '141429286690', '0', '阿萨达是', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1429276690', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1429286690', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('52', '151429287185', '0', '人情味', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1429287198', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1429287185', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('53', '161429287781', '0', '啊', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201504/30/5541bf082440d.jpg', '1435815934', '1429287929', '0', '39', '15', '0', '0', null, null, null, '::1', '1429287781', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('54', '171431924543', '0', '卢燃', null, 'e10adc3949ba59abbe56e057f20f883e', './imgs/default.gif', '1431924583', '1431924639', '0', '76', '8', '0', '0', null, null, null, '125.69.121.194', '1431924543', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('55', '181432695124', '0', '哈希', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1435288700', '1432695382', '0', '161', '22', '0', '0', null, null, null, '::1', '1432695124', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('56', '191434009944', '0', '博士', null, 'e10adc3949ba59abbe56e057f20f883e', './imgs/default.gif', '1434010115', '0', '0', '0', '0', '0', '1434077598', null, null, null, '171.111.44.132', '1434009944', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('57', '1', null, null, null, null, '../icon/26.jpg', '1435632147', '0', '0', '60', '0', '0', '0', null, null, null, '::1', '1435632147', null, null, '0', '0');
-INSERT INTO `ux73_user` VALUES ('58', '211435815541', '0', '啊啊啊', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1435815909', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1435815542', null, null, '0', '1');
-INSERT INTO `ux73_user` VALUES ('59', '221435815945', '0', '啊啊', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1435817158', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1435815945', null, null, '0', '1');
+INSERT INTO `ux73_user` VALUES ('29', '101427698727', '0', '站长', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/30/551909ca17728.jpg', '1436521427', '1436245842', '0', '19919', '132', '0', '1433136116', null, null, null, '127.0.0.1', '1427698727', '1433297997', null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('39', '121427795139', '0', '九月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6cbc9709f.jpg', '1427795139', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795139', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('38', '111427795114', '0', '南台月', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6ca051411.jpg', '1427795114', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795114', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('37', '101427795057', '0', '大姐大', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6c66eb3a2.jpg', '1427795058', '0', '0', '10', '0', '0', '0', null, null, null, '127.0.0.1', '1427795057', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('36', '91427795025', '0', '时光', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6c45dfbeb.jpg', '1427795025', '0', '0', '0', '0', '0', '0', null, null, null, '127.0.0.1', '1427795025', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('35', '81427794933', '0', '攻城狮', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6bea66911.jpg', '1430235554', '1430235595', '0', '86', '62', '0', '1427869735', null, null, null, '127.0.0.1', '1427794933', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('34', '71427784723', '0', '灯塔', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a441b77323.jpg', '1435297655', '1430372364', '0', '82', '42', '0', '0', null, null, null, '127.0.0.1', '1427784723', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('27', '201427430248', '0', '芳芳', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201505/20/555c3b223556b.jpg', '1435725232', '1435725482', '0', '111', '137', '0', '0', null, null, null, '127.0.0.1', '1427430248', '1428388724', '4个回答 - 提问时间: 2013年07月16日\n板的问题Function name must be a string in D:wampwwwadd.php on line...2012-09', '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('28', '211427435691', '0', '哈哈哈笑', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a6bb1c2d9a.jpg', '1427794880', '0', '0', '997', '1', '0', '0', null, null, null, '127.0.0.1', '1427435691', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('30', '111427723099', '0', '苹果', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201505/02/5544d0e035975.jpg', '1432743660', '1430575364', '0', '22', '41', '0', '0', null, null, null, '::1', '1427723099', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('31', '121427768841', '0', '屌爆天', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a0623ccad6.jpg', '1435306207', '1430234892', '0', '1088', '21', '0', '0', null, null, null, '127.0.0.1', '1427768841', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('32', '131427770385', '0', '点点', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a0c151343b.jpg', '1435296944', '1430984987', '0', '5807', '34', '0', '0', null, null, null, '127.0.0.1', '1427770385', '1433750658', null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('33', '141427781015', '131427770385', '鹳狸猿', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201503/31/551a35a892033.jpg', '1435288732', '1430372046', '0', '333', '50', '0', '1427966320', null, null, null, '127.0.0.1', '1427781015', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('40', '131427797021', null, '我是章鱼', null, 'ecaab6049e91395de7d530941cbf6eef', './imgs/default.gif', '1427797071', '0', '0', '0', '0', '0', '0', null, null, null, '125.71.2.246', '1427797021', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('51', '141429286690', '0', '阿萨达是', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1429276690', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1429286690', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('52', '151429287185', '0', '人情味', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1429287198', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1429287185', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('53', '161429287781', '0', '啊', null, '0cc175b9c0f1b6a831c399e269772661', 'http://webimg1.meitudata.com/201504/30/5541bf082440d.jpg', '1435815934', '1429287929', '0', '39', '15', '0', '0', null, null, null, '::1', '1429287781', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('54', '171431924543', '0', '卢燃', null, 'e10adc3949ba59abbe56e057f20f883e', './imgs/default.gif', '1431924583', '1431924639', '0', '76', '8', '0', '0', null, null, null, '125.69.121.194', '1431924543', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('55', '181432695124', '0', '哈希', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1435288700', '1432695382', '0', '161', '22', '0', '0', null, null, null, '::1', '1432695124', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('56', '191434009944', '0', '博士', null, 'e10adc3949ba59abbe56e057f20f883e', './imgs/default.gif', '1434010115', '0', '0', '0', '0', '0', '1434077598', null, null, null, '171.111.44.132', '1434009944', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('57', '1', null, null, null, null, '../icon/26.jpg', '1435632147', '0', '0', '90', '0', '0', '0', null, null, null, '::1', '1435632147', null, null, '0', '0', '0');
+INSERT INTO `ux73_user` VALUES ('58', '211435815541', '0', '啊啊啊', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1435815909', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1435815542', null, null, '0', '1', '0');
+INSERT INTO `ux73_user` VALUES ('59', '221435815945', '0', '啊啊', null, '0cc175b9c0f1b6a831c399e269772661', './imgs/default.gif', '1436506834', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1435815945', null, null, '0', '1', '0');
+INSERT INTO `ux73_user` VALUES ('60', '231436506843', '0', '啊啊啊啊', null, '0cc175b9c0f1b6a831c399e269772661', './icon/23.jpg', '1436507324', '0', '0', '0', '0', '0', '0', null, null, null, '::1', '1436506843', '0', null, '0', '1', '1');

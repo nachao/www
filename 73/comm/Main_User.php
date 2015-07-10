@@ -293,14 +293,15 @@ class Event_user extends Data_user
 	//获取用户信息
 	protected function event_get($uid=0){
 		$uid = $uid ? $uid : $this -> event_uid();
-		$info = parent::data_selectByUid($uid);
+		$info = parent::data_selectByUid($uid, 1);
 		$this -> info = $info;
 		return $info;
 	}
 
 	//获取指定 用户UID 的全部信息
 	protected function event_getInfo($uid=0){
-		return parent::data_selectByUid($uid);
+		$uid = $uid ? $uid : $this -> event_uid();
+		return parent::data_selectByUid($uid, 1);
 	}
 
 	//获取 用户名 根据 用户ID（）
@@ -666,7 +667,6 @@ class Users extends Event_user
 
 	//根据 用户UID 获取用户头像
 	public function Gicon($uid=0){
-		$uv = new Users_visitor();
 		$info = parent::event_get($uid);
 		$icon = $info['icon'];
 		return $icon;
@@ -1246,7 +1246,8 @@ class Users extends Event_user
 
 		//当前用户的默认头像
 		// $icon = md5($uid).".jpg";
-		$effigy = "./imgs/default.gif";
+		// $effigy = "./imgs/default.gif";
+		$effigy = '../icon/'.rand(1,26).'.jpg';	//随机头像
 		// copy( "../img/default.gif", ".".$effigy);
 
 		//如果有邀请码则刷新邀请码

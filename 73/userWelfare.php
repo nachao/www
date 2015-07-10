@@ -34,7 +34,7 @@
 					<?php if(count($ub -> Gbadge())){ ?>
 						<!-- 输出全部 我拥有的徽章 -->
 							<?php foreach($ub -> Gbadge() as $BLk => $BLv ){ //输出内容开始 --------------------------------  
-								$bid = $BLv['sid'];
+								$sid = $BLv['sid'];
 								$img = $BLv['icon'];
 								$name = $BLv['name'];
 								$cue = $BLv['depict'];
@@ -42,26 +42,24 @@
 								$btn = $BLv['icon'] != "new" || $u -> Gplus() < 10;		//如果是新手福利则进行判断，用户条件是否足够
 								$can = !$ub -> Ireceive($BLv['sid']) ? 'no' :'';		//判断是否可以领取
 							?>
-								<div class="col col-full" bid="<?php echo $bid; ?>" >
+								<div class="col" bid="<?php echo $sid; ?>" >
 									<div class="left">
 										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
-										<div class="progress">
-											<span class="progress-txt">● 0%</span>
-											<span class="progress-con"></span>
+									</div>
+									<div class="text">
+										<?php echo $cue; ?>
+										<div class="tip">
+											<div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div>
 										</div>
 									</div>
-									<div class="text"><?php echo $cue; ?></div>
 									<div class="right">
-										<!-- <div class="price">
-											<span><em class="golds"><?php echo $num; ?></em> 分</span>
-										</div> -->
-										<div class="right-info">剩余使用次数：10 次</div>
-										<?php if( $can ){ ?>
-											<!-- <div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" >领取</a></div> -->
-										<?php } ?>
+										<!-- <div class="price"><span><?php echo $BLgain['str']; ?></span></div> -->
+										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+										<div class="btn">
+											<a class="<?php echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
+										</div>
 									</div>
-									<div class="received <?php echo $can; ?>" ></div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
 
@@ -85,10 +83,6 @@
 									<div class="left">
 										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
 										<div class="name"><?php echo $name; ?></div>
-										<!-- <div class="progress">
-											<span class="progress-txt">● 0%</span>
-											<span class="progress-con"></span>
-										</div> -->
 									</div>
 									<div class="text">
 										<?php echo $cue; ?>
@@ -100,7 +94,7 @@
 										<div class="price"><span><?php echo $BLgain['str']; ?></span></div>
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
 										<div class="btn">
-											<a class="<?php //echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
+											<a class="<?php echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
 										</div>
 									</div>
 								</div>
@@ -113,75 +107,81 @@
 		</div>
 	</div>
 
-	<!-- 教程 - 能力篇 -->
-	<div class="course course-user no">
-		<div class="course-dialog"><i></i>
-			<p>能力篇</p>
-			<p>这里的一切，您随便掌握一门就能变成高能。</p>
-			<p>所有的能力都可以根据自己的需要购买，不过有些技能是有限制的。</p>
-			<p>但是，</p>
-			<p>看您我也是有缘人，今天就让免费送你一个技能。</p>
-			<p class="tip">提示：技能经常使用能提升技能等级和对应的效果。</p>
-			<div class="btn">
-				<a href="javascript::">选哪个好呢</a>
-				<a href="javascript::">知道了</a>
+
+	<?php if ( $uc -> Ifinish('ability') ) {	// 首次进入能力	?>
+		<!-- 教程 - 能力篇 -->
+		<div class="course course-ability">
+			<div class="course-dialog"><i></i>
+				<p>能力篇</p>
+				<p>这里的一切，您随便掌握一门就能变成高能。</p>
+				<p>所有的能力都可以根据自己的需要购买，不过有些技能是有限制的。</p>
+				<p>但是，</p>
+				<p>看您我也是有缘人，今天就让免费送你一个技能。</p>
+				<p class="tip">提示：技能经常使用能提升技能等级和对应的效果。</p>
+				<div class="btn">
+					<a class="course-btn-no" class="" href="javascript::">选哪个好呢</a>
+					<a class="course-btn-yes" href="javascript::">知道了</a>
+				</div>
 			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/5.gif" />
+			<div class="course-bg"></div>
 		</div>
-		<div class="c"></div>
-		<img class="course-figure" src="./course/5.gif" />
-	</div>
-
-	<!-- 教程 - 选哪个好呢 -->
-	<div class="course course-user no">
-		<div class="course-dialog"><i></i>
-			<p>每个技能都有详细说明，不过这么多还是会眼花缭乱。</p>
-			<p>淡定，让我们先想想要在这怎么玩？</p>
-
-			<p>赚钱路线：学习收益类技能，例如：
-				每日福利：每天领取相应的福利(100)；
-				推广牛人：发布内容时，可以支付相应的金额让自己的内容上首页(100)；
-				翻倍：短时间内指定的内容收入翻倍，每天可以使用相应的次数(100)；
-				一呼百应：邀请好友，当好友成文平民后得到相应的奖励（100）
-				账单数据：在查看自己的最近30天的收入情况，以及发布内容的详细数据(100)等。</p>
-
-			<p>娱乐路线：学习特效类技能，例如：
-				变脸：可以更换表情(100)；
-				雇员：可以更换提现信息人物(100)；
-				皮肤：可以更换背景(100)；
-				收藏夹：可以查看自己所有点赞过的内容；(100)；
-				体验：体验最近的功能(100)等。</p>
-
-			<p>疯狂路线：学习破坏类技能，例如：
-				陨石：首页相应数量的内容扣相应百分比的分(200)；
-				静止：短时间内容指定内容无法被点赞(100)；
-				盗窃：短时间指定内容的收入为自己所有(100)；
-				禁言：短时内用户无法评论(100)；
-				失足：短时间内发布内容消耗增高(100)等。</p>
-
-			<p>自由路线：学习保护类技能，例如：
-				翅膀：用户永久免除静止、盗窃伤害(100)；
-				单挑：指定一个用户如果对方接受两人开启挑战指定时间内得分比拼，赢家得两人收入(100)；
-				芳芳的朋友：不定时的可以领取福利或者其他什么惊喜。(100)；
-				朋友圈：可以关注指定的用户（100）；
-				牛仔：用户永久免除禁言、失足伤害(100)等。</p>
-
-			<p>团队路线：学习群体类技能，例如：
-				守护：指定数量用户短时间内容免除陨石、静止、盗窃伤害(300);
-				分享：指定数量用户短时间拥有自己的所有技能（除了分享）(200)、
-				战旗：指定数量用户短时间消费减少相应数量(200)、
-				祝福：指定数量用户短时间内收入得到相应的百分比增长(200)、
-				组团：组建一个队伍，可以邀请和移除成员，每周需缴纳维护费，按人数收费(300)等</p>
-
-			<p>热门玩法就推荐这么多，刚来到此处可以参考这些。当你了解了这里以后，就可以玩出自己的特色。</p>
-			<p class="tip">提示：每个用户最多只能拥有7种不同的能力。</p>
-			<div class="btn">
-				<a href="javascript::">好的</a>
-				<a href="javascript::">不</a>
+		<!-- 教程 - 选哪个好呢 -->
+		<div class="course course-abilityExplain no">
+			<div class="course-dialog"><i></i>
+				<p>每个技能都有详细说明，不过这么多还是会眼花缭乱。</p>
+				<p>淡定，让我们先想想要在这怎么玩？</p>
+				<p>赚钱路线：每日福利、推广牛人、翻倍、一呼百应、账单数据；</p>
+				<p>娱乐路线：变脸、雇员、皮肤、收藏夹、体验；</p>
+				<p>疯狂路线：陨石、静止、盗窃、禁言、失足；</p>
+				<p>自由路线：翅膀、单挑、芳芳的朋友、朋友圈、牛仔；</p>
+				<p>团队路线：守护、分享、战旗、祝福、组团；</p>
+				<p>热门玩法就推荐这么多，刚来到此处可以参考这些。当你了解了这里以后，就可以玩出自己的特色。</p>
+				<p class="tip">提示：每个用户最多只能拥有7种不同的能力。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">了解了，谢谢</a>
+				</div>
 			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/6.gif" />
+			<div class="course-bg"></div>
 		</div>
-		<div class="c"></div>
-		<img class="course-figure" src="./course/6.gif" />
-	</div>
+		<!-- 教程 - 学会第一个技能 -->
+		<div class="course course-abilityFinish no">
+			<div class="course-dialog"><i></i>
+				<p>恭喜，您拥有了一个看似很吊的能力。</p>
+				<p>接下来如何运用它，就看你自己了。</p>
+				<p>那么，我们去下一个地方 《标题》页面看看吧！</p>
+				<p class="tip">提示：请点击头部标题菜单。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">好的</a>
+					<a class="course-btn-yes" href="javascript::">不</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/2.gif" />
+			<div class="course-bg"></div>
+		</div>
+		<script>
+			$('.course-ability .course-btn-no').click(function(){	// 继续教程
+				$('.course-ability').hide();
+				$('.course-abilityExplain').removeClass('no');
+			});
+			$('.course-user .course-btn-yes').click(function(){		// 关闭教程
+				$('.course-ability').fadeOut();
+			});
+			$('.course-abilityExplain .course-btn-yes').click(function(){	// 关闭教程
+				$('.course-abilityExplain').fadeOut();
+			});
+			$('.col .right .btn a').click(function(){
+				$('.course-abilityFinish').removeClass('no');
+			});
+			$('.course-abilityFinish .course-btn-yes').click(function(){	// 关闭教程
+				$('.course-abilityFinish').fadeOut();
+			});
+		</script>
+	<?php }	?>
 
 	<script type="text/javascript">
 
@@ -269,32 +269,28 @@
 			var icon = col.find('.icon i').attr('class'),
 				name = col.find('.name').html();
 
-			//如果是购买的话，则扣除 样式余额
-			if( $(this).html() == "购买" ){
+			//获取参数元素
+			var userGold = $('#userGold'),
+				userSide = $('#userInfoGold');
 
-				//获取参数元素
-				var userGold = $('#userGold'),
-					userSide = $('#userInfoGold');
+			//获取卖价
+			var sellingPrice = parseInt($(this).attr('gain'));
 
-				//获取卖价
-				var sellingPrice = parseInt($(this).attr('gain'));
+			var number = parseInt(userGold.val());
+				number = number - parseInt($(this).attr('gain'));
 
-				var number = parseInt(userGold.val());
-					number = number - parseInt($(this).attr('gain'));
+			if( number >= 0 ){
 
-				if( number >= 0 ){
+				userSide.attr('n', number);
+				userSide.golds();
+				userGold.val(number);
 
-					userSide.attr('n', number);
-					userSide.golds();
-					userGold.val(number);
+				// $('#userGold').val(gold);
+				// $('#userInfoGold').html(gold/100);
 
-					// $('#userGold').val(gold);
-					// $('#userInfoGold').html(gold/100);
-
-					getBadge(col);
-				}else{
-					$(this).parent().prev().show();
-				}
+				getBadge(col);
+			}else{
+				$(this).parent().prev().show();
 			}
 
 			//如果是免费领取的
