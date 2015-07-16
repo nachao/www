@@ -21,6 +21,12 @@
 	//引用用户 - 兑换功能
 	include("Main_User_Exchange.php");
 
+	//引用用户 - 游客功能
+	include("Main_User_Visitor.php");
+
+	//引用用户 - 教程功能
+	include("Main_User_Course.php");
+
 	//引用内容功能
 	include("Main_Content.php");
 

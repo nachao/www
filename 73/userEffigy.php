@@ -112,6 +112,62 @@
 					</div>
 					<!-- 修改邮箱 -->
 
+					<!-- 功能设置 -->
+					<div class="comm settings mt20">
+						<div class="tip">功能设置</div>
+						<div class="are settings-function">
+							<div class="sf-col">
+								<div class="sf-txt">提现</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="0" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">留言板</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="0" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">我的标题</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">关注的用户</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">徽章/福利</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+						</div>
+						<div class="c"></div>
+					</div>
+
+					<!-- 用户中心设置 -->
+					<div class="comm settings mt20">
+						<div class="tip">用户中心设置</div>
+						<div class="are settings-function">
+							<div class="sf-col">
+								<div class="sf-txt">金额记录</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">我的标题</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+							<div class="sf-col">
+								<div class="sf-txt">独家赞助</div>
+								<div class="sf-switch"><i>关闭</i></div>
+								<input type='hidden' value="1" class="sf-switch-value" />
+							</div>
+						</div>
+						<div class="c"></div>
+					</div>
+
 					<!-- 设置个人中心模板
 					<div class="comm settings mt20">
 						<div class="tip">个人中心模板</div>
@@ -483,6 +539,24 @@
 				}
 			}else{
 				alert("你的金币不足！");
+			}
+		});
+
+
+		//功能开关
+		$('.sf-switch').click(function(){
+			var cn = 'sf-switch-act';
+			if ( $(this).hasClass(cn) ) {
+				$(this).removeClass(cn).find('i').html('关闭');
+			} else {
+				$(this).addClass(cn).find('i').html('开启');
+			}
+		});
+
+		//初始化控制
+		$('.sf-switch-value').each(function(){
+			if ( $(this).val() == 1 ) {
+				$(this).prev('.sf-switch').click();
 			}
 		});
 

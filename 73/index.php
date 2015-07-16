@@ -43,8 +43,8 @@
 	// $bnid = $admin -> Abanner('', './list.php?tid=291429104152', 0, 291429104152);
 	// echo $admin -> Uact($bnid);
 
-	$admin -> UBsrc('731429112068', './images/1.jpg');
-	$admin -> UBact('731429112068');
+	// $admin -> UBsrc('731429112068', './images/1.jpg');
+	// $admin -> UBact('731429112068');
 
 
 	// $an -> Anotice("【新加入功能】发布内容时，可以选择“推送”，用户支付 1 元，内容随机分配0.60元至1.10元之间。");
@@ -52,7 +52,7 @@
 
 ?>
 
-	<div class="container pagecon">
+	<div class="container pagecon Lite">
 
 		<!-- 主体 -->
 		<div class="main">
@@ -131,7 +131,7 @@
 					<div class="row"></div>
 					<?php foreach ($list as $k => $v) {	//输出内容，或者指定标题的内容 		?>
 						<?php $is_look = !$u -> Guid()?' col_possess':'';	//如果没有登录默认内容可以查看 ?>
-						<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+						<div class="col col_possess<?php //echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
 
 							<!-- 标示 -->
 							<?php if($v['effects'] == 1){	//如果是顶 ?>
@@ -182,7 +182,9 @@
 								<?php } ?>
 								
 								<div class="use">
-									<div class="num f"><span class="gold golds" n="<?php echo $v['plus']; ?>" title="内容目前的收入."></span> <i>元</i></div>
+									<div class="num cols-sum f">
+										<span class="gold golds" n="<?php echo $v['plus']; ?>" title="内容目前的收入."></span> <i>元</i>
+									</div>
 
 									<?php if($u -> Guid()){	//登录后显示的提示 ?>
 										<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
@@ -190,23 +192,12 @@
 										<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
 									<?php } ?>
 
-									<?php if($c -> Ibuy($v['cid'])){		//如果可以查看 ?>
-										<a class="buy confirmBtn r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >去评论</a>
-										<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-									<?php }else{  //需要购买 ?>
-
-										<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
-											<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-											<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-										<?php }else{ ?>
-											<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-										
+									<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
+										<!-- <a class="skip look r" href="javascript:;" >展开</a> -->
 									<?php } ?>
 
+									<a class="buy confirmBtn iconfont icon-qipaoa <?php echo $um -> IUmessage($v['cid']) ? 'praise-act' : ''; ?> r" href="./detail.php?cid=<?php echo $v['cid']; ?>" title="评论" ></a>
+									<a class="buy confirmBtn purchase iconfont icon-zan praise <?php echo $c -> Ibuy($v['cid']) ? 'praise-act' : ''; ?> r" href="javascript:;" title="赞" ></a>
 								</div>
 							</div>
 						</div>
@@ -215,7 +206,7 @@
 					<div class="c"></div>
 
 					<?php if($total > $page){	//如果内容超过一页则显示加载按钮 ?>
-						<div class="loadMore"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容</a></div>
+						<div class="loadMore"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
 					<?php } ?>
 
 				</div>
@@ -223,7 +214,14 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<!-- 内容收情况 -->
+	<ul class="income-detailed" id="incomeDetailed">
+		<ol class="idd-item">
+			<li class="idd-pillar"></li>
+			<li class="idd-depict"><em></em><i></i></li>
+		</ol>
+	</ul>
 	<script type="text/javascript">
 
 		//自动排序
@@ -332,6 +330,17 @@
 			});
 
 		})();
+
+		//获取指定内容的收支情况
+		$('.col').income();
+
+
+		//如果高度改变，重新排序瀑布
+		// $('.contentList').resize(function(){
+		// 	console.log($(this).height());
+		// });
+			//启动游客收入
+			$(window).visitorIncome();
 
 	</script>
 

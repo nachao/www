@@ -88,12 +88,38 @@ class Data_title extends Config
 	// 参数说明
 	// $begin= 当前页数（选）； $pages= 每页显示条数（选）；$type= 指定的标题类型（选，默认无） ； $grade = 购买次数标准（选，默认没有标准）；$sort = 排序方式
 	protected function data_selectList( $begin=0, $pages=9, $type=0, $grade=0, $sort='id'){
-		$pages = $pages < 9 ? 9 : $pages;
+		// $pages = $pages < 9 ? 9 : $pages;
 		$sql = "select * FROM  `".parent::Fn()."classify` WHERE";
-		// echo $type;
 		//全部
 		if ( $type == 0 ) {
-			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ))";
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time().") OR (`type` =4 AND `duration` > ".time()."))";
+		}
+		//活动
+		if ( $type == 1 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		//专题
+		if ( $type == 2 ) {
+			$sql = $sql." `start` !=3 AND `type` =".$type;
+		}
+		//任务
+		if ( $type == 3 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		//任务
+		if ( $type == 4 ) {
+			$sql = $sql." `duration` > ".time()." AND `type` =".$type;
+		}
+		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
+		return mysql_query($sql);
+	}
+
+	//获取指定 类型TYPE 的标题总数
+	protected function data_selectTitTotal($type=0){
+		$sql = "select count(`id`) FROM  `".parent::Fn()."classify` WHERE";
+		//全部
+		if ( $type == 0 ) {
+			$sql = $sql." ((`duration` > ".time()." AND `type` =1 ) OR (`type` =2 AND `start` !=3 ) OR (`type` =3 AND `duration` > ".time()."))";
 		}
 		//活动
 		if ( $type == 1 ) {
@@ -107,8 +133,9 @@ class Data_title extends Config
 		if ( $type == 3 ) {
 			$sql = $sql." `duration` < ".time()." AND `type` =".$type;
 		}
-		$sql = $sql." AND `click` >= ".$grade." ORDER BY `".$sort."` DESC LIMIT ".$begin." , ".$pages;
-		return mysql_query($sql);
+		$sql = $sql." LIMIT 1";
+		$row = parent::Ais($sql);
+		return $row[0];
 	}
 
 	//获取指定 标题ID 的内容总数
@@ -121,7 +148,8 @@ class Data_title extends Config
 
 	//获取指定 用户UID 关注的所有 活动标题和专题标题 以及自己创建的所有标题 列表【用户侧栏我的标题，我关注的】
 	protected function data_selectUserFollowList($uid=0, $begin=0 ,$pages=15 ){
-		$sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE (`t`.`start` = 1 AND ((`t`.`type` = 1 AND `t`.`duration` > ".time().") OR `t`.`type` =2)) AND (`t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid.") GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
+		// $sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE (`t`.`start` = 1 AND ((`t`.`type` = 1 AND `t`.`duration` > ".time().") OR `t`.`type` =2)) AND (`t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid.") GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
+		$sql = "select `t`. * FROM `".parent::Fn()."classify` AS `t` , `".parent::Fn()."logs_followtitle` as `u` WHERE `t`.`start` = 1 AND `t`.`tid` = `u`.`tid` AND `u`.`uid` = ".$uid." GROUP BY  `t`.`id` ORDER BY `t`.`id` DESC LIMIT ".$begin." , ".$pages;
 		return mysql_query($sql);
 	}
 	
@@ -694,6 +722,11 @@ class Title extends Event_title
 	* 获取 get
 	*/
 
+	//获取 指定类型TYPE 的标题总数
+	public function Gtotal($type=0){
+		return parent::data_selectTitTotal($type);
+	}
+
 	//获取 标题列表
 	public function Glist($type=0, $begin=0, $pages=0, $grade=0){
 		return parent::event_get($begin, $pages, $type, $grade);
@@ -765,7 +798,7 @@ class Title extends Event_title
 	//获取指定 活动标题ID 的剩余日期
 	public function Gsurplus($tid=0){
 		if($tid){
-			if(parent::event_getType($tid) == 1){	//必须为活动标题
+			// if(parent::event_getType($tid) == 1){	//必须为活动标题
 				$end = parent::event_getDuration($tid);
 				$current = time();
 				if( $end <= $current){
@@ -781,7 +814,7 @@ class Title extends Event_title
 					}
 				}
 				return $time;
-			}
+			// }
 		}
 	}
 
@@ -1005,8 +1038,8 @@ class Title extends Event_title
 	}
 
 	//判断是否有被使用
-	public function Iuse($type=0){
-		return count(parent::event_get(0, 0, $type));
+	public function Iuse($type=0, $begin=0, $page=0){
+		return count(parent::event_get($begin, $page, $type));
 	}
 
 	//判断指定 标题TID 是否有内容
@@ -1032,6 +1065,27 @@ class Title extends Event_title
 		}
 		if( $typeid == 3 ){
 			$value = '任务';
+		}
+		if( $typeid == 4 ){
+			$value = '挑战';
+		}
+		return $value;
+	}
+
+	//判断标题分类根据 类型ID 返回对应的样式名称
+	public function ITclass($typeid){
+		$value = '';
+		if( $typeid == 1 ){
+			$value = 'tit-activity';
+		}
+		if( $typeid == 2 ){
+			$value = 'tit-special';
+		}
+		if( $typeid == 3 ){
+			$value = 'tit-task';
+		}
+		if( $typeid == 4 ){
+			$value = 'tit-surpass';
 		}
 		return $value;
 	}
@@ -1277,8 +1331,8 @@ class Title extends Event_title
 
 	//更新指定 标题ID 的购买 次数NUM（选填，默认为 +1）
 	public function Ubuy($tid=0, $num=1){
-		if($tid){
-			return parent::event_updateClick( $tid, parent::event_getNumber($tid) +$num );
+		if( $tid ){
+			return parent::event_updateClick( $tid, parent::event_getClick($tid) +$num );
 		}
 	}
 

@@ -8,8 +8,21 @@
 	$ect="user";	
 
 	//引用样式头部
-	include("./comm/head.php");		
+	include("./comm/head.php");	
 
+	$page = 1;
+	$number = 9;
+	$total = $c -> Gtotel(0, $u -> Guid());
+
+	if ( isset($_GET['page'])) {
+		$page = $_GET['page'];	
+	}
+
+	
+	// 如果不是首次今日
+	// if ( !$u -> Inew() ) {
+	// 	$u -> Uskip();
+	// } 
 
 	// echo strtotime();
 ?>
@@ -28,7 +41,7 @@
 
 				<div class="leftarea f" style="width: 800px;">
 						
-					<?php $Ulist = $c -> GUlist(0, 99, 0, 0, $u -> Ik() ? $u -> Gcid() : 0);					
+					<?php $Ulist = $c -> GUlist(($page - 1) * $number, $number, 0, 0, $u -> Ik() ? $u -> Gcid() : 0);					
 					if(count($Ulist) > 0){ 	//如果有内容 ?>
 						<div class="contentList" style="margin:0px;width: 100%;position: relative;top: -30px;">
 							
@@ -104,13 +117,20 @@
 									</div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
-
+							
+							<!-- 分页 -->
+							<div class="paging" total="<?php echo $total; ?>" number="<?php echo $number; ?>" current="<?php echo $page; ?>" >
+								<div class="paging-use"></div>
+								<div class="paging-link">
+									<div class="paging-link-fill"></div>
+								</div>
+							</div>
 						</div>
 					<?php }else{	//如果没有内容 ?>
 						<div class="noContent userNot <?php if($u -> IVuser()){ echo "visitNot"; }	//如果访问他人	?>">
 							<div class="are">
 							
-								<?php if($u -> Gid() && !$u -> IVuser()){	//用户在自己的个人中心可以见此按钮 ?>
+								<?php if($u -> Gid() && !$u -> IVuser()){	//用户在自己的个人中心可以见此按钮 ?>	
 									<a class="publish" href="./userAdd.php" title="">发<span>布</span></a>
 								<?php } ?>
 
@@ -129,10 +149,78 @@
 	
 	<?php if($u -> Ifirst()){ //判断是否首次登陆	?>
 	<!-- 提示信息 -->
-	<div class="globalShade"><i></i><em>×</em><span></span></div>
+	<!-- <div class="globalShade"><i></i><em>×</em><span></span></div> -->
+	<?php } ?>
+
+	<?php if ( $uc -> Ifinish('user') ) {		// 首次进入用户中心	?>
+		<!-- 教程 - 注册成功 -->
+		<div class="course course-user">
+			<div class="course-dialog"><i></i>
+				<p>Good！你已经注册成功了自己的账户。</p>
+				<p>这里是 <em>用户中心</em>，我们先从这里开始讲起吧。</p>
+				<p class="tip">提示：目前这儿还是空空如也。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">好的</a>
+					<a class="course-btn-no" href="javascript::">不</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/2.gif" />
+		</div>
+		<!-- 教程 - 进入能力界面 -->
+		<div class="course course-enterAbility no">
+			<div class="course-dialog"><i></i>
+				<p>点击 <em>我的能力</em>，跟我一起去个神奇的地方吧。</p>
+				<p class="tip">提示：前方高能！这个位置 →</p>
+				<div class="btn">
+					<a class="course-btn-no" href="javascript::">不了</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/3.gif" />
+		</div>
+		<script>
+			$('.course-user .course-btn-yes').click(function(){	// 继续教程
+				$('.course-user').hide();
+				$('.course-enterAbility').removeClass('no');
+				$('.header .operate').addClass('operate_act');
+			});
+			$('.course-user .course-btn-no').click(function(){	// 关闭教程
+				$('.course-user').fadeOut();
+			});
+			$('.course-enterAbility .course-btn-no').click(function(){	// 关闭教程
+				$('.header .operate').removeClass('operate_act');
+				$('.course-enterAbility').fadeOut();
+			});
+		</script>
+	<?php } ?>
+
+	<?php if ( !$u -> Inew() && $u -> Ilogin() ) { ?>
+	<!-- 教程 - 欢迎回来 -->
+	<div class="course course-entry">
+		<div class="course-dialog"><i></i>
+			<div class="course-text">
+				<p>欢迎回来！小的恭候您多时了。</p>
+				<p>请让我简单的给你汇报下，你离开的这<span class="course-text-time">-</span>里都发生了什么。</p>
+				<p><b>新增收入：</b><em class="course-text-num">-</em> 分</p>
+				<p><b>当前的神：</b><em class="course-text-first">-</em>，你排第 <em class="course-text-digg">-</em> 位，为土豪名列。</p>
+				<p><b>新报道的后辈们：</b><em class="course-text-user">-</em> 位</p>
+			</div>
+			<p class="tip">提示：点击不再提醒后，可以在个人设置中再次找到我。</p>
+			<div class="btn">
+				<a class="course-btn-yes" href="javascript::">知道了，谢谢</a>
+				<!-- <a class="course-btn-no" href="javascript::">不再提醒</a> -->
+			</div>
+		</div>
+		<div class="c"></div>
+		<img class="course-figure" src="./course/4.gif" />
+	</div>
 	<?php } ?>
 
 	<script type="text/javascript">
+
+
+
 
 	// if( a[i].childNodes() )
 	// a[i].setAttribute('href', 'javascript:;');
@@ -210,6 +298,10 @@
 		$('.col_possess').writing();
 
 
+		//获取用户汇报
+		$('.course-entry').report();
+
+
 
 		
 
@@ -244,17 +336,17 @@
 
 
 		//新手提示
-		if( $('.globalShade').length > 0 ){
-			$('.header .operate').addClass('operate_act');
-			$('.header .operate .link a').eq(7).addClass('act');
+		// if( $('.globalShade').length > 0 ){
+		// 	$('.header .operate').addClass('operate_act');
+		// 	$('.header .operate .link a').eq(7).addClass('act');
 
-			//关闭提示
-			$('.globalShade em').click(function(){
-				$('.globalShade').remove();
-				$('.header .operate').removeClass('operate_act');
-				$('.header .operate .link a').eq(7).removeClass('act');
-			});
-		}
+		// 	//关闭提示
+		// 	$('.globalShade em').click(function(){
+		// 		$('.globalShade').remove();
+		// 		$('.header .operate').removeClass('operate_act');
+		// 		$('.header .operate .link a').eq(7).removeClass('act');
+		// 	});
+		// }
 
 	</script>
 

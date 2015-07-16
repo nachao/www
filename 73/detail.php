@@ -13,9 +13,8 @@
 		$cid = $_GET['cid'];
 	}
 
-
-
-
+	//当前位置
+	$position = 'detail';
 ?>
 
 	<div class="container pagecon">
@@ -37,7 +36,7 @@
 						$cid = $_GET['cid'];
 						$con = $c -> Ginfo($cid); 	?>
 						<div class="contentList" style="margin:0px;" cid="<?php echo $cid; ?>" >
-							<div class="col<?php echo $c -> Ibuy($con['cid']) ? ' col_possess' : ''; ?>" cid="<?php echo $con['cid']; ?>" now="<?php echo $con['plus']; ?>" style="display: block;" >
+							<div class="col col_possess" cid="<?php echo $con['cid']; ?>" now="<?php echo $con['plus']; ?>" style="display: block;" >
 
 									<!-- 标示 -->
 									<?php if($con['effects'] == 1){	//如果是顶 ?>
@@ -79,21 +78,11 @@
 										
 										<div class="use">
 											<div class="num f"><span class="gold golds" n="<?php echo $con['plus']; ?>"></span> <i></i></div>
-										
-											<?php if($u -> Guid()){	//登录后显示的提示 ?>
-												<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-											<?php }else{			//未登录后显示的提示 ?>
-												<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
+											<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+											<?php if($c -> Itxt($con['cid'])){	//如果有文本则显示展开按钮 ?>
+												<a class="skip look r" href="javascript:;" >展开</a>
 											<?php } ?>
-
-											<?php if($c -> Ibuy($con['cid'])){		//如果可以查看 ?>
-												<?php if($c -> Itxt($con['cid'])){	//如果有文本则显示展开按钮 ?>
-													<a class="skip look r" href="javascript:;" >展开</a>
-												<?php } ?>
-											<?php }else{  //需要购买 ?>
-												<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-											<?php } ?>
-
+											<a class="buy confirmBtn purchase r" href="javascript:;" >赞一个</a>
 										</div>
 									</div>
 								</div>
@@ -145,9 +134,15 @@
 										<div class="col">
 											<a href="?cid=<?php echo $con['cid']; ?>" >
 												<?php if($Atype==0){ ?><div class="con"><?php echo $con['content']; ?></div><?php } ?>
-												<?php if($Atype==1){ ?><div class="pic" style="background-image: url(<?php echo $con['image']; ?>);"></div><?php } ?>
-												<?php if($Atype==2){ ?><embed class="gif" src="http://<?php echo $con['video']; ?>" quality="high" wmode="Opaque" width="100%" height="100%" align="middle" allowscriptaccess="always" allowfullscreen="true" mode="transparent" type="application/x-shockwave-flash"><?php } ?>
-												<?php if($Atype==3){ ?><embed class="mp3" src="<?php echo $con['music']; ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent" /><?php } ?>
+												<?php if($Atype==1){ ?>
+													<div class="pic" style="background-image: url(<?php echo $c -> Gimage($con['cid']); ?>);"></div>
+												<?php } ?>
+												<?php if($Atype==2){ ?>
+													<embed class="gif" src="<?php echo $c -> Gvideo($con['cid']); ?>" quality="high" wmode="Opaque" width="100%" height="100%" align="middle" allowscriptaccess="always" allowfullscreen="true" mode="transparent" type="application/x-shockwave-flash">
+												<?php } ?>
+												<?php if($Atype==3){ ?>
+													<embed class="mp3" src="<?php echo $c -> Gmusic($con['cid']); ?>" type="application/x-shockwave-flash" width="257" height="33" wmode="transparent" />
+												<?php } ?>
 												<div class="info">
 													<div class="txt"><?php if( $Atype!=0 ){ echo $con['content']; } ?></div>
 													<div class="ico">
@@ -166,7 +161,7 @@
 							<div class="bottomSide"></div>
 						</div>
 						
-						<?php if($um -> ICmessage($_GET['cid'])){ ?>
+						<?php if(0 && $um -> ICmessage($_GET['cid'])){ ?>
 							<!-- 显示全部留言 -->
 							<div class="commarea detailAuthor">
 								<div class="content">
@@ -288,7 +283,7 @@
 							</div>
 						<?php } ?>
 						
-						<!-- 添加留言 -->
+						<!-- 添加留言
 						<div class="commarea detailAuthor">
 							<div class="content">
 								<div class="head">
@@ -307,7 +302,6 @@
 									<?php } ?>
 
 									<form method="get" onsubmit="return tijiao();" style="position:relative;" >
-										<!-- <div id="txtDiv" class="txt" contentEditable=true ></div> -->
 										<textarea id="txtAre" class="txt" name="addMessage"></textarea>
 										<input type="hidden" name="p" value="<?php echo 0; ?>" />
 										<input id="huifuMid" type="hidden" name="huifuMid" value="" />
@@ -321,6 +315,7 @@
 							</div>
 							<div class="bottomSide"></div>
 						</div>
+						 -->
 
 					<?php }else{ ?>
 					<div class="msgwu msgwu"></div>
@@ -442,28 +437,76 @@
 
 
 		//发布留言
-		// $('#huifuSub').click(function(){
-		// 	var cid = $('.contentList').attr('cid'),
-		// 		top = 0;
+		$('#messagePBtn').click(function(){
+			var cid = $('.contentList').attr('cid'),
+				obj = $('#messagePText'),
+				text = obj.val().replace(/\s/g, '').substr(0, 200);
+			if( text != '' ){
+				$.g({
+					name: 'addMessage',
+					data: { 'cid': cid, 'txt': text },
+					result: function(value){
+						obj.val('');
+						$(window).commentIn(value);
 
-		// 	$('.messageList').each(function(i){
-		// 		top = $(this).context.getBoundingClientRect().top + $(document).scrollTop();
-		// 	});
-		// 	if( $('#txtDiv').html()!= '' ){
-		// 		$.ajax({
-		// 			type: "POST",
-		// 			url: "./ajax/ajax_message.php",
-		// 			data: "addMessage="+ cid +"&t="+ $('#txtDiv').html(),
-		// 			success: function(msg){
-		// 				// console.log( msg );
-		// 				$('#txtDiv').html('');
-		// 				$('html,body').stop().animate({ scrollTop:top -100 },function(){
-		// 					location.reload();
-		// 				});
-		// 			}
-		// 		});
-		// 	}
-		// });
+						//如果是游客则刷新积分
+						if ( $('#pop-3').length ) {
+							$(window).updateSum(-1);
+						}
+					}
+				});
+			}
+		});
+
+		//评论字数长度控制
+		$('#messagePText').keydown(function(){
+			if ( $(this).val().length > 200 ) {
+				$(this).val($(this).val().substr(0, 200));
+			}
+		})
+
+
+
+		
+		//获取指定内容的全部评论
+		function messageList () {
+			var cid = $('.contentList').attr('cid'),
+				select = parseInt($('.message-current-num span').html()) -1;
+			$.g({
+				name: 'getM',
+				data: { 'cid': cid, 'page': select },
+				result: function(value){
+					$(window).commentIn(value);
+
+					//输出页数按钮
+					value = JSON.parse(value);
+					var total = value.total,
+						number = value.number,
+						page = Math.ceil(total / number);
+					var contain = $('.message-current-use').empty(),
+						message = $('.message-page');	
+					if ( page > 1 ) {
+						for ( var i = 1; i <= page; i++ ) {
+							if ( (i-1) != select ) {
+								contain.append('<a href="javascript:;" >'+ i +'</a>');
+							}
+						}
+						contain.find('a').click(function(){
+							var span = $('.message-current-num span'),
+								value = $(this).html();
+							if ( value != span.html() ) {
+								span.html(value);
+								messageList();
+							}
+						});
+						message.show();
+					}
+				}
+			});
+		}
+		messageList();
+
+		//选择评论页数
 
 
 

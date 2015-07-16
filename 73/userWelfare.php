@@ -9,6 +9,16 @@
 
 	//引用样式头部
 	include("./comm/head.php");
+
+	//属性最近活动时间
+	$u -> Uskip();
+
+	/*-------------------------------
+	
+	收益类：翻倍、推广牛人、每日福利、一呼百应、实时数据。
+
+	
+	------------------------------------*/
 ?>
 
 	<div class="container pagecon">
@@ -16,89 +26,163 @@
 		<!-- 主体 -->
 		<div class="main">
 			<div class="userpage center">
-				
+
 				<!-- 操作栏 -->
 				<div class="actionbar"></div>
-
-				<div class="leftarea f">
-
-					<!-- 我拥有的徽章 -->
-					<div class="commarea badgeHead">
-						<div class="content">
-							<div class="head">
-								<div class="tit f"><em>我的徽章 / 福利</em></div>
-								<div class="gap"><i></i></div>
-							</div>
-							<div class="c"></div>
-						</div>
-						<div class="bottomSide"></div>
-					</div>
+				<div class="badgeList ">
 
 					<?php if(count($ub -> Gbadge())){ ?>
 						<!-- 输出全部 我拥有的徽章 -->
-						<div class="badgeList ">
-							<?php foreach($ub -> Gbadge() as $BLk => $BLv ){ //输出内容开始 --------------------------------  ?>
-								<div class="col" bid="<?php echo $BLv['sid']; ?>" >
+							<?php foreach($ub -> Gbadge() as $BLk => $BLv ){ //输出内容开始 --------------------------------  
+								$sid = $BLv['sid'];
+								$img = $BLv['icon'];
+								$name = $BLv['name'];
+								$cue = $BLv['depict'];
+								$num = $BLv['welfare'];
+								$btn = $BLv['icon'] != "new" || $u -> Gplus() < 10;		//如果是新手福利则进行判断，用户条件是否足够
+								$can = !$ub -> Ireceive($BLv['sid']) ? 'no' :'';		//判断是否可以领取
+							?>
+								<div class="col" bid="<?php echo $sid; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $BLv['icon']; ?>"></i></div>
-										<div class="name"><?php echo $BLv['name']; ?></div>
+										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
+										<div class="name"><?php echo $name; ?></div>
 									</div>
-									<div class="text"><?php echo $BLv['depict']; ?></div>
+									<div class="text">
+										<?php echo $cue; ?>
+										<div class="tip">
+											<div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div>
+										</div>
+									</div>
 									<div class="right">
-										<div class="price"><span><em class="golds"><?php echo $BLv['welfare']; ?></em> 分</span></div>
-										<?php if($BLv['icon'] != "new" ){ //如果是新手福利则进行判断，用户条件是否足够 ?>
-										<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" title="">领取</a></div>
-										<?php }else if($u -> Gplus() < 10){ ?>
-										<div class="btn"><a class="cupid-green theirBenefits" href="javascript:;" title="">领取</a></div>
-										<?php } ?>
+										<!-- <div class="price"><span><?php echo $BLgain['str']; ?></span></div> -->
+										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+										<div class="btn">
+											<a class="<?php echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
+										</div>
 									</div>
-									<div class="received <?php echo !$ub -> Ireceive($BLv['sid']) ? 'no' :'';	//判断是否可以领取 ?>" ></div>
 								</div>
 							<?php } //输出内容结束 -------------------------------- ?>
-						</div>
+
 					<?php }else{ ?>
-						<div class="noContent badgeNot"></div>
+						<!-- <div class="noContent badgeNot"></div> -->
 					<?php } ?>
 
-					<!-- 全部徽章 -->
-					<div class="commarea badgeHead" style="margin-top: 90px;">
-						<div class="content">
-							<div class="head">
-								<div class="tit f"><em>未获得的徽章</em></div>
-								<div class="gap"><i></i></div>
-							</div>
-							<div class="c"></div>
-						</div>
-						<div class="bottomSide"></div>
-					</div>
-
-					<!-- 输出全部徽章 -->
-					<div class="badgeList">
+						<!-- 输出全部徽章 -->
 						<?php foreach ($ub -> Gspecial() as $k => $v) { //输出内容开始 --------------------------------
-							if(!$ub -> IBbe($v['sid'])){	
-								$BLgain		= $ub -> IBPbuy($v['sid']);	//判断是的需要购买 ?>
-								<div class="col" bid="<?php echo $v['sid']; ?>" >
+							$is = !$ub -> IBbe($v['sid']);
+							$sid = $v['sid'];
+							$img = $v['icon'];
+							$name = $v['name'];
+							$cue = $v['depict'];
+							$BLgain	= $ub -> IBPbuy($v['sid']);	//判断是的需要购买
+							$style = $ub -> IBFcn($v['gain']);
+							$num = $BLgain['num'];
+							$txt = $ub -> IBfree($v['gain']);
+							if ( $is ) { ?>
+								<div class="col" bid="<?php echo $sid; ?>" >
 									<div class="left">
-										<div class="icon"><i class="<?php echo $v['icon']; ?>"></i></div>
-										<div class="name"><?php echo $v['name']; ?></div>
+										<div class="icon"><i class="iconfont <?php echo $img; ?>"></i></div>
+										<div class="name"><?php echo $name; ?></div>
 									</div>
-									<div class="text"><?php echo $v['depict']; ?><div class="tip"><div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div></div></div>
+									<div class="text">
+										<?php echo $cue; ?>
+										<div class="tip">
+											<div class="result">恭喜！领取成功。<p><a href="javascript:history.go(0);" title="">刷新页面</a> 后领取福利</p></div>
+										</div>
+									</div>
 									<div class="right">
 										<div class="price"><span><?php echo $BLgain['str']; ?></span></div>
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-										<div class="btn"><a class="<?php echo $ub -> IBFcn($v['gain']); ?>" href="javascript:;" gain="<?php echo $BLgain['num']; ?>" ><?php echo $ub -> IBfree($v['gain']); ?></a></div>
+										<div class="btn">
+											<a class="<?php echo $style; ?>" href="javascript:;" gain="<?php echo $num; ?>" >可购买</a>
+										</div>
 									</div>
 								</div>
 						<?php }
 						} //输出内容结束 -------------------------------- ?>
-					</div>
+
 				</div>
-				<div class="rightarea r"><?php include("./comm/userSide.php");	//导入 用户页 - 右侧信息 	?></div>
 				<div class="c"></div>
 			</div>
 		</div>
-		
 	</div>
+
+
+	<?php if ( $uc -> Ifinish('ability') ) {	// 首次进入能力	?>
+		<!-- 教程 - 能力篇 -->
+		<div class="course course-ability">
+			<div class="course-dialog"><i></i>
+				<p>能力篇</p>
+				<p>这里的一切，您随便掌握一门就能变成高能。</p>
+				<p>所有的能力都可以根据自己的需要购买，不过有些技能是有限制的。</p>
+				<p>但是，</p>
+				<p>看您我也是有缘人，今天就让免费送你一个技能。</p>
+				<p class="tip">提示：技能经常使用能提升技能等级和对应的效果。</p>
+				<div class="btn">
+					<a class="course-btn-no" class="" href="javascript::">选哪个好呢</a>
+					<a class="course-btn-yes" href="javascript::">知道了</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/5.gif" />
+			<div class="course-bg"></div>
+		</div>
+		<!-- 教程 - 选哪个好呢 -->
+		<div class="course course-abilityExplain no">
+			<div class="course-dialog"><i></i>
+				<p>每个技能都有详细说明，不过这么多还是会眼花缭乱。</p>
+				<p>淡定，让我们先想想要在这怎么玩？</p>
+				<p>赚钱路线：每日福利、推广牛人、翻倍、一呼百应、账单数据；</p>
+				<p>娱乐路线：变脸、雇员、皮肤、收藏夹、体验；</p>
+				<p>疯狂路线：陨石、静止、盗窃、禁言、失足；</p>
+				<p>自由路线：翅膀、单挑、芳芳的朋友、朋友圈、牛仔；</p>
+				<p>团队路线：守护、分享、战旗、祝福、组团；</p>
+				<p>热门玩法就推荐这么多，刚来到此处可以参考这些。当你了解了这里以后，就可以玩出自己的特色。</p>
+				<p class="tip">提示：每个用户最多只能拥有7种不同的能力。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">了解了，谢谢</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/6.gif" />
+			<div class="course-bg"></div>
+		</div>
+		<!-- 教程 - 学会第一个技能 -->
+		<div class="course course-abilityFinish no">
+			<div class="course-dialog"><i></i>
+				<p>恭喜，您拥有了一个看似很吊的能力。</p>
+				<p>接下来如何运用它，就看你自己了。</p>
+				<p>那么，我们去下一个地方 《标题》页面看看吧！</p>
+				<p class="tip">提示：请点击头部标题菜单。</p>
+				<div class="btn">
+					<a class="course-btn-yes" href="javascript::">好的</a>
+					<a class="course-btn-yes" href="javascript::">不</a>
+				</div>
+			</div>
+			<div class="c"></div>
+			<img class="course-figure" src="./course/2.gif" />
+			<div class="course-bg"></div>
+		</div>
+		<script>
+			$('.course-ability .course-btn-no').click(function(){	// 继续教程
+				$('.course-ability').hide();
+				$('.course-abilityExplain').removeClass('no');
+			});
+			$('.course-user .course-btn-yes').click(function(){		// 关闭教程
+				$('.course-ability').fadeOut();
+			});
+			$('.course-abilityExplain .course-btn-yes').click(function(){	// 关闭教程
+				$('.course-abilityExplain').fadeOut();
+			});
+			$('.col .right .btn a').click(function(){
+				$('.course-abilityFinish').removeClass('no');
+			});
+			$('.course-abilityFinish .course-btn-yes').click(function(){	// 关闭教程
+				$('.course-abilityFinish').fadeOut();
+			});
+		</script>
+	<?php }	?>
+
 	<script type="text/javascript">
 
 		//可领取的徽章 前置
@@ -185,32 +269,28 @@
 			var icon = col.find('.icon i').attr('class'),
 				name = col.find('.name').html();
 
-			//如果是购买的话，则扣除 样式余额
-			if( $(this).html() == "购买" ){
+			//获取参数元素
+			var userGold = $('#userGold'),
+				userSide = $('#userInfoGold');
 
-				//获取参数元素
-				var userGold = $('#userGold'),
-					userSide = $('#userInfoGold');
+			//获取卖价
+			var sellingPrice = parseInt($(this).attr('gain'));
 
-				//获取卖价
-				var sellingPrice = parseInt($(this).attr('gain'));
+			var number = parseInt(userGold.val());
+				number = number - parseInt($(this).attr('gain'));
 
-				var number = parseInt(userGold.val());
-					number = number - parseInt($(this).attr('gain'));
+			if( number >= 0 ){
 
-				if( number >= 0 ){
+				userSide.attr('n', number);
+				userSide.golds();
+				userGold.val(number);
 
-					userSide.attr('n', number);
-					userSide.golds();
-					userGold.val(number);
+				// $('#userGold').val(gold);
+				// $('#userInfoGold').html(gold/100);
 
-					// $('#userGold').val(gold);
-					// $('#userInfoGold').html(gold/100);
-
-					getBadge(col);
-				}else{
-					$(this).parent().prev().show();
-				}
+				getBadge(col);
+			}else{
+				$(this).parent().prev().show();
 			}
 
 			//如果是免费领取的

@@ -84,10 +84,50 @@
 		echo $ue -> Gsurplus();
 	}
 
+
+
+
+
+
+
+
+
+
+
 	//添加留言
+	// if( isset($_POST['addMessage']) ){
+	// 	echo $um -> addMessage();
+	// }
+
+
+	//发布留言（评论）
 	if( isset($_POST['addMessage']) ){
-		echo addMessage();
+		$fid = 0;
+		if ( isset($_POST['huifu']) ) {
+			$fid = $_POST['huifu'];
+		}
+		echo json_encode($um -> Amessage( $_POST['txt'], $_POST['cid'], $fid ));
 	}
+
+	//获取评论
+	if ( isset($_POST['getM']) ) {
+		echo json_encode($um -> GCmessage($_POST['cid'], $_POST['page']));
+	}
+
+	//评论点赞
+	if ( isset($_POST['messageUp']) ) {
+		echo $um -> Uup($_POST['mid']);
+	}
+
+	//评论点踩
+	if ( isset($_POST['messageDown']) ) {
+		echo $um -> Udown($_POST['mid']);
+	}
+
+
+
+
+
 
 	//点赞
 	if( isset($_POST['praise']) ){
@@ -287,6 +327,28 @@
 	if ( isset($_POST['UGlog']) ){
 		echo json_encode($u -> Glog());
 	}
+
+	//获取指定内容的收支情况
+	if ( isset($_POST['income']) ) {
+		echo json_encode($c -> Gincome($_POST['cid']));
+	}
+
+	//游客收入
+	if ( isset($_POST['visitorIncome']) ) {
+		$sum = $u -> Gplus();
+		$sum = $sum + 1;
+		echo $uv -> Usum($_POST['uid'], $sum);
+	}
+
+
+
+
+	//用户情况报表
+	if ( isset($_POST['userReport']) ) {
+		echo json_encode($u -> Greport($_POST['uid']));
+	}
+
+
 
 
 ?>

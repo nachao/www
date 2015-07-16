@@ -1,22 +1,33 @@
 <?php
 	
-//引用公共文件
-include("./comm/base.php");	
+	//引用公共文件
+	include("./comm/base.php");	
 
-//设置选择菜单
-Global $ect;
-$ect="title"; 	
+	//设置选择菜单
+	Global $ect;
+	$ect="title"; 	
 
-//引用样式头部
-include("./comm/head.php");	
+	//引用样式头部
+	include("./comm/head.php");	
 
-//类型
-$type = 0;
+	//类型
+	$type = 0;
 
-//获取指定类型
-if (isset($_GET['type'])) {
-	$type = $_GET['type'];
-}
+	//获取指定类型
+	if (isset($_GET['type'])) {
+		$type = $_GET['type'];
+	}
+
+
+	$page = 1;		//当前默认打开页数
+	$number = 9;	//每页显示数量
+	$total = $t -> Gtotal($type);
+	$total = $total <= 0 ? 1 : $total;
+
+	if ( isset($_GET['page'])) {
+		$page = $_GET['page'];	
+	}
+
 
 ?>
 
@@ -34,11 +45,12 @@ if (isset($_GET['type'])) {
 						<a class="actionbar-btn actionbar-s1 <?php echo $type == 1 ? 'actionbar-btn-act actionbar-s1-act' : ''; ?>" href="?type=1">活动</a>
 						<a class="actionbar-btn actionbar-s2 <?php echo $type == 2 ? 'actionbar-btn-act actionbar-s2-act' : ''; ?>" href="?type=2">专题</a>
 						<a class="actionbar-btn actionbar-s3 <?php echo $type == 3 ? 'actionbar-btn-act actionbar-s3-act' : ''; ?>" href="?type=3">任务</a>
+						<a class="actionbar-btn actionbar-s3 <?php echo $type == 4 ? 'actionbar-btn-act actionbar-s3-act' : ''; ?>" href="?type=4">挑战</a>
 					</div>
 					<!-- 赛选 -->
 				</div>
 
-				<?php if(!$t -> Iuse($type)){ ?>
+				<?php if(!$t -> Iuse($type, ($page - 1) * $number, $number)){ ?>
 					<!-- 没有标题时的提示 -->
 					<div class="Ncon notTit">
 						<h1>抱歉没有找到相关内容！</h1>
@@ -57,11 +69,9 @@ if (isset($_GET['type'])) {
 				<!-- 标题列表 -->
 				<?php
 
-				if(1 || $t -> Iuse($type)){   //判断是否有标题内容，如果有标题内容则输出  ?>
+				if(1){   //判断是否有标题内容，如果有标题内容则输出  ?>
 				<div class="contentList titleList" style="width: 100%;overflow: initial;" >
-
-					<?php foreach($t -> Glist($type) as $key => $Tv) {	//循环输出全部标题 ?>
-
+					<?php foreach($t -> Glist($type, ($page - 1) * $number, $number) as $key => $Tv) {	//循环输出全部标题 ?>
 						<?php if($t -> Gcost($Tv['tid']) > 0){  		//判断是否需要维护
 								if(!$t -> USMcharges($Tv['tid'])){		//如果没有维护成功
 									if($t -> Gcost($Tv['tid']) > 300){	//如果连续超过3天无法维护
@@ -82,9 +92,9 @@ if (isset($_GET['type'])) {
 									<span class="creator">创建者：
 										<a href="./list.php?uid=<?php echo $Tv['userid']; ?>" ><?php echo $users -> Gname($Tv['userid']); ?></a>
 									</span>
-									<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
 
 									<?php if($t -> Iact($Tv['tid'])){ 	//活动标题参数 ?>
+										<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
 										<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
 										<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
 										<?php echo $t -> ISnormal($Tv['tid']); ?>
@@ -98,9 +108,19 @@ if (isset($_GET['type'])) {
 											<!-- <span class="first">获胜者：<a href="./list.php?uid=<?php echo $t -> Gfirst($Tv['tid']); ?>"><?php echo $u -> Gname($t -> Gfirst($Tv['tid'])); ?></a></span> -->
 										<?php } ?>
 
-									<?php }else{	//专题参数 ?>
-									<!-- <span class="shoucang"><em><?php echo $Tv['click']; ?></em> 人喜欢</span> -->
+									<?php } ?>
+
+									<?php if ( $Tv['type'] == 2 ) {	//专题参数 ?>
+									<span class="fabu"><em><?php echo $t -> GTCcount($Tv['tid']); ?></em> 条内容</span>
+									<span class="shoucang"><em><?php echo $Tv['click']; ?></em> 次购买</span>
 									<span class="guanzhu"><em><?php echo $t -> GFtotal($Tv['tid']); ?></em> 人关注</span>
+									<?php } ?>
+
+									<?php if ( $Tv['type'] == 3 ) {	//专题参数 ?>
+									<span class="time">剩余：<em><?php echo $t -> Gsurplus($Tv['tid']); ?></em></span>
+									<span class="jine">奖金：<em class="golds"><?php echo $Tv['reward']; ?></em> <i>元</i></span>
+									<!-- <span class="shoucang"><em><?php echo $Tv['click']; ?></em> 人喜欢</span> -->
+									<span class="guanzhu"><em><?php echo $t -> GFtotal($Tv['tid']); ?></em> 人加入</span>
 									<?php } ?>
 
 								</div>
@@ -117,8 +137,12 @@ if (isset($_GET['type'])) {
 										<?php }else{ ?>
 											<?php if($t -> Iact($Tv['tid'])){ 	//活动标题 ?>
 												<a class="buy follow r" href="javascript:;" >参与活动</a>
-											<?php }else{	//专题 ?>
+											<?php } elseif ( $Tv['type'] == 2 ) {	//专题 ?>
 												<a class="buy follow r" href="javascript:;" >关注专题</a>
+											<?php } elseif ( $Tv['type'] == 3 ) {	//任务 ?>
+												<a class="buy follow r" href="javascript:;" >接受任务</a>
+											<?php } elseif ( $Tv['type'] == 4 ) {	//跳转 ?>
+												<a class="buy follow r" href="javascript:;" >参与挑战</a>
 											<?php } ?>
 										<?php } ?>
 									<?php } ?>
@@ -190,6 +214,15 @@ if (isset($_GET['type'])) {
 				</div>
 				<div class="c"></div>
 				<?php } ?>
+
+				<!-- 分页 -->
+				<div class="paging" total="<?php echo $total; ?>" number="<?php echo $number; ?>" current="<?php echo $page; ?>" >
+					<div class="paging-use"></div>
+					<div class="paging-link">
+						<div class="paging-link-fill"></div>
+					</div>
+				</div>
+				<div class="c"></div>
 			</div>
 		</div>
 	</div>

@@ -368,6 +368,16 @@ class Users_badge extends Event_user_badge
 		return $num >= 3;			//邀请人数达到 3 人
 	}
 
+	//判断指定 用户UID 当前所处在的等级
+	public function Igrade($uid=0){
+		$uid = $uid ? $uid : parent::Eid();
+		$u = new Users();
+		$num = $u -> Gplus($uid);
+		// if ( $num  ) {
+			
+		// }
+	}
+
 
 
 

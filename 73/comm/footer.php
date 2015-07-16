@@ -1,4 +1,8 @@
 		<div class="floatside">
+			<?php if ( !$u -> Is() ) {	//如果是游客 ?>
+			<a class="s4" id="visitorBtn" href="javascript:;" pop="pop-3" ><span><?php echo $u -> Gplus(); ?></span><i></i></a>
+			<?php } ?>
+
 			<?php if($u -> Guid()){	//登陆用户可反馈 ?>
 			<a class="s2" id="feedback" href="javascript:;" title="反馈" pop="pop-1"></a>
 			<?php } ?>
@@ -22,6 +26,30 @@
 				<div class="pop-colse"></div>
 			</div>
 		</div>
+		<?php } ?>
+	
+		<?php if ( !$u -> Is() ) {	//如果是游客 ?>
+			<div class="pop" id="pop-3" >
+				<div class="pop-bg"></div>
+				<div class="pop-main">
+					<h1 class="pop-title">游客中心</h1>
+					<div class="pop-form">
+						<div class="pop-form-info">
+							<a class="pop-form-icon" href="javascript:;" ><img src="<?php echo $u -> Gicon(); ?>" alt="" /></a>
+							<p><span class="pop-form-span">名称：</span>-</p>
+							<p><span class="pop-form-span">IP：</span><?php echo $u -> Gip(); ?></p>
+							<p><span class="pop-form-span">余额：</span><span id="visitorSum" class="golds" n="<?php echo $u -> Gplus(); ?>" ></span> <i></i></p>
+							<p><span class="pop-form-span">喜欢：</span><span id="visitorTotal" ><?php echo $u -> Gzan(); ?></span> 条内容</p>
+							<p><span class="pop-form-span">停留时长：</span><span id="" >-</span></p>
+						</div>
+						<div class="pop-form-col">
+							<!-- <a href="javascript:;" class="pop-form-submit" >成为会员</a> -->
+							<a href="javascript:;" class="pop-form-close" >关闭窗口</a>
+						</div>
+					</div>
+					<div class="pop-colse"></div>
+				</div>
+			</div>
 		<?php } ?>
 
 		<script type="text/javascript">
@@ -70,6 +98,9 @@
 
 			//设置金额显示方式
 			// goldShow($('#headGold'));
+
+			//启动游客收入
+			$(window).visitorIncome();
 
 		</script>
 		<div class="footer">
