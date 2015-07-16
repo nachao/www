@@ -1935,14 +1935,8 @@ margin: auto; }
 .course-abilityFinish .course-dialog i{ right: auto;left: 100px; }
 .course-abilityFinish .course-figure{ left: 66px; }
 
-/*.icon-maozi:before { content: "\e600"; }
-.icon-qipaoa:before { content: "\e607"; }
-.icon-shuye:before { content: "\e601"; }
-.icon-zan:before { content: "\e608"; }
-.icon-zhuan:before { content: "\e602"; }
-.icon-kafeiting:before { content: "\e603"; }
-.icon-850chibang:before { content: "\e604"; }
-.icon-caifu:before { content: "\e605"; }*/
+.icon-qipaoa:before { content: "\e61c"; }
+.icon-zan:before { content: "\e61d"; }
 
 
 

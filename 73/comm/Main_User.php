@@ -974,6 +974,11 @@ class Users extends Event_user
 	//获取指定 用户UID 的报告
 	public function Greport( $uid = 0 ){
 		$uid = $uid ? $uid : $this -> Guid();
+		$info = parent::event_getInfo($uid);
+		$time = $info['lastdate'] - $info['lastskip'];
+		$sum = parent::data_selectSumlog($uid, $info['lastskip'], time(), 1);
+		$first = $this -> Gdigg(0, 1);
+		$first = $first['name'];
 		return array(
 				'time' => 1,
 				'num' => 2,
