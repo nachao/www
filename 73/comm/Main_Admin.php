@@ -121,6 +121,8 @@ class Event_admin extends Data_admin
 	protected function event_getList($val=1){
 		$c = new Content();
 		$t = new Title();
+		$u = new Users();
+		$o = new Tool();
 		$array = array();
 		$query = parent::data_selectStatus($val);
 		if( !!$query && mysql_num_rows($query) > 0 ){	//遍历数据
@@ -129,6 +131,8 @@ class Event_admin extends Data_admin
 				$tid = $row['tid'];
 
 				$row['href'] = "javascript:;";
+				$row['title'] = $t -> Gtitle($row['tid']);
+				$row['type'] = '0';
 
 				//判断
 				if($cid){ 
@@ -137,13 +141,28 @@ class Event_admin extends Data_admin
 					$row['time'] = $c -> Gtime($cid);
 					$row['href'] = "./detail.php?cid=".$cid;
 					$row['author'] = $c -> Gauthor($cid);
+					$row['type'] = '1';
 				}
 				if($tid){ 
 					$row['text'] = $t -> Gcontent($tid); 
 					$row['time'] = $t -> GUtime($tid);
 					$row['href'] = "./list.php?tid=".$tid;
 					$row['author'] = $t -> Gcreator($tid);
+					$row['type'] = '2';
 				}
+
+				$row['name'] = $u -> Gname($row['author']);
+
+				if($row['tid'] && $t -> Iact($row['tid'])){		//如果是活动，则显示奖金和剩余时间
+					$row['time'] = $t -> Gsurplus($row['time']);
+					$row['bonus'] = $t -> Greward($row['tid']);
+					$row['titleType'] = '1';	// 活动
+				}else{	//则显示使用或者发布日期
+					$row['time'] = $o -> Cdate($row['time']);
+					$row['bonus'] = '';
+					$row['titleType'] = '2';	// 专题
+				}
+
 				array_push($array, $row);
 			}
 		}

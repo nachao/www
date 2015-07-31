@@ -166,11 +166,29 @@ class Event_content extends Data_content
 
 	//获取的内容列表，可以指定 标准得分NORM
 	protected function event_getList($tid=0, $begin=0, $page=15, $norm=0 , $uid=0, $label=0 ){
+		$u = new Users();
+		$t = new Title();
 		$query = parent::data_selectContent( $begin, $page, $tid, $norm, $uid, $label);
 		$array = array();
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据
-				array_push($array, $row);
+				$temp = array(
+						'cid' => $row['id'],
+
+						'biaoshi'	=> $row['effects'],	// 标示
+						'biaotiid'	=> $row['titleid'],	// 标题id
+						'biaoti'	=> $t -> Gtitle($row['titleid']),	// 标题名
+						'text'	=> $row['content'],	// 文本
+						'type'	=> $row['types'],	// 类型
+						'zhuyao'	=> $row['cont'],	// 主要内容
+
+						'zuozheid'	=> $row['userid'],	// 作者id
+						'zuozheming'=> $u -> Gname($row['userid']),	// 作者名
+
+						'score'		=> $row['plus'],	// 得分
+						'shijian'	=> $row['base'],	// 发布时间
+					);
+				array_push($array, $temp);
 			}
 		}
 		return $array;	//返回

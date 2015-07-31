@@ -1,5 +1,6 @@
 <?php
-	
+
+
 	//引用公共文件
 	include("../comm/base.php");		
 	
@@ -347,6 +348,39 @@
 	if ( isset($_POST['userReport']) ) {
 		echo json_encode($u -> Greport($_POST['uid']));
 	}
+
+	header("Content-type: application/json");
+
+
+	$request = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
+
+
+
+
+
+	// ====
+	// 内容部分
+	// ====
+
+	// 获取首页显示内容
+	if ( isset($request['clist']) ) {
+
+		//内容参数
+		$norm = 1;		// 最低分
+		$begin = 0;		// 开始页
+		$pages = $request['clist'];	// 显示数量
+
+		// 返回
+		echo json_encode($c -> Glist( $begin, $pages, 0 ,$norm ));	//获取内容列表
+
+	}
+
+
+	// 获取焦点图信息
+	if ( isset($request['banner']) ) {
+		echo json_encode($admin -> Gbanner());
+	}
+
 
 
 
