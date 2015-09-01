@@ -655,6 +655,12 @@ class Users extends Event_user
 		return parent::event_uid();
 	}
 
+	//获取指定 用户Uid 的信息
+	public function GBid($uid=0){
+		return parent::event_get($uid);
+	}
+
+
 	//获取指定 用户Uid 的唯一编码
 	public function Gid($uid=0){
 		return parent::event_getId($uid);
@@ -1024,15 +1030,36 @@ class Users extends Event_user
 
 	//判断指定 用户账号和密码 是否存在，如果存在并验证密码是否正确	//登录
 	public function Ientry($account=0, $password=0){
-		$value = 0;		//正好不存在
+		$value = array();		//正好不存在
 		if($account){
 			$info = parent::event_getByName($account);
 			if($info){		//账号是否不存在
 				if($info['pwd'] == md5($password)){		//登录成功
-					$value = 1;
 					$uid = $info['uid'];
 					setcookie("73userid", $uid, time()+24*3600, "/");	//存入 - 有效时间 1 天
 					parent::event_updateLastdate($uid);	//刷新登录时间
+
+					// $value = array(
+					// 		'icon' => $info['icon']
+					// 		'name' => $info['name'],
+					// 		'plus' => $info['plus'],
+					// 		'describe' => $info['describe']
+					// 	);
+
+					$value = array( 
+						'icon' => $info['icon'],
+						'name' => $info['name'],
+						'plus' => $info['plus'],
+						'status' => '1'
+					);
+
+					// $value['icon'] = info['icon'];
+
+					// $value = array(
+					// 	'a' => 1,
+					// 	'b' => 2
+					// 	);
+
 				}else{
 					$value = 2;		//账号正确，密码错误
 				}	

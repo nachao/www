@@ -87,7 +87,7 @@ jQuery.fn.extend({
 		function iniLie(){
 			var bodyW = $('.contentList').width() +100,
 				rowW = row.width() + 30,
-				num = Math.round( bodyW / rowW )-1;
+				num = Math.round( bodyW / rowW ) - 1 -1 ;
 			for(var i=1; i<=num; i++){
 				top.prepend( row.eq(0).clone() );
 			}
@@ -831,17 +831,26 @@ jQuery.fn.extend({
 			var bg = $('.artwork-bg').show()
 				close = $('.artwork-close').show(),
 				image = $('.artwork-image').show();
-			image.attr('src', $(this).attr('href')).css({ width: 'auto'});
+			image.attr('src', $(this).attr('src')).css({ width: 'auto'});
+			
+			$('.center').hide();
+			$('html,body').scrollTop(0);
+			image.css({ padding: '0 0 100px' });
+
 			var ww = $(window).width()-300,
-				top = $(window).scrollTop() + 50;
+				top = 100; //$(window).scrollTop() + 50;
 			if(image.width() > ww){
 				image.width(ww);
 			}
+
+
 			close.css({ top: top, marginLeft: image.width() /2 });
 			image.css({ marginLeft: -image.width()/2, top: top });
 			return false;
 		});
 		$('.artwork-close,.artwork-bg').click(function(){
+			$('.center').show();
+
 			$('html,body').scrollTop(scroll);
 			$('.artwork-close,.artwork-image,.artwork-bg').hide();
 		});

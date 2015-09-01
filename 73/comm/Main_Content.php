@@ -173,7 +173,7 @@ class Event_content extends Data_content
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据
 				$temp = array(
-						'cid' => $row['id'],
+						'cid' => $row['cid'],
 
 						'biaoshi'	=> $row['effects'],	// 标示
 						'biaotiid'	=> $row['titleid'],	// 标题id
@@ -182,8 +182,8 @@ class Event_content extends Data_content
 						'type'	=> $row['types'],	// 类型
 						'zhuyao'	=> $row['cont'],	// 主要内容
 
-						'zuozheid'	=> $row['userid'],	// 作者id
-						'zuozheming'=> $u -> Gname($row['userid']),	// 作者名
+						'uid'	=> $row['userid'],	// 作者id
+						'uname'=> $u -> Gname($row['userid']),	// 作者名
 
 						'score'		=> $row['plus'],	// 得分
 						'shijian'	=> $row['base'],	// 发布时间

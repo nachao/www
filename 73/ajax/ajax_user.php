@@ -52,7 +52,15 @@
 	//登录
 	//验证账户是否存在，以及密码是否正确
 	if( isset($_POST['entry']) ){
-		echo $u -> Ientry($_POST['entry'], $_POST['password']);
+		// echo $u -> Ientry($_POST['entry'], $_POST['password']);
+
+		$arr = array(
+				'a' => 1,
+				'b' => 2,
+				'c' => 3
+			);
+		echo json_encode($arr);
+
 	}
 
 	//注册用户
@@ -281,6 +289,11 @@
 		echo $c -> UErecommend($_POST['recommendSet']);
 	}
 
+	// 获取指定用户（uid）的信息
+	if (isset($_POST['getUser'])) {
+		echo json_encode($tl -> Glabel($_POST['tgl']));
+	}
+
 
 
 	//投资管理
@@ -376,9 +389,12 @@
 	}
 
 
-	// 获取焦点图信息
-	if ( isset($request['banner']) ) {
-		echo json_encode($admin -> Gbanner());
+
+
+	// 登录
+	if ( isset($request['entry']) ) {
+		echo json_encode($u -> Ientry($request['entry'], $request['password']));
+		// echo json_encode($admin -> Gbanner());
 	}
 
 
