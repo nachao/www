@@ -48,8 +48,8 @@ class Data_label extends Config
 
 	//添加标签
 	// 参数说明
-	protected function data_addLabel($lid=0, $uid=0, $tid=0, $name=''){
-		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."label` (`id`, `lid`, `uid`, `tid`, `time`, `status`, `name`) VALUES (NULL, '".$lid."', '".$uid."', '".$tid."', '".time()."', '1', '".$name."');";
+	protected function data_add( $lid=0, $uid=0, $cid=0 ){
+		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_label` (`id`, `label_id`, `content_id`, `user_id`, `time`, `status`) VALUES (NULL, '".$lid."', '".$cid."', '".$uid."', '".time()."', '1');";
 		return mysql_query($sql);
 	}
 
@@ -59,14 +59,8 @@ class Data_label extends Config
 	* 查询 select
 	*/
 
-	//获取指定 标题TID 的全部标签
-	protected function data_selectLabelList($tid=0){
-		$sql = "select * FROM  `".parent::Fn()."label` WHERE  `tid` LIKE  '".$tid."' AND `status` =1 LIMIT 0 , 30";
-		return mysql_query($sql);
-	}
-
 	//获取指定 标签LID 的全部信息
-	protected function data_selectLabel($lid=0){
+	protected function data_select($lid=0){
 		$sql = "select * FROM  `".parent::Fn()."label` WHERE `lid` =".$lid." AND `status` =1 LIMIT 0 , 30";
 		return parent::Ais($sql);
 	}
@@ -255,15 +249,11 @@ class Label extends Event_label
 	*/
 
 	//新增广告
-	public function Alabel($name='', $tid=0, $uid=0){
+	public function Alabel( $tid=0, $cid=0, $uid=0 ){
 		$uid = $uid ? $uid : parent::Eid();
-		$value = 0;
-		if($name && $tid){
-			$lid = time().count($this -> Glabel($tid));
-			parent::data_addLabel($lid, $uid, $tid, $name);
-			$value = $lid;
+		if ( $tid && $cid ) {
+			parent::data_add( $lid, $uid, $cid );
 		}
-		return $value;
 	}
 
 
@@ -280,7 +270,7 @@ class Label extends Event_label
 
 //赋值数据
 $label = new Label();
-$tl = new Label();
+$a = new Label();
 
 
 

@@ -34,7 +34,10 @@
 	include("Main_Title.php");
 
 	//引用标题标签功能
-	include("Main_Title_Label.php");
+	// include("Main_Title_Label.php");
+
+	//引用标签功能
+	include("Main_Label.php");
 
 	//引用广告功能
 	include("Main_Advert.php");

@@ -356,6 +356,7 @@
 
 
 
+	echo isset($_POST['getUserInfo']);
 
 	//用户情况报表
 	if ( isset($_POST['userReport']) ) {
@@ -363,8 +364,6 @@
 	}
 
 	header("Content-type: application/json");
-
-
 	$request = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
 
 
@@ -389,13 +388,64 @@
 	}
 
 
+	// 获取指定的用户
+	if ( isset($request['ulist']) ) {
 
+		//内容参数
+		$norm = 1;		// 最低分
+		$begin = 0;		// 开始页
+		$pages = $request['ulist'];	// 显示数量
+		$userid = $request['uid'];	// 显示数量
+
+		// 返回
+		echo json_encode($c -> GUlist( $begin, $pages, 0 ,$norm ,$userid ));	//获取内容列表
+
+	}
+
+
+
+
+	// ====
+	// 内容部分
+	// ====
 
 	// 登录
 	if ( isset($request['entry']) ) {
 		echo json_encode($u -> Ientry($request['entry'], $request['password']));
 		// echo json_encode($admin -> Gbanner());
 	}
+
+	// 获取指定用户的信息
+	if ( isset($request['_uid']) ) {
+		echo json_encode($u -> Guser($request['_uid']));
+	}
+
+
+
+
+	// ====
+	// 标签部分
+	// ====
+
+	// 获取指定标签的信息
+	if ( isset($request['_label']) ) {
+		echo json_encode($u -> Guser($request['_label']));
+	}
+
+
+
+
+	// ====
+	// 用户部分
+	// ====
+
+	// 登录用户，成功后返回信息
+	if ( isset($request['key']) && $request['key'] == 'entry' ) {
+		echo json_encode($u -> Ientry($request['account'], $request['password']));
+	}
+
+
+
 
 
 

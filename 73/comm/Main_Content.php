@@ -125,6 +125,14 @@ class Data_content extends Comm_content
 		return $row[0] ? $row[0] : 0;
 	}
 
+	//获取指定 用户UID 的内容总数
+	protected function data_selectUserTotal( $uid=0 ){
+		$sql = "select COUNT( * ) FROM  `".parent::Fn()."content` WHERE  `userid` LIKE  '".$uid."'";
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
+	}
+
+
 	/********************************************
 	* 更新 update
 	*/
@@ -574,6 +582,11 @@ class Content extends Event_content
 			$arr[$key]['income'] = parent::data_selectSumlog($cid, $start, $end);	//获取用户指定天数的收入总和
 		}
 		return $arr;
+	}
+
+	// 获取指定 用户（uid） 的内容总数
+	public function GUtotal($uid=0){
+		return parent::data_selectUserTotal($uid);
 	}
 
 

@@ -1542,7 +1542,7 @@ ncs.pop = {
 			var arr = {};
 			arr.open = $(this);
 			arr.pop = $('#'+ $(this).attr('pop'));
-			arr.close = arr.pop.find('.pop-colse,.pop-bg,.pop-form-close');
+			arr.close = arr.pop.find('.pop-close,.pop-bg,.pop-form-close');
 			arr.submit = arr.pop.find('.pop-form-submit');
 			arr.textarea = arr.pop.find('.pop-form-textarea');
 			arr.funs = funs['pop-1'];
@@ -1567,4 +1567,13 @@ ncs.pop = {
 
 
 }
+
+
+
+
+
+
+
+
+
 

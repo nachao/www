@@ -618,12 +618,15 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 /*.contentList .col .use .buy:hover{ background: #ca3627; }*/
 .contentList .col .use .buy:hover{ color: #e74c3c;font-size: 30px; }
 
-.use-floating{ position: absolute; top: -75px; left: -222px;display: none;z-index: 3; }
-.use-floating .use-fcon{ float: left; width: 300px; background: white; height: 75px; border: 2px solid #E2DFDF; border-right: 0; position: relative; }
+.use-floating{ position: absolute; top: -75px; left: -222px;display: none;z-index: 4; }
+.use-fcon{ float: left; width: 300px; background: white; height: 75px; border: 2px solid #E2DFDF; border-right: 0; position: relative; }
 .use-fc-icon{ width: 55px; float: left; position: relative; z-index: 2; border-right: 0px; margin-right: 15px; margin: 10px 15px 10px 10px; }
 .use-fc-name{ float: left; width: 200px; text-align: left; line-height: 22px; margin-top: 10px; font-size: 14px;color: black;font-family: 微软雅黑; }
 .use-fc-param{ float: left; margin-top: 10px; }
 .use-fc-param span{ font-size: 12px; color: #666; float: left; margin-right: 20px; line-height: 22px; }
+
+.use-fcon-load{ background: url(../imgs/concept-f.gif) no-repeat center white;background-size: auto 200%; }
+.use-fcon-load .use-fc-icon,.use-fcon-load .use-fc-name,.use-fcon-load .use-fc-param{ display: none; }
 
 .contentList .col .use .icon-user:hover .use-floating{ display: inline-block; }
 
@@ -1029,6 +1032,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .enter .content{ width: 300px;height: auto;margin-left: 50px;margin-top: 190px; }
 .enter .content .txt{ width: 298px;height:40px;background: #fffcf3;margin-bottom: 20px; }
 .enter .content .txt input{ width: 100%;height:40px;text-indent: 35px;font-size: 15px;margin: 0px;padding: 0px;border: 0px;color: #f3b508;border-radius: 3px;border: 1px solid #f3b508;background: transparent; }
+.enter .content .txt input::-webkit-input-placeholder { color:#E9DAB1; }
 .enter .content .account{ background: url(../imgs/iconfont-ren.png) no-repeat 10px center;margin-top: 20px; }
 .enter .content .password{ background: url(../imgs/iconfont-mima1.png) no-repeat 10px center; }
 .enter .content .CDK{ background: url(../imgs/iconfont-yao.png) no-repeat 10px center; }
@@ -1045,17 +1049,21 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
     color:    #f3b508;
 }
 
-.entry-loading{ position: absolute;top: 0px;left: 0px;z-index: 2;background: white url(../imgs/concept-f.gif) no-repeat center;width: 100%;height: 0px;overflow: hidden; }
-.entry-success{ position: absolute;top: 0px;left: 0px;z-index: 2;background: white;width: 100%;height: 0px;overflow: hidden;  }
-.entry-success span{ display: inline-block; background: white url(../imgs/textgo.png) no-repeat left center; padding: 10px 0 10px 50px; font-size: 15px; width: 100px; left: 50%; top: 50%; position: relative; margin: -20px 0 0 -70px; }
+.entry-loading{ position: absolute;top: 0px;left: 0px;z-index: 2;background: white url(../imgs/concept-f.gif) no-repeat center;width: 100%;height: 100%;overflow: hidden;display: none; }
+.entry-success{ position: absolute;top: 0px;left: 0px;z-index: 2;background: white;width: 100%;height: 0px;overflow: hidden; height: 100%;display: none; }
+.entry-success span{ color: green;padding: 0 3px;text-decoration: underline; }
+.entry-success-contain{ width: 200px; background: white url(../imgs/textgo.png) no-repeat left 0px; padding-left: 50px;position: relative; top: 120px; left: 100px; }
+.entry-success-text{ font-size: 20px; line-height: 30px; }
+.entry-success-user{ font-size: 18px;margin-top: 10px; }
+.entry-success-param{ margin-top: 30px; }
+.entry-success-param p{ line-height: 33px;color: #666; }
 
-.enter .interval{ width: 100%;height: 36px;position: relative;overflow: hidden;margin-top: 20px;display: none; }
-.enter .interval .cue{ width: 100%;color: #ce863c;line-height: 20px;text-align: right;display: none; }
+.enter .interval{ width: 100%;display: inline-block; position: absolute; top: 180px; left: 0px;color: #ce863c;line-height: 33px;text-align: right; }
 .enter .content .confirm{ background: url(../imgs/iconfont-queren.png) no-repeat 10px center;position: relative;top: -50px; }
 .enter .content .confirm input{ background-position: 260px -30px; }
 .enter .content .confirm input:focus{ background-position: 35px 40px; }
 
-.enter .btn{ margin-top: 0px;height: 40px;margin-top: 55px; }
+.enter .btn{ margin-top: 0px;height: 40px;margin-top: 55px;position: relative; }
 .enter .btn .qq{ position: relative;left: 0px;top: 7px; }
 .enter .btn .link{ color: #030d0c;text-decoration: none;font-size: 14px;line-height: 40px;margin-right: 30px;float: right; }
 .enter .btn .link:hover{ text-decoration: underline; }
@@ -1071,7 +1079,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* 登录样式 */
 .login-style .CDK{ visibility: hidden; }
-.login-style .interval{ height: 96px; }
+/*.login-style .interval{ height: 96px; }*/
 
 
 /*====
@@ -2027,6 +2035,20 @@ margin: auto; }
 .actionbar-use-btn:hover i{ color: #d82425; }
 .actionbar-use-btnAct{ color: #e74c3c; }
 .actionbar-use-btnAct i{ color: #e74c3c; }
+
+
+
+
+
+/* 公告 - 提示 */
+.public-tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: rgba(0,0,0,.73);padding: 4px 10px 5px;position: absolute;top: -35px;right: 0px;display: none;cursor: default; }
+.public-tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 50%;margin-left: -2px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid rgba(0,0,0,.73); border-top-color: transparent; border-left-color: transparent;  }
+.public-tip em{ color: white; }
+
+.public-tip-right{ top: 0px; }
+.public-tip-right i{ left: auto;right: -4px;bottom: auto;top: 50%;margin: -2px 0 0;border-top: 4px solid rgba(0,0,0,.73);border-bottom-color: transparent; }
+
+
 
 /*====
 图标字体

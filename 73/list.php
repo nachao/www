@@ -27,6 +27,7 @@
 		<!-- <script type="text/javascript" src="./js/73-user.js" ></script> -->
 
 		<script type="text/javascript" src="./js/ffangle.js" ></script>
+		<script type="text/javascript" src="./js/na.js" ></script>
 	</head>
 	<body>
 
@@ -128,15 +129,10 @@
 
 					<!-- 操作栏 -->
 					<div class="actionbar">
-						<div class="iconfont icon-user actionbar-icon"></div>
+						<div class="iconfont icon-label actionbar-icon"></div>
 						<div class="actionbar-info">
 							<div class="actionbar-info-title">游客</div>
 							<div class="actionbar-info-param">
-								<div class="actionbar-info-span"><i class="iconfont icon-good"></i>关注：<em>51</em> 人</div>
-								<div class="actionbar-info-span"><i class="iconfont icon-content"></i>内容：<em>23</em> 条</div>
-								<div class="actionbar-info-span"><i class="iconfont icon-sum"></i>收益：<em>112</em> 分</div>
-							</div>
-							<div class="actionbar-info-param no">
 								<div class="actionbar-info-span"><i class="iconfont icon-good"></i>关注：<em>51</em> 人</div>
 								<div class="actionbar-info-span"><i class="iconfont icon-content"></i>内容：<em>23</em> 条</div>
 								<div class="actionbar-info-span"><i class="iconfont icon-sum"></i>收益：<em>112</em> 分</div>
@@ -279,7 +275,7 @@
 			$.ajax({ 
 				type: "POST", 
 				url: './ajax/ajax_user.php', 
-				data: JSON.stringify({ clist: '10' }),
+				data: JSON.stringify({ clist: '10', uid: na.url.param.uid }),
 				contentType:"application/json",
 				dataType:"json",
 				success: function(response){
@@ -343,6 +339,14 @@
 
 				}
 			});
+
+
+			// 判断列表类型 - 标签列表
+			if ( na.url.param.label ) {
+
+				// 获取指定标签的信息
+				var info = na.label.get(na.url.param.label);
+			}
 
 			//自动排序
 			// $('.contentList').jw13217();

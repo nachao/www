@@ -298,6 +298,11 @@ class Event_user extends Data_user
 		return $info;
 	}
 
+	//获取用户信息
+	protected function event_getById($uid=0){
+		return parent::data_selectByUid($uid);
+	}
+
 	//获取指定 用户UID 的全部信息
 	protected function event_getInfo($uid=0){
 		$uid = $uid ? $uid : $this -> event_uid();
@@ -656,8 +661,18 @@ class Users extends Event_user
 	}
 
 	//获取指定 用户Uid 的信息
-	public function GBid($uid=0){
-		return parent::event_get($uid);
+	public function Guser($uid=0){
+		$c = new Content();
+		$info = parent::event_getById($uid);
+		$array = array(
+				'name' => $info['name'],
+				'icon' => $info['icon'],
+				'sum' => $info['plus'],
+				'content' => $c -> GUtotal($uid),
+				'love' => 0
+			);
+
+		return $array;
 	}
 
 
@@ -1030,6 +1045,7 @@ class Users extends Event_user
 
 	//判断指定 用户账号和密码 是否存在，如果存在并验证密码是否正确	//登录
 	public function Ientry($account=0, $password=0){
+		$c = new Content();
 		$value = array();		//正好不存在
 		if($account){
 			$info = parent::event_getByName($account);
@@ -1046,25 +1062,44 @@ class Users extends Event_user
 					// 		'describe' => $info['describe']
 					// 	);
 
-					$value = array( 
-						'icon' => $info['icon'],
-						'name' => $info['name'],
-						'plus' => $info['plus'],
-						'status' => '1'
-					);
+					// 新增数据
+					$insert = array(
+							'plus' => $info['plus'],	// 积分
+							'collect' => '0',			// 收藏
+							'comment' => '0',			// 评论
+							'follower' => '0' 			// 粉丝
+						);
 
-					// $value['icon'] = info['icon'];
+					// 基本信息
+					$basic = array(
+							'name' => $info['name'],
+							'icon' => $info['icon'],
+							'plus' => $info['plus'],
+							'content' => $c -> GUtotal($uid),
+							'love' => '0',
+						);
 
-					// $value = array(
-					// 	'a' => 1,
-					// 	'b' => 2
-					// 	);
+					$value = array(
+							'status' => '1',
+							'message' => '登录成功',
+
+							'insert' => $insert,
+							'basic' => $basic
+						);
 
 				}else{
-					$value = 2;		//账号正确，密码错误
+					$value = array( 
+							'status' => '0',
+							'message' => '密码错误'
+						);
+					// $value = 2;		//账号正确，密码错误
 				}	
 			}else{
-				$value = 3;		//账号可注册
+				$value = array( 
+						'status' => '0',
+						'message' => '账号不存在'
+					);
+				// $value = 3;		//账号可注册
 			}
 		}
 		return $value;

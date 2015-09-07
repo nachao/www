@@ -27,6 +27,8 @@
 		<!-- <script type="text/javascript" src="./js/73-user.js" ></script> -->
 
 		<script type="text/javascript" src="./js/ffangle.js" ></script>
+		<script type="text/javascript" src="./js/na.js" ></script>
+		<script type="text/javascript" src="./js/na.user.js" ></script>
 	</head>
 	<body>
 
@@ -47,20 +49,38 @@
 					<div class="menu f">
 						<a href="#" title="最新最热门的内容都在这里" >首页</a>
 						<a href="#" title="在这里查看和管理你发布的所有内容" >内容管理</a>
-						<a href="#" title="那些非常欣赏的作者" >我的关注</a>
+						<!-- <a href="#" title="那些非常欣赏的作者" >我的关注</a> -->
 						<a href="#" title="那些特别喜欢的内容" >收藏夹</a>
-						<a href="#" title="看看别人都给你说了些什么" >私信</a>
+						<!-- <a href="#" title="看看别人都给你说了些什么" >私信</a> -->
 						<a href="#" title="在这里把你的积分变成RMB" >提现</a>
 						<a href="#" title="这里总有你需要的答案" >帮助</a>
 					</div>
 
 					<!-- 搜索 及 注册按钮 -->
 					<div class="make r">
-						<a class="login f" href="javascript:;" pop="pop-4" >注册/登录</a>
+						<a class="login f" href="javascript:;" id="j_userEntry" pop="pop-4" >注册/登录</a>
+						<a class="login no f" href="javascript:;" id="j_userOperate" style="border-top-color: #e74c3c;" >注册/登录</a>
 
-						<!-- 用户信息 -->
-						<input type="hidden" value="<?php echo $sum; ?>" id="userGold" />
-						<input type="hidden" value="<?php echo $uid; ?>" id="userIs" />
+						<!-- <div class="operate f" style="border-top-color: #e74c3c;" >
+							<div class="icon"><a href="./user.php" ></a><i></i></div>
+							<div class="link">
+								<a href="javascript:;" class="price" ><span class="glyphicon glyphicon-fire"></span><em id="headGold" class="golds" n="0" ></em> <i></i></a>
+								<a class="fabu" href="./userAdd.php" ><span class="glyphicon glyphicon-pencil"></span>发布</a>
+								<a href="./user.php" ><span class="glyphicon glyphicon-user"></span>个人中心</a>
+								<a href="./userExchange.php" ><span class="glyphicon glyphicon-barcode"></span>提现</a>
+								<a href="./userMessage.php" ><span class="glyphicon glyphicon-comment"></span>留言板 <i></i></a>
+								<a href="./userTitle.php" ><span class="glyphicon glyphicon-th-list"></span>我的标题</a>
+								<a href="./userFollow.php" ><span class="glyphicon glyphicon-ok"></span>关注的用户</a>
+								<a href="./userWelfare.php" ><span class="glyphicon glyphicon-th-large"></span>我的能力</a>
+								<a href="./userEffigy.php" ><span class="glyphicon glyphicon-cog"></span>个人设置</a>
+								<a href="?out=1" ><span class="glyphicon glyphicon-off"></span>注销</a>
+							</div>
+						</div> -->
+
+						<!-- 用户信息
+						<input type="hidden" value="" id="userGold" />
+						<input type="hidden" value="" id="userIs" />
+						 -->
 					</div>
 					
 					<div class="c"></div>
@@ -164,13 +184,13 @@
 									<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
 									<a class="buy confirmBtn use-icon iconfont icon-user r" href="javascript:;" title="作者" >
 										<div class="use-floating">
-											<div class="use-fcon">
+											<div class="use-fcon use-fcon-load">
 												<img class="use-fc-icon" src="./icon/26.jpg" alt="" >
 												<div class="use-fc-name">游客</div>
 												<div class="use-fc-param" >
-													<span title="积分"><i class="iconfont icon-sum"></i> 123</span>
-													<span title="发布的内容量"><i class="iconfont icon-content"></i> 123</span>
-													<span title="被收藏次数"><i class="iconfont icon-love"></i>123</span>
+													<span title="积分"><i class="iconfont icon-sum"></i> <em>123</em></span>
+													<span title="发布的内容量"><i class="iconfont icon-content"></i> <em>123</em></span>
+													<span title="被收藏次数"><i class="iconfont icon-love"></i> <em>123</em></span>
 												</div>
 											</div>
 										</div>
@@ -230,7 +250,7 @@
 									<div class="price">
 										<em id="userInfoGold" class="golds" n="<?php echo '100'//$u -> Gplus(); ?>"></em><i>元</i>
 									</div>
-									<div class="name">游客</div>
+									<div class="name" id="userInfoName" >游客</div>
 								</div>
 								<div class="c"></div>
 								<div class="depict no"><?php echo '暂无描述'//$u -> Gdepict(); ?></div>
@@ -416,7 +436,7 @@
 				contentType:"application/json",
   				dataType:"json",
 				success: function(response){
-					// console.log( response );
+					console.log( response );
 					
 					// 获取元素
 					var templat = $('#contentTemplat'),
@@ -447,6 +467,29 @@
 						// 作者
 						temp.find('.icon-user').attr('href', './list.php?uid='+ data.uid);
 						temp.find('.use-fc-name').html(data.zuozhe);
+
+						// 绑定事件
+						temp.find('.icon-user').attr('get', '0').mouseenter(function(){
+
+							var are = $(this),
+								get = $(this).attr('get');
+
+							if ( get == '0' ) {
+
+								$(this).attr('get', '1');	// 标记为正在获取数据
+
+								na.user.get( data.uid, function(data){
+									are.find('.use-fc-icon').attr('src', data.icon );
+									are.find('.use-fc-name').html(data.name );
+
+									are.find('.use-fc-param .icon-sum').next('em').html(data.sum );
+									are.find('.use-fc-param .icon-content').next('em').html(data.content );
+									are.find('.use-fc-param .icon-love').next('em').html(data.love );
+
+									are.find('.use-fcon').removeClass('use-fcon-load');
+								});
+							}
+						});
 
 						// 判断类型
 						temp.find('.gui').addClass('gui_' + data.type);
@@ -722,11 +765,14 @@
 							<a href="javascript:;" pop="pop-cdk" >获取邀请码</a>
 						</div>
 						<div class="c"></div>
-						<div class="interval">
-							<div class="cue" id="cue">提示：密码不正确</div>
-						</div>
+						<div class="interval" id="intervalCue"></div>
 						<div class="btn login">
-							<input class="affirm" type="button" value="登 录" />
+
+							<div class="public-tip public-tip-right" id="loginAffirmTip" style="top: 6px;right: 110px;">
+								<i></i><em>aasdasd</em>
+							</div>
+
+							<input class="affirm" id="loginAffirm" type="button" value="登 录" />
 							<a id="loginLink" class="link" href="javascript:;" title="注册">立即注册</a>
 							<!-- <a class="qq" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=357586693&site=qq&menu=yes" title="问题咨询"><img border="0" src="http://wpa.qq.com/pa?p=2:357586693:52" alt="点击这里给我发消息"/></a> -->
 						</div>
@@ -736,7 +782,17 @@
 						</div>
 						<div class="entry-loading" id="entryLoading" ></div>
 						<div class="entry-success" id="entrySuccess" >
-							<p>登录成功！欢迎<span></span>回来。</p>
+							<div class="entry-success-contain">
+								<div class="entry-success-text">登录成功！</div>
+								<div class="entry-success-user"><span id="entrySuccessName">xxxxx</span>，欢迎您回来。</div>
+								<div class="entry-success-param">
+									<p>您离开的这段时间里：</p>
+									<p>新增收入：<span id="entrySuccessPlus">0</span>分</p>
+									<p>新增收藏：<span id="entrySuccessCollect">0</span>次</p>
+									<p>新增评论：<span id="entrySuccessComment">0</span>分</p>
+									<p>新增粉丝：<span id="entrySuccessFollower">0</span>分</p>
+								</div>
+							</div>
 						</div>
 						<div class="c"></div>
 					</div>
@@ -826,6 +882,8 @@
 
 			//点击登录
 			$('#registerLink').click(function(){
+
+
 				
 				//标题
 				$('.pop-enter .head:first').stop().animate({ left: 0 });
@@ -873,18 +931,100 @@
 			}
 
 			//点击
-			$('.login .affirm').click(function(){
-				var a = escaping($('#account').val()),
-					b = $('#password').val();
-				if( !/^[\u4e00-\u9fa5]+$/gi.test($('#account').val()) ){
-					pointout("账户只能是中文");
-					reg = false;
-				}else{
-					if( require(a,b) ){
-						verify(a, b);
+			$('#loginAffirm').click(function(){
+
+				var account = $('#account').val(),
+					password = $('#password').val(),
+					interval = $('#loginAffirmTip'),
+					verify = null;
+
+				verify = na.user.verifyAccount(account);	// 判断账号
+
+				if ( verify.status ) {
+					verify = na.user.verifyPwd(password);	// 判断密码
+
+					if ( verify.status ) {
+						$('#entryLoading').slideDown();
+						setTimeout(function(){
+
+							na.user.entry( account, password, function(verify){	// 后台判断及登录
+								$('#entryLoading').slideUp();
+
+								if ( verify.status == '0' ) {			// 密码错误
+									interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+
+								} else if ( verify.status == '1' ) {	// 登录成功
+									var success = $('#entrySuccess').slideDown();
+
+									// 显示登录用户信息
+									success.find('#entrySuccessName').html(verify.basic.name);
+									success.find('#entrySuccessPlus').html(verify.insert.plus);
+									success.find('#entrySuccessCollect').html(verify.insert.collect);
+									success.find('#entrySuccessComment').html(verify.insert.comment);
+									success.find('#entrySuccessFollower').html(verify.insert.follower);
+
+									// 保存用户信息
+									na.user.set(verify);
+
+									// 开启缓存
+									na.user.cache(verify);
+
+									// 刷新显示
+									na.user.refresh(verify);
+								}
+							});
+						}, 1000);
+
+					} else {
+						interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+						$('#password').focus();
+					}
+				} else {
+					interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+					$('#account').focus();
+				}
+
+
+
+				// var a = escaping($('#account').val()),
+				// 	b = $('#password').val();
+				// if( !/^[\u4e00-\u9fa5]+$/gi.test($('#account').val()) ){
+				// 	pointout("账户只能是中文");
+				// 	reg = false;
+				// }else{
+				// 	if( require(a,b) ){
+				// 		verify(a, b);
+				// 	}
+				// }
+			});
+
+			// 回车
+			// document.onkeydown = function(event){
+	  //           var e = event || window.event || arguments.callee.caller.arguments[0];
+	  //           console.log(e);
+	  //           var type = $("#account").attr('enter');       
+	  //           if(e && e.keyCode==13){ // enter 键
+	  //           	if( type == "register" ){
+	  //           		$('.register .affirm').click();
+	  //           	}else{
+	  //           		$('#loginAffirm').click();
+	  //           	}
+	  //           }
+	  //       };
+
+	        $(window).keydown(function(e){
+				console.log(e.keyCode);
+
+				if ( e && e.keyCode == 13 ) { // enter 键
+
+					if( $("#account").attr('enter') == "login" ){
+						$('#loginAffirm').click();		// 登录
+
+					}else{
+						$('.register .affirm').click();	// 注册
 					}
 				}
-			});
+	        });
 
 			//验证用户
 			function verify( account, password ){
