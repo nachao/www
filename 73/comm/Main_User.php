@@ -103,8 +103,8 @@ class Data_user extends Config
 	*/
 	
 	//获取当前用户的全部信息，根据ID
-	protected function data_selectByUid($uid=0){
-		$sql = "select * FROM  `".parent::Fn()."user` WHERE  `uid` LIKE  ".$uid;
+	protected function data_selectByUid($uid=0, $visitor=0){
+		$sql = "select * FROM  `".parent::Fn()."user` WHERE  `uid` = ".$uid." AND `visitor` =".$visitor;
 		return parent::Ais($sql);
 	}
 
@@ -192,7 +192,6 @@ class Data_user extends Config
 		return mysql_query($sql);
 	}
 
-
 	//获取指定 用户UID 的指定 时间段TIME(一天) 内容的指定 类型TYPE 的变动总金额
 	protected function data_selectSumlog($uid=0, $start=0, $end=0, $type=0){
 		$sql = "select sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND ";
@@ -204,6 +203,14 @@ class Data_user extends Config
 		$row = parent::Ais($sql);
 		return $row[0] ? $row[0] : 0;
 	}
+
+	//获取指定 用户UID 的支出指定 类型TYPE 的总数量
+	protected function data_selectPurchaseSum($uid=0, $source='cid'){
+		$sql = "select count(`id`)  FROM `".parent::Fn()."logs_purchase` WHERE `out_uid` = ".$uid." AND  `source` LIKE  '".$source."'";
+		$row = parent::Ais($sql);
+		return $row[0];
+	}
+
 
 
 	/********************************************
@@ -269,20 +276,37 @@ class Event_user extends Data_user
 
 	//根据缓存获取用户 ID
 	protected function event_uid(){
-		return $this -> event_uis() ? $_COOKIE[self::CN] : 0;
+		$uid = '0';
+		if ( $this -> event_uis() ) {
+			$uid = $_COOKIE[self::CN];
+		}
+		if ( !$uid && isset($_COOKIE['73visitor']) ) {
+			$uid = $_COOKIE['73visitor'];
+			$uid = str_replace(':', '', $uid);	
+		}
+		if ( !$uid ) {
+			$uid = '-1';
+		}
+		return $uid;
 	}
 
 	//获取用户信息
 	protected function event_get($uid=0){
 		$uid = $uid ? $uid : $this -> event_uid();
-		$info = parent::data_selectByUid($uid);
+		$info = parent::data_selectByUid($uid, 1);
 		$this -> info = $info;
 		return $info;
 	}
 
+	//获取用户信息
+	protected function event_getById($uid=0){
+		return parent::data_selectByUid($uid);
+	}
+
 	//获取指定 用户UID 的全部信息
 	protected function event_getInfo($uid=0){
-		return parent::data_selectByUid($uid);
+		$uid = $uid ? $uid : $this -> event_uid();
+		return parent::data_selectByUid($uid, 1);
 	}
 
 	//获取 用户名 根据 用户ID（）
@@ -446,7 +470,12 @@ class Event_user extends Data_user
 	//刷新指定 用户ID（选填，默认为登录用户） 的 数量NUM 金币
 	protected function event_updatePlus($num=0, $uid=0){
 		$uid = $uid ? $uid : $this -> event_uid();
+		$uv = new Users_visitor();
 		if($num >= 0){
+			//如果是游客
+			// if ( !$this -> Is() ) {
+			// 	return $uv -> Usum($uid, $num);
+			// }
 			parent::data_update($uid, 'plus', $num);
 			return $num;
 		}
@@ -631,6 +660,22 @@ class Users extends Event_user
 		return parent::event_uid();
 	}
 
+	//获取指定 用户Uid 的信息
+	public function Guser($uid=0){
+		$c = new Content();
+		$info = parent::event_getById($uid);
+		$array = array(
+				'name' => $info['name'],
+				'icon' => $info['icon'],
+				'sum' => $info['plus'],
+				'content' => $c -> GUtotal($uid),
+				'love' => 0
+			);
+
+		return $array;
+	}
+
+
 	//获取指定 用户Uid 的唯一编码
 	public function Gid($uid=0){
 		return parent::event_getId($uid);
@@ -644,13 +689,19 @@ class Users extends Event_user
 	//根据 用户UID 获取用户头像
 	public function Gicon($uid=0){
 		$info = parent::event_get($uid);
-		return $info['icon'];
+		$icon = $info['icon'];
+		return $icon;
 	}
 
 	//根据用户 id 获取用户名
 	public function Gname($uid=0){
+		$uv = new Users_visitor();
 		$info = parent::event_get($uid);
-		return $info['name'];
+		$name = $info['name'];
+		if ( !$name ) {
+			$name = $info['register_ip'];
+		}
+		return $name;
 	}
 
 	//根据指定 用户UID 的最近一次登录时间
@@ -667,13 +718,10 @@ class Users extends Event_user
 
 	//获取用户余额，根据 用户ID（选填，默认为登录用户）
 	public function Gplus($uid=0){
-		if(!$uid && parent::event_uis()){	//没有参数且有登录用户的情况下
-			$uid = parent::event_uid();
-		}
-		if($uid > 0){	//判断是否有参数
-			return parent::event_getA($uid);
-		}else{
-			return 0;
+		$uid = $uid ? $uid : $this -> event_uid();
+		if( $uid ){	//判断是否有参数
+			$info = parent::event_get($uid);
+			return $info['plus'];
 		}
 	}
 
@@ -757,6 +805,18 @@ class Users extends Event_user
 	public function Gpwd($uid=0){
 		$info = parent::event_get($uid);
 		return $info['pwd'];
+	}
+
+	//获取指定 用户UID 的点赞量
+	public function Gzan($uid=0){
+		$info = parent::event_get($uid);
+		return $info['comments'];
+	}
+
+	//获取指定 用户UID 的注册IP
+	public function Gip($uid=0){
+		$info = parent::event_get($uid);
+		return $info['register_ip'];
 	}
 
 
@@ -904,7 +964,7 @@ class Users extends Event_user
 
 
 	//获取指定用户最近30天金额变动记录
-	public function Glog($uid=0){
+	public function Glog( $uid=0, $len=30 ){
 		$uid = $uid ? $uid : $this -> Guid();
 
 		$day = 24 *60 *60;
@@ -914,7 +974,7 @@ class Users extends Event_user
 		$arr = array();
 		$key = '';
 
-		for($i=0; $i<=31; $i++){
+		for($i=0; $i <= $len; $i++){
 			$time = $begin - $day * $i;
 			$key = date('Y-m-d', $time-1);
 			$start = $time-$day;
@@ -924,6 +984,24 @@ class Users extends Event_user
 			$arr[$key]['income'] = parent::data_selectSumlog($uid, $start, $end, 1);	//获取用户指定天数的收入总和
 		}
 		return $arr;
+	}
+
+	//获取指定 用户UID 的点赞总次数
+	public function GZtotal($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		return parent::data_selectPurchaseSum($uid, 'cid');
+	}
+
+	//获取指定 用户UID 的报告
+	public function Greport( $uid = 0 ){
+		$uid = $uid ? $uid : $this -> Guid();
+		return array(
+				'time' => 1,
+				'num' => 2,
+				'first' => 3,
+				'digg' => 4,
+				'user' => 5
+			);
 	}
 
 
@@ -954,6 +1032,10 @@ class Users extends Event_user
 		return isset($_GET['k']);
 	}
 
+	public function Is(){
+		return parent::event_uis();
+	}
+
 	//判断是否登录 没有登录则跳转至 内容列表页
 	public function INtoL(){
 		if(!parent::event_uis()){
@@ -963,20 +1045,61 @@ class Users extends Event_user
 
 	//判断指定 用户账号和密码 是否存在，如果存在并验证密码是否正确	//登录
 	public function Ientry($account=0, $password=0){
-		$value = 0;		//正好不存在
+		$c = new Content();
+		$value = array();		//正好不存在
 		if($account){
 			$info = parent::event_getByName($account);
 			if($info){		//账号是否不存在
 				if($info['pwd'] == md5($password)){		//登录成功
-					$value = 1;
 					$uid = $info['uid'];
 					setcookie("73userid", $uid, time()+24*3600, "/");	//存入 - 有效时间 1 天
 					parent::event_updateLastdate($uid);	//刷新登录时间
+
+					// $value = array(
+					// 		'icon' => $info['icon']
+					// 		'name' => $info['name'],
+					// 		'plus' => $info['plus'],
+					// 		'describe' => $info['describe']
+					// 	);
+
+					// 新增数据
+					$insert = array(
+							'plus' => $info['plus'],	// 积分
+							'collect' => '0',			// 收藏
+							'comment' => '0',			// 评论
+							'follower' => '0' 			// 粉丝
+						);
+
+					// 基本信息
+					$basic = array(
+							'name' => $info['name'],
+							'icon' => $info['icon'],
+							'plus' => $info['plus'],
+							'content' => $c -> GUtotal($uid),
+							'love' => '0',
+						);
+
+					$value = array(
+							'status' => '1',
+							'message' => '登录成功',
+
+							'insert' => $insert,
+							'basic' => $basic
+						);
+
 				}else{
-					$value = 2;		//账号正确，密码错误
+					$value = array( 
+							'status' => '0',
+							'message' => '密码错误'
+						);
+					// $value = 2;		//账号正确，密码错误
 				}	
 			}else{
-				$value = 3;		//账号可注册
+				$value = array( 
+						'status' => '0',
+						'message' => '账号不存在'
+					);
+				// $value = 3;		//账号可注册
 			}
 		}
 		return $value;
@@ -1027,6 +1150,30 @@ class Users extends Event_user
 		}
 		return $value;
 	}
+
+
+	// 判断是否为新用户
+	public function Inew($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		$info = parent::event_getInfo($uid);
+		if ( $info['lastskip'] <= 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 判断是否刚刚登陆
+	public function Ilogin($uid=0){
+		$uid = $uid ? $uid : $this -> Guid();
+		$info = parent::event_getInfo($uid);
+		if ( $info['lastdate'] >= $info['lastskip'] ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 
 
@@ -1113,6 +1260,13 @@ class Users extends Event_user
 		return parent::event_updateVip($time, $uid);
 	}
 
+	//刷新指定 用户UID 的最近跳转时间
+	public function Uskip($uid=0){
+		$uid = $uid ? $uid : $this -> event_uid();
+		return parent::data_update($uid, 'lastskip', time());
+	}
+
+
 
 
 	/********************************************
@@ -1154,7 +1308,8 @@ class Users extends Event_user
 
 		//当前用户的默认头像
 		// $icon = md5($uid).".jpg";
-		$effigy = "./imgs/default.gif";
+		// $effigy = "./imgs/default.gif";
+		$effigy = '../icon/'.rand(1,26).'.jpg';	//随机头像
 		// copy( "../img/default.gif", ".".$effigy);
 
 		//如果有邀请码则刷新邀请码
@@ -1169,11 +1324,23 @@ class Users extends Event_user
 			$invited = null;
 		}
 		parent::event_addUser($uid, $account, $password, $effigy, $invited, $ip);		//创建用户所有数据
-
-		setcookie("73userid", $uid, time()+24*3600, "/");	//存入本地缓存 - 有效时间 1 天	
 		// userStatusSet( $nid, "个人中心");	//刷新状态	
+		$this -> Acache($uid);
 
 		return $uid;	//返回数据
+	}
+
+	//添加用户浏览器缓存
+	public function Acache($uid=0, $type=''){
+		$name = '73userid';
+		if ( $type == 'visitor' ) {
+			$name = '73visitor';
+		}
+		if ( $uid ) {
+			setcookie( $name, $uid, time()+24*3600, "/");	//存入本地缓存 - 有效时间 1 天	
+		} else {
+			setcookie( $name, '', time()-3600);
+		}
 	}
 
 	//激活码 --添加 激活码CDK 
@@ -1208,10 +1375,10 @@ class Users extends Event_user
 
 		//获取收入用户
 		if($source == 'tid'){	//创建标题
-			$in_uid = $t -> Gcreator($source_id);
+			// $in_uid = $t -> Gcreator($source_id);
 		}
 		if($source == 'cid'){	//购买内容
-			$in_uid = $t -> Gauthor($source_id);
+			// $in_uid = $t -> Gauthor($source_id);
 		}
 		if($source == 'ccid'){	//创建内容
 			$in_uid = 0;

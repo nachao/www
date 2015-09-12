@@ -193,6 +193,16 @@ class Label extends Event_label
 		return $value;
 	}
 
+	//获取指定 标签LID 的相关信息
+	public function Ginfo($lid=0){
+		$value = '';
+		if($lid){
+			$row = parent::data_selectLabel($lid);
+			$value = $row['name'];
+		}
+		return $value;
+	}
+
 	//获取指定 标签LID 的内容数量
 	public function GCtotal($lid=0){
 		$value = 0;

@@ -1,5 +1,6 @@
 <?php
-	
+
+
 	//引用公共文件
 	include("../comm/base.php");		
 	
@@ -51,7 +52,15 @@
 	//登录
 	//验证账户是否存在，以及密码是否正确
 	if( isset($_POST['entry']) ){
-		echo $u -> Ientry($_POST['entry'], $_POST['password']);
+		// echo $u -> Ientry($_POST['entry'], $_POST['password']);
+
+		$arr = array(
+				'a' => 1,
+				'b' => 2,
+				'c' => 3
+			);
+		echo json_encode($arr);
+
 	}
 
 	//注册用户
@@ -84,10 +93,50 @@
 		echo $ue -> Gsurplus();
 	}
 
+
+
+
+
+
+
+
+
+
+
 	//添加留言
+	// if( isset($_POST['addMessage']) ){
+	// 	echo $um -> addMessage();
+	// }
+
+
+	//发布留言（评论）
 	if( isset($_POST['addMessage']) ){
-		echo addMessage();
+		$fid = 0;
+		if ( isset($_POST['huifu']) ) {
+			$fid = $_POST['huifu'];
+		}
+		echo json_encode($um -> Amessage( $_POST['txt'], $_POST['cid'], $fid ));
 	}
+
+	//获取评论
+	if ( isset($_POST['getM']) ) {
+		echo json_encode($um -> GCmessage($_POST['cid'], $_POST['page']));
+	}
+
+	//评论点赞
+	if ( isset($_POST['messageUp']) ) {
+		echo $um -> Uup($_POST['mid']);
+	}
+
+	//评论点踩
+	if ( isset($_POST['messageDown']) ) {
+		echo $um -> Udown($_POST['mid']);
+	}
+
+
+
+
+
 
 	//点赞
 	if( isset($_POST['praise']) ){
@@ -240,6 +289,11 @@
 		echo $c -> UErecommend($_POST['recommendSet']);
 	}
 
+	// 获取指定用户（uid）的信息
+	if (isset($_POST['getUser'])) {
+		echo json_encode($tl -> Glabel($_POST['tgl']));
+	}
+
 
 
 	//投资管理
@@ -287,6 +341,123 @@
 	if ( isset($_POST['UGlog']) ){
 		echo json_encode($u -> Glog());
 	}
+
+	//获取指定内容的收支情况
+	if ( isset($_POST['income']) ) {
+		echo json_encode($c -> Gincome($_POST['cid']));
+	}
+
+	//游客收入
+	if ( isset($_POST['visitorIncome']) ) {
+		$sum = $u -> Gplus();
+		$sum = $sum + 1;
+		echo $uv -> Usum($_POST['uid'], $sum);
+	}
+
+
+
+	echo isset($_POST['getUserInfo']);
+
+	//用户情况报表
+	if ( isset($_POST['userReport']) ) {
+		echo json_encode($u -> Greport($_POST['uid']));
+	}
+
+	header("Content-type: application/json");
+	$request = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
+
+
+
+
+
+	// ====
+	// 内容部分
+	// ====
+
+	// 获取首页显示内容
+	if ( isset($request['clist']) ) {
+
+		//内容参数
+		$norm = 1;		// 最低分
+		$begin = 0;		// 开始页
+		$pages = $request['clist'];	// 显示数量
+
+		// 返回
+		echo json_encode($c -> Glist( $begin, $pages, 0 ,$norm ));	//获取内容列表
+
+	}
+
+
+	// 获取指定的用户
+	if ( isset($request['ulist']) ) {
+
+		//内容参数
+		$norm = 1;		// 最低分
+		$begin = 0;		// 开始页
+		$pages = $request['ulist'];	// 显示数量
+		$userid = $request['uid'];	// 显示数量
+
+		// 返回
+		echo json_encode($c -> GUlist( $begin, $pages, 0 ,$norm ,$userid ));	//获取内容列表
+
+	}
+
+
+
+
+	// ====
+	// 内容部分
+	// ====
+
+
+
+
+
+	// ====
+	// 标签部分
+	// ====
+
+	// 获取指定标签的信息
+	if ( isset($request['_label']) ) {
+		echo json_encode($u -> Guser($request['_label']));
+	}
+
+
+
+
+	// ====
+	// 用户部分
+	// ====
+
+	if ( isset($request['user']) ) {
+
+		// 登录用户，成功后返回信息
+		if ( $request['user'] == 'entry' ) {
+			echo json_encode($u -> Ientry($request['account'], $request['password']));
+		}
+
+		// 获取当前缓存中的uid
+		if ( $request['user'] == 'register' ) {
+			echo $u -> Guid();
+		}
+
+		// 获取指定用户的信息
+		if ( $request['user'] == 'get' ) {
+			echo json_encode($u -> Guser($request['uid']));
+		}
+
+		// 获取指定用户的指定天数的收入详细
+		if ( $request['user'] == 'income' ) {
+			echo json_encode($u -> Glog($request['uid'], $request['day'] ));
+		}
+
+	}
+
+
+
+
+
+
 
 
 ?>

@@ -1,246 +1,731 @@
-<?php
+<!doctype html>
+<html lang="zh">
+	<head>
+		<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+		<title>七十三号馆</title>
 
-	//引用公共文件
-	include("./comm/base.php");		
+        <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="0">
 
-	//设置选择菜单
-	Global $ect;
-	$ect="index";
-	
-	//引用样式头部
-	include("./comm/head.php");	
+		<meta http-equiv="pragma"content="no-cache">
+		<meta http-equiv="Cache-Control"content="no-cache, must-revalidate">
+		<meta http-equiv="expires"content="Wed, 26 Feb 1997 08:21:57 GMT">
 
-	//内容参数
-	$page = $cf -> LPages;		//每页显示的数量
-	$norm = 1;		//内容显示最低标准（金额：0.01元为单位）
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
 
-	//获取标题
-	$ist = isset($_GET['tid']) && $_GET['tid'];
-	$isu = isset($_GET['uid']) && $_GET['uid'];
+		<link rel="stylesheet" type="text/css" href="./css/common.css" />
+		<link rel="stylesheet" type="text/css" href="./css/ffangle.css" />
+        <link rel="icon" href="./icon-red.png" type="image/gif" >
 
-	//初始化
-	$uid = 0;
-	$tid = 0;
+		<script type="text/javascript" src="./js/jquery-1.11.0.min.js" ></script>
+		<script type="text/javascript" src="./js/angular-1.0.1.min.js"></script>
 
-	if($ist){
-		$tid = $_GET['tid'];
+		<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<!-- 		<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/exporting.js"></script> -->
 
-		$list = $c -> Glist(0, $page, $tid);			//获取内容列表，指定标题内容时没有显示标准
-		$total = $c -> Gtotel(0, 0, $tid);				//获取此标题的内容总数
+		<!-- <script type="text/javascript" src="./js/73-user.js" ></script> -->
 
-	}elseif($isu){
-		$tid = 0;
-		$uid = $_GET['uid'];
+		<script type="text/javascript" src="./js/ffangle.js" ></script>
+		<script type="text/javascript" src="./js/na.js" ></script>
+		<script type="text/javascript" src="./js/na.user.js" ></script>
+	</head>
+	<body>
 
-		$list = $c -> GUlist(0, $page, 0, 0, $uid);		//获取内容列表，指定用户内容时没有显示标准
-		$total = $c -> Gtotel(0, $uid);					//获取此用户的内容总数
-
-	}else{
-		$list = $c -> Glist(0, $page,0 ,$norm);		//获取内容列表
-		$total = $c -> Gtotel($norm);				//获取内容总数
-	}
-
-	// $bnid = $admin -> Abanner('', './list.php?tid=291429104152', 0, 291429104152);
-	// echo $admin -> Uact($bnid);
-
-	$admin -> UBsrc('731429112068', './images/1.jpg');
-	$admin -> UBact('731429112068');
-
-
-	// $an -> Anotice("【新加入功能】发布内容时，可以选择“推送”，用户支付 1 元，内容随机分配0.60元至1.10元之间。");
-
-
-?>
-
-	<div class="container pagecon">
-
-		<!-- 主体 -->
-		<div class="main">
+	<div class="container" >
+		
+		<!-- 头部 -->
+		<div class="header">
+			<div class="topgap"></div>
 			<div class="center">
+				<div class="row">
 
-				<!-- 公告 -->
-				<div class="notice">
-					<div class="tit">系统公告</div>
-					<div class="con">
-						<div class="cue f" id="notice-cue">
-							<?php foreach ($an -> Gnotice() as $key => $val) { ?>
-							
-							<p><a href="<?php  echo !!$val['address'] ? './detail.php?cid='.$val['address'] : 'javascript:;'; ?>" ><?php echo $val['text'].' - '.$o -> Cdate($val['time']); ?></a></p>
-							<?php } ?>
-						</div>
-						<div class="btn r">
-							<a id="notice-btn-left" href="javascript:;" >&lt;</a>
-							<a id="notice-btn-right" href="javascript:;" >&gt;</a>
-						</div>
+					<!-- LOGO -->
+					<div class="logo f"><a href="./" ><em>? 七十三号馆</em><i>让一切想法变的有价值.</i></a>
+						<span class="version" title="2.0" >Alpha</span>
 					</div>
+
+					<!-- 菜单 -->
+					<div class="menu f">
+						<a href="#" title="最新最热门的内容都在这里" >首页</a>
+						<a href="#" title="在这里查看和管理你发布的所有内容" >内容管理</a>
+						<!-- <a href="#" title="那些非常欣赏的作者" >我的关注</a> -->
+						<a href="#" title="那些特别喜欢的内容" >收藏夹</a>
+						<!-- <a href="#" title="看看别人都给你说了些什么" >私信</a> -->
+						<a href="#" title="在这里把你的积分变成RMB" >提现</a>
+						<a href="#" title="这里总有你需要的答案" >帮助</a>
+					</div>
+
+					<!-- 搜索 及 注册按钮 -->
+					<div class="make r">
+						<a class="login f" href="javascript:;" id="j_userEntry" pop="pop-4" >注册/登录</a>
+						<a class="login login-user no f" href="javascript:;" id="j_userOperate" style="border-top-color: #e74c3c;" >
+							<span>-</span>
+							<em></em> <i></i>
+						</a>
+						<a class="login f" href="javascript:;" id="j_userEntry" pop="pop-4" >注销</a>
+
+						<!-- <div class="operate f" style="border-top-color: #e74c3c;" >
+							<div class="icon"><a href="./user.php" ></a><i></i></div>
+							<div class="link">
+								<a href="javascript:;" class="price" ><span class="glyphicon glyphicon-fire"></span><em id="headGold" class="golds" n="0" ></em> <i></i></a>
+								<a class="fabu" href="./userAdd.php" ><span class="glyphicon glyphicon-pencil"></span>发布</a>
+								<a href="./user.php" ><span class="glyphicon glyphicon-user"></span>个人中心</a>
+								<a href="./userExchange.php" ><span class="glyphicon glyphicon-barcode"></span>提现</a>
+								<a href="./userMessage.php" ><span class="glyphicon glyphicon-comment"></span>留言板 <i></i></a>
+								<a href="./userTitle.php" ><span class="glyphicon glyphicon-th-list"></span>我的标题</a>
+								<a href="./userFollow.php" ><span class="glyphicon glyphicon-ok"></span>关注的用户</a>
+								<a href="./userWelfare.php" ><span class="glyphicon glyphicon-th-large"></span>我的能力</a>
+								<a href="./userEffigy.php" ><span class="glyphicon glyphicon-cog"></span>个人设置</a>
+								<a href="?out=1" ><span class="glyphicon glyphicon-off"></span>注销</a>
+							</div>
+						</div> -->
+
+						<!-- 用户信息
+						<input type="hidden" value="" id="userGold" />
+						<input type="hidden" value="" id="userIs" />
+						 -->
+					</div>
+					
+					<div class="c"></div>
 				</div>
+			</div>
+			<div class="bottomgap"></div>
+		</div>
 
-				<?php $blist = $admin -> Gbanner(); ?>
-				<!-- 焦点图 -->
-				<div class="home-banner">
-					<div class="con">
-						<div class="are">
-							<?php foreach ($blist as $key => $Nval) { ?>
-								<a href="<?php echo $Nval['href']; ?>" >
-									<img src="<?php echo $Nval['src']; ?>" width="100%" />
-								</a>
-							<?php } ?>
+		<div class="container pagecon Lite">
+
+			<!-- 主体 -->
+			<div class="main">
+				<div class="center">
+
+					<!-- 公告 -->
+					<div class="notice no">
+						<div class="tit">系统公告</div>
+						<div class="con">
+							<div class="cue f" id="notice-cue">
+								<p><a href="javascript:;" ></a></p>
+							</div>
+							<div class="btn r">
+								<a id="notice-btn-left" href="javascript:;" >&lt;</a>
+								<a id="notice-btn-right" href="javascript:;" >&gt;</a>
+							</div>
 						</div>
 					</div>
-					<div class="key">
-						<?php foreach ($blist as $key => $Nval) { ?><i></i><?php } ?>
-					</div>
-					<div class="txt">
-						<?php foreach ($blist as $key => $Nval) { ?>
-							<?php if($Nval['cid'] || $Nval['tid']){ //如果有关联信息 ?>
-								<div class="home-banner-col">
-									<?php if($Nval['tid']){ //如果有标题则显示	?>
-										<div class="tit"><a href="./list.php?tid=<?php echo $Nval['tid']; ?>" ><?php echo $t -> Gtitle($Nval['tid']); ?></a></div>
-									<?php } ?>
-									<?php if($Nval['text']){ ?>
-										<div class="cue"><?php echo $Nval['text']; ?></div>
-									<?php } ?>
-									<div class="tag f">
-										<div class="item user f">BY：
-											<a href="./list.php?uid=<?php echo $Nval['author']; ?>" ><?php echo $u -> Gname($Nval['author']); ?></a>
-										</div>
-										<?php if($Nval['tid'] && $t -> Iact($Nval['tid'])){	//如果是活动，则显示奖金和剩余时间 ?>
-										<div class="item time f">剩余：<?php echo $t -> Gsurplus($Nval['tid']); ?></div>
-										<div class="item money f">奖金：<a href="./userExchange.php" class="golds"><?php echo $t -> Greward($Nval['tid']); ?></a> <i></i></div>
 
-										<?php }else{ //不是活动的话，则显示使用或者发布日期 ?>
-										<div class="item time f"><?php echo $o -> Cdate($Nval['time']); ?></div>
-										<?php } ?>
+					<!-- 焦点图 -->
+					<div class="home-banner no" id="banner">
+						<div class="con">
+							<div class="are" id="bannerImgsList">
+								<a class="no" id="bannerImgsTemplat" href="" ><img src="" width="100%" /></a>
+							</div>
+						</div>
+						<div class="key" id="bannerBtn"><i></i><i></i><i></i></div>
+						<div class="txt" id="bannerTextList">
+							<div class="no" id="bannerTextTemplat">
+								<div class="tit"><a href="./list.php?tid=" ></a></div>
+								<div class="cue"></div>
+								<div class="tag f">
+									<div class="item user f">BY：
+										<a href="./list.php?uid=" ></a>
 									</div>
-									<div class="c"></div>
+									<div class="item time f"></div>
+									<div class="item money f">奖金：<a href="./userExchange.php" class="golds"></a> <i></i></div>
 								</div>
-							<?php } ?>
-						<?php } ?>
+								<div class="c"></div>
+							</div>
+						</div>
+						<div class="btn">
+							<a href="javascript:;" >&lt;</a>
+							<a href="javascript:;" >&gt;</a>
+						</div>
 					</div>
-					<div class="btn">
-						<a href="javascript:;" >&lt;</a>
-						<a href="javascript:;" >&gt;</a>
-					</div>
-				</div>
 
-				<!-- 操作栏 -->
-				<div class="home-slogan">这里会让一切变的有价值。<br />有很多网友还是很热心的我跟你说。</div>
-	
-				<!-- 内容列表 -->
-				<div class="contentList" tote="<?php echo $total; ?>" style="overflow: inherit;margin: 0 -15px;" >
-					<div class="row"></div>
-					<?php foreach ($list as $k => $v) {	//输出内容，或者指定标题的内容 		?>
-						<?php $is_look = !$u -> Guid()?' col_possess':'';	//如果没有登录默认内容可以查看 ?>
-						<div class="col<?php echo $c -> Ibuy($v['cid']) ? ' col_possess' : ''; echo $is_look; ?>" cid="<?php echo $v['cid']; ?>" now="<?php echo $v['plus']; ?>" style="display: block;" >
+					<!-- 操作栏 -->
+					<div class="home-slogan no">这里会让一切变的有价值。<br />有很多网友还是很热心的我跟你说。</div>
+		
+					<!-- 内容列表 -->
+					<div class="contentList f" tote="" id="contentList" >
+						<div class="row"  ></div>
+						<div class="col no" cid="" now="" id="contentTemplat" >
 
 							<!-- 标示 -->
-							<?php if($v['effects'] == 1){	//如果是顶 ?>
-								<div class="effects effects-very" alt="作者顶贴" ></div>
-							<?php } ?>
+							<div class="effects effects-very no" alt="作者顶贴" ></div>
+							<div class="effects effects-recommend no" alt="题主推荐" ></div>
+							<div class="effects effects-first no" alt="活动第一名" ></div>
 
-							<?php if($v['effects'] == 2){	//如果是推荐 ?>
-								<div class="effects effects-recommend" alt="题主推荐" ></div>
-							<?php } ?>
-
-							<?php if($ist && isset($fcid) && $fcid == $v['cid']){	//如果是标题第一名的内容 ?>
-								<div class="effects effects-first" alt="活动第一名" ></div>
-							<?php } ?>
-
-							<?php 
-							if($ist && (((intval($v['effects'],  10) == 0 && $v['plus'] > 100)) && $Tv['userid'] == $u -> Gid()) && $u -> Gplus() > 10000){	//题主且活动有效的话，则可以设置推荐 ?>
-								<a href="javascript:;" class="effects effects-recommend-set" title="将支付 100.00 元给此内容的发布者作为奖励" >设为推荐</a>
-							<?php } ?>
-
-							<div class="head">
-								<?php if(!$ist){	//判断是否有标题，则不显示标题 ?>
-									<div class="tit <?php echo $v['titleid'] <= 0 ? 'no' : ''; ?>">
-										<a href="./list.php?tid=<?php echo $v['titleid']; ?>" ><?php echo $t -> Gtitle($v['titleid']); ?></a>
+							<div class="cont">
+								<div class="gui gui_">
+									<div class="fail"></div>
+									<div class="j_control j_text">
+										<div class='sawtooth'></div>
 									</div>
-								<?php } ?>
-								<div class="param-tag tag">
-									<span class="name">BY：
-										<a href="./list.php?uid=<?php echo $v['userid']; ?>" title="访问TA" ><?php echo $u -> Gname($v['userid']); ?></a>
-									</span>
-									<span class="time"><?php echo $o -> Cdate($v['base']); ?></span>
+									<div class="j_control j_image">
+										<div class="loading"></div>
+										<img class='img' src='' /><a class='bigimg' href='' title='Natural: 1100 x 687 pixels' target='_black'>查看大图</a>
+										<div class='sawtooth'></div>
+									</div>
+									<div class="j_control j_video">
+										<embed class='gif' src='' quality='high' wmode='Opaque' width='100%' height='100%' align='middle' allowscriptaccess='always' allowfullscreen='true' mode='transparent' type='application/x-shockwave-flash'>
+									</div>
+									<div class="j_control j_music">
+										<embed class='mp3' src='' type='application/x-shockwave-flash' width='257' height='33' wmode='transparent' />
+										<i class="purchase">+</i><em></em>
+									</div>
 									<div class="c"></div>
+								</div>
+								<div class="txt" ><div class="are"></div></div>
+								<div class="count-labels">
+									<a href="./list.php?label=123" class="label">阿萨达速度</a>
+									<a href="./list.php?label=4123" class="label">阿萨达速</a>
+									<a href="./list.php?label=4123123" class="label">阿萨</a>
+								</div>
+								<div class="use">
+									<div class="num cols-sum f">
+										<span class="gold golds" n="" title="内容目前的收入."></span> <i>元</i>
+									</div>
+									<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
+									<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
+									<a class="buy confirmBtn use-icon iconfont icon-user r" href="javascript:;" title="作者" >
+										<div class="use-floating">
+											<div class="use-fcon use-fcon-load">
+												<img class="use-fc-icon" src="./icon/26.jpg" alt="" >
+												<div class="use-fc-name">游客</div>
+												<div class="use-fc-param" >
+													<span title="积分"><i class="iconfont icon-sum"></i> <em>123</em></span>
+													<span title="发布的内容量"><i class="iconfont icon-content"></i> <em>123</em></span>
+													<span title="被收藏次数"><i class="iconfont icon-love"></i> <em>123</em></span>
+												</div>
+											</div>
+										</div>
+									</a>
+									<a class="buy confirmBtn iconfont icon-detailed r" href="./detail.php?cid=" title="评论" ></a>
+									<a class="buy confirmBtn purchase iconfont icon-good praise r" href="javascript:;" title="赞" ></a>
+									<div class="c"></div>	
 								</div>
 							</div>
-							<div class="cont">
 
-								<?php if($v['label']){	//输出内容的标签  ?>
-									<a href="./list.php?tid=<?php echo $v['titleid'] ?>&label=<?php echo $v['label'] ?>" class="label <?php if($v['types'] == 0){ echo ' label-txt'; } ?>"><?php echo $tl -> Gname($v['label']); ?></a>
-								<?php } ?>
-
-								<div class="gui gui_<?php echo $o -> Ccode($v['types']); ?>">
-									<?php echo $c -> IGcontrol($v['cid']); ?>
-									<i class="purchase">+</i><em></em>
-									<div class="c"></div>
-								</div>
-
-								<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-									<div class="txt" <?php if($v['types'] ==0){ echo "style='max-height: 198px;'"; } ?>><div class="are"><?php echo $v['content']; ?></div></div>
-								<?php } ?>
-								
-								<div class="use">
-									<div class="num f"><span class="gold golds" n="<?php echo $v['plus']; ?>" title="内容目前的收入."></span> <i>元</i></div>
-
-									<?php if($u -> Guid()){	//登录后显示的提示 ?>
-										<a class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-									<?php }else{			//未登录后显示的提示 ?>
-										<a class="tip r" href="javascript:;" title="">登录后可购买！<i></i></a>
-									<?php } ?>
-
-									<?php if($c -> Ibuy($v['cid'])){		//如果可以查看 ?>
-										<a class="buy confirmBtn r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >去评论</a>
-										<?php if($c -> Itxt($v['cid'])){	//如果有文本则显示展开按钮 ?>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-									<?php }else{  //需要购买 ?>
-
-										<?php if($u -> Guid()){ //未登录的话，默认内容不需要购买可直接查看 ?>
-											<a class="buy confirmBtn purchase r" href="javascript:;" >买买买</a>
-											<a class="skip look r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-										<?php }else{ ?>
-											<a class="buy confirmBtn purchase r" href="./detail.php?cid=<?php echo $v['cid']; ?>" >评论</a>
-											<a class="skip look r" href="javascript:;" >展开</a>
-										<?php } ?>
-										
-									<?php } ?>
-
+							<!-- 评论 -->
+							<div class="cont-comment">
+								<div class="message-list" id="messageList">
+									<div class="message-title">全部评论</div>
+									<div class="message-rows" id="messageTemplet" style="display: none;" >
+										<div class="message-r-icon">
+											<a href="javascript:;" ><img src="" /></a>
+										</div>
+										<div class="message-r-info">
+											<div class="message-i-name">
+												<a href="javascript:;" ></a>
+											</div>
+											<div class="message-i-text"></div>
+											<div class="message-i-other">
+												<div class="message-o-time"></div>
+												<div class="message-o-use">
+													<a class="message-u-good" href="javascript:;" title="" >赞 <span>0</span></a>
+													<a class="message-u-bad" href="javascript:;" title="" >踩 <span>0</span></a>
+													<a class="message-u-reply" href="javascript:;" title="" >回复</a>
+												</div>
+												<div class="c"></div>
+											</div>
+											<div class="message-i-reply">
+												<textarea class="message-reply-text" id="messageReplyText" placeholder="请输入评论" ></textarea>
+												<a class="message-reply-btn" id="messageReplyBtn" href="javascript:;">回复</a>
+											</div>
+											<div class="c"></div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					<?php } //输出内容结束 -------------------------------- ?>
+
+					</div>
+	
+					<!-- 用户资料 -->
+					<div class="userMain r">
+						
+						<!-- 基本信息 -->
+						<div class="um-base">
+							<div class="userInfo" >
+								<div class="withdraw"><a href="#" title="修改资料" ></a></div>
+								<div class="icon f">
+									<a href="#" ><img id="userInfoIcon" src="<?php echo './icon/26.jpg'//u -> Gicon(); ?>" /></a>
+								</div>
+								<div class="info f">
+									<div class="price">
+										<em id="userInfoGold" class="golds" n="<?php echo '100'//$u -> Gplus(); ?>"></em><i>元</i>
+									</div>
+									<div class="name" id="userInfoName" >游客</div>
+								</div>
+								<div class="c"></div>
+								<div class="depict no"><?php echo '暂无描述'//$u -> Gdepict(); ?></div>
+								<div class="c"></div>
+							</div>
+						</div>
+
+						<!-- 实时收入 -->
+						<div class="um-cartogram" id="container" style="width: 100%;height:400px"></div>
+
+						<!-- 最新评论 -->
+						<div class="um-comment commarea">
+							<div class="content">
+								<div class="head">
+									<div class="tit f"><i class="iconfont icon-kafeiting"></i><em>最新评论</em></div>
+									<div class="gap"><i></i></div>
+								</div>
+								<div class="messageBoard">
+									<div class="message-publish no">
+										<textarea class="message-p-text" id="messagePText" placeholder="请输入评论" ></textarea>
+										<a class="message-p-btn" id="messagePBtn" href="javascript:;">发布</a>
+									</div>
+									<div class="c"></div>
+									<div class="message-loading no" id="messageLoading"></div>
+									<div class="message-node" id="messageNot">没有内容</div>
+									<div class="message-list" id="messageList">
+										<div class="message-title">全部评论</div>
+										<div class="message-rows" id="messageTemplet" style="display: none;" >
+											<div class="message-r-icon">
+												<a href="javascript:;" ><img src="" /></a>
+											</div>
+											<div class="message-r-info">
+												<div class="message-i-name">
+													<a href="javascript:;" ></a>
+												</div>
+												<div class="message-i-text"></div>
+												<div class="message-i-other">
+													<div class="message-o-time"></div>
+													<div class="message-o-use">
+														<a class="message-u-good" href="javascript:;" title="" >赞 <span>0</span></a>
+														<a class="message-u-bad" href="javascript:;" title="" >踩 <span>0</span></a>
+														<a class="message-u-reply" href="javascript:;" title="" >回复</a>
+													</div>
+													<div class="c"></div>
+												</div>
+												<div class="message-i-reply">
+													<textarea class="message-reply-text" id="messageReplyText" placeholder="请输入评论" ></textarea>
+													<a class="message-reply-btn" id="messageReplyBtn" href="javascript:;">回复</a>
+												</div>
+												<div class="c"></div>
+											</div>
+										</div>
+									</div>
+									<div class="message-page" >
+										<a class="message-page-btn message-pa-next" href="javascript:;" >&gt;</a>
+										<div class="message-page-current">
+											<div class="message-current-use">
+												<a href="javascript:;" >1</a>
+												<a href="javascript:;" >2</a>
+												<a href="javascript:;" >3</a>
+											</div>
+											<div class="message-current-num"><span>1</span><i></i></div>
+										</div>
+										<a class="message-page-btn message-page-prev" href="javascript:;" >&lt;</a>
+									</div>
+									<div class="c"></div>
+								</div>
+							</div>
+							<div class="bottomSide"></div>
+						</div>
+
+					</div>
 
 					<div class="c"></div>
 
-					<?php if($total > $page){	//如果内容超过一页则显示加载按钮 ?>
-						<div class="loadMore"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容</a></div>
-					<?php } ?>
-
+					<div class="loadMore no"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
+					<div class="c"></div>
 				</div>
-				<div class="c"></div>
 			</div>
+
 		</div>
-	</div>
+	
+		<!-- 内容收情况 -->
+		<ul class="income-detailed" id="incomeDetailed">
+			<ol class="idd-item">
+				<li class="idd-pillar"></li>
+				<li class="idd-depict"><em></em><i></i></li>
+			</ol>
+		</ul>
 
 	<script type="text/javascript">
 
-		//自动排序
-		$('.contentList').jw13217();
 
-		//挂接购买按钮
-		$('.purchase').purchase();
+/*
+			// 实时收入
+		    $('#container').highcharts({
+		        chart: {
+		            type: 'spline',
+		            animation: Highcharts.svg,
+		            marginRight: 10,
+		            backgroundColor: 'rgba(0, 0, 0, 0)',
+		            events: {                                                           
+	                    load: function() {                                              
+	                                                                                    
+	                        // set up the updating of the chart each second             
+	                        var series = this.series[0];                                
+	                        setInterval(function() {                                    
+	                            var x = (new Date()).getTime(), // current time         
+	                                y = Math.random();                                  
+	                            series.addPoint([x, y], true, true);                    
+	                        }, 1000);                                                   
+	                    }                                                               
+	                }
+		        },
+		        title: {
+		            text: ''
+		        },
+		        subtitle: {
+		            text: ''
+		        },
+		        xAxis: {
+		            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+		        },
+		        yAxis: {
+		            title: {
+		                text: ''
+		            }
+		        },
+		        tooltip: {
+		            enabled: false,
+		            formatter: function() {
+		                return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y +'°C';
+		            }
+		        },
+		        plotOptions: {
+		            line: {
+		                dataLabels: {
+		                    enabled: true
+		                },
+		                enableMouseTracking: false
+		            },
+		            spline: {
+		           		// allowPointSelect :true,//是否允许选中点  
+						animation:true,//是否在显示图表的时候使用动画  
+						cursor:'pointer',//鼠标移到图表上时鼠标的样式  
+						// dataLabels:{  
+						//   enabled :true,//是否在点的旁边显示数据  
+						//    rotation:0  
+						// },  
+						enableMouseTracking:true,//鼠标移到图表上时是否显示提示框  
+						events:{//监听点的鼠标事件  
+						   click: function() {  
+						   }  
+						},  
+						marker:{  
+							enabled: true,//是否显示点  
+							radius: 3,//点的半径  
+						     // fillColor:"#888",
+							// lineColor:"#000",
+							// symbol: 'url(http://highcharts.com/demo/gfx/sun.png)',//设置点用图片来显示  
+						   states:{  
+						       hover:{  
+						           enabled: true//鼠标放上去点是否放大  
+						                                   },  
+						       select:{  
+						           enabled:false//控制鼠标选中点时候的状态  
+						       }  
+						   }  
+						},  
+						states:{  
+						   hover:{  
+						       enabled:true,//鼠标放上去线的状态控制  
+						       lineWidth: 3 
+						   }  
+						},  
+						// stickyTracking:true,//跟踪  
+						// visible:true,  
+						// lineWidth:2//线条粗细  
+						// pointStart:100,
+		            }
+		        },
+		        series: [{
+		            name: '收入',
+		            data: []
+		        }, {
+		            name: '支出',
+		            data: []
+		        }]
+		    });
+*/
 
-		//挂接已购买的内容为可查看图片
-		$('.col_possess').picture();
+                                                                                          
+	        Highcharts.setOptions({                                                     
+	            global: {                                                               
+	                useUTC: false                                                       
+	            }                                                                       
+	        });                                                                         
+                                                                    
+	        // var chart;                                                                  
+	        $('#container').highcharts({                                                
+	            chart: {                                                                
+	                type: 'spline',               
+		            backgroundColor: 'rgba(0, 0, 0, 0)',
+		            height: 200,
+	                animation: Highcharts.svg, // don't animate in old IE               
+	                marginRight: 10,                                                    
+	                events: {                                                           
+	                    load: function() {                                              
+	                                                                                    
+	                        // set up the updating of the chart each second             
+	                        // var series = this.series[0];                                
+	                        // setInterval(function() {                                    
+	                        //     var x = (new Date()).getTime(), // current time         
+	                        //         y = parseInt(Math.random() * 100);                                  
+	                        //     series.addPoint([x, y], true, true);                    
+	                        // }, 1000 );                                                   
+	                    }                                                               
+	                }                                                                   
+	            },                                                                      
+	            title: {                                                                
+	                text: ''                                            
+	            },                                                                      
+	            xAxis: {                                                                
+	                type: 'datetime',                                                   
+	                tickPixelInterval: 150,                                              
+	            },                                                                      
+	            yAxis: {                                                                
+	                title: {                                                            
+	                    text: ''                                                   
+	                },                                                                  
+	                plotLines: [{                                                       
+	                    value: 0,                                                       
+	                    width: 1,                                                       
+	                    color: '#808080'                                                
+	                }]                                                                  
+	            },
+	            credits: {
+	            	text: ''
+	            },                                                                      
+	            tooltip: {                                                              
+	                formatter: function() {                                             
+	                        return '<b>'+ this.series.name +'</b><br/>'+                
+	                        Highcharts.dateFormat('%Y-%m-%d', this.x) +'<br/>'+ 
+	                        this.y;
+	                        // Highcharts.numberFormat(this.y);                         
+	                }                                                                   
+	            },                                                                      
+	            legend: {                                                               
+	                enabled: false                                                      
+	            },                                                                      
+	            exporting: {                                                            
+	                enabled: false                                                      
+	            },                                                                    
+	            series: [{                                                              
+	                name: '总积分',
+	                pointInterval: 3600 * 1000, // 间隔1小时
+	                data: []                                                              
+	            },{                                                              
+	                name: '日收入',
+	                pointInterval: 3600 * 1000, // 间隔1小时
+	                data: []                                                              
+	            }]                                                                      
+	        });                                                                       				
+
+			var highcharts = $('#container').highcharts();			
+
+
+
+			// 获取内容数据
+			$.ajax({ 
+				type: "POST", 
+				url: './ajax/ajax_user.php', 
+				data: JSON.stringify({ clist: '10' }),
+				contentType:"application/json",
+  				dataType:"json",
+				success: function(response){
+					// console.log( response );
+					
+					// 获取元素
+					var templat = $('#contentTemplat'),
+						temp = null,
+						list = $('#contentList');
+
+					// 循环遍历参数
+					$(response).each(function(key, data){
+
+						// console.log(data);
+						temp = templat.clone();
+						temp.removeAttr('id').removeClass('no').show();
+
+						// 判断标示
+						if ( data.biaoshi == '1' ) {
+							temp.find('.effects-very').removeClass('no').siblings('.effects').remove();
+						} else {
+							temp.find('.effects').remove();
+						}
+
+						// 判断是否有标题
+						if ( data.biaotiid == '0' ) {
+							temp.find('.tit a').html(data.biaoti);
+						} else {
+							temp.find('.tit').remove();
+						}
+
+						// 作者
+						temp.find('.icon-user').attr('href', './list.php?uid='+ data.uid);
+						temp.find('.use-fc-name').html(data.zuozhe);
+
+						// 绑定事件
+						temp.find('.icon-user').attr('get', '0').mouseenter(function(){
+
+							var are = $(this),
+								get = $(this).attr('get');
+
+							if ( get == '0' ) {
+
+								$(this).attr('get', '1');	// 标记为正在获取数据
+
+								na.user.get( data.uid, function(data){
+									are.find('.use-fc-icon').attr('src', data.icon );
+									are.find('.use-fc-name').html(data.name );
+
+									are.find('.use-fc-param .icon-sum').next('em').html(data.sum );
+									are.find('.use-fc-param .icon-content').next('em').html(data.content );
+									are.find('.use-fc-param .icon-love').next('em').html(data.love );
+
+									are.find('.use-fcon').removeClass('use-fcon-load');
+								});
+							}
+						});
+
+						// 判断类型
+						temp.find('.gui').addClass('gui_' + data.type);
+						if ( data.type == '1' ) {	// 图片
+							temp.find('.j_image').siblings('.j_control').remove();
+							temp.find('.j_image img').attr('src', data.zhuyao);
+						} else if ( data.type == '0' ) {	// 文字
+							temp.find('.j_text sawtooth').html(data.zhuyao);
+							temp.find('.j_text').siblings('.j_control').remove();
+						}
+
+						// 得分
+						temp.find('.golds').attr('n', data.score).golds();
+
+						// 文本
+						if ( data.text ) {
+							temp.find('.are').html(data.text);
+						}
+
+						list.append(temp);
+					});
+
+					// $('#contentList').jw13217();	//自动排序
+					$('.purchase').purchase();		//挂接购买按钮
+					// $('.col').picture();	//挂接已购买的内容为可查看图片
+					$('.j_image img').lookbig();	//查看大图
+				}
+			});
+
+
+			// 获取焦点图信息
+			$.ajax({ 
+				type: "POST", 
+				url: './ajax/ajax_user.php', 
+				data: JSON.stringify({ banner: 'true' }),
+				contentType:"application/json",
+  				dataType:"json",
+				success: function(response){
+					
+					// 获取元素
+					var banner = $('#banner'),
+						imgsTemplat = $('#bannerImgsTemplat'),
+						imgstemp = null,
+						imgslist = $('#bannerImgsList');
+						textTemplat = $('#bannerTextTemplat'),
+						texttemp = null,
+						textlist = $('#bannerTextList');
+
+					// 循环遍历参数
+					$(response).each(function(key, data){
+						imgstemp = imgsTemplat.clone();
+						imgstemp.removeAttr('id').removeClass('no').show();
+
+						imgstemp.find('img').attr('src', data.src);
+						imgslist.append(imgstemp);
+
+
+
+						texttemp = textTemplat.clone();
+						texttemp.removeAttr('id').removeClass('no').hide().addClass('home-banner-col');
+
+						texttemp.find('.tit a').html(data.title);
+						texttemp.find('.cue').html(data.text);
+						
+						// 判断类型
+						if ( data.type == '1' ) {	// 推荐内容
+							texttemp.find('.time').html(data.time);
+							texttemp.find('.money,.tit,.cue').remove();
+
+
+						} else if ( data.type == '2' ) {	// 推荐标题
+
+							if ( data.titleType == '1' ) {	// 活动
+								texttemp.find('.time').html('剩余：' + data.time);
+								texttemp.find('.golds').attr('n', data.bonus).golds();
+
+							} else if ( data.type == '2' ) {	// 专题
+								texttemp.find('.time').html('更新于：' + data.time);
+								texttemp.find('.money').remove();
+							}
+						}
+
+						textlist.append(texttemp);
+
+						if ( texttemp.index() == '1' ) {
+							texttemp.show();
+						}
+					});
+
+
+
+
+				}
+			});
+
+
+			//焦点图
+			var banner = $('.home-banner');
+			var key = banner.find('.key i');
+			var now = 0;
+			key.mouseenter(function(){
+				var txt = banner.find('.home-banner-col');
+				var i = $(this).index();
+				key.removeClass('act').eq(i).addClass('act');
+				banner.find('.con').stop().animate({ left: -banner.width() * i }, 1000);
+				txt.hide().eq(i).show();
+				now = i;
+			}).eq(now).mouseenter();
+			banner.find('.btn a:first').click(function(){
+				var i = now - 1;
+					i = i<0? key.length-1 : i;
+				key.eq(i).mouseenter();
+			});
+			banner.find('.btn a:last').click(function(){
+				var i = now + 1;
+					i = i>key.length-1? 0 : i;
+				key.eq(i).mouseenter();
+			});
+
+
+
+
+
+
+/*
+
+
+
+
+
+
+
+
+
+
 
 		//挂接已购买的内容为可查看文本
 		$('.col_possess').writing();
 
 		//加载更多
 		$('#loadmore').loadmore();
-
 
 		//自动加载
 		// $(window).scroll(function(){
@@ -298,41 +783,445 @@
 			}).mouseleave();
 		})();
 
-		//焦点图
-		(function(){
 
-			var banner = $('.home-banner');
+		//获取指定内容的收支情况
+		$('.col').income();
 
-			var con = banner.find('.con'),
-				key = banner.find('.key i'),
-				txt = banner.find('.home-banner-col'),
-				left = banner.find('.btn a:first'),
-				right = banner.find('.btn a:last');
 
-			var now = 0;
+		//如果高度改变，重新排序瀑布
+		// $('.contentList').resize(function(){
+		// 	console.log($(this).height());
+		// });
+		//启动游客收入
+		$(window).visitorIncome();
 
-			key.mouseenter(function(){
-				var i = $(this).index();
-				key.removeClass('act').eq(i).addClass('act');
-				con.stop().animate({ left: -banner.width() * i }, 1000);
-				txt.hide().eq(i).show();
-				now = i;
-			}).eq(now).mouseenter();
+		*/
 
-			left.click(function(){
-				var i = now - 1;
-					i = i<0? key.length-1 : i;
-				key.eq(i).mouseenter();
+	</script>
+
+		<div class="floatside">
+			<!-- <a class="s4" id="visitorBtn" href="javascript:;" pop="pop-3" ><span></span><i></i></a> -->
+			<a class="s2" id="feedback" href="javascript:;" title="反馈" pop="pop-1"></a>
+			<a class="s3" id="topBtn" href="javascript:;" title="" pop="pop-2"></a>
+			<!-- <a class="s1" id="topBtn" href="javascript:;" title="" pop="pop-4"></a> -->
+		</div>
+
+		<div class="pop" id="pop-1" >
+			<div class="pop-bg"></div>
+			<div class="pop-main">
+				<h1 class="pop-title">反馈信息</h1>
+				<div class="pop-form">
+					<div class="pop-form-col">
+						<textarea class="pop-form-textarea" placeholder="请填写反馈信息，如果你的建议被采纳，我们将会给予奖励。" ></textarea>
+					</div>
+					<div class="pop-form-col">
+						<input type="button" value="提交" class="pop-form-submit" />
+						<a href="javascript:;" class="pop-form-close" >关闭窗口</a>
+					</div>
+				</div>
+				<div class="pop-colse"></div>
+			</div>
+		</div>
+
+		<div class="pop" id="pop-3" >
+			<div class="pop-bg"></div>
+			<div class="pop-main">
+				<h1 class="pop-title">游客中心</h1>
+				<div class="pop-form">
+					<div class="pop-form-info">
+						<a class="pop-form-icon" href="javascript:;" ><img src="" alt="" /></a>
+						<p><span class="pop-form-span">名称：</span>-</p>
+						<p><span class="pop-form-span">IP：</span></p>
+						<p><span class="pop-form-span">余额：</span><span id="visitorSum" class="golds" n="" ></span> <i></i></p>
+						<p><span class="pop-form-span">喜欢：</span><span id="visitorTotal" ></span> 条内容</p>
+						<p><span class="pop-form-span">停留时长：</span><span id="" >-</span></p>
+					</div>
+					<div class="pop-form-col">
+						<!-- <a href="javascript:;" class="pop-form-submit" >成为会员</a> -->
+						<a href="javascript:;" class="pop-form-close" >关闭窗口</a>
+					</div>
+				</div>
+				<div class="pop-colse"></div>
+			</div>
+		</div>
+
+		<div class="pop pop-enter" id="pop-4" >
+			<div class="pop-bg"></div>
+			<div class="pop-main">
+
+				<div class="enter">
+					<div class="head"><h5>登录</h5><p>log on</p></div>
+					<div class="head" style="left: 400px;"><h5>注册</h5><p>register</p></div>
+					<div class="content login-style">
+						<div class="txt account"><input id="account" name="account" type="text" value="" enter="login" placeholder="账号" /></div>
+						<div class="txt password"><input id="password" name="password" type="password" value="" placeholder="密码" /></div>
+						<div class="txt CDK">
+							<input id="CDK" name="CDK" type="text" placeholder="" />
+							<a href="javascript:;" pop="pop-cdk" >获取邀请码</a>
+						</div>
+						<div class="c"></div>
+						<div class="interval" id="intervalCue"></div>
+						<div class="btn login">
+
+							<div class="public-tip public-tip-right" id="loginAffirmTip" style="top: 6px;right: 110px;">
+								<i></i><em>aasdasd</em>
+							</div>
+
+							<input class="affirm" id="loginAffirm" type="button" value="登 录" />
+							<a id="loginLink" class="link" href="javascript:;" title="注册">立即注册</a>
+							<!-- <a class="qq" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=357586693&site=qq&menu=yes" title="问题咨询"><img border="0" src="http://wpa.qq.com/pa?p=2:357586693:52" alt="点击这里给我发消息"/></a> -->
+						</div>
+						<div class="btn register" style="display: none;">
+							<input class="affirm" type="button" value="注 册" />
+							<a id="registerLink" class="link" href="javascript:;" title="登录">立即登录</a>
+						</div>
+						<div class="entry-loading" id="entryLoading" ></div>
+						<div class="entry-success" id="entrySuccess" >
+							<div class="entry-success-contain">
+								<div class="entry-success-text">登录成功！</div>
+								<div class="entry-success-user"><span id="entrySuccessName">xxxxx</span>，欢迎您回来。</div>
+								<div class="entry-success-param">
+									<p>您离开的这段时间里：</p>
+									<p>新增收入：<span id="entrySuccessPlus">0</span>分</p>
+									<p>新增收藏：<span id="entrySuccessCollect">0</span>次</p>
+									<p>新增评论：<span id="entrySuccessComment">0</span>分</p>
+									<p>新增粉丝：<span id="entrySuccessFollower">0</span>分</p>
+								</div>
+							</div>
+						</div>
+						<div class="c"></div>
+					</div>
+				</div>
+				<a href="javascript:;" class="pop-close" >×</a>
+				<div class="pop-colse"></div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+
+			$(document).ready(function(){
+
+				//弹出框初始化
+				ncs.pop.init({
+					funs: {
+						'pop-1': function(pop){
+							var txt = pop.find('.pop-form-textarea').val();
+							if(txt.replace(/\s*/g, '') != ''){
+								pop.hide();		//关闭弹出框
+								ncs.ajax.set("feedback="+ txt);	//提交反馈信息后提交数据
+							}
+						},
+						'pop-2': function(){
+							ncs.ajax.set("feedback="+ $('.j-fankui').val());	//提交后执行
+						}
+					}
+				});
 			});
 
-			right.click(function(){
-				var i = now + 1;
-					i = i>key.length-1? 0 : i;
-				key.eq(i).mouseenter();
+			//置顶
+			(function(){
+				var btn = $('#topBtn');
+				btn.click(function(){
+					$('body,html').animate({ scrollTop:0 }, 500 );
+				});
+				$(window).scroll(function(){
+					if( $(window).scrollTop() > 300 ){
+						btn.addClass('rotate');
+					}else{
+						btn.removeClass('rotate');
+					}
+				});
+			})();
+
+			$(document).ready(function(){
+				$('.golds').golds();
+			})
+
+			//设置金额显示方式
+			// goldShow($('#headGold'));
+
+			//启动游客收入
+			$(window).visitorIncome();
+
+
+
+		//切换
+		(function(){
+
+			//点击注册
+			$('#loginLink').click(function(){
+				
+				//标题
+				$('.pop-enter .head:first').stop().animate({ left: -400 });
+				$('.pop-enter .head:last').stop().animate({ left: 0 });
+
+				//密码确认
+				// $('.confirm').stop().animate({ top: 0 });
+
+				//输入验证码
+				$('.content').removeClass('login-style');
+
+				//按钮
+				$('.register').show();
+				$('.login').hide();
+
+				//类型
+				$('#account').attr('enter', 'register');
+
+				//验证账号
+				$('#account').blur();
+
+				$('.entrybg').stop().animate({ left: 625 });
+
+			});
+
+			//点击登录
+			$('#registerLink').click(function(){
+
+
+				
+				//标题
+				$('.pop-enter .head:first').stop().animate({ left: 0 });
+				$('.pop-enter .head:last').stop().animate({ left: 400 });
+
+				//输入验证码
+				$('.content').addClass('login-style');
+
+				//密码确认
+				// $('.confirm').stop().animate({ top: -50 });
+
+				//按钮
+				$('.register').hide();
+				$('.login').show();
+
+				//类型
+				$('#account').attr('enter', 'login');
+
+				//验证账号
+				$('#account').blur();
+
+				$('.entrybg').stop().animate({ left: 0 });
+
+			});
+
+			//转义
+			function escaping( v ){
+				v = v.replace(/\"/g, "&22");
+				v = v.replace(/'/g, "&27");
+				v = v.replace(/=/g, "&3D");
+				return v;
+			}
+
+			//不能为空
+			function require(a,b){
+				if( !a ){
+					pointout("请填写账号");
+					return false;
+				}else if( !b ){
+					pointout("请填写密码");
+					return false;
+				}else{
+					return true;
+				}
+			}
+
+			//点击
+			$('#loginAffirm').click(function(){
+
+				var account = $('#account').val(),
+					password = $('#password').val(),
+					interval = $('#loginAffirmTip'),
+					verify = null;
+
+				verify = na.user.verifyAccount(account);	// 判断账号
+
+				if ( verify.status ) {
+					verify = na.user.verifyPwd(password);	// 判断密码
+
+					if ( verify.status ) {
+						$('#entryLoading').slideDown();
+						setTimeout(function(){
+
+							na.user._entry( account, password, function(verify){	// 后台判断及登录
+								$('#entryLoading').slideUp();
+
+								if ( verify.status == '0' ) {			// 密码错误
+									interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+
+								} else if ( verify.status == '1' ) {	// 登录成功
+									var success = $('#entrySuccess').slideDown();
+
+									// 显示登录用户信息
+									success.find('#entrySuccessName').html(verify.basic.name);
+									success.find('#entrySuccessPlus').html(verify.insert.plus);
+									success.find('#entrySuccessCollect').html(verify.insert.collect);
+									success.find('#entrySuccessComment').html(verify.insert.comment);
+									success.find('#entrySuccessFollower').html(verify.insert.follower);
+
+									// 保存用户信息
+									na.user.set(verify);
+
+									// 开启缓存
+									na.user.cache(verify);
+
+									// 刷新显示
+									na.user.refresh(verify.basic);
+
+									// 获取收入
+									na.user._income(uid, function(data){
+										console.log(data);
+
+										var array = [];
+
+										for ( var key in data ) {
+											array.push({
+												x: new Date(key).getTime(),
+												y: parseInt(Math.random() * 100)//data[key].income
+											});
+										}
+
+										highcharts.series[0].setData( array );
+										
+										console.log(array);
+									}, 10);
+								}
+							});
+						}, 1000);
+
+					} else {
+						interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+						$('#password').focus();
+					}
+				} else {
+					interval.stop().show().find('em').html( verify.message ).parent().delay(3000).fadeOut();
+					$('#account').focus();
+				}
+
+
+
+				// var a = escaping($('#account').val()),
+				// 	b = $('#password').val();
+				// if( !/^[\u4e00-\u9fa5]+$/gi.test($('#account').val()) ){
+				// 	pointout("账户只能是中文");
+				// 	reg = false;
+				// }else{
+				// 	if( require(a,b) ){
+				// 		verify(a, b);
+				// 	}
+				// }
+			});
+
+			// 回车
+			// document.onkeydown = function(event){
+	  //           var e = event || window.event || arguments.callee.caller.arguments[0];
+	  //           console.log(e);
+	  //           var type = $("#account").attr('enter');       
+	  //           if(e && e.keyCode==13){ // enter 键
+	  //           	if( type == "register" ){
+	  //           		$('.register .affirm').click();
+	  //           	}else{
+	  //           		$('#loginAffirm').click();
+	  //           	}
+	  //           }
+	  //       };
+
+	        $(window).keydown(function(e){
+				console.log(e.keyCode);
+
+				if ( e && e.keyCode == 13 ) { // enter 键
+
+					if( $("#account").attr('enter') == "login" ){
+						$('#loginAffirm').click();		// 登录
+
+					}else{
+						$('.register .affirm').click();	// 注册
+					}
+				}
+	        });
+
+			//验证用户
+			function verify( account, password ){
+				var load = $('#entryLoading').stop().animate({ height: '100%' }),
+					success = $('#entrySuccess').stop().css({ height: '0px' });
+				$.ajax({
+					type: "POST",
+					url: "./ajax/ajax_user.php",
+					// data: "entry="+ a +"&password="+ b,
+					data: JSON.stringify({ 'entry': account, 'password': password }),
+					contentType:"application/json",
+	  				dataType:"json",
+					success: function(msg){
+						load.stop().animate({ height: '0px' });
+
+						if( msg.status == 1 ){
+
+							success.stop().animate({ height: '100%' });
+							success.stop().animate({ height: '100%' });
+
+							// pointout("登录成功");	
+							// skip();
+						}else if( msg == 2 ){
+							// pointout("密码错误");
+						}else{
+							// pointout("账号不存在");
+						}
+					}
+				});
+			}
+
+			// 判断当前是否
+			na.user._register(function(uid){
+
+				if ( uid > 0 ) {
+					na.user._get(uid, function(info){
+						na.user.refresh(info);
+						na.user._income(uid, function(data){
+
+							var array = [],
+								income = [],
+								value = 0,
+								item = 0;
+
+							for ( var key in data ) {
+								array.unshift({
+									x: new Date(key).getTime(),
+									y: info.sum - value	//data[key].income
+								});
+								item = parseInt(Math.random() * 1000);
+								value += item;
+								income.push({
+									x: new Date(key).getTime(),
+									y: item	//data[key].income
+								});
+							}
+
+							highcharts.series[0].setData( array );
+							highcharts.series[1].setData( income );
+						}, 10);
+					});
+				}
 			});
 
 		})();
 
-	</script>
+		</script>
+		<div class="footer no">
+			<div class="center">
+				<div class="info">All Rights Reserved ® LOGGER&nbsp;&nbsp;|&nbsp;&nbsp;By <a href="#" title="">ffangle.com</a></div>
+				<!--
+				<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a></div>
+				<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+				-->
+			</div>
+		</div>
 
-<?php include("./comm/footer.php");	//引用底部 	?>
+		<!-- 查看大图 -->
+		<img class="artwork-image" />
+		<div class="artwork-close">°</div>
+		<div class="artwork-bg"></div>
+
+		<script type="text/javascript">
+			$('.bigimg').lookbig();	//查看大图
+		</script>
+	</body>
+</html>

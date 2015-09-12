@@ -112,10 +112,24 @@ class Data_content extends Comm_content
 	}
 	
 	//获取指定 用户UID 是否购买指定的 内容(CID)
-	protected function data_userIsBuy($uid=0, $cid=0){
+	protected function data_userIsBuy($uid=-1, $cid=0){
 		$sql = "select * FROM  `".parent::Fn()."logs_purchase` WHERE  `source_id` =".$cid." AND `out_uid` =".$uid.";";
-		return parent::Ais($sql);
+		$row = parent::Ais($sql);
 		return $row[0];
+	}
+
+	//获取指定 内容CID 的指定 时间段TIME(一天) 内容的收入总金额
+	protected function data_selectSumlog($cid=0, $start=0, $end=0 ){
+		$sql = "select sum(`sum`) FROM  `".parent::Fn()."logs_purchase` WHERE  `time` > ".$start." AND `time` < ".$end." AND `source_id` = ".$cid." AND `types` = 1 AND `source` = 'cid' LIMIT 1";
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
+	}
+
+	//获取指定 用户UID 的内容总数
+	protected function data_selectUserTotal( $uid=0 ){
+		$sql = "select COUNT( * ) FROM  `".parent::Fn()."content` WHERE  `userid` LIKE  '".$uid."'";
+		$row = parent::Ais($sql);
+		return $row[0] ? $row[0] : 0;
 	}
 
 
@@ -160,11 +174,29 @@ class Event_content extends Data_content
 
 	//获取的内容列表，可以指定 标准得分NORM
 	protected function event_getList($tid=0, $begin=0, $page=15, $norm=0 , $uid=0, $label=0 ){
+		$u = new Users();
+		$t = new Title();
 		$query = parent::data_selectContent( $begin, $page, $tid, $norm, $uid, $label);
 		$array = array();
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据
-				array_push($array, $row);
+				$temp = array(
+						'cid' => $row['cid'],
+
+						'biaoshi'	=> $row['effects'],	// 标示
+						'biaotiid'	=> $row['titleid'],	// 标题id
+						'biaoti'	=> $t -> Gtitle($row['titleid']),	// 标题名
+						'text'	=> $row['content'],	// 文本
+						'type'	=> $row['types'],	// 类型
+						'zhuyao'	=> $row['cont'],	// 主要内容
+
+						'uid'	=> $row['userid'],	// 作者id
+						'uname'=> $u -> Gname($row['userid']),	// 作者名
+
+						'score'		=> $row['plus'],	// 得分
+						'shijian'	=> $row['base'],	// 发布时间
+					);
+				array_push($array, $temp);
 			}
 		}
 		return $array;	//返回
@@ -260,11 +292,11 @@ class Event_content extends Data_content
 	}
 
 	//获取指定 用户(UID)（选填） 购买过指定的 内容(CID) 的记录信息
-	protected function event_isBuy($cid=0, $uid=0){
-		if($cid){
-			return parent::data_userIsBuy($uid, $cid);
-		}
-	}
+	// protected function event_isBuy($cid=0, $uid=0){
+	// 	if($cid){
+	// 		return parent::data_userIsBuy($uid, $cid);
+	// 	}
+	// }
 
 	//判断指定 用户UID（选填） 是否可以查看指定的 内容ID  
 	// protected function event_isSee($cid=0, $uid=0){
@@ -531,6 +563,32 @@ class Content extends Event_content
 		return parent::event_getInterfix($cid);
 	}
 
+	//获取指定 内容CID 的收支情况
+	public function Gincome($cid=0){
+		$day = 24 *60 *60;
+		$begin = strtotime(date('Y-m-d',time())) + $day;
+		$time = 0;
+
+		$arr = array();
+		$key = '';
+
+		for($i=0; $i<=6; $i++){
+			$time = $begin - $day * $i;
+			$key = date('Y-m-d', $time-1);
+			$start = $time-$day;
+			$end = $time -1;
+
+			// $arr[$key]['pay'] = parent::data_selectSumlog($cid, $start, $end);			//获取用户指定天数的支出总和
+			$arr[$key]['income'] = parent::data_selectSumlog($cid, $start, $end);	//获取用户指定天数的收入总和
+		}
+		return $arr;
+	}
+
+	// 获取指定 用户（uid） 的内容总数
+	public function GUtotal($uid=0){
+		return parent::data_selectUserTotal($uid);
+	}
+
 
 
 
@@ -559,7 +617,7 @@ class Content extends Event_content
 	public function Ibuy($cid=0, $uid=0){
 		$uid = $uid ? $uid : parent::Eid();
 		if($cid){
-			return $this -> Iauthor($cid, $uid) || parent::event_isBuy($cid, $uid);
+			return $this -> Iauthor($cid, $uid) || parent::data_userIsBuy($uid, $cid);
 		}
 	}
 
@@ -689,10 +747,14 @@ class Content extends Event_content
 		$t = new Title();
 		$value = 0;
 		if($cid){
-			$num = 2 *5;			//作者默认收获，0.02 元吗，测试期间三倍收入。
-			if($u -> Guid()){					//登录用户才能操作
-				if($u -> Gplus() >= 1){			//如果用户金额足够
-
+			$num = 2;
+			if ( $u -> Is() ) {
+				$num = $num *5;			//作者默认收获，0.02 元吗，测试期间三倍收入。
+			} else {
+				$num = 1;
+			}
+			if($u -> Gplus() >= 1){			//如果用户金额足够
+				if($u -> Is()){				//登录用户才能操作
 					$u -> UAclick();					//用户刷新点评量
 					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
 					
@@ -702,11 +764,14 @@ class Content extends Event_content
 						$t -> UAda($tid);		//标题刷新的金池，默认收入 1 分。
 						$t -> Ubuy($tid);		//标题刷新的购买次数
 					}
-					$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
-
-					$this -> Uplus($cid, $num);	//刷新内容金额
-					$this -> UAclick($cid);		//内容刷新购买次数
+				} else {	//游客
+					$u -> USplus(1, 'cid', $cid);		//用户刷新的余额
 				}
+
+				$u -> UAplus($num, 'cid', $cid, $this -> Gauthor($cid));	//作者刷新的余额
+
+				$this -> Uplus($cid, $num);	//刷新内容金额
+				$this -> UAclick($cid);		//内容刷新购买次数
 			}
 			$value = $num;//$cid;
 		}
