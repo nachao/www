@@ -409,16 +409,6 @@
 	// 内容部分
 	// ====
 
-	// 登录
-	if ( isset($request['entry']) ) {
-		echo json_encode($u -> Ientry($request['entry'], $request['password']));
-		// echo json_encode($admin -> Gbanner());
-	}
-
-	// 获取指定用户的信息
-	if ( isset($request['_uid']) ) {
-		echo json_encode($u -> Guser($request['_uid']));
-	}
 
 
 
@@ -439,9 +429,28 @@
 	// 用户部分
 	// ====
 
-	// 登录用户，成功后返回信息
-	if ( isset($request['key']) && $request['key'] == 'entry' ) {
-		echo json_encode($u -> Ientry($request['account'], $request['password']));
+	if ( isset($request['user']) ) {
+
+		// 登录用户，成功后返回信息
+		if ( $request['user'] == 'entry' ) {
+			echo json_encode($u -> Ientry($request['account'], $request['password']));
+		}
+
+		// 获取当前缓存中的uid
+		if ( $request['user'] == 'register' ) {
+			echo $u -> Guid();
+		}
+
+		// 获取指定用户的信息
+		if ( $request['user'] == 'get' ) {
+			echo json_encode($u -> Guser($request['uid']));
+		}
+
+		// 获取指定用户的指定天数的收入详细
+		if ( $request['user'] == 'income' ) {
+			echo json_encode($u -> Glog($request['uid'], $request['day'] ));
+		}
+
 	}
 
 

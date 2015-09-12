@@ -42,11 +42,84 @@ User.prototype = new Na();
 *  @return {object}
 *  @public
 */
-User.prototype.get = function( uid, callback ){
+User.prototype._get = function( uid, callback ){
 
-	var param = {
-			_uid: uid
-		};
+	var param = {},
+		that = this;
+
+	param['user'] = 'get';
+	param['uid'] = uid;
+
+	this.get_( param, function(data){
+		callback ? callback(data) : null;
+
+		that.set(data);
+	});
+}
+
+
+/*
+*  验证账号和密码，且登录
+*
+*  @param {string} account = 账号
+*  @param {string} password = 密码
+*  @param {function} callback = 回调
+*  @return {object}	如果登录成功则返回 status =1，失败则 =0。成功的话返回此用户的基本信息。
+*  @public
+*/
+User.prototype._entry = function( account, password, callback ){
+
+	var param = {};
+
+	if ( account && password ) {
+
+		param['user'] = 'entry';
+		param['account'] = account;
+		param['password'] = password;
+
+		this.get_( param, function(data){
+			callback ? callback(data) : null;
+		});
+	}
+}
+
+
+/*
+*  获取指定账号的每天的收入详细
+*
+*  @param {string} uid = 账号
+*  @param {string} day = 指定天数内容，默认 7 天
+*  @param {function} callback = 回调
+*  @public
+*/
+User.prototype._income = function( uid, callback, day ){
+
+	var param = {};
+
+	if ( uid ) {
+
+		param['user'] = 'income';
+		param['uid'] = uid;
+		param['day'] = day || 7;
+
+		this.get_( param, function(data){
+			callback ? callback(data) : null;
+		});
+	}
+}
+
+
+/*
+*  判断当前是否有账号登录
+*
+*  @param {function} callback = 回调
+*  @public
+*/
+User.prototype._register = function( callback ){
+
+	var param = {};
+
+	param['user'] = 'register';
 
 	this.get_( param, function(data){
 		callback ? callback(data) : null;
@@ -62,6 +135,17 @@ User.prototype.get = function( uid, callback ){
 */
 User.prototype.set = function( param ){
 	this.data_ = param;
+}
+
+
+/*
+*  获取指定用户的信息
+*
+*  @return {object}
+*  @public
+*/
+User.prototype.get = function(){
+	return this.data_;
 }
 
 
@@ -121,33 +205,6 @@ User.prototype.verifyPwd = function( password ){
 
 
 /*
-*  验证账号和密码，且登录
-*
-*  @param {string} account = 账号
-*  @param {string} password = 密码
-*  @param {function} callback = 回调
-*  @return {object}	如果登录成功则返回 status =1，失败则 =0。成功的话返回此用户的基本信息。
-*  @public
-*/
-User.prototype.entry = function( account, password, callback ){
-
-	var param = {};
-
-	if ( account && password ) {
-
-		param['key'] = 'entry';
-
-		param['account'] = account;
-		param['password'] = password;
-
-		this.get_( param, function(data){
-			callback ? callback(data) : null;
-		});
-	}
-}
-
-
-/*
 *  页面显示当前登录用户信息
 *
 *  @param {object} account = 账号
@@ -160,12 +217,13 @@ User.prototype.refresh = function( param ){
 	if ( param ) {
 
 		// 刷新用户信息
-		$('#userInfoIcon').attr('src', param.basic.icon);
-		$('#userInfoGold').attr('n', param.basic.plus).golds();
-		$('#userInfoName').html(param.basic.name);
+		$('#userInfoIcon').attr('src', param.icon);
+		$('#userInfoGold').attr('n', param.sum).golds();
+		$('#userInfoName').html(param.name);
 
 		// 刷新用户操作按钮
-		$('#j_userOperate').show();
+		$('#j_userOperate').show().removeClass('no').find('span').html(param.name);
+		$('#j_userOperate em').attr('n', param.sum).golds();
 		$('#j_userEntry').hide();
 	}
 }
@@ -181,17 +239,6 @@ User.prototype.cache = function( param ){
 
 	param = param || this.data_;
 
-	if ( param ) {
-
-		// 刷新用户信息
-		$('#userInfoIcon').attr('src', param.basic.icon);
-		$('#userInfoGold').attr('n', param.basic.plus).golds();
-		$('#userInfoName').html(param.basic.name);
-
-		// 刷新用户操作按钮
-		$('#j_userOperate').show();
-		$('#j_userEntry').hide();
-	}
 }
 
 

@@ -964,7 +964,7 @@ class Users extends Event_user
 
 
 	//获取指定用户最近30天金额变动记录
-	public function Glog($uid=0){
+	public function Glog( $uid=0, $len=30 ){
 		$uid = $uid ? $uid : $this -> Guid();
 
 		$day = 24 *60 *60;
@@ -974,7 +974,7 @@ class Users extends Event_user
 		$arr = array();
 		$key = '';
 
-		for($i=0; $i<=31; $i++){
+		for($i=0; $i <= $len; $i++){
 			$time = $begin - $day * $i;
 			$key = date('Y-m-d', $time-1);
 			$start = $time-$day;

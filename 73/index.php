@@ -59,7 +59,11 @@
 					<!-- 搜索 及 注册按钮 -->
 					<div class="make r">
 						<a class="login f" href="javascript:;" id="j_userEntry" pop="pop-4" >注册/登录</a>
-						<a class="login no f" href="javascript:;" id="j_userOperate" style="border-top-color: #e74c3c;" >注册/登录</a>
+						<a class="login login-user no f" href="javascript:;" id="j_userOperate" style="border-top-color: #e74c3c;" >
+							<span>-</span>
+							<em></em> <i></i>
+						</a>
+						<a class="login f" href="javascript:;" id="j_userEntry" pop="pop-4" >注销</a>
 
 						<!-- <div class="operate f" style="border-top-color: #e74c3c;" >
 							<div class="icon"><a href="./user.php" ></a><i></i></div>
@@ -343,12 +347,27 @@
 
 	<script type="text/javascript">
 
-		// 实时收入
-		$(function () {
+
+/*
+			// 实时收入
 		    $('#container').highcharts({
 		        chart: {
 		            type: 'spline',
-		            backgroundColor: 'rgba(0, 0, 0, 0)'
+		            animation: Highcharts.svg,
+		            marginRight: 10,
+		            backgroundColor: 'rgba(0, 0, 0, 0)',
+		            events: {                                                           
+	                    load: function() {                                              
+	                                                                                    
+	                        // set up the updating of the chart each second             
+	                        var series = this.series[0];                                
+	                        setInterval(function() {                                    
+	                            var x = (new Date()).getTime(), // current time         
+	                                y = Math.random();                                  
+	                            series.addPoint([x, y], true, true);                    
+	                        }, 1000);                                                   
+	                    }                                                               
+	                }
 		        },
 		        title: {
 		            text: ''
@@ -419,13 +438,89 @@
 		        },
 		        series: [{
 		            name: '收入',
-		            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+		            data: []
 		        }, {
 		            name: '支出',
-		            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+		            data: []
 		        }]
 		    });
-		});				
+*/
+
+                                                                                          
+	        Highcharts.setOptions({                                                     
+	            global: {                                                               
+	                useUTC: false                                                       
+	            }                                                                       
+	        });                                                                         
+                                                                    
+	        // var chart;                                                                  
+	        $('#container').highcharts({                                                
+	            chart: {                                                                
+	                type: 'spline',               
+		            backgroundColor: 'rgba(0, 0, 0, 0)',
+		            height: 200,
+	                animation: Highcharts.svg, // don't animate in old IE               
+	                marginRight: 10,                                                    
+	                events: {                                                           
+	                    load: function() {                                              
+	                                                                                    
+	                        // set up the updating of the chart each second             
+	                        // var series = this.series[0];                                
+	                        // setInterval(function() {                                    
+	                        //     var x = (new Date()).getTime(), // current time         
+	                        //         y = parseInt(Math.random() * 100);                                  
+	                        //     series.addPoint([x, y], true, true);                    
+	                        // }, 1000 );                                                   
+	                    }                                                               
+	                }                                                                   
+	            },                                                                      
+	            title: {                                                                
+	                text: ''                                            
+	            },                                                                      
+	            xAxis: {                                                                
+	                type: 'datetime',                                                   
+	                tickPixelInterval: 150,                                              
+	            },                                                                      
+	            yAxis: {                                                                
+	                title: {                                                            
+	                    text: ''                                                   
+	                },                                                                  
+	                plotLines: [{                                                       
+	                    value: 0,                                                       
+	                    width: 1,                                                       
+	                    color: '#808080'                                                
+	                }]                                                                  
+	            },
+	            credits: {
+	            	text: ''
+	            },                                                                      
+	            tooltip: {                                                              
+	                formatter: function() {                                             
+	                        return '<b>'+ this.series.name +'</b><br/>'+                
+	                        Highcharts.dateFormat('%Y-%m-%d', this.x) +'<br/>'+ 
+	                        this.y;
+	                        // Highcharts.numberFormat(this.y);                         
+	                }                                                                   
+	            },                                                                      
+	            legend: {                                                               
+	                enabled: false                                                      
+	            },                                                                      
+	            exporting: {                                                            
+	                enabled: false                                                      
+	            },                                                                    
+	            series: [{                                                              
+	                name: '总积分',
+	                pointInterval: 3600 * 1000, // 间隔1小时
+	                data: []                                                              
+	            },{                                                              
+	                name: '日收入',
+	                pointInterval: 3600 * 1000, // 间隔1小时
+	                data: []                                                              
+	            }]                                                                      
+	        });                                                                       				
+
+			var highcharts = $('#container').highcharts();			
+
 
 
 			// 获取内容数据
@@ -436,7 +531,7 @@
 				contentType:"application/json",
   				dataType:"json",
 				success: function(response){
-					console.log( response );
+					// console.log( response );
 					
 					// 获取元素
 					var templat = $('#contentTemplat'),
@@ -947,7 +1042,7 @@
 						$('#entryLoading').slideDown();
 						setTimeout(function(){
 
-							na.user.entry( account, password, function(verify){	// 后台判断及登录
+							na.user._entry( account, password, function(verify){	// 后台判断及登录
 								$('#entryLoading').slideUp();
 
 								if ( verify.status == '0' ) {			// 密码错误
@@ -970,7 +1065,25 @@
 									na.user.cache(verify);
 
 									// 刷新显示
-									na.user.refresh(verify);
+									na.user.refresh(verify.basic);
+
+									// 获取收入
+									na.user._income(uid, function(data){
+										console.log(data);
+
+										var array = [];
+
+										for ( var key in data ) {
+											array.push({
+												x: new Date(key).getTime(),
+												y: parseInt(Math.random() * 100)//data[key].income
+											});
+										}
+
+										highcharts.series[0].setData( array );
+										
+										console.log(array);
+									}, 10);
 								}
 							});
 						}, 1000);
@@ -1055,6 +1168,39 @@
 					}
 				});
 			}
+
+			// 判断当前是否
+			na.user._register(function(uid){
+
+				if ( uid > 0 ) {
+					na.user._get(uid, function(info){
+						na.user.refresh(info);
+						na.user._income(uid, function(data){
+
+							var array = [],
+								income = [],
+								value = 0,
+								item = 0;
+
+							for ( var key in data ) {
+								array.unshift({
+									x: new Date(key).getTime(),
+									y: info.sum - value	//data[key].income
+								});
+								item = parseInt(Math.random() * 1000);
+								value += item;
+								income.push({
+									x: new Date(key).getTime(),
+									y: item	//data[key].income
+								});
+							}
+
+							highcharts.series[0].setData( array );
+							highcharts.series[1].setData( income );
+						}, 10);
+					});
+				}
+			});
 
 		})();
 
