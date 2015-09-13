@@ -436,7 +436,7 @@
 
 		// 获取当前缓存中的uid
 		if ( $key == 'exist' ) {
-			echo json_encode($u -> Icache());
+			echo json_encode($u -> Gcache());
 		}
 
 		// 获取指定用户的信息

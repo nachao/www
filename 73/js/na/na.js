@@ -69,8 +69,6 @@ Na.prototype.get_ = function( param, callback ){
 
 	param['_'] = new Date().getTime();
 
-	console.log(param);
-
 	$.ajax({ 
 		type: "POST", 
 		url: './ajax/ajax_user.php', 

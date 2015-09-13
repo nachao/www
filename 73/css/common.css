@@ -1,71 +1,49 @@
 
+/**
+*  头部 
+**/
+.header{ width: 100%;box-shadow: 0 1px 3px rgba(0,0,0,.1);background: white; }
+.header:hover{ opacity: 0.96; }
+.header .topgap{ height: 2px;width: 100%;background: url(../imgs/header_topBg.gif) repeat-x; }
+.header .bottomgap{ width: 100%;height: 7px;background: url(../imgs/area_bottomBg.gif) repeat-x; }
 
-/*====
-@描述：提示内容
-@作者：NA
-@时间：15.4.23
-*/====
+/* 头部 - logo */
+.header .logo{ width: 190px;height: 80px;position: relative; }
+.header .logo a{ display: block;height: 100%;padding-left: 20px;margin-left: -20px; }
+.header .logo i{ line-height: 21px;color: #808894;font-size: 12px;display: inline-block;width: 100%; }
+.header .logo em{ line-height: 30px;margin-top: 13px;font-size: 24px;color: #e74c3c;font-weight: bold;float: left;display: inline-block;width: 100%; }
+.header .logo a:hover i{ color: #444; }
+.header .logo .version{ position: absolute;top: 18px;left: 147px;background: #e74c3c;border-radius: 3px;color: white;padding: 0 5px 1px;cursor: default; }
+.header .pagelogo{ width: auto;height: 90px; }
+.header .pagelogo a{  height: 100%;line-height: 90px;font-size: 24px;color: #e74c3c;font-weight: bold;float: left;display: inline-block;width: 100%; }
 
-/* 详细页 - 无内容 */ 
-.msgwu{ height: 600px;background: url(../imgs/msgwu.png) no-repeat center; } /* 列表页 - 无内容 */ .noContent{ height: 360px;background: url(../imgs/msgwu2.png) no-repeat center;margin-top: 90px;position: relative; } .noContent .are{ position: absolute;top: 220px;text-align: center;left: 50%;margin-left: -35px; } .noContent .tip{ position: absolute;top:100px;left: 600px;font-size: 30px;color: #ccc; }
-.noContent a{ display: inline-block;line-height: 35px;padding: 0 15px;border-radius: 2px;margin: 0 10 0 10px; }
-.noContent .publish,.noContent .confirm{ background: #e74c3c;color: white;padding: 0 15px; }
-.noContent .publish{ background: #e74c3c url(../imgs/tagPublish_white.png) no-repeat 10px center;padding: 0 15px 0 30px; }
-.noContent .publish:hover,.noContent .confirm:hover{ background-color: #ca3627; }
-.noContent .stroll{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;padding: 0 15px; }
-.noContent .stroll:hover{ border-color: #bbb;color: #333; }
+/* 头部 - 操作按钮 */
+.header .make{ position: relative;z-index: 99; }
+.header .operate{ margin: 24px 0 0 20px;width: 130px;background: #f6f6f6;border: 1px solid #e4e6e8;color: #9ba1a8;position: relative;z-index: 99; }
+.header .operate .icon{ line-height: 33px;height: 33px;cursor: default;position: relative; }
+.header .operate .icon a{ display: inline-block;width: 100%;text-indent: 10px;color: #666; }
+.header .operate .icon img{ width: 20px;height: 20px; }
+.header .operate .icon i{ display: inline-block;width: 8px;height: 8px;border: 1px solid #ccc;-webkit-transform:rotate(45deg);transform:rotate(45deg);border-left: 0px;border-top: 0px;position: absolute;right: 18px;top: 11px;-webkit-transition: 0.3s; transition: 0.3s; }
+.header .operate .icon:hover{ background-color: #f9f9f9; }
+.header .operate .link{ border-top: 1px dashed #e4e6e8;display: none;position: absolute;background: #f6f6f6;border: 1px solid #e4e6e8;border-radius: 0 0 3px 3px;z-index: 5;margin: 0 -1px; }
+.header .operate .link span{ margin-right: 10px;opacity: 0.6; }
+.header .operate .link a{ display: inline-block;width: 100%;line-height: 36px;font-size: 13px;color: #888;text-indent: 5px; }
+.header .operate .link a i{ display: inline-block;background: #aaa;color: white;border-radius: 20px;float: right;text-indent: 0px;line-height: 16px;margin: 9px 9px 0 0;padding: 0 5px;font-size: 12px;position:relative;top:1px; }
+.header .operate .link a:hover,.header .operate .link .act{ background-color: #ececec;color: #e74c3c; }
+.header .operate .link a:hover i,.header .operate .link .act i{ background: #e74c3c; }
+.header .operate .link a:hover span,.header .operate .link .act span{ opacity: 1; }
+/*.header .operate .link .fabu{ background: url(../imgs/tagFabu.png) no-repeat 10px center; }*/
+.header .operate .link .price{ color: #e74c3c;border-bottom: 1px dotted #ddd;cursor: default;line-height: 40px;font-size: 12px; }  
+.header .operate .link .price span{ margin-right: 8px;opacity: 1; }
+.header .operate .link .price em{ color: #e74c3c; }
+.header .operate .link .price:hover{ background-color: transparent; }
+.header .operate:hover .link,.header .operate_act{ z-index: 99; }
+.header .operate:hover .link,.header .operate_act .link{ display: block; }
+.header .operate:hover .icon i,.header .operate_act .icon i{ -webkit-transform:rotate(-135deg);transform:rotate(-135deg);top: 14px; }
 
-/* 提示 - 简洁版 */
-.Ncon{ background: no-repeat 150px center;margin-top: 0px;height: 335px;background-size: 100px;height: auto;padding: 150px 0 150px 300px; }
-.Ncon h1{ font-weight: normal;font-size: 20px;color: #2f3c4e;margin: 0px; }
-.Ncon .cue{ color: #737a83;margin-top: 10px;line-height: 24px; }
-.Ncon .cue p{ color: #737a83; }
-.Ncon .btn{ margin-top: 20px; }
-.Ncon .btn a{ border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;display: inline-block;line-height: 35px;padding: 0 15px;margin-right: 10px;width: auto; }
-.Ncon .btn a:hover{ border-color: #bbb;color: #333; }
-.Ncon .btn a.red{ background: #e74c3c;color: white;padding: 0 15px;border-color: #ca3627; }
-.Ncon .btn a.red:hover{ background-color: #ca3627; }
-
-/* 用户中心 - 无内容 */
-.userNot{ background: url(../imgs/msgwu3.png) no-repeat center; }
-
-/* 用户中心 - 访问用户 - 无内容 */
-.visitNot{ background: url(../imgs/msgwu4.png) no-repeat center; }
-
-/* 申请标题 - 提交提示信息 */
-.applyMsg{ background: url(../imgs/msgwu5.png) no-repeat center; }
-
-/* 我的标题 - 暂无属于自己的标题 */
-.titleNot{ background-image: url(../imgs/iconfont-message.png); }
-
-/* 我的标题 - 暂无属于自己的标题 */
-.followNot{ background-image: url(../imgs/iconfont-wodedingyue.png); }
-
-/* 徽章福利 - 没有徽章提示 */
-.badgeNot{ background: url(../imgs/msgwu7.png) no-repeat center;margin-top: 0px; }
-
-/* 发布成功 */
-.addContentMsg{ background: url(../imgs/msgwu8.png) no-repeat center;margin-top: 0px; }
-
-/* 留言提示 */
-.notMessage{ background: url(../imgs/msgwu9.png) no-repeat center;margin-top: 0px;height: 335px; }
-
-/* 留言提示 */
-.notAd{ background: url(../imgs/msgwu10.png) no-repeat center;margin-top: 0px;height: 335px; }
-
-/* 无标题提示 */
-.notTit{ background: url(../imgs/iconfont-no.png) no-repeat 100px center;margin-top: 0px;height: 335px;background-size: 100px;height: auto;padding: 150px 0 150px 300px; } 
-.notTit h1{ font-weight: normal;font-size: 18px;color: #999;margin: 0px; }
-.notTit p{ color: #aaa;margin-top: 10px; }
-
-/* 没有关注的用户 */
-.followUserNot{ background-image: url(../imgs/iconfont-guanzhu-black.png); }
-
-/* 没有留言 */
-.messageNot{ background-image: url(../imgs/iconfont-geiwoliuyan-black.png); }
-
-/* 没有相关内容 */
-.listNot{ background-image: url(../imgs/iconfont-xiangxineirong.png); }
-
-/* 成功信息 */
-.hint-success{ background-image: url(../imgs/iconfont-chenggongtishi24px.png); }
+/* 头部 - 注册按钮 */
+.header .login{ display: inline-block;line-height: 33px;padding: 0 20px;background: #f6f6f6;border: 1px solid #e4e6e8;border-radius: 2px;color: #9ba1a8;margin-left: 20px;margin-top: 24px; }
+.header .login:hover{ border-color: #d0d2d5; }
+.login-user span{ color: #333;display: none; }
+.login-user em{ color: #e74c3c; }
+.login-user i{ color: #aaa; }

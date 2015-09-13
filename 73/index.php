@@ -150,98 +150,11 @@
 						</div>
 
 					</div>
-	
-					<!-- 用户资料 -->
-					<div class="userMain r">
-						
-						<!-- 基本信息 -->
-						<div class="um-base">
-							<div class="userInfo" >
-								<div class="withdraw"><a href="#" title="修改资料" ></a></div>
-								<div class="icon f">
-									<a href="#" ><img id="userInfoIcon" src="<?php echo './icon/26.jpg'//u -> Gicon(); ?>" /></a>
-								</div>
-								<div class="info f">
-									<div class="price">
-										<em id="userInfoGold" class="golds" n="<?php echo '100'//$u -> Gplus(); ?>"></em><i>元</i>
-									</div>
-									<div class="name" id="userInfoName" >游客</div>
-								</div>
-								<div class="c"></div>
-								<div class="depict no"><?php echo '暂无描述'//$u -> Gdepict(); ?></div>
-								<div class="c"></div>
-							</div>
-						</div>
-
-						<!-- 实时收入 -->
-						<div class="um-cartogram" id="container" style="width: 100%;height:400px"></div>
-
-						<!-- 最新评论 -->
-						<div class="um-comment commarea">
-							<div class="content">
-								<div class="head">
-									<div class="tit f"><i class="iconfont icon-kafeiting"></i><em>最新评论</em></div>
-									<div class="gap"><i></i></div>
-								</div>
-								<div class="messageBoard">
-									<div class="message-publish no">
-										<textarea class="message-p-text" id="messagePText" placeholder="请输入评论" ></textarea>
-										<a class="message-p-btn" id="messagePBtn" href="javascript:;">发布</a>
-									</div>
-									<div class="c"></div>
-									<div class="message-loading no" id="messageLoading"></div>
-									<div class="message-node" id="messageNot">没有内容</div>
-									<div class="message-list" id="messageList">
-										<div class="message-title">全部评论</div>
-										<div class="message-rows" id="messageTemplet" style="display: none;" >
-											<div class="message-r-icon">
-												<a href="javascript:;" ><img src="" /></a>
-											</div>
-											<div class="message-r-info">
-												<div class="message-i-name">
-													<a href="javascript:;" ></a>
-												</div>
-												<div class="message-i-text"></div>
-												<div class="message-i-other">
-													<div class="message-o-time"></div>
-													<div class="message-o-use">
-														<a class="message-u-good" href="javascript:;" title="" >赞 <span>0</span></a>
-														<a class="message-u-bad" href="javascript:;" title="" >踩 <span>0</span></a>
-														<a class="message-u-reply" href="javascript:;" title="" >回复</a>
-													</div>
-													<div class="c"></div>
-												</div>
-												<div class="message-i-reply">
-													<textarea class="message-reply-text" id="messageReplyText" placeholder="请输入评论" ></textarea>
-													<a class="message-reply-btn" id="messageReplyBtn" href="javascript:;">回复</a>
-												</div>
-												<div class="c"></div>
-											</div>
-										</div>
-									</div>
-									<div class="message-page" >
-										<a class="message-page-btn message-pa-next" href="javascript:;" >&gt;</a>
-										<div class="message-page-current">
-											<div class="message-current-use">
-												<a href="javascript:;" >1</a>
-												<a href="javascript:;" >2</a>
-												<a href="javascript:;" >3</a>
-											</div>
-											<div class="message-current-num"><span>1</span><i></i></div>
-										</div>
-										<a class="message-page-btn message-page-prev" href="javascript:;" >&lt;</a>
-									</div>
-									<div class="c"></div>
-								</div>
-							</div>
-							<div class="bottomSide"></div>
-						</div>
-
-					</div>
-
+					<div class="userMain r" id="userMain" ><?php include("./comm/side.php"); ?></div>
 					<div class="c"></div>
-
-					<div class="loadMore no"><a id="loadmore" href="javascript:;" uid="<?php echo $uid; ?>" tid="<?php echo $tid; ?>" >加载更多内容<i></i></a></div>
+					<div class="loadMore no">
+						<a id="loadmore" href="javascript:;" uid="0" tid="0" >加载更多内容<i></i></a>
+					</div>
 					<div class="c"></div>
 				</div>
 			</div>
@@ -337,13 +250,6 @@
 							<div class="entry-success-contain">
 								<div class="entry-success-text">登录成功！</div>
 								<div class="entry-success-user"><span id="entrySuccessName">xxxxx</span>，欢迎您回来。</div>
-								<div class="entry-success-param">
-									<p>您离开的这段时间里：</p>
-									<p>新增收入：<span id="entrySuccessPlus">0</span>分</p>
-									<p>新增收藏：<span id="entrySuccessCollect">0</span>次</p>
-									<p>新增评论：<span id="entrySuccessComment">0</span>分</p>
-									<p>新增粉丝：<span id="entrySuccessFollower">0</span>分</p>
-								</div>
 							</div>
 						</div>
 						<div class="entry-success" id="registerSuccess" >

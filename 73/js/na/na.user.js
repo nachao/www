@@ -176,9 +176,9 @@ User.prototype.refresh = function( param ){
 
 	param = param || this.data_;
 
-	console.log(param);
-
 	if ( param ) {
+
+		$('#userMain').show();
 
 		// 刷新用户信息
 		$('#userInfoIcon').attr('src', param.icon);
@@ -258,6 +258,33 @@ User.prototype._register = function( account, password, callback ){
 *  @public
 */
 User.prototype._entry = function( account, password, callback ){
+
+	var param = {},
+		login = this.login;
+
+	if ( account && password ) {
+
+		param['user'] = 'entry';
+		param['account'] = account;
+		param['password'] = password;
+
+		login.loading(true);
+		this.get_( param, function(data){
+			login.loading(false);
+			callback ? callback(data) : null;
+		}); 
+	}
+}
+
+
+/*
+*  验证账号和密码，且登录
+*
+*  @param {string} account = 账号
+*  @return {object}	如果登录成功则返回 status =1，失败则 =0。成功的话返回此用户的基本信息。
+*  @public
+*/
+User.prototype._logout = function( account ){
 
 	var param = {},
 		login = this.login;
