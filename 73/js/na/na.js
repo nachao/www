@@ -65,7 +65,11 @@ Na.prototype.urlParam_ = function(){
 */
 Na.prototype.get_ = function( param, callback ){
 
+	param = param || {};
+
 	param['_'] = new Date().getTime();
+
+	console.log(param);
 
 	$.ajax({ 
 		type: "POST", 
@@ -77,6 +81,8 @@ Na.prototype.get_ = function( param, callback ){
 			callback ? callback(data) : null;
 		}
 	});
+
+	return param;
 }
 
 
@@ -88,6 +94,7 @@ Na.prototype.get_ = function( param, callback ){
 *  @private
 */
 Na.prototype.delBlank_ = function( val ){
+	val = val || '';
 	return val.replace(/\s*/g, '');
 }
 

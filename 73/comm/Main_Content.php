@@ -82,6 +82,7 @@ class Data_content extends Comm_content
 		if($uid){
 			$sql = "select * from `".parent::Fn()."content` WHERE (`verify` = 0 AND `userid` = ".$uid.") AND `plus` >= ".$grade." order by `id` desc LIMIT ".$begin." , ".$pages;
 		}
+		echo $sql;
 		return mysql_query($sql);
 	}
 

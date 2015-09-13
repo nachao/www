@@ -388,7 +388,7 @@
 	}
 
 
-	// 获取指定的用户
+	// 获取指定用户的内容
 	if ( isset($request['ulist']) ) {
 
 		//内容参数
@@ -401,14 +401,6 @@
 		echo json_encode($c -> GUlist( $begin, $pages, 0 ,$norm ,$userid ));	//获取内容列表
 
 	}
-
-
-
-
-	// ====
-	// 内容部分
-	// ====
-
 
 
 
@@ -430,24 +422,30 @@
 	// ====
 
 	if ( isset($request['user']) ) {
+		$key = $request['user'];
+
+		// 注册账号
+		if ( $key == 'register' ) {
+			echo json_encode($u -> Auser( $request['account'], $request['password'] ));
+		}
 
 		// 登录用户，成功后返回信息
-		if ( $request['user'] == 'entry' ) {
+		if ( $key == 'entry' ) {
 			echo json_encode($u -> Ientry($request['account'], $request['password']));
 		}
 
 		// 获取当前缓存中的uid
-		if ( $request['user'] == 'register' ) {
-			echo $u -> Guid();
+		if ( $key == 'exist' ) {
+			echo json_encode($u -> Icache());
 		}
 
 		// 获取指定用户的信息
-		if ( $request['user'] == 'get' ) {
+		if ( $key == 'get' ) {
 			echo json_encode($u -> Guser($request['uid']));
 		}
 
 		// 获取指定用户的指定天数的收入详细
-		if ( $request['user'] == 'income' ) {
+		if ( $key == 'income' ) {
 			echo json_encode($u -> Glog($request['uid'], $request['day'] ));
 		}
 

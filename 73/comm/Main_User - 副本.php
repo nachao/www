@@ -103,8 +103,8 @@ class Data_user extends Config
 	*/
 	
 	//获取当前用户的全部信息，根据ID
-	protected function data_selectByUid( $uid =0, $visitor =1 ) {
-		$sql = "select * FROM  `ux73_main_user` WHERE  `id_uid` = ".$uid." AND `status_visitor` =".$visitor;
+	protected function data_selectByUid($uid=0, $visitor=0){
+		$sql = "select * FROM  `ux73_main_user` WHERE  `uid` = ".$uid." AND `visitor` =".$visitor;
 		return parent::Ais($sql);
 	}
 
@@ -140,13 +140,6 @@ class Data_user extends Config
 	protected function data_selectFollowUser($uid=0 ,$fuid=0){
 		$sql = "select * FROM  `".parent::Fn()."logs_FollowUser` WHERE `uid` = ".$uid." AND `fuid` =".$fuid." LIMIT 0 , 1";
 		return parent::Ais($sql);
-	}
-
-	//获取指定 账号ACCOUNT 的用户信息
-	protected function data_selectByAccount( $account='' ){
-		$sql = "select * FROM  `ux73_main_user` WHERE  `text_account` LIKE  '".$account."'";
-		$query = mysql_query($sql);
-		return mysql_fetch_array($query);
 	}
 
 	//获取指定 用户名NAME 的用户信息
@@ -687,25 +680,6 @@ class Users extends Event_user
 		return $array;
 	}
 
-	//获取指定 用户Uid 的信息
-	public function GUbasie ( $uid =0 ) {
-
-		if ( $uid ) {
-			$c = new Content();
-			$info = parent::data_selectByUid($uid);
-
-			if ( $info ) {
-				// 基本信息
-				return array(
-					'account' => $info['text_account'],
-					'nick' => $info['text_nick'],
-					'icon' => $info['text_icon'] ? $info['text_icon'] : parent::event_getRandomIcon(),
-					'plus' => $info['number_sum']
-				);
-			}
-		}
-	}
-
 
 	//获取指定 用户Uid 的唯一编码
 	public function Gid($uid=0){
@@ -1045,11 +1019,6 @@ class Users extends Event_user
 		return count(parent::event_getInfo($uid));
 	}
 	
-	//判断指定用户是否存在，根据找好
-	public function IBaccount($uid=0){
-		return count(parent::event_getInfo($uid));
-	}
-	
 	//判断指定 用户(UID)（选填）是不是会员
 	public function Ivip($uid=0){
 		return parent::event_getVip($uid) > time();
@@ -1080,61 +1049,64 @@ class Users extends Event_user
 	}
 
 	//判断指定 用户账号和密码 是否存在，如果存在并验证密码是否正确	//登录
-	public function Ientry( $account ='', $password ='' ){
-
+	public function Ientry($account=0, $password=0){
 		$c = new Content();
 		$value = array();		//正好不存在
-		$userInfo = parent::data_selectByAccount( $account );
+		if($account){
+			$info = parent::event_getByName($account);
+			if($info){		//账号是否不存在
+				if($info['pwd'] == md5($password)){		//登录成功
+					$uid = $info['uid'];
+					setcookie("73userid", $uid, time()+24*3600, "/");	//存入 - 有效时间 1 天
+					parent::event_updateLastdate($uid);	//刷新登录时间
 
-		if ( $account =='' || $password == '' ){
-			$value = array( 
-					'status' => '0',
-					'message' => '请填写完整'
-				);
+					// $value = array(
+					// 		'icon' => $info['icon']
+					// 		'name' => $info['name'],
+					// 		'plus' => $info['plus'],
+					// 		'describe' => $info['describe']
+					// 	);
 
-		} else if ( !$userInfo ) {
-			$value = array( 
-					'status' => '0',
-					'message' => '账号不存在'
-				);
+					// 新增数据
+					$insert = array(
+							'plus' => $info['plus'],	// 积分
+							'collect' => '0',			// 收藏
+							'comment' => '0',			// 评论
+							'follower' => '0' 			// 粉丝
+						);
 
-		} else if ( $userInfo['text_pwd'] != MD5($password) ){
-			$value = array( 
-					'status' => '0',
-					'message' => '密码错误'
-				);
+					// 基本信息
+					$basic = array(
+							'name' => $info['name'],
+							'icon' => $info['icon'],
+							'plus' => $info['plus'],
+							'content' => $c -> GUtotal($uid),
+							'love' => '0',
+						);
 
-		} else {
-			$uid = $userInfo['id_uid'];
-			setcookie("73userid", $uid, time()+24*3600, "/");		//存入 - 有效时间 1 天
-			parent::data_update($uid, 'time_lastdate', time());		//刷新登录时间
+					$value = array(
+							'status' => '1',
+							'message' => '登录成功',
 
-			// 新增数据
-			$insert = array(
-				'plus' => $userInfo['plus'],	// 积分
-				'collect' => '0',			// 收藏
-				'comment' => '0',			// 评论
-				'follower' => '0' 			// 粉丝
-			);
+							'insert' => $insert,
+							'basic' => $basic
+						);
 
-			// 基本信息
-			$basic = array(
-				'name' => $userInfo['name'],
-				'icon' => $userInfo['icon'],
-				'plus' => $userInfo['plus'],
-				'content' => $c -> GUtotal($uid),
-				'love' => '0',
-			);
-
-			$value = array(
-				'status' => '1',
-				'message' => '登录成功',
-
-				'insert' => $insert,
-				'basic' => $basic
-			);
+				}else{
+					$value = array( 
+							'status' => '0',
+							'message' => '密码错误'
+						);
+					// $value = 2;		//账号正确，密码错误
+				}	
+			}else{
+				$value = array( 
+						'status' => '0',
+						'message' => '账号不存在'
+					);
+				// $value = 3;		//账号可注册
+			}
 		}
-
 		return $value;
 	}
 
@@ -1205,29 +1177,6 @@ class Users extends Event_user
 		} else {
 			return false;
 		}
-	}
-
-	// 判断是否刚刚登陆
-	public function Icache () {
-		$uid = $this -> Guid();
-		$value = array(
-			'status' => 0,
-			'message' => '-',
-			'basic' => array()
-		);
-
-		if ( $uid ) {
-			$basic = $this -> GUbasie($uid);
-
-			// 返回参数
-			$value = array(
-				'status' => 1,
-				'message' => '成功获取用户基本信息',
-				'basic' => $basic
-			);
-		}
-
-		return $value;
 	}
 
 
@@ -1366,7 +1315,7 @@ class Users extends Event_user
 				);
 
 		// 判断账号是否存在
-		} else if ( parent::data_selectByAccount($account) ) {
+		} else if ( count(parent::event_getInfo($account)) > 0 ) {
 
 			// 返回参数
 			$value = array( 
@@ -1401,6 +1350,39 @@ class Users extends Event_user
 		}
 
 		return $value;
+
+
+
+		$newdate = date("Y-m-d");
+		$newstamp = strtotime($newdate);
+		if(parent::event_getIpNum( $ip, $newstamp - 60*60*24 ) >= 10 ){
+			echo 'overproof';
+			return false;
+		}
+		$uid = parent::event_getUserTotal().time();
+
+		//当前用户的默认头像
+		// $icon = md5($uid).".jpg";
+		// $effigy = "./imgs/default.gif";
+		$effigy = '../icon/'.rand(1,26).'.jpg';	//随机头像
+		// copy( "../img/default.gif", ".".$effigy);
+
+		//如果有邀请码则刷新邀请码
+		if($cdk){
+			parent::event_updateCdk($cdk, $uid);
+		}
+
+		//是否被邀请来的
+		if($invited && $this -> Ibe($invited)){
+			$this -> UAplus(30, $invited);
+		}else{
+			$invited = null;
+		}
+		parent::event_addUser($uid, $account, $password, $effigy, $invited, $ip);		//创建用户所有数据
+		// userStatusSet( $nid, "个人中心");	//刷新状态	
+		$this -> Acache($uid);
+
+		return $uid;	//返回数据
 	}
 
 	//添加用户浏览器缓存
