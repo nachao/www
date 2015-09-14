@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50611
 File Encoding         : 65001
 
-Date: 2015-09-13 08:50:02
+Date: 2015-09-14 08:03:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,8 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `ux73_main_user`;
 CREATE TABLE `ux73_main_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_uid` int(11) DEFAULT '0' COMMENT '用户唯一编号',
+  `id_uid` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户唯一编号',
   `id_invited` int(11) DEFAULT '0' COMMENT '邀请者唯一编号',
   `text_account` varchar(100) DEFAULT '' COMMENT '用户名称',
   `text_nick` varchar(100) DEFAULT '' COMMENT '昵称',
@@ -41,9 +40,11 @@ CREATE TABLE `ux73_main_user` (
   `number_entrys` int(11) DEFAULT '0' COMMENT '登录次数',
   `status_visitor` int(1) DEFAULT '1' COMMENT '0=游客，1=会员',
   `status_vip` int(1) DEFAULT '0' COMMENT '是否为会员 1=是、0=不是',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id_uid`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ux73_main_user
 -- ----------------------------
+INSERT INTO `ux73_main_user` VALUES ('1', '0', 'zz', '', '0cc175b9c0f1b6a831c399e269772661', '', '', '', '::1', '1442147673', '0', '1442147673', '1442147673', '0', '0', '0', '0', '0', '1', '0');
+INSERT INTO `ux73_main_user` VALUES ('2', '0', 'a', '', '0cc175b9c0f1b6a831c399e269772661', '', '', '', '', '1442151691', '0', '1442150116', '1442150116', '0', '0', '0', '0', '0', '1', '0');
