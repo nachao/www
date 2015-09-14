@@ -1,74 +1,14 @@
-<?php
-	
-	//引用公共文件
-	include("./comm/base.php");	
-	
-	//设置选择菜单
-	Global $ect;
-	$ect="user";
 
-	//引用样式头部
-	include("./comm/head.php");
-
-	//没有登录则跳转至列表页
-	if(!$u -> Guid()){
-		$u -> UtoL();
-	}
-
-	//是否提交表单
-	if(isset($_POST['submit'])){
-
-		//判断类型
-		switch ($_POST['types']) {					//判断类型，并刷新描述内容
-			case 0: $text = $_POST['depict'];		$control = '';					break;	//文字
-			case 1: $text = $_POST['imgDepict']; 	$control = $_POST['beforeimg']; break;	//图片
-			case 2: $text = $_POST['videoDepict']; 	$control = $_POST['video']; 	break;	//视频
-			case 3: $text = $_POST['musicDepict']; 	$control = $_POST['music']; 	break;	//音乐
-		}
-
-		//提交数据
-		$c -> Acon(array(
-			'type' => $_POST['types'],			//类型
-			'tid'  => $_POST['titleid'],		//标题id
-			'text' => $text,					//文本描述
-			'cont' => $control,					//控件
-			'push' => $_POST['recommend-sum'],	//是否推送(1|0)
-			'label'=> $_POST['titleLabel'],		//标签id
-		));
-	}
-
-	$addOk = 0;
-
-	//是否提交成功
-	if(isset($_GET['ok'])){
-		$addOk = $_GET['ok'];
-	}
-
-	//默认显示分类
-	$Dtype = 1;
-
-	//是否有指定的标题
-	if(isset($_GET['tid'])){
-		$Itid = $_GET['tid'];
-		// $Dinfo = $t -> Ginfo($Itid);
-		// $Dtype = $Dinfo['recommend'];
-	}else{
-		$Itid = 0;
-	}
-
-	// $arr = range(1,10); 
-	// print_r(rand(70,120)); 
-
-?>
+	<!-- 导入头部 -->
+	<?php include("./comm/head.php"); ?>
 
 	<div class="container pagecon">
-
-		<!-- 主体 -->
 		<div class="main">
 			<div class="userpage center">
 
 				<!-- 操作栏 -->
 				<div class="actionbar"></div>
+				<div class="leftarea f">
 
 					<!-- 发布成功 -->
 					<div class="Ncon hint-success no" id="success">
@@ -101,27 +41,6 @@
 								</div>
 								<input id="conTypes" type="hidden" name="types" value="0" />
 								<div class="main">
-									<div class="title no">
-										<input id="conTitleShow" class="tit f" type="text" value="" readonly="readonly" />
-										<input id="conTitleId" type="hidden" name="titleid" />
-										<a id="orTitle" class="btn r" href="javascript:;" >加入标题</a>
-										<a id="delTitle" class="btn no r" style="margin-right: 15px;" href="javascript:;" title="">去除标题</a>
-
-										<!-- 输出用户 所有可用的标题（活动标题和个人专题） -->
-										<div id="titleList" class="tags f" tid="0" >
-											<a class="tits" href="javascript:;" tid="0" share="0" >-</a>
-
-											<!--//判断用户是否还没有关注 活动标题，以及 个人专题 -->
-											<div id="titleCue" class="tagsCue f">
-												<span>你还没有关注任何 活动，也还没有属于个人的 专题！</span>&nbsp;&nbsp;&nbsp;
-												<a href="./title.php" title="">去看看</a>&nbsp;&nbsp;&nbsp;
-												<a href="./userTitle-Apply.php" title="">去申请</a>
-											</div>
-
-										</div>
-										<div class="c"></div>
-									</div>
-									<div class="c"></div>
 
 									<!-- 文字 -->
 									<div class="col extent writing">
@@ -135,7 +54,7 @@
 									<div class="col extent picture">
 										<div class="tip">必选要选择一张图片<i></i></div>
 										<div class="con">
-											<div id="uploadPlugIn" style="height: 600px;" >
+											<div id="uploadPlugIn" style="height: 350px;" >
 												<div id="altContent"></div>
 											</div>
 											<img id="imgHeadPhoto" src="" style="display: none;" />
@@ -188,42 +107,58 @@
 										<div class="are"><textarea id="musicDepict" class="cue" name="musicDepict" placeholder="描述（可以不写）" ></textarea></div>
 									</div>
 
+									<!-- 标签  -->
+									<div class="cue-label">
+										<div class="cue-label-col no j-label-templet" lid="" > 
+											<div class="label-rename">
+												<input class="label-rename-input" type="text" value="" />
+												<div class="cue-label-btn label-rename-yes">确认</div>
+												<div class="cue-label-btn label-rename-no">取消</div>
+											</div>
+											<div class="label-normal">
+												<div class="cue-label-name"></div>
+												<div class="cue-label-btn cue-label-rename" title="修改"></div>
+												<div class="cue-label-btn cue-label-close" title="删除"></div>
+											</div>
+										</div>
+										
+										<!-- <div class="cue-label-col" lid="1" > 
+											<div class="label-rename">
+												<input class="label-rename-input" type="text" value="1" />
+												<div class="cue-label-btn label-rename-yes">确认修改</div>
+												<div class="cue-label-btn label-rename-no">取消修改</div>
+											</div>
+											<div class="label-normal">
+												<div class="cue-label-name">123</div>
+												<div class="cue-label-btn cue-label-rename" title="修改"></div>
+												<div class="cue-label-btn cue-label-close" title="删除"></div>
+											</div>
+										</div> -->
+
+										<div class="cue-label-add">
+											<input class="label-add-input" type="text" style="display: none;" />
+											<a class="label-add-btn label-add-yes j-manage-add-label" href="javascript:;" >添加标签</a>
+											<a class="label-add-btn label-add-no j-manage-add-label-cancel" href="javascript:;" style="display: none;" >取消</a> 
+										</div>
+										<div class="c"></div>
+									</div>
+
 									<!-- 提交  -->
 									<div class="prompt j-add-prompt" style="margin-top: 50px;">
 										<a id="tipApply" class="tip r" href="javascript:;" title="">您的金额不足！<i></i></a>
-										<input id="submitApply" class="sub f" type="submit" name="submit" value="发布" />
-										<a href="javascript:;" class="recommend" id="btn-recommend">推送【1折】</a>
+										<a id="submitApply" class="sub f" href="javascript:;" >发布</a>
+										<!-- <input type="submit" name="submit" value="" /> -->
 										<input type="hidden" value="0" name="recommend-sum" id="is-recommend" />
-										<?php 
-											//$number = $u -> GTPnum()+1;			//本日发布次数
-											//$basic = $u -> Ivip() ? 3 : 7;		//基础值
-											//$deduct = $basic * $number;			//发布消费金额
-										  ?>
 										<div class="tag r">需付： 
 											<input id="totalTote" type="text" class="golds" n="" value="" readonly />
 											元<em><i>！</i>你的金币不足</em>
 										</div>
 										<input type="hidden" id="deductApply" name="deductApply" value="" />
 										<div class="c"></div>
-										
-										<!-- 应该金额计算公式 -->
-										<div class="formula">
-											<div class="formula-txt no r" id="basic-cue" >计算公式：会员基础金：3分  * 本日次数：0次</div>
-											<div class="formula-txt r" id="basic-cue" style="display: block;">计算公式：基础消费：7分  * 本日次数：0	次</div>
-											<div class="formula-txt no r" id="basic-tit-cue" >计算公式：（标准金：7分 - 分享金：6分） * 本日次数：0次</div>
-										</div>
-
-										<!-- 只用于前端 显示计算 -->
-										<input type="hidden" id="number" value="0" />	
-										<input type="hidden" id="standard" value="7" />			
-										<input type="hidden" id="special" value="3" />			
-										<input type="hidden" id="value-recommend" value="10" />
-										<input type="hidden" id="basic" value="0" />		
-										<input type="hidden" id="isvip" value="0" />
 									</div>
 
 									<!-- 选择标签 -->
-									<div class="publish-label-list">
+									<div class="publish-label-list no">
 										<div id="publish-label-list">
 											<a href="javascript:;" class="publish-label-col no" id="publish-label-col-templet" tid="0" >-</a>
 										</div>
@@ -232,6 +167,14 @@
 									</div>
 
 								</div>
+
+								<!-- 发布提交等待提示 -->
+								<div class="publish-loading" id="publishLoading" >
+									<div class="publish-result" id="publishResult" >
+										<p>添加成功</p>
+									</div>
+								</div>
+
 								<div class="c"></div>
 						    </form>
 							<!-- 发布信息 结束 -->
@@ -241,12 +184,16 @@
 						<div class="bottomSide"></div>
 					</div>
 
+				</div>
+
+				<!-- 侧栏 -->
+				<div class="userMain no r" id="userMain" >
+					<?php include("./comm/side.php"); ?>
+				</div>
+
 				<div class="c"></div>
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="./js/comm.js" ></script>
-	<script type="text/javascript" src="./js/xiuxiu.js"></script>
-	<script type="text/javascript" src="./js/add.js" ></script>
 
-<?php include("./comm/footer.php");	//引用底部 	?>
+	<?php include("./comm/footer.php");	//引用底部 	?>

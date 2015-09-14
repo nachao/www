@@ -1,0 +1,123 @@
+
+
+
+/*====
+发布
+====*/
+.publishHead{ margin-top: 0px; }
+.publishHead .head .tit em{ background: url(../imgs/add_headIcon.png) no-repeat 0 center;padding-left: 38px; }
+.publishHead .head .gap i{ width: 28px; }
+
+.publish{ position: relative; }
+
+/*菜单*/
+.publish .nav{ border-bottom: 1px solid #e74c3c;margin-top: 20px; }
+.publish .nav a{ display: inline-block;line-height: 35px;text-decoration: none;padding: 0 30px;font-size: 14px;border-radius: 3px 3px 0 0;margin-right: 10px; }
+.publish .nav a:hover{ background: #eee; }
+.publish .nav a.act{ background: #e74c3c;color: white;box-shadow: 0 0 10px #d52d1c inset;text-shadow: 1px 1px 5px #d52d1c; }
+
+/* 统一 */
+.publish .col{ display: none;margin-top: 20px;position: relative; }
+.publish .col .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 5px 20px;position: absolute;bottom: -38px;left: 0px;display: none;cursor: default; }
+.publish .col .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;top: -4px;left: 50%;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #bbb; border-bottom-color: transparent; border-right-color: transparent;margin-left: -2px; }
+
+/* 标题 */
+.publish .title{ display: block;margin: 30px 0 30px;position: relative; }
+.publish .title .tit{ height: 35px;background: white url(../imgs/tagtag.png) no-repeat 10px center;width: 450px;padding: 0 10px 0 35px;border: 0px;color: #444;font-size: 15px;display: none;cursor: default; }
+.publish .title .tit:focus{ background-color: white; }
+.publish .title .btn{ display: inline-block;width: auto;line-height: 33px;border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;padding: 0 15px; }
+.publish .title .btn:hover{ border-color: #bbb;color: #333; }
+.publish .title .tags{ display: none;z-index: 3;width: 510px;background: white;padding: 50px;border:1px solid #eee;position: relative;z-index: 99; }
+.publish .title .tags .tits{ display: inline-block;line-height: 33px;background: #f2f2f2;border: 1px solid #e6e6e5;padding: 0 30px;color: #666;float: left;margin: -1px 0 0 -1px;position: relative;left: 1px;top: 1px; }
+.publish .title .tags .tits:hover{ background: #e6e6e5;color: #111; }
+.publish .title .tagsCue{ line-height: 35px;color: #999; }
+.publish .title .tagsCue span{ margin-left: 30px; }
+.publish .title .tagsCue a{ color: #e74c3c; }
+.publish .title .tagsCue a:hover{ text-decoration: underline; }
+
+/* 描述 */
+.publish .col .cue{ display: block;padding: 16px 20px;line-height: 28px;min-height: 140px;background: #f6f6f6 url(../imgs/tagJianjie.png) no-repeat 20px 23px;border: 1px solid #e4e6e8;border-radius: 3px;width: 425px;resize: vertical;font-size: 14px;color: #333;padding-left: 50px;outline: none;margin-top: 20px; }
+.publish .col .cue:focus{ background-color: white;border-color: #ddd;box-shadow: 0 0 10px #ddd; }
+
+/* 文字 */
+.publish .writing .txt{ display: block;line-height: 22px;height: 209px;border: 1px solid #e4e6e8;border-radius: 2px;width: 425px;resize: vertical;font-size: 14px;color: #333;margin-top: 30px; }
+
+/* 图片 */
+.publish .picture .uploadPhoto{ border: 1px dashed #ddd;border-radius: 3px;padding: 20px;text-align: center;color: #ccc;margin-bottom: 30px;cursor: pointer; }
+.publish .picture .con{ border: 1px solid #ddd;border-radius: 3px; }
+.publish .picture .con #divPreview{ overflow: hidden;position: relative; }
+.publish .picture .con #divPreview .upfile{ position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0;filter: alpha(opacity:0);z-index: 2; }
+.publish .picture .con img{ border: 0px;float: left;max-width: 100%; }
+.publish .picture .con #divPreview a{ display: inline-block;width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;background: rgba(0,0,0,.1);color: white;text-align: center;line-height: 100px;text-decoration: none;display: none;opacity: 0; }
+.publish .picture .con #divPreview:hover a{ opacity: 1; }
+.publish .picture .picture-edit{ background: url(../imgs/loading.gif) no-repeat center #f6f6f6;min-height: 100px; }
+
+/* 视频 */
+.publish .video .con{ position: relative; }
+.publish .video .tit{ display: inline-block;position: absolute;bottom: 0px;left: 33px;line-height: 35px;color: #999;cursor: default; }
+.publish .video .txt{  height: 33px;background: url(../imgs/tagtag.png) no-repeat 10px center;width: 450px;padding: 0 10px 0 33px;border: 1px solid #e4e6e8;border-radius: 3px;color: #444;font-size: 13px; }
+.publish .video .txt:focus{ border-color: #ddd;box-shadow: 0 0 10px #ddd; }
+.publish .video .hint{ height: 67px;text-align: right; }
+.publish .video .hint p{ font-size: 12px;color: gray;line-height: 24px; }
+.publish .video .hint p a{ color: black;text-decoration: none; }
+.publish .video .hint p a:hover{ text-decoration: underline;}
+.publish .video .result{ display: none;border-left: 1px solid #ddd;border-right: 1px solid #ddd;height: 350px;background: #e74c3c; }
+.publish .video .result embed{ float: left; }
+
+
+/*.publish .video .con{ padding: 20px; }*/
+
+/* 音乐 */
+/*.publish .music .con{ padding: 20px; }*/
+/*.publish .music .txt{ width: 660px; }*/
+/*.publish .btn{ margin: 20px 0 0; }*/
+/*.publish #content{ display: none; }*/
+.publish .music .result{ height: 70px; }
+.publish .music .result embed{ float: left;position: relative;left: 235px;top: 20px; }
+
+/*.publish .col .tit{ float: left;line-height: 30px;margin-left: 40px;color: #ccc;width: auto; }*/
+
+
+/*.publish .urls .s1{ width: 120px; }*/
+/*.publish .urls .s2{ width: 685px; }*/
+
+/*.publish .upbtn{ width: 100%; }
+.publish #halfamoment{ width: 100%;height: 50px;float: left;text-align: center;line-height: 50px;color: #ccc;font-size: 18px;display: none; }
+*/
+/* 确定 */
+.publish .prompt{ display: inline-block;width: 100%;position: relative; }
+.publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px;color: white;cursor: pointer;line-height: 35px;text-align: center; }
+.publish .prompt .sub:hover{ background: #ca2d1d; }
+.publish .prompt .cancel{ color: #2f3c4e;float: left;margin: 10px 0 0 30px;font-size: 13px; }
+.publish .prompt .cancel:hover{ text-decoration: underline; }
+.publish .prompt .recommend{ display: inline-block;width: auto;line-height: 33px;border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 0 3px 3px 0;padding: 0 15px;margin-left: 10px;-webkit-transition: 0.3s; transition: 0.3s; }
+.publish .prompt .recommend:hover{ border-color: #bbb;color: #333; }
+.publish .prompt .recommend-act{ margin-left: 2px;background: #e74c3c;border-color: #e74c3c;color: white; }
+.publish .prompt .recommend-act:hover{ color: white;background-color: #ca2d1d;border-color: #ca2d1d; }
+.publish .prompt .tag{ line-height: 35px; }
+.publish .prompt .tag input{ color: #e74c3c;font-size: 30px;font-family: Arial;width: 120px;display: inline-block; }
+.publish .prompt .tag em{ display: none; }
+.publish .prompt .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 2px 5px;position: absolute;top: -35px;left: 0px;display: none;cursor: default; }
+.publish .prompt .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 40px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #bbb; border-top-color: transparent; border-left-color: transparent;  }
+
+.publish .prompt .formula{ width: 100%; }
+.publish .prompt .formula-txt{ margin: 0 0 0 20px;color:#aaa;display: none; }
+
+/* 提交后加载动画 */
+.j-prompt-submit-ajax{ background: url(../imgs/concept-f.gif) no-repeat center; }
+
+/* 提示 */
+.publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
+
+/* 发布、编辑内容 - 标签选择 */
+.publish-label-list{ border-top: 1px solid #eee;padding-top: 20px;margin-top: 16px; }
+.publish-label-list a{ background-color: #ddd; font-weight: 700; border-radius: 3px; color: #fff; font-size: 12px; margin-right: 10px; cursor: pointer;display: inline-block;line-height: 33px;padding: 0 12px;margin-bottom: 10px; }
+.publish-label-list a:hover{ background-color: #999; }
+.publish-label-list a.act{ background: #e74c3c; }
+
+/* 提交等待 */
+.publish-loading,.publish-result{ position: absolute;top: 0px;left: 0px;z-index: 2;width: 100%;height: 100%;background: white url(../imgs/concept-f.gif) no-repeat center;display: none; }
+
+/* 结果提示 */
+.publish-result{ background: white; }
+.publish-result p{ font-size: 20px; position: relative; top: 50%; line-height: 40px; margin-top: -40px; text-align: center; color: #999; }

@@ -384,7 +384,6 @@
 
 		// 返回
 		echo json_encode($c -> Glist( $begin, $pages, 0 ,$norm ));	//获取内容列表
-
 	}
 
 
@@ -399,7 +398,26 @@
 
 		// 返回
 		echo json_encode($c -> GUlist( $begin, $pages, 0 ,$norm ,$userid ));	//获取内容列表
+	}
 
+
+	if ( isset($request['content']) ) {
+		$key = $request['content'];
+
+		// 添加内容
+		if ( $key == 'add' ) {
+			echo json_encode($c -> Acon( $request['text'], $request['input'], $request['type'], $request['tags'] ));
+		}
+
+		// 获取内容
+		if ( $key == 'get' ) {
+			echo json_encode($c -> GBsum());
+		}
+
+		// 点赞
+		if ( $key == 'zan' ) {
+			echo json_encode($c -> Azan($request['cid']));
+		}
 	}
 
 
@@ -432,6 +450,11 @@
 		// 登录用户，成功后返回信息
 		if ( $key == 'entry' ) {
 			echo json_encode($u -> Ientry($request['account'], $request['password']));
+		}
+
+		// 退出账号
+		if ( $key == 'logout' ) {
+			echo json_encode($u -> Acache());
 		}
 
 		// 获取当前缓存中的uid

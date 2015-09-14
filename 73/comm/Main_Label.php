@@ -40,24 +40,60 @@ class Data_label extends Config
 	// 	# code...
 	// }
 
+	// 当前用户UID
+	protected function _uid(){
+		$u = new Users();
+		return $u -> Guid();
+	}
 
 
-	/********************************************
-	* 添加 add
-	*/
+	// 添加标签
+	protected function _addLabel( $uid =0, $name ='' ){
+		// $sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_label` (`id`, `label_id`, `content_id`, `user_id`, `time`, `status`) VALUES (NULL, '".$lid."', '".$cid."', '".$uid."', '".time()."', '1');";
 
-	//添加标签
-	// 参数说明
-	protected function data_add( $lid=0, $uid=0, $cid=0 ){
-		$sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_label` (`id`, `label_id`, `content_id`, `user_id`, `time`, `status`) VALUES (NULL, '".$lid."', '".$cid."', '".$uid."', '".time()."', '1');";
+		$sql = "insert INTO `ux73`.`ux73_main_label` (`id_lid`, `id_uid`, `time_create`, `time_active`, `text_name`) VALUES (".
+				"NULL, '".$uid."', '".time()."', '".time()."', '".$name."');";
+		return mysql_query($sql);
+	}
+
+
+	// 添加使用记录
+	protected function _addUse( $lid =0, $uid =0, $cid =0 ){
+		// $sql = "insert INTO `".parent::Mn()."`.`".parent::Fn()."logs_label` (`id`, `label_id`, `content_id`, `user_id`, `time`, `status`) VALUES (NULL, '".$lid."', '".$cid."', '".$uid."', '".time()."', '1');";
+
+		$sql = "insert INTO `ux73`.`ux73_log_label` (`id_lid`, `id_uid`, `id_cid`, `time_use`) VALUES ('".$lid."', '".$uid."', '".$cid."', '".time()."');";
+		return mysql_query($sql);
+	}
+
+
+	// 获取标签，根据名称
+	protected function _selectByName( $name ='' ) {
+		$sql = "select *  FROM `ux73_main_label` WHERE `text_name` LIKE '".$name."'";
+		return parent::Ais($sql);
+	}
+
+
+	// 获取标签，根据名称
+	protected function _selectByLid( $lid ='' ) {
+		$sql = "select *  FROM `ux73_main_label` WHERE `id_lid` = ".$lid;
+		return parent::Ais($sql);
+	}
+
+
+	// 获取标签使用记录
+	protected function _selectUse( $uid =0, $cid =0 ) {
+		$sql = "select *  FROM `ux73_log_label` WHERE `id_uid` = ".$uid." AND `id_cid` = ".$cid;
 		return mysql_query($sql);
 	}
 
 
 
-	/********************************************
-	* 查询 select
-	*/
+
+
+
+
+
+
 
 	//获取指定 标签LID 的全部信息
 	protected function data_select($lid=0){
@@ -167,7 +203,32 @@ class Label extends Event_label
 	* 获取 get
 	*/
 
-	//获取指定 标题TID 的全部标签信息
+
+	//获取标签使用
+	public function Guse( $cid =0, $uid =0 ){
+
+		$uid = $uid ? $uid : parent::_uid();
+
+		$array = array();
+		$query = parent::_selectUse( $uid, $cid );
+		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
+			while( $row = mysql_fetch_array($query)){	//遍历数据
+				$info = parent::_selectByLid($row['id_lid']);
+				$temp = array(
+						'lid' => $info['id_lid'],
+						'name' => $info['text_name'],
+					);
+				array_push($array, $temp);
+			}
+		}
+
+		return $array;	//返回
+	}
+
+
+
+
+	// 获取标签
 	public function Glabel($tid=0){
 		$value = array();
 		if($tid){
@@ -248,13 +309,58 @@ class Label extends Event_label
 	* 新增 add
 	*/
 
-	//新增广告
-	public function Alabel( $tid=0, $cid=0, $uid=0 ){
-		$uid = $uid ? $uid : parent::Eid();
-		if ( $tid && $cid ) {
-			parent::data_add( $lid, $uid, $cid );
+	// 新增标签
+	public function Alabel( $name ='' ){
+		$uid = parent::_uid();
+		$value = array(
+			'status' => 0,
+			'message' => '-'
+		);
+
+		if ( $uid && $name ) {
+			$label = parent::_selectByName($name);
+
+			if ( !$label ) {
+				parent::_addLabel( $uid, $name );
+				$label = parent::_selectByName($name);
+				$value = array(
+					'status' => 1,
+					'message' => '成功添加标签',
+					'label' => $label
+				);
+
+			} else {
+				$value = array(
+					'status' => 1,
+					'message' => '标签已存在',
+					'label' => $label
+				);
+			}
 		}
+
+		return $value;
 	}
+
+	// 新增使用标签
+	public function ALuse( $lid =0, $cid =0 ){
+		$uid = parent::_uid();
+		$value = array(
+			'status' => 0,
+			'message' => '-'
+		);
+
+		if ( $uid && $lid && $cid ) {
+			if ( parent::_addUse( $lid, $uid, $cid ) ) {
+				$value = array(
+					'status' => 1,
+					'message' => '标签标记成功'
+				);
+			}
+		}
+
+		return $value;
+	}
+
 
 
 

@@ -354,7 +354,7 @@
 		*/
 
 
-	//点击注册
+	// 切换界面 - 点击注册
 	$('#loginLink').click(function(){
 		
 		//标题
@@ -381,11 +381,9 @@
 
 	});
 
-	//点击登录
+	// 切换界面 - 点击登录
 	$('#registerLink').click(function(){
 
-
-		
 		//标题
 		$('.pop-enter .head:first').stop().animate({ left: 0 });
 		$('.pop-enter .head:last').stop().animate({ left: 400 });
@@ -418,19 +416,6 @@
 		return v;
 	}
 
-	//不能为空
-	function require(a,b){
-		if( !a ){
-			pointout("请填写账号");
-			return false;
-		}else if( !b ){
-			pointout("请填写密码");
-			return false;
-		}else{
-			return true;
-		}
-	}
-
 	//点击登陆按钮
 	$('#loginAffirm').click(function(){
 
@@ -458,22 +443,8 @@
 				} else if ( verify.status == '1' ) {	// 登录成功
 					na.user.login.entrySuccess(verify);
 
-					na.user.setUser(verify.basic);				// 保存用户信息
-					// na.user.setCache(verify);				// 保存缓存
+					na.user.setUser(verify.basic);			// 保存用户信息
 					na.user.refresh(verify.basic);			// 刷新显示
-
-					/*
-					na.user._income(uid, function(data){	// 获取收入
-						var array = [];
-						for ( var key in data ) {
-							array.push({
-								x: new Date(key).getTime(),
-								y: parseInt(Math.random() * 100)//data[key].income
-							});
-						}
-						highcharts.series[0].setData( array );
-					}, 10);	// 十天内的收入
-*/
 				}
 			});
 		}
@@ -507,23 +478,22 @@
 				} else if ( verify.status == '1' ) {	// 登录成功
 					na.user.login.registerSuccess(verify);
 
-					na.user.setUser(verify.basic);				// 保存用户信息
-					// na.user.setCache(verify);				// 保存缓存
+					na.user.setUser(verify.basic);			// 保存用户信息
 					na.user.refresh(verify.basic);			// 刷新显示
-
-					/* na.user._income(uid, function(data){	// 获取收入
-						var array = [];
-						for ( var key in data ) {
-							array.push({
-								x: new Date(key).getTime(),
-								y: parseInt(Math.random() * 100)//data[key].income
-							});
-						}
-						highcharts.series[0].setData( array );
-					}, 10);	// 十天内的收入	*/
 				}
 			});
 		}
+	});
+
+
+	// 点击注销
+	$('#j_logout').click(function(){
+		na.user._logout(function(result){
+
+			if ( result.status == '1' ) {			// 退出失败
+				na.user.refresh();
+			}
+		});
 	});
 
 
@@ -532,33 +502,68 @@
 
 		if ( data.status == '1' ) {
 			na.user.refresh(data.basic);
-
-				/*
-				na.user._income(uid, function(data){
-
-					var array = [],
-						income = [],
-						value = 0,
-						item = 0;
-
-					for ( var key in data ) {
-						array.unshift({
-							x: new Date(key).getTime(),
-							y: info.sum - value	//data[key].income
-						});
-						item = parseInt(Math.random() * 1000);
-						value += item;
-						income.push({
-							x: new Date(key).getTime(),
-							y: item	//data[key].income
-						});
-					}
-
-					highcharts.series[0].setData( array );
-					highcharts.series[1].setData( income );
-				}, 10); */
 		}
 	});
 
+	// 获取内容
+	na.content._get(function(result){
 
+		var templat = $('#contentTemplat'),
+			temp = null;
+
+		if ( result.status == 1 ) {
+			$(result.res).each(function( i, val ){
+				temp = templat.clone();
+
+				temp.removeClass('no').removeAttr('id').show();
+				temp.find('.gui').hide();
+				temp.find('.are').html(val.text);
+
+				// 作者信息
+				temp.find('.icon-user').attr('get', '0').mouseenter(function(){
+					var are = $(this),
+						get = $(this).attr('get');
+
+					if ( get == '0' ) {
+						$(this).attr('get', '1');	// 标记为正在获取数据
+						na.user._get( val.uid, function(user){
+							are.find('.use-fc-icon').attr('src', user.icon );
+							are.find('.use-fc-name').html( user.nick || user.account );
+
+							are.find('.use-fc-param .icon-sum').next('em').html(user.sum );
+							// are.find('.use-fc-param .icon-content').next('em').html(user.content);
+							// are.find('.use-fc-param .icon-love').next('em').html();
+
+							are.find('.use-fcon').removeClass('use-fcon-load');
+						});
+					}
+				});
+
+				if ( val.zan == '0' ) {
+					temp.find('.icon-good').attr('get', '0').click(function(){	// 点赞
+
+						if ( !$(this).hasClass('praise-act') ) {
+							$(this).addClass('praise-act');
+							na.content._zan({
+								cid: val.cid
+							});
+						}
+					});
+
+				} else {
+					temp.find('.icon-good').addClass('praise-act');
+				}
+
+				if ( val.label ) {
+					temp.find('.count-labels').empty();
+
+					$(val.label).each(function( i, tag ){
+						temp.find('.count-labels').append('<a href="javascript:;" class="label">'+ tag.name +'</a>');
+					});
+				}
+
+				$('#contentList').append(temp);
+			});
+		}
+	});
 

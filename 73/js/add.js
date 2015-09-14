@@ -105,9 +105,20 @@
 			setCookie( cookieName + "musicSrc" , $(this).val(), 1 );
 		});
 
+		//类型选择
+		function selectType(i){
+			$('#classType').val(i);
+			$('.main .col').hide().eq(i).show();
+			$('#conTypes').val(i);
+			$('.nav a').eq(i).addClass('act').siblings().removeClass('act');
 
+			//类型存入缓存
+			// setCookie( cookieName + "selectType" , i, 1 );
+		}
+
+		$('.nav a').click(function(){ selectType($(this).index()); }).eq(0).click();
      
-
+		/*
 		//======================
 		//判断是否有图片
 		var F_addImg = checkCookie(cookieName + 'addImg');
@@ -157,21 +168,10 @@
 
 
 
-		//类型选择
-		function selectType(i){
-			$('#classType').val(i);
-			$('.main .col').hide().eq(i).show();
-			$('#conTypes').val(i);
-			$('.nav a').eq(i).addClass('act').siblings().removeClass('act');
-
-			//类型存入缓存
-			setCookie( cookieName + "selectType" , i, 1 );
-		}
-		$('.nav a').click(function(){ selectType($(this).index()); });
 		var defType = $('#conTypes').val();
-		if( F_selectType ){
-			defType = F_selectType;
-		}
+		// if( F_selectType ){
+		// 	defType = F_selectType;
+		// }
 		selectType(defType);	//初始化选择
 
 		//打开和关闭标题列表
@@ -266,6 +266,8 @@
 			$('#titleList .tits[tid='+ dat +']').click();
 		}
 
+		*/
+
 		//表单检测
 		function check( obj ){
 
@@ -330,36 +332,216 @@
 
 		//============================
 		//提交数据后删除所有缓存
-		if( $('#success').length > 0 ){
-			delCookie(cookieName + 'addImg');
-			delCookie(cookieName + 'imgDepict');
-			delCookie(cookieName + 'textDepict');
-			delCookie(cookieName + 'musicDepict');
-			delCookie(cookieName + 'videoDepict');
-			delCookie(cookieName + 'selectType');
-			delCookie(cookieName + 'musicSrc');
-			delCookie(cookieName + 'videoSrc');
-		}
+		// if( $('#success').length > 0 ){
+		// 	delCookie(cookieName + 'addImg');
+		// 	delCookie(cookieName + 'imgDepict');
+		// 	delCookie(cookieName + 'textDepict');
+		// 	delCookie(cookieName + 'musicDepict');
+		// 	delCookie(cookieName + 'videoDepict');
+		// 	delCookie(cookieName + 'selectType');
+		// 	delCookie(cookieName + 'musicSrc');
+		// 	delCookie(cookieName + 'videoSrc');
+		// }
 
 
 
 		//======================
 		//保存音乐描述缓存
-		$('#musicDepict').blur(function(){
-			setCookie(cookieName + "musicDepict" , $(this).val(), 1);
-		});
+		// $('#musicDepict').blur(function(){
+		// 	setCookie(cookieName + "musicDepict" , $(this).val(), 1);
+		// });
 
 		//保存视频描述缓存
-		$('#videoDepict').blur(function(){
-			setCookie(cookieName + "videoDepict" , $(this).val(), 1);
-		});
+		// $('#videoDepict').blur(function(){
+		// 	setCookie(cookieName + "videoDepict" , $(this).val(), 1);
+		// });
 
 		//保存图片描述缓存
-		$('#imgDepict').blur(function(){
-			setCookie( cookieName + "imgDepict" , $(this).val(), 1 );
-		});
+		// $('#imgDepict').blur(function(){
+		// 	setCookie( cookieName + "imgDepict" , $(this).val(), 1 );
+		// });
 
 		//保存文本
-		$('#textDepict').blur(function(){
-			setCookie( cookieName + "textDepict" , $(this).val(), 1 );
+		// $('#textDepict').blur(function(){
+		// 	setCookie( cookieName + "textDepict" , $(this).val(), 1 );
+		// });
+
+	// 初始化图片插件
+	$('#xiuxiuEditor').append('<param name="wmode" value="transparent" />');
+
+
+	// 发布
+	$('#submitApply').click(function(){
+
+		var param = {},
+			tags = [];
+
+		param['type'] = $('.extent a[class=act]').index();
+
+		if ( param.type == '0' ) {
+			param['text'] = $('#textDepict').val();
+			param['input'] = '';
+		} else if ( param.type == '1' ) {
+			param['text'] = $('#imgDepict').val();
+			param['input'] = '';
+		} else if ( param.type == '2' ) {
+			param['text'] = $('#videoDepict').val();
+			param['input'] = $('#j-vidsrc').val();
+		} else if ( param.type == '3' ) {
+			param['text'] = $('#musicDepict').val();
+			param['input'] = $('#j-mussrc').val();
+		}
+
+		// 获取所有便签
+		$('.cue-label-name').each(function( i, el ){
+			if ( $(el).html() != '' ) {
+				tags.push($(el).html());
+			}
 		});
+
+		param['tags'] = tags;
+
+		$('#publishLoading').slideDown();
+
+		na.content._add( param, function(result){
+			$('#publishResult').show().find('p').html(result.message);
+
+			if ( result.status == 0 ) {
+				setTimeout(function(){
+					$('#publishLoading').slideUp();
+				}, 1000);
+			}
+			console.log(result);
+		});
+	});
+
+
+
+	//标签管理 *********************************************
+
+	//展开添加标签面板
+	$('.j-manage-add-label').click(function(){
+		var label = $(this).parent(),
+			input = label.find('.label-add-input');
+
+		var col = label.parents('.col'),
+			cue = label.parents('.cue-label');
+
+		//判断添加数量是否上限
+		if(cue.find('.cue-label-col').length-1 >= 5){
+			alert('此标题的标签达到上限（5个）。');
+			return;
+		}
+
+		//判断是否展开
+		if(label.hasClass('j-add-label')){
+			var name = input.val();
+
+			//判断命名是否规范
+			if(name.replace(/\s/g, '').length <= 0){
+				return;
+			}
+
+			// 判断是否和其他重命名
+			if ( isNameRepeat(name) ) {
+				alert('命名重复');
+				return;
+			}
+
+			//重置添加面板
+			input.val('');
+
+			//添加页面元素
+			var fresh = cue.find('.j-label-templet').clone(true);
+			fresh.removeClass('no j-label-templet');
+			fresh.find('.cue-label-name').html(name);
+			fresh.find('.label-rename-input').val(name);
+			manageLabel(fresh);
+			cue.find('.cue-label-add').before(fresh);
+
+		}else{
+			label.addClass('j-add-label');
+			label.find('.label-add-no').show();
+			label.find('.label-add-yes').css({ borderRadius: 0 });
+			input.width(0).show().stop().animate({ width: 120, paddingLeft: 12, paddingRight: 12 },function(){
+				$(this).attr('placeholder', '标签名');
+			});
+		}
+	});
+
+	// 判断是否有重复名称
+	function isNameRepeat(name){
+		var is = false;
+		$('.cue-label-name').each(function( i, el ){
+			if ( $(el).html() == name ) {
+				is = true;
+				return false;
+			}
+		});
+		return is;
+	}
+
+	//取消添加
+	$('.j-manage-add-label-cancel').click(function(){
+		var label = $(this).parent();
+			label.removeClass('j-add-label');
+			label.find('.label-add-yes').animate({ borderRadius: 3 });
+			label.find('.label-add-input').removeAttr('placeholder').stop().animate({ width: 0, padding: 0 });
+			label.find('.label-add-no').hide();
+	});
+
+	// 标签修改名称 - 显示面板
+	function renameLabel(col){
+		var label = col.parent();
+		label.find('.label-normal').show();
+		label.find('.label-rename').hide();
+		col.find('.label-normal').hide();
+		col.find('.label-rename').show();
+	}
+
+	// 标签确认重命名
+	function renameLabelYes(col){
+		col.find('.label-normal').hide();
+		col.find('.label-rename').show();
+
+		var name = col.find('.label-rename-input').val();
+
+		//判断命名是否规范
+		if(name.replace(/[]/g, '').length <= 0 && name == col.find('.cue-label-name').html()){
+			return;
+		}
+
+		// 判断是否和其他重命名
+		if ( isNameRepeat(name) ) {
+			alert('命名重复');
+			return;
+		}
+
+		col.find('.label-normal').show();
+		col.find('.label-rename').hide();
+		col.find('.cue-label-name').html(col.find('.label-rename-input').val());	//修改页面参数
+	}
+
+	//标签取消重命名
+	function renameLabelNo(col){
+		col.find('.label-normal').show();
+		col.find('.label-rename').hide();
+	}
+
+	//标签删除
+	function closeLabel(col){
+		col.animate({ width: 0, marginRight: 0 }, 500, function(){
+			col.remove();
+		});
+	}
+
+	//挂接每个标签管理的事件
+	function manageLabel(col){
+		col.find('.cue-label-rename').click(function(){	renameLabel(col); });		//修改标签名称		
+		col.find('.label-rename-yes').click(function(){ renameLabelYes(col); });	//确认重命名
+		col.find('.label-rename-no').click(function(){ renameLabelNo(col); });	//取消重命名
+		col.find('.cue-label-close').click(function(){ closeLabel(col); });	//删除标签
+	}
+	// $('.cue-label-col').each(function(){
+		// manageLabel($(this));
+	// });

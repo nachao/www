@@ -51,8 +51,6 @@ User.prototype._get = function( uid, callback ){
 
 	this.get_( param, function(data){
 		callback ? callback(data) : null;
-
-		that.set(data);
 	});
 }
 
@@ -174,22 +172,26 @@ User.prototype.verifyPwd = function( password ){
 */
 User.prototype.refresh = function( param ){
 
-	param = param || this.data_;
-
 	if ( param ) {
 
-		$('#userMain').show();
+		$('#userMain').removeClass('no');
 
 		// 刷新用户信息
 		$('#userInfoIcon').attr('src', param.icon);
-		$('#userInfoGold').attr('n', param.plus).golds();
+		$('#userInfoGold').attr('n', param.sum).golds();
 		$('#userInfoName').html(param.nick || param.account);
 
 		// 刷新用户操作按钮
-		$('#j_userEntry').hide();
+		$('#j_userEntry').addClass('no');
 		$('#j_userOperate').removeClass('no');
 		$('#j_userOperateName').html( param.nick || param.account );
-		$('#headGold').attr('n', param.plus ).golds();
+		$('#headGold').attr('n', param.sum ).golds();
+
+	} else {
+
+		$('#userMain').addClass('no');
+		$('#j_userOperate').addClass('no');
+		$('#j_userEntry').removeClass('no');
 	}
 }
 
@@ -278,29 +280,20 @@ User.prototype._entry = function( account, password, callback ){
 
 
 /*
-*  验证账号和密码，且登录
+*  退出账号
 *
-*  @param {string} account = 账号
-*  @return {object}	如果登录成功则返回 status =1，失败则 =0。成功的话返回此用户的基本信息。
+*  @param {function} callback = 回调
 *  @public
 */
-User.prototype._logout = function( account ){
+User.prototype._logout = function( callback ){
 
-	var param = {},
-		login = this.login;
+	var param = {};
 
-	if ( account && password ) {
+	param['user'] = 'logout';
 
-		param['user'] = 'entry';
-		param['account'] = account;
-		param['password'] = password;
-
-		login.loading(true);
-		this.get_( param, function(data){
-			login.loading(false);
-			callback ? callback(data) : null;
-		}); 
-	}
+	this.get_( param, function(data){
+		callback ? callback(data) : null;
+	}); 
 }
 
 
@@ -381,14 +374,10 @@ Login.prototype.prompt = function(msg){
 Login.prototype.entrySuccess = function(data){
 
 	if ( data ) {
-		var success = $('#entrySuccess').slideDown();
+		$('#entrySuccess').slideDown();
 
 		// 显示登录用户信息
-		success.find('#entrySuccessName').html(data.basic.name);
-		success.find('#entrySuccessPlus').html(data.insert.plus);
-		success.find('#entrySuccessCollect').html(data.insert.collect);
-		success.find('#entrySuccessComment').html(data.insert.comment);
-		success.find('#entrySuccessFollower').html(data.insert.follower);
+		$('#entrySuccessName').html(data.basic.nick || data.basic.account);
 	}
 }
 
@@ -402,10 +391,10 @@ Login.prototype.entrySuccess = function(data){
 Login.prototype.registerSuccess = function(data){
 
 	if ( data ) {
-		var success = $('#registerSuccess').slideDown();
+		$('#registerSuccess').slideDown();
 
 		// 显示登录用户信息
-		success.find('#entrySuccessName').html(data.basic.name);
+		$('#entrySuccessName').html( data.basic.nick || data.basic.account );
 	}
 }
 

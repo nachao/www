@@ -18,7 +18,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 
 /* 公共 - 区域 */
-.leftarea{ width: 770px; }
+.leftarea{ width: 560px; }
 .rightarea{ width: 370px; }
 
 /* 公共 - 通用框 */
@@ -441,29 +441,6 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 
 /* -------------------------------------------- */
 
-/* 内页 操作栏 */
-.actionbar{ height: 90px;width: 100%;margin-top: 90px; }
-.actionbar .option,.actionbar-btn{ display: inline-block;line-height: 33px;background: white url(../imgs/page_bottomBg.gif) repeat-x bottom;border: 1px solid #d9dbdd;border-bottom: 0px;padding: 0 30px 2px;color: #afb4bb;border-radius: 3px;margin-top: 27px;float: left;margin-right: 15px; }
-.actionbar .option:hover,.actionbar-btn:hover{ box-shadow: 0 0 10px #E4E4E4; }
-.actionbar .optionAct,.actionbar-btn-act,.actionbar .optionAct:hover,.actionbar-btn-act:hover{ background: #e74c3c;color: white;border-color: #ca3627; }
-.actionbar .user-icon{ background-image: url(../imgs/iconfont-fanhui.png);background-repeat: no-repeat;background-position: 10px 8px;padding-left: 30px; }
-.actionbar-gap{ float: left;margin: 27px 20px 0 5px;border-right: 1px solid #d9dbdd;height: 33px;width: 0px; }
-
-.actionbar-sign{ display: inline-block;width: 100%;height: 1px;margin-top: 60px;overflow: hidden; }
-
-.actionbar-type .actionbar-btn{ position: relative; top: -73px; height: 90px; font-family: 微软雅黑; line-height: 135px; font-size: 15px;border-bottom: 1px solid #d9dbdd;-webkit-transition: 0.3s;transition: 0.3s;background-repeat: no-repeat;background-position:  center 10px; }
-.actionbar-type .actionbar-s0{ background-image: url(../imgs/iconfont-weibiaoti1.png); }
-.actionbar-type .actionbar-s1{ background-image: url(../imgs/iconfont-wodehuodong.png); }
-.actionbar-type .actionbar-s2{ background-image: url(../imgs/iconfont-zhuanti.png); }
-.actionbar-type .actionbar-s3{ background-image: url(../imgs/iconfont-crmtubiao66.png); }
-
-.actionbar-type .actionbar-btn:hover{ top: -35px;background-position: center 20px; }
-.actionbar-type .actionbar-btn-act{  color:white; top: -35px;background-color: #e74c3c;border-color: #D13B2C;top: -35px;background-position: center 20px; }
-.actionbar-type .actionbar-s0-act{ background-image: url(../imgs/iconfont-weibiaoti1-white.png); }
-.actionbar-type .actionbar-s1-act{ background-image: url(../imgs/iconfont-wodehuodong-white.png); }
-.actionbar-type .actionbar-s2-act{ background-image: url(../imgs/iconfont-zhuanti-white.png); }
-.actionbar-type .actionbar-s3-act{ background-image: url(../imgs/iconfont-crmtubiao66-white.png); }
-
 /* 标题描述 */
 /*.describe{ padding: 20px 0 50px; }*/
 .describe{ width: 710px; border-right: 1px dashed #ddd; padding: 20px 30px 20px; margin-bottom: 50px; background: white; border: 1px solid #d9dbdd; border-radius: 20px 0 0; }
@@ -539,7 +516,8 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .contentList .col .cont .gui i{ width: 38px;height: 38px;background: #ddd;position: absolute;top: 50%;left: 50%;font-size: 30px;font-weight: bold;color: #2f3c4e;line-height: 35px;text-align: center;margin: -19px 0 0 -19px;z-index: 3;border-radius: 2px;cursor: pointer;display: none; }
 .contentList .col .cont .gui i:hover{ background: white;font-size: 33px; }
 .contentList .col .cont .gui:hover i,.contentList .col .cont .gui:hover em{ display: inline-block; }
-.contentList .col .cont .txt{ margin: 25px 30px;color: #6d7683;line-height: 22px;max-height: 66px;overflow: hidden; }
+.contentList .col .cont .txt{ margin: 25px 30px 0;color: #6d7683;line-height: 22px;max-height: 66px;min-height: 66px;overflow: hidden;display: inline-block; }
+.contentList .col .cont .txt .are{ word-break: break-all; } 
 .contentList .col .cont .txt-big{ font-size: 13px;color: #333;line-height: 26px;max-height: 78px; }
 .contentList .col .cont .txt .are-not{ text-align: center;line-height: 26px;color: #ddd; }
 .contentList .col .use{ margin: 20px 30px;height: 45px;border-top: 1px solid #ecedee;padding-top: 20px;position: relative; }
@@ -638,7 +616,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .loadmore-act i{ background: url(../imgs/concept-f.gif) no-repeat center;background-size: 1000px 28px;display: inline-block;width: 100%;height: 100%;position: absolute;top: 0px;left: 0px; }
 
 /* 个人中心 - 用户信息 */
-.userInfo{ background: #e74c3c url(../imgs/userInfo_bg.png) no-repeat right top;border-radius: 3px;margin-top: 90px;position: relative;overflow: hidden; }
+.userInfo{ background: #e74c3c url(../imgs/userInfo_bg.png) no-repeat right top;border-radius: 3px;position: relative;overflow: hidden; }
 .userInfo .icon{ width: 180px;height: 180px; }
 .userInfo .icon a{ display: inline-block;width: 100px;height: 100px;border-radius: 100px;border: 4px solid #d82425;margin: 36px 0 0 36px;overflow: hidden;float: left; }
 .userInfo .icon a img{ width: 110%;position: relative;top: -5%;left: -5%; }
@@ -867,24 +845,24 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .titleManage .col .col-close-load img{ position: relative;top: 2px;left: -10px; }
 
 /* 我的标题 - 标签管理 */
-.titleManage .cue-label{ padding-left: 190px; }
-.titleManage .cue-add-label{  }
-.titleManage .cue-label-col{ height: 33px;line-height: 33px;background: #f6f6f6;border-radius: 2px 2px 0 0;float: left;margin-left: 20px;border-bottom: 1px solid #e74c3c;margin-bottom: 20px; }
-/*.titleManage .cue-label-col:hover{ border-color: #d0d2d5; }*/
-.titleManage .cue-label-name{ float: left;padding: 0 12px;border: 1px solid #ddd;border-bottom: 0px;width: 67px;overflow: hidden;height: 33px; }
-.titleManage .cue-label-btn{ width: 33px;height: 32px;cursor: pointer;float: left;border-top: 1px solid #ddd;background: no-repeat center #f6f6f6; }
-.titleManage .cue-label-btn:hover{ background-color: #e74c3c;border-top-color: #e74c3c;color: white; }
+.cue-label{ margin-top: 20px; }
+.cue-add-label{  }
+.cue-label-col{ height: 33px;line-height: 33px;background: #f6f6f6;border-radius: 2px 2px 0 0;float: left;margin-right: 20px;border-bottom: 1px solid #e74c3c;margin-top: 20px; }
+/*.cue-label-col:hover{ border-color: #d0d2d5; }*/
+.cue-label-name{ float: left;padding: 0 12px;border: 1px solid #ddd;border-bottom: 0px;width: auto;overflow: hidden;height: 33px;min-width: 42px; }
+.cue-label-btn{ width: 33px;height: 32px;cursor: pointer;float: left;border-top: 1px solid #ddd;background: no-repeat center #f6f6f6; }
+.cue-label-btn:hover{ background-color: #e74c3c;border-top-color: #e74c3c;color: white; }
 
-.titleManage .cue-label-rename{ background-image: url(../imgs/iconfont-zhongmingming.png); }
-.titleManage .cue-label-rename:hover{ background-image: url(../imgs/iconfont-zhongmingming-white.png); }
-.titleManage .cue-label-close{ background-image: url(../imgs/iconfont-shanchu.png); }
-.titleManage .cue-label-close:hover{ background-image: url(../imgs/iconfont-shanchu-white.png); }
+.cue-label-rename{ background-image: url(../imgs/iconfont-zhongmingming.png); }
+.cue-label-rename:hover{ background-image: url(../imgs/iconfont-zhongmingming-white.png); }
+.cue-label-close{ background-image: url(../imgs/iconfont-shanchu.png); }
+.cue-label-close:hover{ background-image: url(../imgs/iconfont-shanchu-white.png); }
 
-.label-normal{ position: relative;float: left;width: 158px; }
-.label-normal .cue-label-name{ width: 133px; }
+.label-normal{ position: relative;float: left; }
+.label-normal .cue-label-name{ width: auto; }
 .label-normal .cue-label-btn{ opacity: .1;position: absolute;top: 0px; }
-.label-normal .cue-label-rename{ right: 35px; }
-.label-normal .cue-label-close{ right: 0px; }
+.label-normal .cue-label-rename{ right: 34px; }
+.label-normal .cue-label-close{ right: 1px; }
 .label-normal:hover .cue-label-btn{ opacity: 1; }
 
 /* 我的标题 - 标签管理 - 重命名 */
@@ -894,7 +872,7 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .label-rename .label-rename-no:hover{ border-right-color: #e74c3c; }
 .label-rename .label-rename-input{ float: left;padding: 0 12px;border-top: 1px solid #ddd;border-left: 1px solid #ddd;width: 167px;height: 33px;background: transparent;display: inline-block;border-right: 1px solid #ddd; }
 
-.cue-label-add{ margin-left: 20px;float: left; }
+.cue-label-add{ float: left;margin-top: 20px; }
 .label-add-input{ border-bottom: 1px solid #e74c3c;height: 33px;background: #f6f6f6;padding: 0 12px;float: left; }
 .label-add-btn{ width: auto;height: 34px;line-height: 34px; background: #e74c3c;color: white;padding: 0 12px;display: inline-block;float: left; }
 .label-add-yes{ border-radius: 3px; }
@@ -1125,119 +1103,6 @@ html,body,a,em,i,input,textarea,p,ul,li,ol{ margin: 0px;padding: 0px;border: 0px
 .glory .friend{ background-image: url(../imgs/glory-friend.png) ; }
 
 
-
-
-/*====
-发布
-====*/
-.publishHead{ margin-top: 0px; }
-.publishHead .head .tit em{ background: url(../imgs/add_headIcon.png) no-repeat 0 center;padding-left: 38px; }
-.publishHead .head .gap i{ width: 28px; }
-
-/*菜单*/
-.publish .nav{ border-bottom: 1px solid #e74c3c;margin-top: 20px; }
-.publish .nav a{ display: inline-block;line-height: 35px;text-decoration: none;padding: 0 30px;font-size: 14px;border-radius: 3px 3px 0 0;margin-right: 10px; }
-.publish .nav a:hover{ background: #eee; }
-.publish .nav a.act{ background: #e74c3c;color: white;box-shadow: 0 0 10px #d52d1c inset;text-shadow: 1px 1px 5px #d52d1c; }
-
-/* 统一 */
-.publish .col{ display: none;margin-top: 20px;position: relative; }
-.publish .col .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 5px 20px;position: absolute;bottom: -38px;left: 0px;display: none;cursor: default; }
-.publish .col .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;top: -4px;left: 50%;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #bbb; border-bottom-color: transparent; border-right-color: transparent;margin-left: -2px; }
-
-/* 标题 */
-.publish .title{ display: block;margin: 30px 0 30px;position: relative; }
-.publish .title .tit{ height: 35px;background: white url(../imgs/tagtag.png) no-repeat 10px center;width: 450px;padding: 0 10px 0 35px;border: 0px;color: #444;font-size: 15px;display: none;cursor: default; }
-.publish .title .tit:focus{ background-color: white; }
-.publish .title .btn{ display: inline-block;width: auto;line-height: 33px;border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 3px;padding: 0 15px; }
-.publish .title .btn:hover{ border-color: #bbb;color: #333; }
-.publish .title .tags{ display: none;z-index: 3;width: 510px;background: white;padding: 50px;border:1px solid #eee;position: relative;z-index: 99; }
-.publish .title .tags .tits{ display: inline-block;line-height: 33px;background: #f2f2f2;border: 1px solid #e6e6e5;padding: 0 30px;color: #666;float: left;margin: -1px 0 0 -1px;position: relative;left: 1px;top: 1px; }
-.publish .title .tags .tits:hover{ background: #e6e6e5;color: #111; }
-.publish .title .tagsCue{ line-height: 35px;color: #999; }
-.publish .title .tagsCue span{ margin-left: 30px; }
-.publish .title .tagsCue a{ color: #e74c3c; }
-.publish .title .tagsCue a:hover{ text-decoration: underline; }
-
-/* 描述 */
-.publish .col .cue{ display: block;padding: 16px 20px;line-height: 28px;min-height: 140px;background: #f6f6f6 url(../imgs/tagJianjie.png) no-repeat 20px 23px;border: 1px solid #e4e6e8;border-radius: 3px;width: 636px;resize: vertical;font-size: 14px;color: #333;padding-left: 50px;outline: none;margin-top: 20px; }
-.publish .col .cue:focus{ background-color: white;border-color: #ddd;box-shadow: 0 0 10px #ddd; }
-
-/* 文字 */
-.publish .writing .txt{ display: block;line-height: 22px;height: 209px;border: 1px solid #e4e6e8;border-radius: 2px;width: 636px;resize: vertical;font-size: 14px;color: #333;margin-top: 30px; }
-
-/* 图片 */
-.publish .picture .uploadPhoto{ border: 1px dashed #ddd;border-radius: 3px;padding: 20px;text-align: center;color: #ccc;margin-bottom: 30px;cursor: pointer; }
-.publish .picture .con{ border: 1px solid #ddd;border-radius: 3px; }
-.publish .picture .con #divPreview{ overflow: hidden;position: relative; }
-.publish .picture .con #divPreview .upfile{ position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;opacity: 0;filter: alpha(opacity:0);z-index: 2; }
-.publish .picture .con img{ border: 0px;float: left;max-width: 100%; }
-.publish .picture .con #divPreview a{ display: inline-block;width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;background: rgba(0,0,0,.1);color: white;text-align: center;line-height: 100px;text-decoration: none;display: none;opacity: 0; }
-.publish .picture .con #divPreview:hover a{ opacity: 1; }
-.publish .picture .picture-edit{ background: url(../imgs/loading.gif) no-repeat center #f6f6f6;min-height: 100px; }
-
-/* 视频 */
-.publish .video .con{ position: relative; }
-.publish .video .tit{ display: inline-block;position: absolute;bottom: 0px;left: 33px;line-height: 35px;color: #999;cursor: default; }
-.publish .video .txt{  height: 33px;background: url(../imgs/tagtag.png) no-repeat 10px center;width: 663px;padding: 0 10px 0 33px;border: 1px solid #e4e6e8;border-radius: 3px;color: #444;font-size: 13px; }
-.publish .video .txt:focus{ border-color: #ddd;box-shadow: 0 0 10px #ddd; }
-.publish .video .hint{ height: 67px;text-align: right; }
-.publish .video .hint p{ font-size: 12px;color: gray;line-height: 24px; }
-.publish .video .hint p a{ color: black;text-decoration: none; }
-.publish .video .hint p a:hover{ text-decoration: underline;}
-.publish .video .result{ display: none;border-left: 1px solid #ddd;border-right: 1px solid #ddd;height: 350px;background: #e74c3c; }
-.publish .video .result embed{ float: left; }
-
-
-/*.publish .video .con{ padding: 20px; }*/
-
-/* 音乐 */
-/*.publish .music .con{ padding: 20px; }*/
-/*.publish .music .txt{ width: 660px; }*/
-/*.publish .btn{ margin: 20px 0 0; }*/
-/*.publish #content{ display: none; }*/
-.publish .music .result{ height: 70px; }
-.publish .music .result embed{ float: left;position: relative;left: 235px;top: 20px; }
-
-/*.publish .col .tit{ float: left;line-height: 30px;margin-left: 40px;color: #ccc;width: auto; }*/
-
-
-/*.publish .urls .s1{ width: 120px; }*/
-/*.publish .urls .s2{ width: 685px; }*/
-
-/*.publish .upbtn{ width: 100%; }
-.publish #halfamoment{ width: 100%;height: 50px;float: left;text-align: center;line-height: 50px;color: #ccc;font-size: 18px;display: none; }
-*/
-/* 确定 */
-.publish .prompt{ display: inline-block;width: 100%;position: relative;height: 60px; }
-.publish .prompt .sub{ background: #e74c3c;width: 150px;height: 35px;border-radius: 3px 0 0 3px;color: white;cursor: pointer; }
-.publish .prompt .sub:hover{ background: #ca2d1d; }
-.publish .prompt .cancel{ color: #2f3c4e;float: left;margin: 10px 0 0 30px;font-size: 13px; }
-.publish .prompt .cancel:hover{ text-decoration: underline; }
-.publish .prompt .recommend{ display: inline-block;width: auto;line-height: 33px;border: 1px solid #ccc;background: #f6f4f5;color: #666;border-radius: 0 3px 3px 0;padding: 0 15px;margin-left: 10px;-webkit-transition: 0.3s; transition: 0.3s; }
-.publish .prompt .recommend:hover{ border-color: #bbb;color: #333; }
-.publish .prompt .recommend-act{ margin-left: 2px;background: #e74c3c;border-color: #e74c3c;color: white; }
-.publish .prompt .recommend-act:hover{ color: white;background-color: #ca2d1d;border-color: #ca2d1d; }
-.publish .prompt .tag{ line-height: 35px; }
-.publish .prompt .tag input{ color: #e74c3c;font-size: 30px;font-family: Arial;width: 120px;display: inline-block; }
-.publish .prompt .tag em{ display: none; }
-.publish .prompt .tip{ display: inline-block;width: auto;height: 16px;line-height: 16px;border-radius: 2px;text-align: center;color: white;background: #bbb;padding: 2px 5px;position: absolute;top: -35px;left: 0px;display: none;cursor: default; }
-.publish .prompt .tip i{ display: inline-block;width: 0px;height: 0px;overflow:hidden;position: absolute;bottom: -4px;left: 40px;-webkit-transform:rotate(45deg);transform:rotate(45deg);border: 4px solid #bbb; border-top-color: transparent; border-left-color: transparent;  }
-
-.publish .prompt .formula{ width: 100%; }
-.publish .prompt .formula-txt{ margin: 0 0 0 20px;color:#aaa;display: none; }
-
-/* 提交后加载动画 */
-.j-prompt-submit-ajax{ background: url(../imgs/concept-f.gif) no-repeat center; }
-
-/* 提示 */
-.publish .cue_wrong{ border-color: #e74c3c ;color: #a94442;background-color: white; }
-
-/* 发布、编辑内容 - 标签选择 */
-.publish-label-list{ border-top: 1px solid #eee;padding-top: 20px;margin-top: 16px; }
-.publish-label-list a{ background-color: #ddd; font-weight: 700; border-radius: 3px; color: #fff; font-size: 12px; margin-right: 10px; cursor: pointer;display: inline-block;line-height: 33px;padding: 0 12px;margin-bottom: 10px; }
-.publish-label-list a:hover{ background-color: #999; }
-.publish-label-list a.act{ background: #e74c3c; }
 
 
 /*====
@@ -1850,7 +1715,7 @@ margin: auto; }
 /*====
  选择页面风格 - 精简版 
 ====*/
-.Lite .contentList{ width: 48%;display: inline-block;margin-top: 90px; }
+.Lite .contentList{ width: 48%;display: inline-block; }
 .Lite .contentList .col .head{ display: none;position: absolute;top: -118px;z-index: 2;width: 330px;border: 0px; }
 .Lite .contentList .col .cont{ border: 0px;margin-top: 0px;box-shadow: 0px 0px 3px #D8D8D8;border-radius: 3px 3px 0 0; }
 .Lite .contentList .col .use{ margin: 20px 30px 0;padding-bottom: 20px;padding-top: 0px;border-top: 0px; }
@@ -1954,21 +1819,6 @@ margin: auto; }
 
 
 
-.actionbar{ padding-top: 10px;height: 110px; }
-.actionbar-icon{ font-size: 50px; color: #000; width: 90px; height: 90px; line-height: 90px; float: left; }
-.actionbar-info{ float: left; height: 100%; }
-.actionbar-info-title{ line-height: 33px; font-size: 20px; margin-top: 14px; }
-.actionbar-info-param{ display: inline-block; }
-.actionbar-info-span{ float: left; line-height: 33px; font-size: 12px; margin-right: 33px;color: #333; }
-.actionbar-info-span i{ display: inline-block;margin-right: 5px;font-size: 12px;color: #333; }
-.actionbar-info-span em{ color: #e74c3c;font-size: 15px;font-weight: bold;font-family:"Times New Roman",Georgia,Serif; }
-.actionbar-use{ float: right; }
-.actionbar-use-btn{ display: inline-block; height: 90px; line-height: 90px; text-align: center; font-size: 20px; }
-.actionbar-use-btn i{ font-size: 24px;margin-right: 10px; }
-.actionbar-use-btn:hover{ color: #d82425; }
-.actionbar-use-btn:hover i{ color: #d82425; }
-.actionbar-use-btnAct{ color: #e74c3c; }
-.actionbar-use-btnAct i{ color: #e74c3c; }
 
 
 

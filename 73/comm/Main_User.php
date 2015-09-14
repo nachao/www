@@ -123,6 +123,11 @@ class Event_user extends Data_user
 class Users extends Event_user
 {
 
+	//获取UID
+	public function Guid() {
+		return parent::uid_();
+	}
+
 	//获取用户信息，根据UID
 	public function Guser( $target =0 ) {
 
@@ -253,9 +258,21 @@ class Users extends Event_user
 
 		if ( $uid ) {
 			setcookie( '73', $uid, time()+24*3600, "/");	//存入本地缓存 - 有效时间 1 天	
+
+			$value = array(
+				'status' => 1,
+				'message' => '缓存成功'
+			);
 		} else {
-			setcookie( '73', '', time()-3600);
+			setcookie( '73', '', time()-3600, "/");
+
+			$value = array(
+				'status' => 1,
+				'message' => '清除缓存'
+			);
 		}
+
+		return $value;
 	}
 
 	//提交反馈信息

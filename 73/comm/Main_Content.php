@@ -8,6 +8,14 @@
 */
 class Comm_content extends Config
 {	
+
+
+	// 添加内容
+	protected function _uid(){
+		$u = new Users();
+		return $u -> Guid();
+	}
+
 }
 
 
@@ -19,13 +27,55 @@ class Comm_content extends Config
 class Data_content extends Comm_content
 {
 
-	//创建私有变量
-	private $titleId;
+	// 添加内容	
+	protected function _addContent( $uid =0, $text ='', $input ='', $type =0, $cid =0 ){
+		$sql = "insert INTO `ux73`.`ux73_main_content` (".
+				"`id_cid`, `id_uid`, `main_text`, `main_input`, `status_type`, `time_base`) VALUES (".
+				$cid.", '".$uid."', '".$text."', '".$input."', '".$type."', '".time()."');";
+		return mysql_query($sql);
+	}
+
+	// 添加内容
+	protected function _addZan( $cid =0, $uid =0 ){
+		$sql = "insert INTO `ux73`.`ux73_main_zan` (`id_cid`, `id_uid`, `time_zan`) VALUES ('".$cid."', '".$uid."', '".time()."');";
+		return mysql_query($sql);
+	}
+
+	// 获取内容总数
+	protected function _selectCount(){
+		$sql = "select count(*) from `ux73_main_content`";
+		$row = parent::Ais($sql);
+		return $row ? $row[0] : '0';
+	}
+
+	// 获取赛选内容
+	protected function _selectContent( $begin=0, $pages=9, $sum = 0 ){
+		$sql = "select * from `ux73_main_content` WHERE `status_verify` = 0 AND `number_sum` >= ".$sum." order by `id_cid` desc LIMIT ".$begin." , ".$pages;
+		return mysql_query($sql);
+	}
+
+	// 获取用户的点赞信息
+	protected function _selectZan( $cid =0, $uid =0 ){
+		$sql = "select *  FROM `ux73_main_zan` WHERE `id_cid` = ".$cid." AND `id_uid` = ".$uid;
+		$row = parent::Ais($sql);
+		return $row ? $row['time_zan'] : '0';
+	}
 
 
-	/********************************************
-	* 添加
-	*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//添加内容
 	//#参数
@@ -35,6 +85,8 @@ class Data_content extends Comm_content
 				"(`id`, `cid`, `userid`, `titleid`, `content`, `cont`, `plus`, `base`, `types`, `consume`, `shareglod`, `effects`, `label`)".
 				" values".
 				"('', '".$data['cid']."', '".$data['uid']."', '".$data['tid']."', '".$data['text']."', '".$data['cont']."', ".$data['plus'].", '".time()."', '".$data['type']."', '".$data['spend']."', ".$data['help'].", '".$data['push']."', '".$data['label']."');";
+
+		$sql = "insert INTO `ux73`.`ux73_main_content` (`id_cid`, `id_uid`, `id_tid`, `main_text`, `main_input`, `number_consume`, `time_base`, `time_revise`, `status_type`) VALUES (NULL, '123', '0', '123123123', '123123', '0', '0', '0', '0');";
 		return mysql_query($sql);
 	}
 
@@ -173,35 +225,32 @@ class Event_content extends Data_content
 		return parent::data_selectCount($norm, $uid, $tid);
 	}
 
-	//获取的内容列表，可以指定 标准得分NORM
-	protected function event_getList($tid=0, $begin=0, $page=15, $norm=0 , $uid=0, $label=0 ){
-		$u = new Users();
-		$t = new Title();
-		$query = parent::data_selectContent( $begin, $page, $tid, $norm, $uid, $label);
+	// 遍历数据
+	protected function ergodicList_( $query ){
+		$a = new Label();
 		$array = array();
 		if( !!$query && mysql_num_rows($query) > 0 ){	//查询是否有数据
 			while( $row = mysql_fetch_array($query)){	//遍历数据
+
 				$temp = array(
-						'cid' => $row['cid'],
-
-						'biaoshi'	=> $row['effects'],	// 标示
-						'biaotiid'	=> $row['titleid'],	// 标题id
-						'biaoti'	=> $t -> Gtitle($row['titleid']),	// 标题名
-						'text'	=> $row['content'],	// 文本
-						'type'	=> $row['types'],	// 类型
-						'zhuyao'	=> $row['cont'],	// 主要内容
-
-						'uid'	=> $row['userid'],	// 作者id
-						'uname'=> $u -> Gname($row['userid']),	// 作者名
-
-						'score'		=> $row['plus'],	// 得分
-						'shijian'	=> $row['base'],	// 发布时间
+						'cid' => $row['id_cid'],
+						'uid' => $row['id_uid'],
+						'sum' => $row['number_sum'],
+						'zan' => parent::_selectZan( $row['id_cid'], parent::_uid() ),
+						'text'	=> $row['main_text'],	// 文本
+						'input'	=> $row['main_input'],	// 控件
+						'type'	=> $row['status_type'],	// 类型
+						'label' => $a -> Guse( $row['id_cid'], $row['id_uid'] )
 					);
 				array_push($array, $temp);
 			}
 		}
 		return $array;	//返回
 	}
+
+
+
+
 
 	//获取指定 内容ID 的信息
 	protected function event_getById($cid){
@@ -421,6 +470,35 @@ class Event_content extends Data_content
 class Content extends Event_content
 {
 	
+	// 获取指定分数的内容列表
+	public function GBsum(){
+
+		$value = array(
+			'status' => 0,
+			'message' => '-'
+		);
+
+		$query = parent::_selectContent();
+		$array = parent::ergodicList_($query);
+
+		if ( $array ) {
+			$value = array(
+				'status' => 1,
+				'message' => '成功获取列表数据',
+				'res' => $array
+			);
+		}
+
+		return $value;
+	}
+
+
+
+
+
+
+
+
 	/********************************************
 	* 测试
 	*/
@@ -659,8 +737,48 @@ class Content extends Event_content
 	* 添加 add
 	*/
 
+	
+
 	//提交发布表单
-	public function Acon($data=0, $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label=0){
+	public function Acon( $text ='', $input ='', $type =0, $label =0 ){
+
+		$a = new Label();
+
+		$uid = parent::_uid();
+		$cid = parent::_selectCount() + 1;
+		$run = parent::_addContent( $uid, $text, $input, $type, $cid );
+
+		if ( $run ) {
+
+			if ( $label ) {
+				foreach( $label as $i => $tag ) {
+					$label = $a -> Alabel($tag);
+					$a -> ALuse( $label['label']['id_lid'], $cid );
+				}
+			}
+			$value = array(
+				'status' => 1,
+				'message' => '发布成功'
+			);
+
+		} else {
+			$detail = array(
+				'uid' => $uid,
+				'cid' => $cid,
+				// 'sql' = $run
+			);
+			$value = array(
+				'status' => 0,
+				'message' => '发布失败',
+				'detail' => $detail
+			);
+		}
+
+		return $value;
+	}
+
+	//提交发布表单
+	public function Acon2($data=0, $type=0, $tid=0, $con='', $img='', $imgcon='', $mp3='', $mp3con='', $gif='', $gifcon='', $recommend=0, $label=0){
 		$u = new Users();				
 		$t = new Title();	
 		$o = new Tool();
@@ -739,6 +857,28 @@ class Content extends Event_content
 
 		//发布成功后跳转
 		$u -> UtoL('userAdd.php?ok='.$cid);
+	}
+
+	// 点赞
+	public function Azan( $cid =0 ){
+
+		$uid = parent::_uid();
+
+		if ( parent::_selectZan( $cid, $uid ) ) {
+			$value = array(
+				'status' => 0,
+				'message' => '已经赞过此内容'
+			);
+
+		} else {
+			parent::_addZan( $cid, $uid );
+			$value = array(
+				'status' => 1,
+				'message' => '点赞成功'
+			);
+		}
+
+		return $value;
 	}
 
 	//添加指定 用户UID（选填） 购买指定 内容CID 

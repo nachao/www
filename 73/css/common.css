@@ -2,7 +2,7 @@
 /**
 *  头部 
 **/
-.header{ width: 100%;box-shadow: 0 1px 3px rgba(0,0,0,.1);background: white; }
+.header{ width: 100%;box-shadow: 0 1px 3px rgba(0,0,0,.1);background: white;position: relative;z-index: 9; }
 .header:hover{ opacity: 0.96; }
 .header .topgap{ height: 2px;width: 100%;background: url(../imgs/header_topBg.gif) repeat-x; }
 .header .bottomgap{ width: 100%;height: 7px;background: url(../imgs/area_bottomBg.gif) repeat-x; }
@@ -47,3 +47,51 @@
 .login-user span{ color: #333;display: none; }
 .login-user em{ color: #e74c3c; }
 .login-user i{ color: #aaa; }
+
+
+
+
+
+
+
+/* 内页 操作栏 */
+.actionbar{ height: 90px;width: 100%; }
+.actionbar .option,.actionbar-btn{ display: inline-block;line-height: 33px;background: white url(../imgs/page_bottomBg.gif) repeat-x bottom;border: 1px solid #d9dbdd;border-bottom: 0px;padding: 0 30px 2px;color: #afb4bb;border-radius: 3px;margin-top: 27px;float: left;margin-right: 15px; }
+.actionbar .option:hover,.actionbar-btn:hover{ box-shadow: 0 0 10px #E4E4E4; }
+.actionbar .optionAct,.actionbar-btn-act,.actionbar .optionAct:hover,.actionbar-btn-act:hover{ background: #e74c3c;color: white;border-color: #ca3627; }
+.actionbar .user-icon{ background-image: url(../imgs/iconfont-fanhui.png);background-repeat: no-repeat;background-position: 10px 8px;padding-left: 30px; }
+.actionbar-gap{ float: left;margin: 27px 20px 0 5px;border-right: 1px solid #d9dbdd;height: 33px;width: 0px; }
+
+.actionbar-sign{ display: inline-block;width: 100%;height: 1px;margin-top: 60px;overflow: hidden; }
+
+.actionbar-type .actionbar-btn{ position: relative; top: -73px; height: 90px; font-family: 微软雅黑; line-height: 135px; font-size: 15px;border-bottom: 1px solid #d9dbdd;-webkit-transition: 0.3s;transition: 0.3s;background-repeat: no-repeat;background-position:  center 10px; }
+.actionbar-type .actionbar-s0{ background-image: url(../imgs/iconfont-weibiaoti1.png); }
+.actionbar-type .actionbar-s1{ background-image: url(../imgs/iconfont-wodehuodong.png); }
+.actionbar-type .actionbar-s2{ background-image: url(../imgs/iconfont-zhuanti.png); }
+.actionbar-type .actionbar-s3{ background-image: url(../imgs/iconfont-crmtubiao66.png); }
+
+.actionbar-type .actionbar-btn:hover{ top: -35px;background-position: center 20px; }
+.actionbar-type .actionbar-btn-act{  color:white; top: -35px;background-color: #e74c3c;border-color: #D13B2C;top: -35px;background-position: center 20px; }
+.actionbar-type .actionbar-s0-act{ background-image: url(../imgs/iconfont-weibiaoti1-white.png); }
+.actionbar-type .actionbar-s1-act{ background-image: url(../imgs/iconfont-wodehuodong-white.png); }
+.actionbar-type .actionbar-s2-act{ background-image: url(../imgs/iconfont-zhuanti-white.png); }
+.actionbar-type .actionbar-s3-act{ background-image: url(../imgs/iconfont-crmtubiao66-white.png); }
+
+
+/* 操作栏 */
+.actionbar-icon{ font-size: 50px; color: #000; width: 90px; height: 90px; line-height: 90px; float: left; }
+.actionbar-info{ float: left; height: 100%; }
+.actionbar-info-title{ line-height: 33px; font-size: 20px; margin-top: 14px; }
+.actionbar-info-param{ display: inline-block; }
+.actionbar-info-span{ float: left; line-height: 33px; font-size: 12px; margin-right: 33px;color: #333; }
+.actionbar-info-span i{ display: inline-block;margin-right: 5px;font-size: 12px;color: #333; }
+.actionbar-info-span em{ color: #e74c3c;font-size: 15px;font-weight: bold;font-family:"Times New Roman",Georgia,Serif; }
+.actionbar-use{ float: right; }
+.actionbar-use-btn{ display: inline-block; height: 90px; line-height: 90px; text-align: center; font-size: 20px; }
+.actionbar-use-btn i{ font-size: 24px;margin-right: 10px; }
+.actionbar-use-btn:hover{ color: #d82425; }
+.actionbar-use-btn:hover i{ color: #d82425; }
+.actionbar-use-btnAct{ color: #e74c3c; }
+.actionbar-use-btnAct i{ color: #e74c3c; }
+
+.actionbar-select{  }
