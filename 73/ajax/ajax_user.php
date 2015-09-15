@@ -464,12 +464,17 @@
 
 		// 获取指定用户的信息
 		if ( $key == 'get' ) {
-			echo json_encode($u -> Guser($request['uid']));
+			echo json_encode($u -> Guser($request['uid'], 0));
 		}
 
 		// 获取指定用户的指定天数的收入详细
 		if ( $key == 'income' ) {
 			echo json_encode($u -> Glog($request['uid'], $request['day'] ));
+		}
+
+		// 修改昵称
+		if ( $key == 'setName' ) {
+			echo json_encode($u -> Unick($request['value']));
 		}
 
 	}

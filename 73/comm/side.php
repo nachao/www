@@ -10,7 +10,12 @@
 				<div class="price">
 					<em id="userInfoGold" class="golds" n="<?php echo '100'//$u -> Gplus(); ?>"></em><i>元</i>
 				</div>
-				<div class="name" id="userInfoName" >游客</div>
+				<div class="name" >
+					<input class="name-edit-input" id="userInfoName" type="text" value="" readonly="true" />
+					<a class="name-edit-btn name-edit-revise" id="nameEdit" href="javascript:;" >修改</a>
+					<a class="name-edit-btn name-edit-yes" id="nameEditYes" href="javascript:;" >确认</a>
+					<a class="name-edit-btn name-edit-no" id="nameEditNo" href="javascript:;" >取消</a>
+				</div>
 			</div>
 			<div class="c"></div>
 			<div class="depict no"><?php echo '暂无描述'//$u -> Gdepict(); ?></div>

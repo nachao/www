@@ -16,6 +16,14 @@ class Comm_content extends Config
 		return $u -> Guid();
 	}
 
+	protected function _u(){
+		return new Users();
+	}
+
+	protected function _a(){
+		return new Label();
+	}
+
 }
 
 
@@ -61,6 +69,12 @@ class Data_content extends Comm_content
 		return $row ? $row['time_zan'] : '0';
 	}
 
+	// 更新内容信息
+	protected function _update( $cid=0, $name='', $val=0){
+		$sql = "update  `ux73`.`ux73_main_content` SET  `".$name."` =  '".$val."' WHERE  `ux73_main_content`.`id_cid` = ".$cid." LIMIT 1 ;";
+		return mysql_query($sql);
+	}
+
 
 
 
@@ -101,6 +115,17 @@ class Data_content extends Comm_content
 	/********************************************
 	* 查询
 	*/
+
+
+	// 获取内容信息，根据CID
+	protected function _selectCid( $cid =0 ) {
+		$sql = "select * FROM  `ux73_main_content` WHERE  `id_cid` =".$cid." ;";
+		return parent::Ais($sql);
+	}
+
+
+
+
 
 	//获取 指定ID 的内容
 	protected function data_selectById($cid=0){
@@ -192,7 +217,7 @@ class Data_content extends Comm_content
 
 
 	//刷新指定 内容CID 的指定 字段NAME 的指定 参数VAL
-	protected function data_update($cid=0, $name='', $val=0){
+	protected function data_update( $cid=0, $name='', $val=0){
 		$sql = "update  `".parent::Mn()."`.`".parent::Fn()."content` SET  `".$name."` =  '".$val."' WHERE  `".parent::Fn()."content`.`cid` = ".$cid." LIMIT 1 ;";
 		return mysql_query($sql);
 	}
@@ -390,7 +415,14 @@ class Event_content extends Data_content
 	//更新指定 内容CID 的 金额NUM
 	protected function event_updatePlus($cid=0, $num=0){
 		if($cid && $num){
-			return parent::data_update($cid, 'plus', $num);
+			return parent::_update($cid, 'number_sum', $num);
+		}
+	}
+
+	//更新指定 内容CID 的 点赞量
+	protected function event_updateZan($cid=0, $num=0){
+		if($cid && $num){
+			return parent::_update($cid, 'number_zan', $num);
 		}
 	}
 
@@ -512,6 +544,44 @@ class Content extends Event_content
 	/********************************************
 	* 获取 get
 	*/
+
+	// 获取内容信息
+	public function Gcontent( $cid =0 ){
+
+		$info = parent::_selectCid($cid);
+
+		$content = array();
+		$value = array(
+			'status' => 0,
+			'message' => '-',
+			'content' => $content
+		);
+
+		if ( $info ) {
+			$content = array(
+					'cid' => $info['id_cid'],
+					'uid' => $info['id_uid'],
+					'sum' => $info['number_sum'],
+					'zan' => parent::_selectZan( $info['id_cid'], parent::_uid() ),
+					'text'	=> $info['main_text'],	// 文本
+					'input'	=> $info['main_input'],	// 控件
+					'type'	=> $info['status_type'],	// 类型
+					'label' => parent::_a() -> Guse( $info['id_cid'], $info['id_uid'] )
+				);
+			$value = array(
+				'status' => 1,
+				'message' => '成功获取内容信息',
+				'content' => $content
+			);
+		}
+
+		return $value;
+	}
+
+
+
+
+
 
 	//获取内容总数量
 	public function Gtotel($norm=0, $uid=0, $tid=0){
@@ -842,7 +912,7 @@ class Content extends Event_content
 					'text' 	=> $text,
 					'cont'	=> $cont,
 
-					'plus'	=> $plus,		//默认金额
+					'sum'	=> $plus,		//默认金额
 					'spend'	=> $deduct,		//消费数额（含推送费）
 					'help'	=> $share,		//标题代付数额
 					'push'	=> $push,		//是否开启了推送
@@ -863,6 +933,7 @@ class Content extends Event_content
 	public function Azan( $cid =0 ){
 
 		$uid = parent::_uid();
+		$con = $this -> Gcontent($cid)['content'];
 
 		if ( parent::_selectZan( $cid, $uid ) ) {
 			$value = array(
@@ -872,9 +943,14 @@ class Content extends Event_content
 
 		} else {
 			parent::_addZan( $cid, $uid );
+			parent::_update( $cid, 'number_zan', $con['zan'] + 1 );
+			parent::_update( $cid, 'number_sum', $con['sum'] + 2 );
+			$add = parent::_u() -> UAplus( 2, $con['uid'] );
+
 			$value = array(
 				'status' => 1,
-				'message' => '点赞成功'
+				'message' => '点赞成功',
+				'detail' => $add
 			);
 		}
 
@@ -925,10 +1001,18 @@ class Content extends Event_content
 	* 更新 update
 	*/
 
+
+
+
+
+
+
+
 	//修改指定 内容CID 添加指定的 金额NUM（选填，默认为 2），返回修改后的金额
 	public function Uplus($cid=0, $num=2){
 		if($cid && $num){
-			$num = $this -> Gplus($cid) + $num;
+			$info = $this -> Gcontent($cid);
+			$num = $info['sum'] + $num;
 			parent::event_updatePlus($cid, $num);
 			return $num;
 		}

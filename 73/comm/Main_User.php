@@ -104,6 +104,7 @@ class Event_user extends Data_user
 
 	// 用户总积分
 	public function sum_() {
+
 	}
 
 }
@@ -129,7 +130,7 @@ class Users extends Event_user
 	}
 
 	//获取用户信息，根据UID
-	public function Guser( $target =0 ) {
+	public function Guser( $target =0, $isBasic =1 ) {
 
 		$info = parent::_byUid($target);
 
@@ -139,13 +140,25 @@ class Users extends Event_user
 
 		$randomIcon = '../icon/'.rand(1,26).'.jpg';
 
-		return array(
+		$basic = array(
 			'account' => $info['account'],
 			'nick' => $info['nick'],
 			'icon' => $info['icon'] ? $info['icon'] : $randomIcon,
 			'uid' => intval($info['uid']),
 			'sum' => intval($info['sum'])
 		);
+
+		if ( $isBasic ) {
+			return $basic;
+
+		} else {
+			$value = array(
+				'status' => 1,
+				'message' => '用户基本信息',
+				'basic' => $basic
+			);
+			return $value;
+		}
 	}
 
 	//判断用户是否存在
@@ -185,7 +198,7 @@ class Users extends Event_user
 			$value = array(
 				'status' => 1,
 				'message' => '登录成功',
-				'basic' => $this -> Guser($uid)
+				'basic' => $this -> Guser($uid, 0)
 			);
 		}
 
@@ -212,13 +225,41 @@ class Users extends Event_user
 	}
 
 	//添加用户积分
-	public function UAplus( $num =1 ){
-		return parent::_update( parent::sum_() +$num, parent::uid_() );
+	public function UAplus( $num =1, $uid =0 ){
+		$uid = $uid ? $uid : parent::uid_();
+		$user = $this -> Guser($uid);
+		$sum = $user['sum'];
+		parent::_update( $uid, 'number_sum', $sum +$num );
+		return array(
+			'original' => $sum,
+			'add' => $num,
+			'new' => $num + $sum,
+			'uid' => $uid
+		);
 	}
 
 	//扣除用户积分
-	public function USplus( $num=1 ) {
-		return parent::_update( parent::sum_() -$num, parent::uid_() );
+	public function USplus( $num =1, $uid =0 ) {
+		$uid = $uid ? $uid : parent::uid_();
+		parent::_update( $uid, 'number_sum', parent::sum_() -$num );
+		return $num;
+	}
+
+	// 修改昵称
+	public function Unick( $nick ='' ) {
+		$value =array(
+			'status' => 0,
+			'message' => '-'
+		);
+
+		if ( parent::_update( parent::uid_(), 'text_nick', $nick ) ) {
+			$value = array(
+				'status' => 1,
+				'message' => '成功修改昵称'
+			);
+		}
+
+		return $value;
 	}
 
 	//注册用户

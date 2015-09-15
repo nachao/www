@@ -9,17 +9,17 @@
 				<!-- 操作栏 -->
 				<div class="actionbar">
 					<div class="actionbar-filter">
-						<a href="javascript:;">热门</a>
-						<a href="javascript:;">最新</a>
+						<a id="actionbarFilterHot" href="javascript:;">热门</a>
+						<a id="actionbarFilterNew" href="javascript:;">最新</a>
 					</div>
-					<div class="actionbar-filter">
+					<!-- <div class="actionbar-filter">
 						<input type="text" placeholder="标签" />
 						<a href="javascript:;">搜索</a>
 					</div>
 					<div class="actionbar-filter">
 						<input type="text" placeholder="用户" />
 						<a href="javascript:;">搜索</a>
-					</div>
+					</div> -->
 				</div>
 
 				<!-- 内容列表 -->

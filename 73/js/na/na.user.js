@@ -17,7 +17,7 @@ function User ( obj_option ) {
 	*  @type {object}
 	*  @private
 	*/
-	this.data_ = null;
+	this.user_ = null;
 
 
 	/*
@@ -50,6 +50,7 @@ User.prototype._get = function( uid, callback ){
 	param['uid'] = uid;
 
 	this.get_( param, function(data){
+		that.user_ = data;
 		callback ? callback(data) : null;
 	});
 }
@@ -88,11 +89,13 @@ User.prototype._income = function( uid, callback, day ){
 */
 User.prototype._getCache = function( callback ){
 
-	var param = {};
+	var param = {},
+		that = this;
 
 	param['user'] = 'exist';
 
 	this.get_( param, function(data){
+		that.user_ = data;
 		callback ? callback(data) : null;
 	});
 }
@@ -105,7 +108,7 @@ User.prototype._getCache = function( callback ){
 *  @public
 */
 User.prototype.get = function(){
-	return this.data_;
+	return this.user_;
 }
 
 
@@ -179,7 +182,7 @@ User.prototype.refresh = function( param ){
 		// 刷新用户信息
 		$('#userInfoIcon').attr('src', param.icon);
 		$('#userInfoGold').attr('n', param.sum).golds();
-		$('#userInfoName').html(param.nick || param.account);
+		$('#userInfoName').val(param.nick || param.account);
 
 		// 刷新用户操作按钮
 		$('#j_userEntry').addClass('no');
@@ -203,9 +206,7 @@ User.prototype.refresh = function( param ){
 *  @public
 */
 User.prototype.setCache = function( param ){
-
-	param = param || this.data_;
-
+	param = param || this.user_;
 }
 
 
@@ -216,7 +217,7 @@ User.prototype.setCache = function( param ){
 *  @public
 */
 User.prototype.setUser = function( param ){
-	this.data_ = param;
+	this.user_ = param;
 }
 
 
@@ -232,6 +233,7 @@ User.prototype.setUser = function( param ){
 User.prototype._register = function( account, password, callback ){
 
 	var param = {},
+		that = this,
 		login = this.login;
 
 	if ( account && password ) {
@@ -242,6 +244,7 @@ User.prototype._register = function( account, password, callback ){
 
 		login.loading(true);
 		this.get_( param, function(data){
+			that.user_ = data;
 			login.loading(false);
 
 			callback ? callback(data) : null;
@@ -262,6 +265,7 @@ User.prototype._register = function( account, password, callback ){
 User.prototype._entry = function( account, password, callback ){
 
 	var param = {},
+		that = this
 		login = this.login;
 
 	if ( account && password ) {
@@ -272,6 +276,7 @@ User.prototype._entry = function( account, password, callback ){
 
 		login.loading(true);
 		this.get_( param, function(data){
+			that.user_ = data;
 			login.loading(false);
 			callback ? callback(data) : null;
 		}); 
@@ -294,6 +299,35 @@ User.prototype._logout = function( callback ){
 	this.get_( param, function(data){
 		callback ? callback(data) : null;
 	}); 
+}
+
+
+/*
+*  设置昵称
+*
+*  @param {function} callback = 回调
+*  @public
+*/
+User.prototype._setName = function( param, callback ){
+
+	param = param || {};
+
+	param['user'] = 'setName';
+
+	this.get_( param, function(data){
+		callback ? callback(data) : null;
+	}); 
+}
+
+
+/*
+*  判断是否有登录
+*
+*  @param {function} callback = 回调
+*  @public
+*/
+User.prototype.isEntry = function(){
+	return !!this.user_.status;
 }
 
 
@@ -374,10 +408,10 @@ Login.prototype.prompt = function(msg){
 Login.prototype.entrySuccess = function(data){
 
 	if ( data ) {
-		$('#entrySuccess').slideDown();
+		var success = $('#entrySuccess').slideDown();
 
 		// 显示登录用户信息
-		$('#entrySuccessName').html(data.basic.nick || data.basic.account);
+		success.find('#entrySuccessName').html( data.basic.nick || data.basic.account );
 	}
 }
 
@@ -391,10 +425,26 @@ Login.prototype.entrySuccess = function(data){
 Login.prototype.registerSuccess = function(data){
 
 	if ( data ) {
-		$('#registerSuccess').slideDown();
+		var success = $('#registerSuccess').slideDown();
 
 		// 显示登录用户信息
-		$('#entrySuccessName').html( data.basic.nick || data.basic.account );
+		success.find('#entrySuccessName').html( data.basic.nick || data.basic.account );
+	}
+}
+
+
+/*
+*  当前是否有登录用户
+*
+*  @public
+*/
+Login.prototype.registerSuccess = function(data){
+
+	if ( data ) {
+		var success = $('#registerSuccess').slideDown();
+
+		// 显示登录用户信息
+		success.find('#entrySuccessName').html( data.basic.nick || data.basic.account );
 	}
 }
 

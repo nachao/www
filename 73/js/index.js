@@ -492,6 +492,10 @@
 
 			if ( result.status == '1' ) {			// 退出失败
 				na.user.refresh();
+				na.user.setUser({
+					status: 0
+				});
+				getList();
 			}
 		});
 	});
@@ -506,64 +510,74 @@
 	});
 
 	// 获取内容
-	na.content._get(function(result){
+	function getList(){
+		na.content._get(function(result){
 
-		var templat = $('#contentTemplat'),
-			temp = null;
+			var templat = $('#contentTemplat'),
+				temp = null;
 
-		if ( result.status == 1 ) {
-			$(result.res).each(function( i, val ){
-				temp = templat.clone();
+			$('#contentList .col[id!=contentTemplat]').remove();
 
-				temp.removeClass('no').removeAttr('id').show();
-				temp.find('.gui').hide();
-				temp.find('.are').html(val.text);
+			if ( result.status == 1 ) {
+				$(result.res).each(function( i, val ){
+					temp = templat.clone();
 
-				// 作者信息
-				temp.find('.icon-user').attr('get', '0').mouseenter(function(){
-					var are = $(this),
-						get = $(this).attr('get');
+					temp.removeClass('no').removeAttr('id').show();
+					temp.find('.gui').hide();
+					temp.find('.are').html(val.text);
+					temp.find('.gold').attr('n', val.sum).golds();
 
-					if ( get == '0' ) {
-						$(this).attr('get', '1');	// 标记为正在获取数据
-						na.user._get( val.uid, function(user){
-							are.find('.use-fc-icon').attr('src', user.icon );
-							are.find('.use-fc-name').html( user.nick || user.account );
+					// 作者信息
+					temp.find('.icon-user').attr('get', '0').mouseenter(function(){
+						var are = $(this),
+							get = $(this).attr('get');
 
-							are.find('.use-fc-param .icon-sum').next('em').html(user.sum );
-							// are.find('.use-fc-param .icon-content').next('em').html(user.content);
-							// are.find('.use-fc-param .icon-love').next('em').html();
+						if ( get == '0' ) {
+							$(this).attr('get', '1');	// 标记为正在获取数据
+							na.user._get( val.uid, function(user){
+								are.find('.use-fc-icon').attr('src', user.icon );
+								are.find('.use-fc-name').html( user.nick || user.account );
 
-							are.find('.use-fcon').removeClass('use-fcon-load');
-						});
-					}
-				});
+								are.find('.use-fc-param .icon-sum').next('em').html(user.sum );
+								// are.find('.use-fc-param .icon-content').next('em').html(user.content);
+								// are.find('.use-fc-param .icon-love').next('em').html();
 
-				if ( val.zan == '0' ) {
-					temp.find('.icon-good').attr('get', '0').click(function(){	// 点赞
-
-						if ( !$(this).hasClass('praise-act') ) {
-							$(this).addClass('praise-act');
-							na.content._zan({
-								cid: val.cid
+								are.find('.use-fcon').removeClass('use-fcon-load');
 							});
 						}
 					});
 
-				} else {
-					temp.find('.icon-good').addClass('praise-act');
-				}
+					if ( na.user.isEntry() ) {
+						if ( val.zan == '0' ) {
+							temp.find('.icon-good').attr('get', '0').click(function(){	// 点赞
 
-				if ( val.label ) {
-					temp.find('.count-labels').empty();
+								if ( !$(this).hasClass('praise-act') ) {
+									$(this).addClass('praise-act');
 
-					$(val.label).each(function( i, tag ){
-						temp.find('.count-labels').append('<a href="javascript:;" class="label">'+ tag.name +'</a>');
-					});
-				}
+									temp.find('.gold').attr('n', parseInt(temp.find('.gold').attr('n')) + 2 ).golds();
+									na.content._zan({
+										cid: val.cid
+									});
+								}
+							});
 
-				$('#contentList').append(temp);
-			});
-		}
-	});
+						} else {
+							temp.find('.icon-good').addClass('praise-act');
+						}
+					}
+
+					if ( val.label ) {
+						temp.find('.count-labels').empty();
+
+						$(val.label).each(function( i, tag ){
+							temp.find('.count-labels').append('<a href="javascript:;" class="label">'+ tag.name +'</a>');
+						});
+					}
+
+					$('#contentList').append(temp);
+				});
+			}
+		});
+	}
+	getList();
 

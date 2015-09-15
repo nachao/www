@@ -38,6 +38,7 @@ ncs.pop = {
 	init: function(val){
 		if(val.funs){
 			this.funs = val.funs;
+			this.open = val.open;
 		}
 		this.gets();
 		this.event();
@@ -88,6 +89,9 @@ ncs.pop.init({
 		},
 		'pop-2': function(){
 			ncs.ajax.set("feedback="+ $('.j-fankui').val());	//提交后执行
+		},
+		'pop-4': function(){
+			console.log(111);
 		}
 	}
 });
@@ -282,4 +286,52 @@ function delCookie(name){
     if(cval!=null){
     	document.cookie= name + "=;expires="+exp.toGMTString(); 
     }
-} 
+}
+
+
+
+// 修改昵称
+$('#nameEdit').click(function(){
+	var name = $(this).parent(),
+		input = name.find('.name-edit-input'),
+		cn = 'name-edit';
+
+	input.attr('old', input.val());
+
+	if ( !name.hasClass(cn) ) {
+		name.addClass(cn);
+		input.removeAttr('readonly').focus();
+	}
+});
+$('#nameEditYes').click(function(){
+	var name = $(this).parent(),
+		input = name.find('.name-edit-input'),
+		value = input.val(),
+		cn = 'name-edit';
+
+	if ( value == '' ) {
+		return;
+	}
+	if ( value == input.attr('old') ) {
+		$('#nameEditNo').click();
+	}
+
+	var btn = $(this).html('...');
+	na.user._setName({ 'value': value }, function(result){
+		if ( result.status == 1 ) {
+			btn.html('确认');
+			input.removeAttr('old');
+			name.removeClass(cn);
+		}
+	});
+
+});
+$('#nameEditNo').click(function(){
+	var name = $(this).parent(),
+		input = name.find('.name-edit-input'),
+		cn = 'name-edit';
+	
+	name.removeClass(cn);
+	input.val(input.attr('old'));
+	input.removeAttr('old');
+});
